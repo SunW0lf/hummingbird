@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Verify the production site responds successfully with expected content.
+set -euo pipefail
+
+URL="${HEALTHCHECK_URL:-https://datum.quest/}"
+
+echo "Checking ${URL}..."
+STATUS=$(curl -sS -o /tmp/hummingbird-healthcheck.html -w "%{http_code}" --max-time 10 "${URL}")
+
+if [ "${STATUS}" != "200" ]; then
+  echo "error: expected HTTP 200, got ${STATUS}" >&2
+  exit 1
+fi
+
+if ! grep -q "Hummingbird" /tmp/hummingbird-healthcheck.html; then
+  echo "error: response did not contain expected marker text 'Hummingbird'" >&2
+  exit 1
+fi
+
+echo "Healthcheck passed: ${URL} is up and serving Hummingbird content."

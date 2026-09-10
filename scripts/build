@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Build produces dist/ from app/. Phase 1 has no compilation step (plain HTML/CSS),
+# so "build" means: validate, then produce a clean, deployable copy.
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+echo "Cleaning dist/..."
+rm -rf dist
+mkdir -p dist
+
+echo "Copying app/ -> dist/..."
+cp -r app/. dist/
+
+echo "Build complete: dist/"

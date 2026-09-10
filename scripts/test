@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Run all automated tests. Currently: the zero-dependency static site smoke test.
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+echo "Running site smoke tests..."
+node tests/site.test.js

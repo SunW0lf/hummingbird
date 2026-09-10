@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# One-time (safe to rerun) local setup.
+# Installs devDependencies needed for CI tooling (currently: wrangler, for later deploy use).
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+if ! command -v node >/dev/null 2>&1; then
+  echo "error: node is required but not found on PATH" >&2
+  exit 1
+fi
+
+echo "Installing devDependencies..."
+npm install
+
+echo "Bootstrap complete. Next: ./scripts/dev"

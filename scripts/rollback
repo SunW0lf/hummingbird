@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Rollback: Cloudflare Pages retains prior deployments. This lists recent deployments
+# so the steward can pick one to promote back to production via the Cloudflare
+# dashboard or `wrangler pages deployment` commands.
+#
+# Requires CLOUDFLARE_API_TOKEN to be set. This script is deliberately read-only
+# (it lists deployments rather than automatically rolling back) so a rollback is
+# always a deliberate, visible action.
+set -euo pipefail
+
+if [ -z "${CLOUDFLARE_API_TOKEN:-}" ]; then
+  echo "error: CLOUDFLARE_API_TOKEN is not set." >&2
+  exit 1
+fi
+
+PROJECT_NAME="${CLOUDFLARE_PAGES_PROJECT:-hummingbird}"
+
+echo "Recent deployments for '${PROJECT_NAME}':"
+npx wrangler pages deployment list --project-name="${PROJECT_NAME}"
+
+echo ""
+echo "To roll back, promote a prior deployment via the Cloudflare dashboard,"
+echo "or redeploy the corresponding Git commit through the normal CI pipeline."

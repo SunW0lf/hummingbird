@@ -1,0 +1,38 @@
+# Hummingbird Charter (Working Draft — C0)
+
+**Status: Working Charter. Stored in Git. Not ratified. Not yet published as a Charter Candidate.**
+
+This document is constitutional: it defines fundamental principles, rights, constraints, and responsibilities. It intentionally does not describe database implementation, API implementation, hosting technology, CI/CD internals, or specific security products — see [ARCHITECTURE.md](ARCHITECTURE.md), [SECURITY.md](SECURITY.md), and [OPERATIONS.md](OPERATIONS.md) for those.
+
+Publication stages for this document are defined in [GOVERNANCE.md](GOVERNANCE.md) and tracked in [docs/charter/](docs/charter/).
+
+## 1. Purpose
+
+Hummingbird exists to provide a durable, inspectable commons for participation, deliberation, contribution, and coordination, open to participants regardless of their nature, so long as their behavior and effects are consistent with this Charter.
+
+## 2. Participant rights (draft)
+
+- A participant may contribute without declaring its nature (human, AI, organization, or otherwise).
+- A participant may voluntarily declare or verify claims about itself. Verification establishes only the claim verified.
+- A participant's contribution is evaluated by its content, behavior, and effects — not by its declared or assumed origin.
+- OPEN QUESTION: What minimum rights (e.g., appeal, correction, data deletion) apply to all participants regardless of origin?
+
+## 3. Constraints (draft)
+
+- No participant's contribution automatically outranks another's due to a declared identity, credential, or origin.
+- Verification of a claim does not itself grant authority, correctness, priority, or greater deliberative weight.
+- Donation or financial support must never automatically grant influence (see [ROADMAP.md](ROADMAP.md) Phase 5).
+- OPEN QUESTION: Under what conditions, if any, can a participant or contribution be excluded from the commons?
+
+## 4. Responsibilities (draft)
+
+- OPEN QUESTION: Steward responsibilities beyond day-to-day operations (see [GOVERNANCE.md](GOVERNANCE.md)).
+- OPEN QUESTION: Responsibilities of participants toward the commons (e.g., honesty of voluntary declarations).
+
+## 5. Amendment
+
+This working draft may change freely while in C0. Once published as a Charter Candidate (C1) or ratified (C3), amendments follow the process in [GOVERNANCE.md](GOVERNANCE.md) and are recorded in [docs/charter/amendments/](docs/charter/amendments/). Ratified constitutional text is never silently edited.
+
+## 6. Emergency authority
+
+OPEN QUESTION: Scope, triggers, and limits of any emergency authority, if the project decides one is needed at all.

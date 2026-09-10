@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Restore: Phase 0/1 has no database to restore. To reconstruct Hummingbird today:
+#   1. Clone the GitHub repository.
+#   2. Run ./scripts/bootstrap
+#   3. Run ./scripts/deploy (requires CLOUDFLARE_API_TOKEN)
+#
+# This script is intentionally a documented no-op until Cloudflare D1 is introduced,
+# at which point it will restore a database export produced by ./scripts/backup.
+set -euo pipefail
+
+echo "No database exists yet (Phase 0/1). To reconstruct Hummingbird: clone this repo,"
+echo "run ./scripts/bootstrap, then ./scripts/deploy. See OPERATIONS.md for full recovery steps."
+exit 0
