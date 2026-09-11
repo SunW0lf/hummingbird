@@ -6,8 +6,12 @@ const path = require("path");
 const { renderPage, escapeHtml } = require("./lib/page-shell");
 
 const ROOT = path.join(__dirname, "..");
-const DIST = path.join(ROOT, "dist");
-const SOURCE = path.join(ROOT, "publication", "canonical");
+const DIST = process.env.HUMMINGBIRD_DIST_DIR
+  ? path.resolve(process.env.HUMMINGBIRD_DIST_DIR)
+  : path.join(ROOT, "dist");
+const SOURCE = process.env.HUMMINGBIRD_PUBLICATION_SOURCE
+  ? path.resolve(process.env.HUMMINGBIRD_PUBLICATION_SOURCE)
+  : path.join(ROOT, "publication", "canonical");
 const OUT = path.join(DIST, "records");
 
 const ALLOWED_TYPES = new Set(["contribution", "proposal", "need", "event"]);
@@ -103,7 +107,7 @@ function renderOptionalJson(record, field) {
 }
 
 function main() {
-  if (!fs.existsSync(DIST)) throw new Error("dist/ does not exist; run the copy-app build step first");
+  if (!fs.existsSync(DIST)) throw new Error("dist/ does not exist; create the output directory before rendering");
   const records = loadRecords();
   fs.mkdirSync(OUT, { recursive: true });
   const knownIds = new Set(records.map((record) => record.id));
@@ -165,7 +169,7 @@ function main() {
     `<p>This is Hummingbird's rebuildable public projection of deliberately published canonical records. It is static at request time: reading this page does not query the canonical database.</p>\n` +
     `<p><a href="records/index.json">Machine-readable record index</a> · <a href="seed-bank.html">Seed Bank</a></p>\n` +
     `<div class="seed-grid">${cards}</div>\n` +
-    `<p class="doc-meta">${records.length} public canonical record(s). Submission is not admission; admission is not governance approval.</p>`;
+    `<p class="doc-meta">${records.length} public canonical record(s). An offer is not admission; admission is not governance approval.</p>`;
 
   fs.writeFileSync(path.join(DIST, "records.html"), renderPage({
     title: "Public canonical records",
