@@ -28,11 +28,11 @@ participant
 
 **Canonical Hummingbird records use portable, versioned representations whose institutional meaning is independent of the database engine used to store them.**
 
-Cloudflare D1 is the planned first Phase 2 persistence engine because it fits the existing deployment footprint and hobby-scale runway. That choice does not make D1 semantics canonical.
+Cloudflare D1 is the first Phase 2 persistence engine because it fits the existing deployment footprint and hobby-scale runway. Phase 2B proved the v1 contract through both local and remote D1 round trips; that implementation choice does not make D1 semantics canonical.
 
 Prefer **schema-flexible, versioned documents**, not unstructured schema-less blobs: every canonical object declares its own `type` and `schema_version` rather than relying on a database schema to convey institutional meaning.
 
-Before production D1 persistence, the v1 contract is exercised outside any database through the reference corpus. D1 migrations/import/export must round-trip those records without depending on provider row IDs, triggers, hidden state, or database-only meaning.
+Before production D1 persistence, the v1 contract was exercised outside any database through the reference corpus. D1 migrations/import/export now round-trip those records without depending on provider row IDs, triggers, hidden state, or database-only meaning.
 
 ### Semantic contract before storage
 
@@ -176,6 +176,7 @@ Phase 2 uses one deliberately small publication/lifecycle state machine:
 draft -> published -> corrected | superseded | withdrawn | archived
 ```
 
+- Deliberate canonical admission may create a `draft` record without publishing it. This is the initial Phase 2C admission boundary.
 - A record may enter directly as `published` when deliberately imported from an already-public authoritative source.
 - A correction is attached to history rather than silently erasing what was previously represented.
 - `superseded`, `withdrawn`, and `archived` preserve the fact that the record existed.
@@ -210,6 +211,8 @@ The relationship object does not require a graph database. D1 may normalize rela
 
 **Derived projections** — search indexes, caches, summaries, embeddings, analytics, database helper rows, and public view models — are not canonical. They should remain rebuildable and disposable wherever practical; losing one should never lose institutional meaning.
 
+Phase 2C's static `publication/canonical/` deployment input and generated `/records` HTML/JSON are examples of derived public projections. They do not replace D1 as canonical persistence, and a public page view must not require a D1 query.
+
 ## External ingress and admission
 
 Phase 2 distinguishes material that exists outside the canonical commons from material deliberately admitted into it.
@@ -225,6 +228,18 @@ canonical record
 ```
 
 The interim Seed Bank is the first live example. A GitHub issue, comment, reaction, provider identity, or issue timestamp is not automatically canonical Hummingbird data. If material is later admitted, Hummingbird should store the admitted meaning plus only the provenance/reference needed to understand where it came from.
+
+Phase 2C adds an explicit publication step after admission for ordinary draft-first records:
+
+```text
+external source
+      ↓
+explicit canonical admission (draft)
+      ↓
+independent publication decision
+      ↓
+rebuildable public projection
+```
 
 **Submission ≠ publication ≠ admission ≠ governance approval.**
 
@@ -323,4 +338,8 @@ Unsolicited inbound support and future project-authorized expenditure are separa
 
 ## Current state
 
-The Phase 2 logical model and storage-independent v1 reference contract are defined. The reference corpus precedes production persistence. The current v1 D1 migration intentionally stores only canonical objects and typed relationships; pads, guilds, spaces, live activities, and later governance workflows remain semantic designs until their portable contracts are defined. No production D1 database has been deployed yet; remote D1 provisioning/reconstruction verification is the next Phase 2B execution slice.
+The Phase 2 logical model and storage-independent v1 reference contract are defined. Phase 2B is complete: the v1 D1 migration exists in the repository, the real remote D1 database is provisioned and migrated, and the bounded reference corpus has been imported, reconstructed, deep-compared without semantic loss, and removed again by the guarded remote verifier.
+
+Phase 2C is active. The first public-read-model slice renders a derived static projection to `/records.html`, `/records/index.json`, and per-record HTML/JSON routes. The projection begins empty by design; no Seed Bank material has been automatically admitted. The next substantive step is one deliberate external-source → draft canonical admission → separate publication exercise under [ADR 0014](docs/decisions/0014-progressive-capability-rollout.md) and [the Phase 2C protocol](docs/protocols/PHASE_2C_ADMISSION_PUBLICATION.md).
+
+Pads, guilds, spaces, live activities, public application-owned writes, and later governance workflows remain semantic designs until their portable contracts and entry gates are satisfied.

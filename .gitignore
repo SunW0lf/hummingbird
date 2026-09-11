@@ -4,6 +4,7 @@ dist/
 .env.*
 !.env.example
 .wrangler/
+.hummingbird-stage/
 .tmp/
 *.log
 .DS_Store

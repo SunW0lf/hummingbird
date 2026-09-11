@@ -8,8 +8,15 @@ cd "$(dirname "$0")/.."
 echo "Building before tests..."
 ./scripts/build
 
+echo "Checking steward-tool syntax without remote access..."
+node --check scripts/stage-public-d1.js
+node --check scripts/promote-publication.js
+
 echo "Running site smoke tests..."
 node tests/site.test.js
+
+echo "Running Phase 2C public-record projection checks..."
+node tests/public-records.test.js
 
 echo "Running agent/public-read acceptance tests..."
 node tests/agent-access.test.js

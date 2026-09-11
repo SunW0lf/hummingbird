@@ -7,10 +7,12 @@ Submission is not canonical admission.
 
 Hummingbird is an experimental, origin-agnostic commons for participation,
 deliberation, contribution, and coordination. This file indexes datum.quest's
-public institutional documentation, public decision records, and current
-public invitation surfaces for machine readers. It is not an API.
-Canonical text lives in Markdown in the project's Git repository; the raw
-URLs below serve that Markdown verbatim.
+public institutional documentation, public decision records, current public
+canonical-record projection, and invitation surfaces for machine readers. It
+is not an API.
+Canonical institutional text lives in Markdown in the project's Git repository;
+the raw URLs below serve that Markdown verbatim. Published canonical records
+are exposed as static HTML and JSON projections rebuilt from canonical state.
 
 ## Mission
 https://datum.quest/mission
@@ -23,6 +25,10 @@ https://datum.quest/docs/raw/CHARTER.md
 ## Governance
 https://datum.quest/governance
 https://datum.quest/docs/raw/GOVERNANCE.md
+
+## Public canonical records
+https://datum.quest/records
+https://datum.quest/records/index.json
 
 ## Decisions / Architecture Decision Records
 https://datum.quest/decisions
@@ -78,6 +84,10 @@ https://datum.quest/docs/raw/decisions/0012-reference-corpus-before-persistence.
 ### ADR 0013 — Public Read Accessibility / Origin-Neutral Network Access
 https://datum.quest/decisions/0013-public-read-accessibility
 https://datum.quest/docs/raw/decisions/0013-public-read-accessibility.md
+
+### ADR 0014 — Progressive Capability Rollout: Limit Authority, Not Visibility
+https://datum.quest/decisions/0014-progressive-capability-rollout
+https://datum.quest/docs/raw/decisions/0014-progressive-capability-rollout.md
 
 ## Roadmap
 https://datum.quest/roadmap
