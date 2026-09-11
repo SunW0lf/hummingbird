@@ -61,6 +61,8 @@ const PUBLIC_DECISIONS = [
   "0012-reference-corpus-before-persistence",
   "0013-public-read-accessibility",
   "0014-progressive-capability-rollout",
+  "0015-standards-based-representation-discovery-and-provenance",
+  "0016-offers-and-the-offer-buffer",
 ];
 
 const REQUIRED_SEED_FORMS = [
@@ -149,6 +151,8 @@ if (fs.existsSync(decisionsPath)) {
     "0012-reference-corpus-before-persistence.html",
     "0013-public-read-accessibility.html",
     "0014-progressive-capability-rollout.html",
+    "0015-standards-based-representation-discovery-and-provenance.html",
+    "0016-offers-and-the-offer-buffer.html",
   ];
   for (const phrase of requiredPhrases) {
     if (!decisions.includes(phrase)) fail(`decisions.html is missing required decision boundary: ${phrase}`);
@@ -166,7 +170,8 @@ if (fs.existsSync(seedBankPath)) {
     "Plant a seed",
     "Leave feedback",
     "Ask a question",
-    "What happens after you submit?",
+    "What happens after you make an offer?",
+    "A seed is an offer, not an admission",
     "Reactions are conversational signals, not votes",
     "security/advisories/new",
     "issues/15",
@@ -177,7 +182,7 @@ if (fs.existsSync(seedBankPath)) {
   for (const phrase of requiredPhrases) {
     if (!seedBank.includes(phrase)) fail(`seed-bank.html is missing required interaction boundary: ${phrase}`);
   }
-  pass("Seed Bank exposes low-friction onboarding and bounded participation boundaries");
+  pass("Seed Bank exposes low-friction offer-making and bounded participation boundaries");
 }
 
 // 7. Constrained GitHub forms and private-security routing must exist in-repo.
@@ -241,6 +246,7 @@ for (const url of [
   "https://datum.quest/persistence",
   "https://datum.quest/support",
   "https://datum.quest/decisions/0013-public-read-accessibility",
+  "https://datum.quest/decisions/0016-offers-and-the-offer-buffer",
   "https://datum.quest/records/contribution-visible-consequence",
 ]) {
   if (!sitemap.includes(`<loc>${url}</loc>`)) fail(`sitemap.xml is missing ${url}`);
@@ -262,20 +268,24 @@ for (const marker of [
 const llms = fs.readFileSync(path.join(APP_DIR, "llms.txt"), "utf8");
 if (!llms.includes("Canonical Hummingbird web origin: https://datum.quest/")) fail("llms.txt does not identify the canonical web origin");
 if (!llms.includes("Treat similarly named domains as separate")) fail("llms.txt lacks domain-disambiguation guidance");
-pass("Search and model discovery identify datum.quest and the public source repository explicitly");
+if (!llms.includes("An offer is not canonical admission")) fail("llms.txt does not expose the offer/admission boundary");
+pass("Search and model discovery identify datum.quest, the public source repository, and the offer/admission boundary explicitly");
 
 // 13. Commons onboarding and roadmap expose the real lifecycle/gates.
 const howItWorks = fs.readFileSync(path.join(APP_DIR, "how-it-works.html"), "utf8");
 for (const marker of [
-  "Lifecycle of a contribution",
+  "Lifecycle of an offer",
   "admit to canonical memory",
+  "What can an offer be?",
+  "Broad scope is not itself an abuse signal",
+  "Offer delivery options regulate resources, not merit",
   "Phase 2D",
   "What must be true before Phase 3?",
   "limit authority, not visibility",
 ]) {
   if (!howItWorks.includes(marker)) fail(`how-it-works.html is missing lifecycle/gate marker: ${marker}`);
 }
-pass("Commons page exposes contribution lifecycle and phase-gate progression");
+pass("Commons page exposes the offer lifecycle, broad-scope principle, and phase-gate progression");
 
 // 14. Governance and Charter expose evaluation criteria without inventing identity scoring.
 const governance = fs.readFileSync(path.join(APP_DIR, "governance.html"), "utf8");
@@ -284,6 +294,7 @@ for (const marker of [
   "does <strong>not</strong> currently maintain a global participant score",
   "Current Phase 2 admission criteria",
   "No hidden institutional criteria",
+  "who may <strong>offer</strong> a proposal",
 ]) {
   if (!governance.includes(marker)) fail(`governance.html is missing evaluation marker: ${marker}`);
 }
