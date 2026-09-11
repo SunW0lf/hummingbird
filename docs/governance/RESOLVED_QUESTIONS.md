@@ -35,3 +35,6 @@ Resolved by [SECURITY.md](../../SECURITY.md) and [OPERATIONS.md](../../OPERATION
 
 ### OQ-OPS-BRANCH-PROTECTION
 Resolved by [OPERATIONS.md](../../OPERATIONS.md) and [SECURITY.md](../../SECURITY.md): `main` is protected with required `Checks, test, build`, and GitHub reports enforcement for everyone including the steward/admin.
+
+### OQ-SECURITY-VULN-REPORTING
+Resolved by [SECURITY.md](../../SECURITY.md) and [CONTRIBUTING.md](../../CONTRIBUTING.md): GitHub private vulnerability reporting is enabled as the designated private reporting path. The Advanced Security setting was confirmed by the steward during the public-repository security activation; vulnerability details must not be filed in public issues.
