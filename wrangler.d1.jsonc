@@ -4,7 +4,7 @@
     {
       "binding": "DB",
       "database_name": "hummingbird",
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_id": "ddd7a611-f997-46a2-b185-605792977a5d",
       "preview_database_id": "DB",
       "migrations_dir": "migrations"
     }
