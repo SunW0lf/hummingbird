@@ -4,16 +4,18 @@ Security protects the commons without depending on proving participant origin.
 
 ## Current attack surface
 
-The deployed site remains static while Phase 2 is being prepared: there are still no public forms, accounts, or production database. The realistic attack surface is therefore concentrated in the supply chain and deployment pipeline:
+Phase 2 is now in progress. The deployed public surface is still read-only while the first D1-backed commons substrate is introduced. There are no public submission forms or participant accounts yet.
+
+The realistic attack surface is concentrated in:
 
 - public GitHub repository and Actions (source and CI compromise)
 - Cloudflare account and deployment token (deployment compromise)
 - dependency compromise (npm devDependencies used for CI tooling)
-- future Phase 2 persistence once D1 is deployed
+- Phase 2 persistence and migrations as D1 is introduced
 
 ## Authentication / authorization
 
-Not applicable yet — no accounts exist. Open question: [OQ-SECURITY-AUTHN-MODEL](docs/governance/OPEN_QUESTIONS.md#oq-security-authn-model) for Phase 3+ when contribution/proposal forms are introduced.
+Not applicable to public participation yet — no participant accounts exist. Open question: [OQ-SECURITY-AUTHN-MODEL](docs/governance/OPEN_QUESTIONS.md#oq-security-authn-model) for Phase 3+ when contribution/proposal forms are introduced.
 
 ## Secrets
 
@@ -52,11 +54,13 @@ The earlier private-mode risk acceptances for missing branch protection and unre
 
 ## Public repository security baseline
 
-The repository is now public. The following controls are part of the required public baseline:
+The Phase 1 public-repository activation gate is complete as of 2026-09-10 (Pacific Time).
 
-- **Verified active:** public repository visibility; protected `main`; required `Checks, test, build`; admin/steward enforcement; SHA-pinned workflow action references.
-- **Steward-configured:** restricted Actions policy and read-only default workflow permissions.
-- **Still requiring explicit verification before Phase 1 closeout:** GitHub private vulnerability reporting; secret scanning and push protection; Dependabot alerts/security updates; CodeQL/default code scanning where available.
+- **Independently observed:** public repository visibility; protected `main`; required `Checks, test, build`; admin/steward enforcement; SHA-pinned workflow action references; successful CodeQL default-setup execution on `main`.
+- **Steward-confirmed in GitHub repository settings:** restricted Actions policy; read-only default workflow permissions; private vulnerability reporting; secret scanning; push protection; Dependabot alerts; Dependabot malware alerts; Dependabot security updates; grouped security updates; and CodeQL default setup.
+- **Repository-configured:** Dependabot version updates via `.github/dependabot.yml`.
+
+GitHub's connected API does not expose every Advanced Security setting to the current integration, so controls that cannot be read back programmatically are recorded as steward-confirmed rather than falsely described as independently verified.
 
 Public source, history, forks, and repository Actions logs should be treated as visible to outside observers.
 
@@ -66,9 +70,11 @@ Open question: [OQ-SECURITY-INCIDENT-RESPONSE](docs/governance/OPEN_QUESTIONS.md
 
 ## Vulnerability reporting
 
-Open question: [OQ-SECURITY-VULN-REPORTING](docs/governance/OPEN_QUESTIONS.md#oq-security-vuln-reporting) — a genuinely private reporting path must be active and verified before Phase 1 is declared complete.
+GitHub private vulnerability reporting is enabled for the public repository and is the designated private vulnerability-reporting channel for the current phase.
 
-The intended current solution is GitHub private vulnerability reporting. Do not open a public issue containing vulnerability details. This document and the public Security page must not claim the GitHub private-reporting path is active until its repository setting and public reporting affordance are verified.
+Do **not** open a public issue containing vulnerability details. Use GitHub's **Report a vulnerability** flow under the repository Security area so the report is delivered privately to the repository maintainer. No response-time guarantee is made.
+
+A dedicated project security email may be added later, but it is not required for the current reporting path.
 
 ## Data classification
 
