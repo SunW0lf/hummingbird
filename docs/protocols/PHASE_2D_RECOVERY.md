@@ -1,6 +1,6 @@
 # Phase 2D — Canonical Backup and Recovery Protocol
 
-Status: **active design and local verification contract; remote recovery drill not yet executed**
+Status: **active design and local verification contract; guarded remote recovery drill prepared but not yet executed**
 
 This protocol defines how Hummingbird backs up and recovers canonical application state without making Cloudflare D1 table layout, provider database identifiers, or public read projections the institution's only recovery source.
 
@@ -61,6 +61,8 @@ The repository ignores `.hummingbird-backups/` for local convenience, but an ign
 
 The first production exercise may use steward-controlled encrypted/offline storage or another private storage service. Choosing a long-term backup provider is less important than proving that the portable bundle can be independently retrieved, verified, and restored.
 
+A GitHub Actions artifact in this public repository is **not** a generally acceptable storage location for canonical backups because repository readers can retrieve public-repository artifacts. The one-shot Phase 2D drill contains a narrow safety exception: it uploads a backup artifact only after proving that every canonical record in the production backup is in a public lifecycle state **and** the full reconstructed canonical set deep-equals the already-public `publication/canonical` projection. If any draft or otherwise non-public canonical state exists, the workflow fails before artifact upload and the independent-retention exit criterion remains unsatisfied until a private storage path is used.
+
 ## Backup commands
 
 Install dependencies first with `npm ci`.
@@ -91,7 +93,7 @@ Validation recomputes every record digest and the bundle digest without touching
 
 A restore target must be empty and must receive the repository-controlled migrations before canonical data is imported.
 
-Current Phase 2D-1 tooling permits restoration only into an explicit isolated local D1 state directory:
+Current general-purpose restore tooling permits restoration only into an explicit isolated local D1 state directory:
 
 ```bash
 npx wrangler d1 migrations apply hummingbird \
@@ -114,7 +116,28 @@ The restore tool:
 - deep-compares restored meaning to the backup bundle;
 - does not modify remote D1.
 
-Remote restore is deliberately disabled in this slice. The next recovery exercise must provision a disposable replacement D1 database/configuration, apply migrations there, import the verified bundle, compare semantic state, rebuild the public projection, and then delete or retain that recovery database according to the exercise record. The live production database must not be the recovery-test target.
+`./scripts/restore --remote` remains deliberately disabled. The first remote recovery exercise uses a separate one-shot runner that creates its own disposable D1 database, writes an ephemeral Wrangler configuration bound only to that returned database UUID, applies migrations, imports the verified bundle, compares semantic state, rebuilds the public projection, and deletes the disposable database in cleanup. The live production database is never the recovery-test target.
+
+## Guarded one-shot remote recovery workflow
+
+`.github/workflows/phase2d-remote-recovery-drill.yml` is prepared specifically for the first production-state exercise.
+
+It has these boundaries:
+
+- it runs only on `main` when the merge commit message begins `Phase 2D: run remote recovery drill`;
+- it does not run on pull requests;
+- it uses the separate `CLOUDFLARE_D1_RECOVERY_TOKEN` GitHub Actions secret, not the Pages deployment token;
+- the credential is account-scoped for D1 recovery operations and is currently temporary rather than a permanent general-purpose automation credential;
+- production access is limited to the existing read-only backup path;
+- the recovery runner creates a uniquely named disposable D1 database and refuses to continue if its UUID somehow equals the production D1 UUID;
+- migrations and restore SQL run only through an ephemeral configuration bound to the disposable recovery UUID;
+- canonical object and relationship tables must be empty after migrations and before restore;
+- restored records must deep-equal the production backup;
+- recovered public canonical records are rendered into an isolated temporary output and their machine-readable JSON projection must byte-equal the expected built projection;
+- database deletion runs from the cleanup path even when verification fails;
+- the portable backup is retained as a public-repository artifact for 30 days **only** when the backup is proven exactly equivalent to already-public canonical state as described in the storage boundary above.
+
+The pull request that introduces this workflow does not itself claim remote recovery success. Evidence is recorded only after the post-merge one-shot run has actually completed and its result has been reviewed.
 
 ## Recovery order
 
@@ -145,7 +168,7 @@ A later scheduled cadence may supplement this rule when mutation frequency grows
 
 ## Phase 2D evidence still required
 
-This protocol and local tooling do **not** complete Phase 2D. Completion still requires a real recovery exercise using current production canonical data:
+This protocol, local tooling, and prepared one-shot workflow do **not** complete Phase 2D. Completion still requires a real recovery exercise using current production canonical data:
 
 - read-only export from remote production D1;
 - independent retention and hash verification of the bundle;
