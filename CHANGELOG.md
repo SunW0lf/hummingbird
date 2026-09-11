@@ -2,21 +2,31 @@
 
 This records meaningful releases and changes, not a raw Git log.
 
-## Unreleased — Phase 1: Public Charter Site
+## Unreleased — Phase 1 closeout / Phase 2 entry
+
+- Made the GitHub repository public and activated protected `main` with required `Checks, test, build`; GitHub now reports branch protection enforcement level `everyone`, including the steward/admin.
+- Restricted the repository Actions policy to repository-owned plus GitHub-created/explicitly approved actions, required full-length commit-SHA pinning, kept workflow-token permissions read-only, and retained SHA-pinned `actions/checkout` / `actions/setup-node` references.
+- Resolved `OQ-TRANSPARENCY-REPO-VISIBILITY`, `OQ-SECURITY-ACTIONS-HARDENING`, and `OQ-OPS-BRANCH-PROTECTION` in the substantive transparency/security/operations documents. Private-mode risk acceptances are no longer operative.
+- Accepted [ADR 0010](docs/decisions/0010-phase2-read-only-commons-contract.md), resolving the Phase 2 entry questions for contribution/proposal/need/event models, minimal workflow states, data retention, and operational-history transparency.
+- Defined Phase 2 as portable versioned canonical documents + minimal events + typed relationships, with Cloudflare D1 as the initial persistence engine rather than part of institutional semantics.
+- Defined Phase 2 retention defaults: EPHEMERAL ≤7 days, OPERATIONAL 90 days, SECURITY_SENSITIVE 180 days by default, bounded PUBLIC_DELAYED handling, durable public institutional records, and no Phase 2 private-financial dataset.
+- Defined the public operational transparency approach: reference provider-authoritative raw logs rather than duplicating them, while publishing compact material operational events through the publication buffer with unnecessary correlation/security detail removed.
+- Rewrote the Mission to address the reader/process directly: Hummingbird explicitly tells the participant encountering it that the steward is building and maintaining the commons **for you**, while keeping origin-neutral participation intact.
+- Phase 1 remains in final security verification until private vulnerability reporting and the remaining GitHub Advanced Security controls are explicitly verified; Phase 2 implementation is queued immediately behind that closeout.
+
+## Phase 1 — Public Charter Site
 
 - Established the authoritative Open Questions Registry ([docs/governance/OPEN_QUESTIONS.md](docs/governance/OPEN_QUESTIONS.md)) and cross-linked every prior `OPEN QUESTION` marker to it.
-- Verified and closed out Phase 0 against the [ROADMAP.md](ROADMAP.md) checklist; corrected documentation drift (credential scope, deployment status, repository trust-boundary language).
-- Hardened the steady-state CI/deployment path: deterministic `npm ci`, high-severity dependency audit as a blocking check, external GitHub Actions pinned to exact commit SHAs, and production deployment now fails closed when its Cloudflare configuration is missing. Corrected public/operational copy that overstated branch protection or misstated the Phase 1 security-contact gate.
-- Recorded dated, Phase-1-only risk acceptances for the unavailable `main` branch protection and unrestricted repository-level GitHub Actions allow-list while Hummingbird remains private and single-steward. Both underlying questions remain open and must be revisited before repository publication; the private vulnerability-reporting channel remains the unresolved Phase 1 completion blocker.
-- Steward authorized public repository visibility in principle on 2026-09-10, contingent on a coordinated public-mode security activation. Added CODEOWNERS, weekly Dependabot monitoring for npm and GitHub Actions, and explicit requirements for branch protection, restricted Actions, private vulnerability reporting, secret scanning/push protection, Dependabot security controls, and code scanning before publication is treated as complete.
+- Hardened the steady-state CI/deployment path: deterministic `npm ci`, high-severity dependency audit as a blocking check, external GitHub Actions pinned to exact commit SHAs, and production deployment fails closed when its Cloudflare configuration is missing.
+- Added CODEOWNERS, weekly Dependabot monitoring for npm and GitHub Actions, and ADR 0009's coordinated public-repository security transition plan.
 
 ## Phase 0 — Foundation (complete)
 
 - Bootstrapped the repository: documentation skeleton (README, PROJECT, MISSION, CHARTER working draft, GOVERNANCE, ARCHITECTURE, DATA_MODEL, SECURITY, TRANSPARENCY, OPERATIONS, CONTRIBUTING, ROADMAP).
 - Added initial Architecture Decision Records (0001–0005).
 - Added minimal static Phase 1 site skeleton under `app/`.
-- Added GitHub Actions CI workflow for automated checks, tests, and build (the initial lint slot was a documented placeholder rather than a real linter).
+- Added GitHub Actions CI workflow for automated checks, tests, and build.
 - Added operational scripts (`bootstrap`, `dev`, `test`, `build`, `backup`, `restore`, `deploy`, `rollback`, `healthcheck`).
 - Cut `datum.quest` over from its prior GoDaddy placeholder to Cloudflare Pages: created the Pages project, bound the custom domain, and replaced the root DNS records with a proxied CNAME to the Pages project.
 - Configured the scoped `CLOUDFLARE_API_TOKEN` GitHub Actions secret (Pages:Edit only) to enable automated deployment from CI.
-- Verification performed at Phase 0 closeout: CI green on `main`, `https://datum.quest` returns HTTP 200 and serves Hummingbird content, git history scanned with no secrets found, deployment credential confirmed scoped to Pages:Edit only (not DNS:Edit as earlier drafts of ARCHITECTURE.md/SECURITY.md had incorrectly stated). Branch protection and GitHub Actions allow-list hardening were found to be gaps and are tracked as open questions rather than claimed as done.
+- Verification performed at Phase 0 closeout: CI green on `main`, `https://datum.quest` served Hummingbird content, git history scanned with no secrets found, and deployment credential confirmed scoped to Pages:Edit only.
