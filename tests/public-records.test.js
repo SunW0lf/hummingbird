@@ -63,7 +63,7 @@ if (index && Array.isArray(index.records)) {
 }
 
 const page = fs.readFileSync(pagePath, "utf8");
-assert(page.includes("Submission is not admission; admission is not governance approval."), "public index states the authority boundary");
+assert(page.includes("An offer is not admission; admission is not governance approval."), "public index states the authority boundary");
 assert(page.includes("static at request time"), "public index states that reads do not query D1");
 
 if (failures) {
