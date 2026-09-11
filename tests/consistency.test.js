@@ -5,11 +5,11 @@
 //  1. Every OQ-* reference resolves to either the active open-question registry
 //     or the resolved-question archive; IDs may not appear in both.
 //  2. No inline "OPEN QUESTION:" markers remain outside the registry pattern.
-//  3. No known stale deployment-status phrases remain.
+//  3. No known stale deployment/status phrases remain.
 //  4. No generated page links to the old charter-candidate path.
 //  5. Phase 0 is not described as in progress/planned anywhere.
 //  6. Current operational sources reflect that main is protected.
-//  7. The public Security page reflects the current Phase 1 reporting gate.
+//  7. The public Security page reflects active private reporting and Phase 2.
 //  8. External GitHub Actions are pinned to immutable 40-character SHAs.
 //  9. Production CI does not silently skip deployment as a bootstrap case.
 
@@ -98,13 +98,15 @@ for (const file of docFiles) {
 }
 if (inlineMarkers === 0) pass("No inline OPEN QUESTION: markers remain outside the registry pattern");
 
-// 3. No known stale deployment-status phrases.
+// 3. No known stale deployment/status phrases.
 const STALE_PHRASES = [
   "still serves its prior placeholder",
   "once cutover happens",
   "production cutover to Hummingbird has not yet occurred",
   "The repository is currently private",
   "branch protection on `main` is currently unavailable",
+  "Phase 1 is in final security verification",
+  "blocker for completing Phase 1",
 ];
 let staleCount = 0;
 for (const file of [...docFiles, ...htmlFiles]) {
@@ -116,7 +118,7 @@ for (const file of [...docFiles, ...htmlFiles]) {
     }
   }
 }
-if (staleCount === 0) pass("No known stale deployment/repository-status phrases found");
+if (staleCount === 0) pass("No known stale deployment/repository/phase-status phrases found");
 
 // 4. Nothing generated should link to the old charter-candidate path.
 let oldCharterLinks = 0;
@@ -151,15 +153,18 @@ if (!operations.includes("`main` is protected")) {
   pass("Operational sources reflect active main-branch protection");
 }
 
-// 7. Public Security page must reflect the current public-repo Phase 1 gate.
+// 7. Public Security page must reflect the active private-reporting path and current phase.
 const securityPage = fs.readFileSync(path.join(DIST_DIR, "security.html"), "utf8");
 if (!securityPage.includes("repository is public")) {
   fail("dist/security.html does not state that the repository is public");
 }
-if (!securityPage.includes("blocker for completing Phase 1")) {
-  fail("dist/security.html does not state the current private-reporting Phase 1 gate");
+if (!securityPage.includes("Phase 2")) {
+  fail("dist/security.html does not state the current Phase 2 condition");
+}
+if (!securityPage.includes("private vulnerability reporting is enabled")) {
+  fail("dist/security.html does not state that private vulnerability reporting is enabled");
 } else {
-  pass("Public Security page states the public-repo/private-reporting Phase 1 gate");
+  pass("Public Security page states active private reporting and Phase 2");
 }
 
 // 8. External Actions must use immutable full commit SHAs.
