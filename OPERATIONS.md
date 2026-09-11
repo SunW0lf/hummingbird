@@ -14,11 +14,11 @@ The normal production path is repository change → CI → deployment. Manual/lo
 
 Phase 2 is intentionally staged:
 
-1. **2A — Canonical contract/reference corpus.** No production database required. Schema and fixture contract must pass CI.
-2. **2B — Persistence/import.** Provision D1, apply versioned migrations, ingest storage-independent records deterministically, and prove export equivalence.
-3. **2C — Public read model/admission.** Build rebuildable projections and demonstrate explicit external-source → canonical-admission behavior.
-4. **2D — Publication buffer/backup/recovery.** Implement delayed/coarsened publication where required, export D1 independently, and restore into empty state.
-5. **2E — Phase review.** Review the Seed Bank experiment and Phase 2 operational/governance review gates before considering Phase 3.
+1. **2A — Canonical contract/reference corpus.** No production database required. Schema and fixture contract must pass CI. **Complete.**
+2. **2B — Persistence/import.** Provision D1, apply versioned migrations, ingest storage-independent records deterministically, and prove export equivalence. **Complete.**
+3. **2C — Public read model/admission.** Build rebuildable projections and demonstrate explicit external-source → canonical-admission behavior. **Complete.**
+4. **2D — Publication buffer/backup/recovery.** Implement delayed/coarsened publication where required, export D1 independently, and restore into empty state. **Complete.**
+5. **2E — Phase review.** Review the Seed Bank experiment and Phase 2 operational/governance review gates before considering Phase 3. **In progress; Phase 3 remains blocked.**
 
 See [ROADMAP.md](ROADMAP.md).
 
@@ -26,7 +26,7 @@ See [ROADMAP.md](ROADMAP.md).
 
 Current durable production state includes the Git repository, deliberately admitted canonical records in Cloudflare D1, and provider-authoritative external records that Hummingbird references rather than clones. The Phase 2 reference corpus under `fixtures/canonical/` is version-controlled contract material, not a backup of production application state.
 
-Phase 2D replaces the original Phase 0 backup no-op with a portable canonical exporter:
+Phase 2D replaced the original Phase 0 backup no-op with a portable canonical exporter:
 
 ```bash
 ./scripts/backup --remote --output /safe/off-repo/path/backup
@@ -38,7 +38,9 @@ Production backup bundles must remain outside the public repository, outside the
 
 During the current low-write steward-controlled phase, create and independently retain a verified portable backup after each deliberate durable canonical mutation, and before/after maintenance or migration activity that could materially affect canonical state. Add scheduled backup cadence only when mutation frequency makes it useful.
 
-A provider-native D1 export may supplement this bundle but does not replace the storage-independent canonical backup requirement.
+The completed Phase 2D production recovery exercise retained its first verified production bundle as a 30-day GitHub Actions artifact only after proving the complete backup exactly matched canonical material already public. That public-artifact exception must fail closed once any non-public canonical state exists; future such backups require a private independent retention path.
+
+A provider-native D1 export may supplement the portable bundle but does not replace the storage-independent canonical backup requirement.
 
 See [docs/protocols/PHASE_2D_RECOVERY.md](docs/protocols/PHASE_2D_RECOVERY.md).
 
@@ -52,7 +54,7 @@ Validate a bundle without touching any database:
 ./scripts/restore /safe/path/backup --validate-only
 ```
 
-Current Phase 2D-1 restoration is intentionally limited to an explicitly isolated local D1 state directory. Apply migrations first, then restore:
+The general-purpose restore command is intentionally limited to an explicitly isolated local D1 state directory. Apply migrations first, then restore:
 
 ```bash
 npx wrangler d1 migrations apply hummingbird \
@@ -68,18 +70,25 @@ npx wrangler d1 migrations apply hummingbird \
 
 The tool refuses non-empty canonical targets, imports objects/relationships transactionally, reconstructs canonical JSON from restored rows, and deep-compares restored meaning with the backup bundle.
 
-Remote restore is deliberately disabled in this slice. The production recovery drill must use a disposable replacement D1 database, never the live production database, as the restoration target. That drill must:
+Remote restore through the general-purpose command remains deliberately disabled. Phase 2D used a separate guarded one-shot workflow to prove remote recovery without ever targeting production: it read production canonical state via D1 REST `SELECT`s, created a disposable replacement D1, applied repository migrations, restored the verified bundle, proved semantic equality and public-projection equality, then deleted the disposable recovery database.
 
-1. provision an empty compatible recovery database;
-2. apply versioned migrations;
-3. import the latest verified portable canonical export;
-4. reconstruct and deep-compare canonical meaning;
-5. rebuild derived projections/indexes;
-6. compare the expected public read projection;
-7. run appropriate read/recovery verification;
-8. move any binding/traffic only after verification if this were a real incident.
+The remote drill demonstrated the required recovery properties against current production canonical state. If a real incident requires replacement, the same recovery order applies, but application bindings/traffic move only after verification.
 
 Derived projections are disposable; loss of a cache/search/read projection must not imply loss of institutional meaning.
+
+## Publication buffer
+
+During Phase 2's low-write period, the publication buffer is implemented as a curated protected-Git review/release boundary rather than a runtime queue or additional datastore. See [ADR 0004](docs/decisions/0004-publication-buffer.md), [ADR 0017](docs/decisions/0017-phase2-publication-buffer-policy.md), and [TRANSPARENCY.md](TRANSPARENCY.md).
+
+For a material operational event:
+
+1. keep raw provider evidence in the authoritative provider system;
+2. identify the consequential project-level facts;
+3. remove or coarsen unnecessary security/correlation metadata;
+4. review the proposed public summary through the protected repository workflow;
+5. publish the accepted summary in the public Transparency record.
+
+The first exercised event was the Phase 2D production-state recovery drill. The public record reports the outcome and demonstrated properties without copying temporary recovery-resource identifiers, credentials, exact provider request timing, raw logs, source/network metadata, or retry noise that does not change the institutional outcome.
 
 ## Rollback
 
@@ -221,5 +230,6 @@ The public-repository security activation is complete. Repository Actions are re
 - Review public Seed Bank activity for abuse/safety issues without treating popularity as governance weight.
 - Review Cloudflare public-read settings after material provider-policy changes so benign `GET`/`HEAD` access remains consistent with ADR 0013 without weakening network/DDoS or mutation-path protections.
 - Revisit the broad public-read Skip expression before any non-public, authenticated, expensive, or abuse-sensitive `GET` endpoint is added.
+- Review the temporary D1 recovery credential during Phase 2E; revoke it at expiration or replace it with an explicitly recovery-only operating procedure rather than allowing it to become a general deployment credential by inertia.
 - Rotate the Cloudflare deployment token periodically. Open question: [OQ-OPS-TOKEN-ROTATION-CADENCE](docs/governance/OPEN_QUESTIONS.md#oq-ops-token-rotation-cadence) — exact cadence.
 - Keep the Open Questions Registry honest — resolve questions in substantive documents rather than letting implementation silently answer them.
