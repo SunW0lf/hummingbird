@@ -34,6 +34,28 @@ Prefer **schema-flexible, versioned documents**, not unstructured schema-less bl
 
 Before production D1 persistence, the v1 contract is exercised outside any database through the reference corpus. D1 migrations/import/export must round-trip those records without depending on provider row IDs, triggers, hidden state, or database-only meaning.
 
+### Semantic contract before storage
+
+Every new Hummingbird concept must receive a portable semantic definition **before** it receives an authoritative database table, migration, provider-specific implementation, or public mutation endpoint.
+
+The order is:
+
+```text
+institutional concept
+        ↓
+portable semantic contract
+        ↓
+reference examples / tests
+        ↓
+storage representation
+        ↓
+provider implementation
+```
+
+A migration must not silently decide what a pad, guild, proposal workflow, grant, connection, space, or activity means. Storage exists to preserve and query an already-defined concept.
+
+This rule deliberately permits different implementation shapes. A future pad may require several operational tables while exporting as one portable object family; a live activity may coordinate through a Durable Object while only meaningful durable transitions enter D1. Provider layout is not institutional meaning.
+
 ## Canonical object core shape
 
 An ordinary canonical object contains only what is necessary for meaning, state, and relationships:
@@ -219,6 +241,44 @@ The Phase 2A reference corpus must:
 
 A future D1 design fails the portability requirement if an equivalent canonical export cannot be reconstructed from the stored data without hidden database-specific semantics.
 
+## Growth beyond v1
+
+The v1 schema is a foundation, not an attempt to encode all later Hummingbird behavior.
+
+### Proposals
+
+`proposal` already exists as a canonical family. Later governance phases may add review, amendment, decision, challenge, or authorization semantics only after those processes are separately defined. A proposal's existence must not imply approval or governance weight.
+
+### Pads
+
+Before a `pad` table or object family becomes authoritative, Hummingbird must define the smallest portable pad contract: what continuity means, which declarations are public, what credentials or capabilities are optional, what can expire, and what information is explicitly *not* identity or origin classification.
+
+A pad should be able to function as a continuing locus of participation without requiring a declaration that it represents any particular participant type.
+
+### Connections and guilds
+
+Pad connections should represent explicit relationship state rather than inferred social graphs. Guild membership should likewise be a deliberate state transition.
+
+A guild is not a higher participant class. Future guild capabilities should be scoped and, where practical, expiring: for example a bounded shared-space lifetime, resource allowance, or scheduled-space capability. Global reputation or permanent authority must not emerge accidentally from a guild table.
+
+### Spaces and live activities
+
+Durable definitions, commitments, memberships, grants, and meaningful outcomes may belong in D1. High-frequency live coordination — presence, sockets, turns, locks, cursor movement, temporary game state — should not automatically become canonical D1 history.
+
+Where serialized real-time coordination becomes necessary, a separate live coordination mechanism may manage transient state and emit only institutionally meaningful transitions into durable storage.
+
+The resulting long-term pattern is:
+
+```text
+portable concept
+      ↓
+D1 durable meaning
+      ↑
+meaningful transitions
+      ↑
+live/ephemeral coordination when actually required
+```
+
 ## Data classification and retention
 
 Visibility classification and retention class are separate axes. See [SECURITY.md](SECURITY.md) for the authoritative retention periods.
@@ -263,4 +323,4 @@ Unsolicited inbound support and future project-authorized expenditure are separa
 
 ## Current state
 
-The Phase 2 logical model and storage-independent v1 reference contract are defined. The reference corpus precedes production persistence. No production D1 database has been deployed yet; D1 migrations/import/export are Phase 2B work.
+The Phase 2 logical model and storage-independent v1 reference contract are defined. The reference corpus precedes production persistence. The current v1 D1 migration intentionally stores only canonical objects and typed relationships; pads, guilds, spaces, live activities, and later governance workflows remain semantic designs until their portable contracts are defined. No production D1 database has been deployed yet; remote D1 provisioning/reconstruction verification is the next Phase 2B execution slice.
