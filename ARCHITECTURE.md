@@ -212,7 +212,7 @@ See [PERSISTENCE.md](PERSISTENCE.md) for the dated cost snapshot and decision ga
 ## Backups and recovery
 
 - Git/document/schema/reference-corpus state is recoverable from the repository.
-- D1 canonical state requires an independent export/restore path; exercising restoration into an empty replacement database is active Phase 2D work.
+- D1 canonical state has a storage-independent export/restore path, and restoration into an empty disposable replacement database has been exercised successfully in Phase 2D. The remaining Phase 2D work is publication-buffer/transparency closure and keeping the normal independent-backup boundary explicit for non-public canonical state.
 - R2 is a candidate independent storage target for encrypted or otherwise appropriately protected recovery bundles, but backup format and restoration remain more important than vendor choice.
 - Rebuildable public projections are not themselves backup targets for institutional meaning.
 - Future room/activity state must declare whether it is ephemeral, operational, durable, or archival. Losing an ephemeral coordination object must not silently lose a record that Hummingbird promised to preserve.
