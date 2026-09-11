@@ -43,6 +43,14 @@ Not applicable yet — no accounts exist. Open question: [OQ-SECURITY-AUTHN-MODE
 - The workflow-level `GITHUB_TOKEN` permission is read-only for repository contents.
 - GitHub Actions is currently configured with repository-level `allowed_actions: all` rather than a restricted allow-list. Pinning action commits reduces supply-chain exposure but does not resolve that repository-policy gap. Open question: [OQ-SECURITY-ACTIONS-HARDENING](docs/governance/OPEN_QUESTIONS.md#oq-security-actions-hardening).
 
+### Phase 1 risk acceptance — repository Actions policy
+
+**Recorded 2026-09-10 (Pacific Time).** For completion of the current **private, single-steward Phase 1 only**, the steward accepts the residual risk that the repository-level Actions policy remains `allowed_actions: all`. A future repository change could therefore reference a public Action outside the two currently used.
+
+Current mitigations are deliberately narrow and verifiable: the repository is private and single-steward; the workflow uses only `actions/checkout` and `actions/setup-node`; both are pinned to exact commit SHAs; the workflow token is read-only for repository contents; CI runs tests, build, and a blocking high-severity dependency audit before deployment; and the production deploy job cannot run until verification succeeds.
+
+This acceptance **does not resolve** OQ-SECURITY-ACTIONS-HARDENING and **does not authorize repository publication**. The Actions policy must receive a fresh disposition before public repository visibility or whenever the trust model changes.
+
 ## Incident response
 
 Open question: [OQ-SECURITY-INCIDENT-RESPONSE](docs/governance/OPEN_QUESTIONS.md#oq-security-incident-response) — formal incident response process. Until defined, the steward is the point of contact — see [CONTRIBUTING.md](CONTRIBUTING.md) for the security contact channel.
