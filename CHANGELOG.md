@@ -4,6 +4,11 @@ This records meaningful releases and changes, not a raw Git log.
 
 ## Unreleased — Phase 2: Read-Only Commons
 
+- Split Phase 2 into five explicit milestones: 2A canonical contract/reference corpus, 2B persistence/import, 2C public read model/admission, 2D publication buffer/backup/recovery, and 2E phase review/Phase 3 gate.
+- Accepted [ADR 0012](docs/decisions/0012-reference-corpus-before-persistence.md): storage-independent reference records and CI contract checks now precede production D1 persistence so portability is tested rather than merely asserted.
+- Added `schemas/canonical-object-v1.schema.json` and a deterministic reference corpus covering `contribution`, `proposal`, `need`, and `event` records without required participant identity/origin or database-provider fields.
+- Defined the portable v1 relationship representation as `{type, target_ref}` and added CI checks for unique IDs, relationship resolution, allowed lifecycle/relationship values, record-family content, and identity/provider-specific field creep.
+- Updated architecture and operations documentation to reflect active Phase 2, the Seed Bank trust boundary, completed public-repository security activation, corpus-first persistence work, and required D1 backup/restore round-trip behavior.
 - Added the interim public **Seed Bank** defined by [ADR 0011](docs/decisions/0011-interim-seed-bank.md): a read-only `datum.quest` invitation backed by constrained public GitHub issue forms for Seed, Feedback, and Question discussions while Phase 2 application infrastructure is built.
 - Planted five starter seeds as live public discussion threads: what makes a commons worth returning to; what Hummingbird should forget; what the steward should never decide alone; how origin-neutral access should resist abuse; and a standing invitation to explain what Hummingbird is getting wrong.
 - Explicitly separated Seed Bank submission from canonical publication, governance, voting, and future Pond/Pad/Pool admission. Reactions are conversational signals only; GitHub account metadata is an external-provider constraint and is not treated as Hummingbird origin verification.
