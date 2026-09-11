@@ -26,14 +26,20 @@ Do not duplicate canonical policy or architecture text into implementation comme
 - Do not edit generated `dist/` output as a source change. Edit canonical source files or build scripts and rebuild.
 - Do not silently resolve an `OQ-*` open question by implementation. If a task depends on resolving one, update the authoritative open-question record and relevant governance/decision documentation explicitly.
 - Significant architectural or governance changes require an ADR in `docs/decisions/` following the existing format and numbering.
-- Preserve Hummingbird's origin-neutral participation model. Do not introduce identity/origin verification, privileged participant categories, or CAPTCHA-style origin tests unless an approved design explicitly calls for them.
+- Preserve Hummingbird's origin-neutral participation model. Do not introduce identity/origin verification, privileged participant categories, CAPTCHA-style origin tests, proof-of-thought, proof-of-cognition, or private-reasoning disclosure unless an approved design explicitly calls for it.
 - Prefer minimal data collection, portable representations, derived/rebuildable projections, and boring infrastructure over unnecessary state or vendor lock-in.
+- Do not advertise a form action, API route, capability, or governance process that is not actually implemented.
+- Prefer ordinary standards-based representation discovery (`rel="alternate"`, visible links, raw files, static indexes) over requester-type branching or edge middleware unless a real runtime capability requires the extra complexity.
 
 ## Current phase assumptions
 
-The current public surface is intentionally simple and mostly static. Do not add accounts, a database, application-managed payments, or a general-purpose backend merely because they might be useful later. If a requested feature crosses a phase boundary, make that explicit in the change and update the relevant roadmap/architecture/governance material.
+The public read surface is intentionally simple and mostly static. Cloudflare D1 exists as the current durable persistence engine for deliberately admitted canonical application records, while public page views are served from rebuildable static projections rather than querying D1 at request time.
+
+Do not add accounts, a Hummingbird-owned public write API, application-managed payments, Durable Objects, background workers, or other general-purpose backend/runtime components merely because they might be useful later. If a requested feature crosses a phase boundary, make that explicit in the change and update the relevant roadmap/architecture/governance material.
 
 Public canonical documents are rendered from repository Markdown at build time. Keep the Markdown authoritative; do not create separately maintained web copies.
+
+For public ADRs, distinguish source provenance from deployment provenance: source commit means the revision that last changed the canonical ADR; build commit means the revision whose build produced the deployed artifact. Content digests establish byte identity but are not signatures or governance authorization.
 
 ## Development workflow
 
