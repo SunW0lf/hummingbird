@@ -58,6 +58,22 @@ Operational configuration should follow these principles:
 
 Exact provider rules, thresholds, and security-sensitive implementation details are operational configuration rather than public institutional policy and need not be exposed merely to prove compliance with this ADR.
 
+## Production implementation — 2026-09-11
+
+The production `datum.quest` zone now has an active Cloudflare custom **Skip** rule for the current read-only application surface with this match expression:
+
+```text
+(http.host eq "datum.quest" and http.request.method in {"GET" "HEAD"})
+```
+
+The rule is intentionally broad while Hummingbird's application-owned production surface is read-only. It exempts matched reads from the applicable challenge/blocking components selected in the Cloudflare dashboard, including remaining custom/WAF phases and legacy edge controls that could otherwise discriminate on browser characteristics, user agent, reputation, or allowlist state. Core Cloudflare network/DDoS protection remains outside this exception.
+
+This rule is **not** a permanent statement that every future `GET` path is low-risk. Before Hummingbird introduces authenticated, administrative, expensive-compute, or otherwise abuse-sensitive read endpoints, the expression must be narrowed to the deliberately public commons routes or the read and write/control planes must be separated by path or hostname.
+
+Cloudflare's basic Bot Fight Mode is a separate operational concern because it is not bypassed by a WAF Skip rule. If that mode conflicts with this ADR, it must remain disabled or be replaced by controls that can preserve origin-neutral public reads. Likewise, provider-managed crawler/`robots.txt` features must not silently override the repository-owned public policy.
+
+No broad "Cache Everything" override was added as part of this change. Cloudflare Pages' native deployment cache/invalidation behavior and ordinary HTTP revalidation are retained; any future explicit cache rule should be justified independently and must not introduce stale institutional content or weaken deploy correctness.
+
 ## Verification
 
 Build/CI acceptance tests should verify the public artifact using a plain HTTP client and confirm at minimum:
@@ -72,11 +88,29 @@ Build/CI acceptance tests should verify the public artifact using a plain HTTP c
 
 A post-deployment smoke test should repeat the critical checks against `https://datum.quest` with a plain HTTP client and reject obvious Cloudflare challenge, CAPTCHA, login, or interstitial responses. This production test is intentionally minimal and does not collect participant identity or fingerprinting data.
 
+### Production acceptance evidence — 2026-09-11
+
+After activating the public-read Skip rule, manual plain-HTTP checks from an ordinary Windows `curl` client produced the following externally observable results:
+
+- `HEAD /` returned `200 OK` and `text/html; charset=utf-8`;
+- `HEAD /llms.txt` returned `200 OK` and `text/plain; charset=utf-8`;
+- `GET /llms.txt` returned the expected Hummingbird machine-facing index as ordinary text;
+- `HEAD /robots.txt` returned `200 OK` and `text/plain; charset=utf-8`;
+- `HEAD /docs/raw/CHARTER.md` returned `200 OK` and `text/markdown; charset=utf-8`;
+- `HEAD /decisions/0013-public-read-accessibility` returned `200 OK` and `text/html; charset=utf-8`;
+- a request with the `User-Agent` header explicitly removed returned `200 OK` for `/llms.txt`;
+- a request using an explicit `curl/8.0` user agent returned `200 OK` for `/`;
+- no tested response contained `cf-mitigated: challenge`, an interactive challenge/interstitial, or a `403`, `429`, or `503` status;
+- the existing CSP, frame, referrer, permissions, and content-type hardening headers remained present.
+
+These checks establish the public-read property at the production edge without relying on a browser session, cookie jar, JavaScript execution, authentication, participant-type declaration, or verified-crawler identity.
+
 ## Consequences
 
 - Public-read accessibility becomes a measurable production property rather than an aspiration.
 - Edge-provider configuration is recognized as part of the effective public-read architecture even when it is not stored in the repository.
 - The boring-web architecture remains a feature rather than technical debt to be replaced with a SPA.
 - Stronger controls remain available for future mutation endpoints and harmful behavior.
+- The currently broad production Skip rule must be revisited before abuse-sensitive or non-public `GET` endpoints are introduced.
 - This decision does not resolve training-crawler policy or content licensing.
 - This decision does not convert Seed Bank submission into canonical admission, alter governance weight, or change the GitHub-backed interim ingress boundary.
