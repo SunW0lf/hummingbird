@@ -87,3 +87,9 @@ footer {
 .doc-meta code {
   color: var(--fg);
 }
+
+.unpublished-note {
+  color: var(--muted);
+  font-size: 0.85em;
+  font-style: italic;
+}

@@ -49,18 +49,33 @@ function getCommitSha() {
 // Canonical Markdown cross-links each other by repo-root-relative filename
 // (e.g. "GOVERNANCE.md"), which is correct in Git but does not resolve once
 // rendered into dist/. Rewrite links to documents we actually publish so the
-// rendered page is navigable; links to documents not in the allowlist (e.g.
-// ARCHITECTURE.md, SECURITY.md, the internal Open Questions Registry) are
-// left as-is since those are intentionally not published yet.
+// rendered page is navigable. Links to documents not in the allowlist (e.g.
+// ARCHITECTURE.md, SECURITY.md, docs/decisions/, the internal Open Questions
+// Registry) are de-linked - the text is kept but the href is dropped and a
+// short note is appended - rather than left as a dead link that (on
+// Cloudflare Pages) silently falls through to the homepage. A visitor who
+// somehow reaches an unpublished path anyway lands on the custom 404 page
+// (app/404.html), which explains the allowlist model.
 const LINK_REWRITES = new Map([
   ...CANONICAL_DOCS.map((d) => [d.file, d.route]),
   ["LICENSE", "docs/raw/LICENSE"],
 ]);
 
+function isInternalUnpublishedPath(base) {
+  if (/^[a-z]+:\/\//i.test(base)) return false; // external URL
+  if (base.startsWith("docs/raw/")) return false; // already a working raw path
+  if (/^[A-Z0-9_]+\.md$/i.test(base) || base === "LICENSE") return true; // unlisted repo-root doc
+  if (base.startsWith("docs/")) return true; // docs/decisions/, docs/charter/, docs/governance/, etc.
+  return false;
+}
+
 function rewriteInternalLinks(html) {
-  return html.replace(/href="([^"#]+)(#[^"]*)?"/g, (match, base, anchor) => {
+  return html.replace(/<a href="([^"#]+)(#[^"]*)?">([^<]*)<\/a>/g, (match, base, anchor, text) => {
     if (LINK_REWRITES.has(base)) {
-      return `href="${LINK_REWRITES.get(base)}${anchor || ""}"`;
+      return `<a href="${LINK_REWRITES.get(base)}${anchor || ""}">${text}</a>`;
+    }
+    if (isInternalUnpublishedPath(base)) {
+      return `${text} <span class="unpublished-note">(internal reference, not yet public)</span>`;
     }
     return match;
   });
