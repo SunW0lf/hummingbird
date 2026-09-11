@@ -4,6 +4,7 @@ This records meaningful releases and changes, not a raw Git log.
 
 ## Unreleased — Phase 2: Read-Only Commons
 
+- Simplified the public front door to five primary choices (About, Commons, Seed Bank, Decisions, More), moved the deeper document set behind a small public library page, reduced Seed Bank acknowledgment friction, extracted Support inline code into static assets, added browser security headers, and added canonical/OpenGraph metadata plus robots/sitemap discovery without changing Hummingbird's governance or participation boundaries.
 - Published a first-class **Decisions** surface at `/decisions`, rendering the twelve currently public Architecture Decision Records from their canonical `docs/decisions/*.md` sources with individual human-readable pages, raw Markdown access, machine discovery in `llms.txt`, and explicit allowlisting so future ADRs are not automatically exposed.
 - Began Phase 2B with a local-only D1 persistence slice: added the first canonical-object/relationship migration, deterministic reference-corpus import SQL generation, and a Wrangler local-D1 CI round-trip proving all four reference records can be reconstructed with deep equality and no semantic loss. No remote D1 database or credentials were used.
 - Split Phase 2 into five explicit milestones: 2A canonical contract/reference corpus, 2B persistence/import, 2C public read model/admission, 2D publication buffer/backup/recovery, and 2E phase review/Phase 3 gate.

@@ -54,7 +54,7 @@ async function main() {
   <p><strong>Network:</strong> ${escapeHtml(chainName)} (chain ID ${escapeHtml(String(chainId))})</p>
   <p><strong>Address:</strong></p>
   <p class="wallet-address" id="wallet-address">${escapeHtml(address)}</p>
-  <button type="button" id="copy-address-btn" onclick="(function(){var t=document.getElementById('wallet-address').textContent.trim();function done(ok){var b=document.getElementById('copy-address-btn');b.textContent=ok?'Copied':'Copy failed — select manually';setTimeout(function(){b.textContent='Copy address';},2000);}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){done(true);},function(){done(false);});}else{done(false);}})()">Copy address</button>
+  <button type="button" id="copy-address-btn">Copy address</button>
   <div class="qr-code">${qrSvg}</div>
   <p class="qr-note">QR code encodes the receiving address only. Select ${escapeHtml(asset)} on ${escapeHtml(chainName)} in your own wallet before sending.</p>
 </div>
@@ -66,22 +66,12 @@ async function main() {
 <p>Base Mainnet remains the authoritative record of any support sent. Hummingbird does not maintain a separate internal transaction ledger; if financial transparency reporting is built later, it will derive inbound activity from the chain or an appropriate indexer rather than duplicating it as a primary record.</p>
 <p>See <a href="transparency.html">Transparency</a> and <a href="governance.html">Governance</a> for how this fits the project's broader transparency and financial-governance principles.</p>`;
 
-  const extraHead = `<style>
-.support-card { border: 1px solid var(--border); border-radius: 0.5rem; padding: 1rem 1.25rem; margin: 1.25rem 0; }
-.wallet-address { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; word-break: break-all; background: #17181b; border: 1px solid var(--border); border-radius: 0.35rem; padding: 0.6rem 0.8rem; }
-.qr-code { max-width: 220px; margin: 1rem 0; }
-.qr-code svg { width: 100%; height: auto; display: block; }
-.qr-note { color: var(--muted); font-size: 0.85rem; }
-.warning { color: var(--accent); }
-button#copy-address-btn { background: transparent; color: var(--fg); border: 1px solid var(--accent); border-radius: 0.35rem; padding: 0.4rem 0.9rem; cursor: pointer; font-size: 0.9rem; }
-button#copy-address-btn:hover { background: var(--accent); color: var(--bg); }
-</style>`;
-
   const html = renderPage({
     title: "Support",
     description: "Voluntary interim support for the Hummingbird steward via a public Base Mainnet USDC address.",
     bodyHtml,
-    extraHead,
+    extraHead: `<script src="support.js" defer></script>`,
+    canonicalPath: "support.html",
   });
 
   fs.writeFileSync(path.join(DIST, "support.html"), html);
