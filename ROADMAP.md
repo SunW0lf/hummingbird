@@ -52,17 +52,24 @@ Completed in PR #26. See [ADR 0012](docs/decisions/0012-reference-corpus-before-
 
 Status: **in progress**
 
-The first substep is intentionally **local-only**: validate D1 migrations/import/export semantics through Wrangler's local D1 environment before any remote production database is created.
+The local-only substep is now implemented: the repository contains the first versioned D1 migration, deterministic reference-corpus seed generation, and a Wrangler local-D1 round-trip test that reconstructs all four reference records and checks deep equality without semantic loss.
 
-- Add versioned migrations for canonical documents and typed relationships.
-- Apply migrations from empty state in CI using local D1.
-- Add a deterministic import path for the reference corpus.
-- Reconstruct canonical records from D1 and compare them with the original storage-independent corpus.
-- Only after local round-trip tests are green, provision/configure remote Cloudflare D1 without placing credentials in the repository.
+That local test remains the authoritative CI contract. The next execution slice is **remote D1 provisioning and reconstruction verification**, not public writes. See [docs/protocols/PHASE_2B_REMOTE_D1.md](docs/protocols/PHASE_2B_REMOTE_D1.md).
+
+Immediate next steps:
+
+- provision an empty remote Cloudflare D1 database without attaching a public mutation surface;
+- keep the existing Pages deployment credential narrow and use a separate least-privilege D1 provisioning/automation credential if remote automation is needed;
+- bind the remote database identifier without making provider IDs part of canonical meaning;
+- apply repository-controlled migrations from empty state;
+- load the bounded reference corpus through the deterministic import path;
+- export/reconstruct canonical records from remote D1 and compare them with the storage-independent corpus;
+- keep ordinary pull-request CI local and deterministic rather than dependent on remote Cloudflare state;
+- document the successful remote reconstruction before moving into Phase 2C.
 
 The broader persistence architecture and dated cost envelope are documented in [PERSISTENCE.md](PERSISTENCE.md). Future Durable Objects/R2 use is explicitly not part of this Phase 2B D1 milestone unless a later decision says otherwise.
 
-**Exit:** an empty database can be migrated and populated deterministically from storage-independent input, and canonical records can be exported without loss of institutional meaning.
+**Exit:** an empty database can be migrated and populated deterministically from storage-independent input, and canonical records can be exported without loss of institutional meaning. Remote-provider configuration must be reproducible enough that undocumented dashboard state is not required for correctness.
 
 ### Phase 2C — Public read model and admission boundary
 
