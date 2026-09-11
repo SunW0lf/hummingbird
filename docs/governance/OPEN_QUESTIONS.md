@@ -176,7 +176,7 @@ Status: IN PROGRESS — feasibility confirmed (Cloudflare Email Routing availabl
 **GitHub Actions permissions hardening.** Repository currently has `allowed_actions: all` (any public action may run) rather than a restricted allow-list. (Documented risk acceptance permitted.)
 Raised in: [SECURITY.md](../../SECURITY.md).
 Blocks: completion of Phase 1, or repository publication, whichever occurs first.
-Status: OPEN.
+Status: OPEN — Phase 1 risk acceptance recorded 2026-09-10 in SECURITY.md for the current private, single-steward phase; must be revisited before repository publication or a material trust-model change.
 
 ## Operations
 
@@ -196,7 +196,7 @@ Status: OPEN.
 **Branch protection on `main` is currently unavailable** (GitHub disables it for private repositories on this plan). No enforced required-review or required-status-check rule exists; CI-before-deploy is enforced only by the workflow's own `needs:`/`if:` structure, not by GitHub branch rules. (Documented risk acceptance permitted while the repository remains private and single-steward.)
 Raised in: [OPERATIONS.md](../../OPERATIONS.md), [SECURITY.md](../../SECURITY.md).
 Blocks: completion of Phase 1, or repository publication, whichever occurs first.
-Status: OPEN.
+Status: OPEN — Phase 1 risk acceptance recorded 2026-09-10 in OPERATIONS.md for the current private, single-steward phase; must be revisited before repository publication, adding maintainers, or a material trust-model change.
 
 ## Transparency
 
@@ -223,7 +223,7 @@ Status: OPEN.
 ## Index by phase gate
 
 - **Blocks entry into Phase 2:** OQ-DATA-CONTRIBUTION-MODEL, OQ-DATA-PROPOSAL-MODEL, OQ-DATA-NEED-MODEL, OQ-DATA-AUDIT-EVENT-MODEL, OQ-DATA-WORKFLOW-STATES, OQ-SECURITY-RETENTION-PERIODS, OQ-TRANSPARENCY-OPERATIONAL-HISTORY.
-- **Blocks completion of Phase 1 / repository publication:** OQ-SECURITY-VULN-REPORTING, OQ-SECURITY-ACTIONS-HARDENING, OQ-OPS-BRANCH-PROTECTION.
+- **Blocks completion of Phase 1 / repository publication:** OQ-SECURITY-VULN-REPORTING, OQ-SECURITY-ACTIONS-HARDENING, OQ-OPS-BRANCH-PROTECTION. For the current private, single-steward Phase 1, the latter two have dated documented risk acceptances; OQ-SECURITY-VULN-REPORTING remains the unresolved Phase 1 completion blocker. All three require fresh disposition before repository publication.
 - **Blocks entry into Phase 3:** OQ-CHARTER-RIGHTS, OQ-CHARTER-EXCLUSION, OQ-CHARTER-PARTICIPANT-RESPONSIBILITIES, OQ-GOVERNANCE-EMERGENCY-AUTHORITY, OQ-GOVERNANCE-PROPOSALS, OQ-ARCH-FRAMEWORK, OQ-SECURITY-ACCESS-CONTROL-RETENTION, OQ-SECURITY-AUTHN-MODEL.
 - **Blocks entry into Phase 4:** OQ-GOVERNANCE-DISPUTES, OQ-GOVERNANCE-VALIDATED-NEEDS.
 - **Blocks entry into Phase 5:** OQ-PROJECT-LEGAL-STRUCTURE.
