@@ -8,11 +8,11 @@ This is currently a passion project, not a conventional startup or commercial pr
 
 ## Project status
 
-**Phase 2 — Read-Only Commons is in progress; Phase 2A is defining and testing the storage-independent canonical contract before production persistence.** Phase 0 — Foundation and Phase 1 — Public Charter Site are complete. The repository is public, `main` is protected, required CI is active, and the public-repository security baseline is enabled. See [ROADMAP.md](ROADMAP.md).
+**Phase 2 — Read-Only Commons is in progress; Phase 2A is complete and Phase 2B persistence/import work is underway.** Phase 0 — Foundation and Phase 1 — Public Charter Site are complete. The repository is public, `main` is protected, required CI is active, and the public-repository security baseline is enabled. See [ROADMAP.md](ROADMAP.md).
 
 The production Hummingbird application remains read-only. An interim public [Seed Bank](https://datum.quest/seed-bank), defined by [ADR 0011](docs/decisions/0011-interim-seed-bank.md), uses constrained GitHub issues for Seed, Feedback, and Question discussions without treating those provider-hosted threads as canonical Hummingbird records or governance votes.
 
-Before D1 is introduced, Phase 2A uses a machine-readable schema and a small reference corpus to prove that canonical record meaning exists independently of any database. See [ADR 0012](docs/decisions/0012-reference-corpus-before-persistence.md).
+Phase 2A established a machine-readable schema and storage-independent reference corpus. Phase 2B has now proven the first D1 migration/import/export round trip locally in CI without creating a remote production database. See [ADR 0012](docs/decisions/0012-reference-corpus-before-persistence.md).
 
 ## Quick start (development)
 
@@ -21,7 +21,7 @@ The current Phase 2 path is: storage-independent canonical contract → D1 persi
 ```bash
 ./scripts/bootstrap   # one-time setup (npm install for devDependencies)
 ./scripts/dev         # serve app/ locally
-./scripts/test        # build + site/docs + canonical-corpus contract tests
+./scripts/test        # build + site/docs + canonical-corpus + local-D1 round-trip tests
 ./scripts/build       # produce dist/ output
 ```
 
@@ -47,7 +47,7 @@ The current Phase 2 path is: storage-independent canonical contract → D1 persi
 
 ## Public documentation access
 
-Selected canonical documents (Mission, Charter, Governance, Roadmap, Transparency, Changelog, Contributing, License) are published on `datum.quest` both as rendered pages (e.g. `/charter`) and as raw Markdown for direct/machine access (e.g. `/docs/raw/CHARTER.md`). See [docs/decisions/0006-canonical-documents-drive-publication.md](docs/decisions/0006-canonical-documents-drive-publication.md). A machine-readable index lives at `/llms.txt`.
+Selected canonical documents (Mission, Charter, Governance, Roadmap, Transparency, Changelog, Contributing, License) are published on `datum.quest` both as rendered pages (e.g. `/charter`) and as raw Markdown for direct/machine access (e.g. `/docs/raw/CHARTER.md`). The explicitly approved public Architecture Decision Records are indexed at `/decisions`, rendered individually under `/decisions/<slug>`, and served verbatim under `/docs/raw/decisions/`. Future ADRs require explicit publication allowlisting rather than recursive publication. See [docs/decisions/0006-canonical-documents-drive-publication.md](docs/decisions/0006-canonical-documents-drive-publication.md). A machine-readable index lives at `/llms.txt`.
 
 ## Deployment overview
 

@@ -21,7 +21,7 @@ Hummingbird is a public commons for participation, deliberation, contribution, a
 
 ## Current phase
 
-**Phase 2 — Read-Only Commons is in progress; Phase 2A is establishing the storage-independent canonical contract before production persistence.** Phase 0 — Foundation and Phase 1 — Public Charter Site are complete. See [ROADMAP.md](ROADMAP.md).
+**Phase 2 — Read-Only Commons is in progress; Phase 2A is complete and Phase 2B persistence/import work is underway.** Phase 0 — Foundation and Phase 1 — Public Charter Site are complete. See [ROADMAP.md](ROADMAP.md).
 
 ## Technology constraints
 
@@ -35,7 +35,7 @@ Hummingbird is a public commons for participation, deliberation, contribution, a
 
 - GitHub is the canonical source of truth for code, docs, schema/reference-contract material, migrations, deployment config, infrastructure scripts, and operational scripts.
 - Cloudflare Pages hosts the deployed site.
-- Cloudflare D1 is the planned initial Phase 2 persistence engine beginning in Phase 2B; canonical data remains portable and versioned per [DATA_MODEL.md](DATA_MODEL.md), [ADR 0010](docs/decisions/0010-phase2-read-only-commons-contract.md), and [ADR 0012](docs/decisions/0012-reference-corpus-before-persistence.md).
+- Cloudflare D1 is the planned initial Phase 2 persistence engine. The Phase 2B local migration/import/export round trip is already exercised in CI; no remote production D1 database has been created yet. Canonical data remains portable and versioned per [DATA_MODEL.md](DATA_MODEL.md), [ADR 0010](docs/decisions/0010-phase2-read-only-commons-contract.md), and [ADR 0012](docs/decisions/0012-reference-corpus-before-persistence.md).
 - Production deployment occurs only from protected `main`, only after required CI passes.
 
 ## Data posture

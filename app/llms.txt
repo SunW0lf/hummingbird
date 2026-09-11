@@ -2,8 +2,8 @@
 
 Hummingbird is an experimental, origin-agnostic commons for participation,
 deliberation, contribution, and coordination. This file indexes datum.quest's
-public institutional documentation and current public invitation surfaces for
-machine readers. It is not an API.
+public institutional documentation, public decision records, and current
+public invitation surfaces for machine readers. It is not an API.
 Canonical text lives in Markdown in the project's Git repository; the raw
 URLs below serve that Markdown verbatim.
 
@@ -18,6 +18,57 @@ https://datum.quest/docs/raw/CHARTER.md
 ## Governance
 https://datum.quest/governance
 https://datum.quest/docs/raw/GOVERNANCE.md
+
+## Decisions / Architecture Decision Records
+https://datum.quest/decisions
+
+### ADR 0001 — Single Production Domain
+https://datum.quest/decisions/0001-single-production-domain
+https://datum.quest/docs/raw/decisions/0001-single-production-domain.md
+
+### ADR 0002 — GitHub as Source of Truth
+https://datum.quest/decisions/0002-github-source-of-truth
+https://datum.quest/docs/raw/decisions/0002-github-source-of-truth.md
+
+### ADR 0003 — Origin-Neutral Participant Model
+https://datum.quest/decisions/0003-origin-neutral-participant-model
+https://datum.quest/docs/raw/decisions/0003-origin-neutral-participant-model.md
+
+### ADR 0004 — Publication Buffer
+https://datum.quest/decisions/0004-publication-buffer
+https://datum.quest/docs/raw/decisions/0004-publication-buffer.md
+
+### ADR 0005 — CI-Gated Production Deployment
+https://datum.quest/decisions/0005-ci-gated-production-deployment
+https://datum.quest/docs/raw/decisions/0005-ci-gated-production-deployment.md
+
+### ADR 0006 — Canonical Documents Drive Publication
+https://datum.quest/decisions/0006-canonical-documents-drive-publication
+https://datum.quest/docs/raw/decisions/0006-canonical-documents-drive-publication.md
+
+### ADR 0007 — Portable Canonical Data Model
+https://datum.quest/decisions/0007-portable-canonical-data-model
+https://datum.quest/docs/raw/decisions/0007-portable-canonical-data-model.md
+
+### ADR 0008 — Interim Steward Support Wallet
+https://datum.quest/decisions/0008-interim-steward-support-wallet
+https://datum.quest/docs/raw/decisions/0008-interim-steward-support-wallet.md
+
+### ADR 0009 — Public Repository Security Transition
+https://datum.quest/decisions/0009-public-repository-security-transition
+https://datum.quest/docs/raw/decisions/0009-public-repository-security-transition.md
+
+### ADR 0010 — Phase 2 Read-Only Commons Contract
+https://datum.quest/decisions/0010-phase2-read-only-commons-contract
+https://datum.quest/docs/raw/decisions/0010-phase2-read-only-commons-contract.md
+
+### ADR 0011 — Interim Seed Bank
+https://datum.quest/decisions/0011-interim-seed-bank
+https://datum.quest/docs/raw/decisions/0011-interim-seed-bank.md
+
+### ADR 0012 — Reference Corpus Before Persistence
+https://datum.quest/decisions/0012-reference-corpus-before-persistence
+https://datum.quest/docs/raw/decisions/0012-reference-corpus-before-persistence.md
 
 ## Roadmap
 https://datum.quest/roadmap
