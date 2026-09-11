@@ -141,7 +141,7 @@ async function main() {
   for (const phrase of [
     "public surfaces are intentionally readable by automated and interactive agents",
     "Public reading does not require an origin category or identity declaration",
-    "Submission is not canonical admission",
+    "An offer is not canonical admission",
     "0013-public-read-accessibility",
   ]) {
     if (!llms.includes(phrase)) fail(`llms.txt is missing public-read guidance: ${phrase}`);

@@ -55,7 +55,7 @@ Blocks: entry into Phase 3.
 Status: OPEN.
 
 ### OQ-GOVERNANCE-PROPOSALS
-**Who may submit a proposal, in what form, and where** (GitHub issue/PR now; in-app form once Phase 3 exists)?
+**Who may offer a proposal, in what form, and where** (GitHub issue/PR now; Hummingbird-owned Offer surface once Phase 3 exists)?
 Raised in: [GOVERNANCE.md](../../GOVERNANCE.md), [CONTRIBUTING.md](../../CONTRIBUTING.md).
 Blocks: entry into Phase 3.
 Status: OPEN.

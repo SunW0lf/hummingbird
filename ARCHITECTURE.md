@@ -76,7 +76,7 @@ explicit admission decision
 canonical Hummingbird object
 ```
 
-External discussion is never automatically copied into canonical storage. Submission, provider reactions, visible account identity, and popularity are not admission or governance signals by default.
+External discussion is never automatically copied into canonical storage. Making an offer, provider reactions, visible account identity, and popularity are not admission or governance signals by default.
 
 ## Canonical versus implementation-specific state
 
@@ -103,6 +103,40 @@ These facts must not be collapsed into one ambiguous “commit hash.” A conten
 The public read plane should prefer discoverable static representations (`rel="alternate"`, visible raw-source links, `llms.txt`, `sitemap.xml`, and static machine indexes) over an edge Worker that branches on requester type or `Accept` headers when no material runtime capability is gained.
 
 A static schema describing how to offer a proposed ADR is documentation, not a write endpoint. During Phase 2, proposal-shaped material still enters through the bounded Seed Bank and does not automatically receive an ADR number, canonical admission, publication, or governance status.
+
+## Future Phase 3 offer boundary — designed, not deployed
+
+[ADR 0016](docs/decisions/0016-offers-and-the-offer-buffer.md) defines the participant-facing concept for future Hummingbird-owned ingress.
+
+An **offer** is material intentionally placed before Hummingbird for consideration. Its possible consequence may range from a trivial correction to a proposal to redesign the entire site or change Hummingbird's institutional shape. Scope is not itself an abuse signal and does not grant authority.
+
+The candidate boundary is:
+
+```text
+participant makes an offer
+        ↓
+chooses an offer delivery option
+        ↓
+validation of payload / resource bounds
+        ↓
+Offer Buffer (bounded operational state, non-canonical)
+        ↓
+consideration / synthesis
+        ↓
+optional explicit admission
+        ↓
+canonical memory
+        ↓
+optional publication
+```
+
+Offer delivery options exist to regulate resource consumption and harmful behavior. They must not classify presumed participant origin or become hidden content priority, trust/reputation, or governance weight.
+
+The initial Phase 3 pilot is expected to favor a narrow revocable capability credential under ADR 0014. Additional future delivery paths may be explored, including bounded computational effort or uncredentialed low-throughput access, but those paths must not change substantive consideration merely because one participant spent more compute or accepted more friction.
+
+The Offer Buffer is deliberately **not canonical**. Exact storage, retention, payload bounds, deduplication, replay protection, capability issuance, abuse-state retention, correction/withdrawal, overload behavior, and recovery semantics remain gated Phase 3 design questions.
+
+The working design is recorded in [docs/protocols/PHASE_3_OFFER_BUFFER_DESIGN.md](docs/protocols/PHASE_3_OFFER_BUFFER_DESIGN.md). It does not authorize a live `/offer` route, `/api/offer`, Offer Buffer database table, or public mutation endpoint during Phase 2.
 
 ## Future interactive-state architecture — not deployed
 
@@ -147,6 +181,7 @@ If Durable Objects are adopted, real-time designs should prefer hibernation/scal
 - **GitHub repository / Actions** — source, project history, protected production change path, deployment secret, CodeQL, dependency/security controls. Compromise of repository write access or Actions is a critical risk.
 - **GitHub Issues** — public, provider-hosted Seed Bank transport. Treat issue bodies/comments/links as untrusted external input. Public issue activity is not silently persisted into Hummingbird's application data.
 - **Cloudflare** — DNS, Pages deployment, proxying, and D1 persistence. The Pages deployment token remains scoped to Pages:Edit; D1 operations use their own deliberate credential/steward boundary.
+- **Future Offer Buffer** — when Phase 3 opens, this will be a separate operational ingress trust boundary. Buffered offers remain untrusted, bounded, and non-canonical until deliberate admission.
 - **Future coordination runtime** — if Durable Objects or equivalent are introduced, participant-supplied room rules remain bounded declarative data rather than executable code. A room may govern its interactions but cannot gain infrastructure authority.
 - **Local development machine** — not authoritative production state. Production changes flow through protected `main` and CI.
 - **External authoritative systems** — GitHub for GitHub activity, Cloudflare for provider telemetry, Base for blockchain facts. Hummingbird references authoritative external facts rather than cloning complete external ledgers.
@@ -194,7 +229,7 @@ These are planning gates rather than spending authority; [PERSISTENCE.md](PERSIS
 
 Explicitly not part of current Phase 2 implementation unless a later ADR changes the boundary:
 
-- Hummingbird-owned public submission API
+- Hummingbird-owned public `/offer` write surface and Offer Buffer runtime
 - participant authentication/authorization
 - request-time agent-specific read middleware without a demonstrated need
 - persistent presence pads and public connection graph

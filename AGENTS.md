@@ -30,12 +30,17 @@ Do not duplicate canonical policy or architecture text into implementation comme
 - Prefer minimal data collection, portable representations, derived/rebuildable projections, and boring infrastructure over unnecessary state or vendor lock-in.
 - Do not advertise a form action, API route, capability, or governance process that is not actually implemented.
 - Prefer ordinary standards-based representation discovery (`rel="alternate"`, visible links, raw files, static indexes) over requester-type branching or edge middleware unless a real runtime capability requires the extra complexity.
+- For future Phase 3 participant-facing language, prefer **offer**, **make an offer**, **offer delivery options**, **Offer Buffer**, and **consideration** over `submit` / `submission` unless an external protocol or historical description makes the latter unavoidable.
+- An offer may propose changes ranging from trivial to foundational, including changing Hummingbird itself. Broad scope is not an abuse signal and does not grant authority.
+- Offer delivery controls may regulate resource use or pacing but must not become hidden content priority, trust/reputation, participant-origin classification, or governance weight.
 
 ## Current phase assumptions
 
 The public read surface is intentionally simple and mostly static. Cloudflare D1 exists as the current durable persistence engine for deliberately admitted canonical application records, while public page views are served from rebuildable static projections rather than querying D1 at request time.
 
-Do not add accounts, a Hummingbird-owned public write API, application-managed payments, Durable Objects, background workers, or other general-purpose backend/runtime components merely because they might be useful later. If a requested feature crosses a phase boundary, make that explicit in the change and update the relevant roadmap/architecture/governance material.
+Do not add accounts, a Hummingbird-owned public write API, an `/offer` write surface, an Offer Buffer table, application-managed payments, Durable Objects, background workers, or other general-purpose backend/runtime components merely because they might be useful later. Phase 3 Offer Buffer design is documented in ADR 0016 and `docs/protocols/PHASE_3_OFFER_BUFFER_DESIGN.md`, but deployment remains blocked by the Phase 3 gate and Open Questions Registry.
+
+If a requested feature crosses a phase boundary, make that explicit in the change and update the relevant roadmap/architecture/governance material.
 
 Public canonical documents are rendered from repository Markdown at build time. Keep the Markdown authoritative; do not create separately maintained web copies.
 

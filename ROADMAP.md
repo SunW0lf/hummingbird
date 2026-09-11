@@ -33,7 +33,7 @@ The Phase 2 data-model, workflow-state, retention, and operational-transparency 
 
 Phase 2 implements public read-only representations of contributions, proposals, needs, relationships, minimal events, statuses, and transparency records. Cloudflare D1 is the first persistence engine, while canonical record meaning remains portable and storage-independent.
 
-Phase 2 does **not** accept application-owned public submissions. A narrow interim exception is the **Seed Bank**, defined by [ADR 0011](docs/decisions/0011-interim-seed-bank.md), using GitHub as external provider-hosted discussion transport without automatically creating canonical records or governance weight.
+Phase 2 does **not** accept Hummingbird-owned public offers through an application write surface. A narrow interim exception is the **Seed Bank**, defined by [ADR 0011](docs/decisions/0011-interim-seed-bank.md), using GitHub as external provider-hosted discussion transport without automatically creating canonical records or governance weight.
 
 ### Phase 2A — Canonical contract and reference corpus
 
@@ -90,7 +90,7 @@ Phase 2C proved the complete boundary rather than merely implementing static pag
 - public page views are static at request time and do not query D1;
 - the derived projection is disposable and can be regenerated from canonical state.
 
-**Exit satisfied:** public projections are rebuildable from canonical records and the deliberate admission/publication path is traceable without treating submission as publication or governance approval.
+**Exit satisfied:** public projections are rebuildable from canonical records and the deliberate offer/source → admission → publication path is traceable without treating ingress as publication or governance approval.
 
 ### Phase 2D — Publication buffer, backup, and recovery
 
@@ -117,6 +117,7 @@ Status: **planned**
 - Review the Seed Bank experiment and document what it taught about participation, moderation, provider dependence, and abuse controls.
 - Resolve or deliberately defer the Phase 2 review-gate questions for steward scope, non-technical decision process, steward succession, incident response, monitoring cadence, and deployment-token rotation.
 - Confirm every Phase 3 blocking question has a substantive decision rather than an implementation accident.
+- Review [ADR 0016](docs/decisions/0016-offers-and-the-offer-buffer.md) and the [Phase 3 Offer Buffer working design](docs/protocols/PHASE_3_OFFER_BUFFER_DESIGN.md) against the resolved Phase 3 rights, governance, security, and runtime decisions before implementation begins.
 
 **Phase 2 completion requires all of the following:**
 
@@ -131,13 +132,37 @@ Status: **planned**
 
 ## Phase 3 — Controlled Participation
 
-Status: **planned**
+Status: **planned — offer architecture documented, gate not yet open**
 
-Phase 3 begins with a narrow capability pilot rather than a private read beta or broad account registration. Public reading remains open. Early Hummingbird-owned write access should grant only bounded, revocable submission capabilities (for example draft contribution/proposal creation) with payload bounds, rate limits, schema validation, replay/duplicate controls, and no implied publication, canonical-admission, moderation, treasury, or governance authority. See [ADR 0014](docs/decisions/0014-progressive-capability-rollout.md).
+Phase 3 begins with a narrow capability pilot rather than a private read beta or broad account registration. Public reading remains open.
 
-The Seed Bank concept will be reviewed and may be replaced or supplemented by Hummingbird-owned participation once the controlled write path is ready.
+The participant-facing concept is an **offer**, defined by [ADR 0016](docs/decisions/0016-offers-and-the-offer-buffer.md). An offer may be small or foundational: it may correct a sentence, add evidence, challenge an ADR, propose a space, recommend a governance change through the appropriate process, or argue that Hummingbird itself should substantially change. Broad possible consequence does not grant authority merely because the offer was made.
 
-Entry into Phase 3 remains blocked by the constitutional, governance, architecture, and security questions listed in the Open Questions Registry. A working Phase 2 database is not permission to bypass those decisions.
+The intended boundary is:
+
+```text
+make an offer
+    ↓
+choose an offer delivery option
+    ↓
+Offer Buffer (bounded, operational, non-canonical)
+    ↓
+consideration / synthesis
+    ↓
+optional explicit admission
+    ↓
+canonical memory
+    ↓
+optional publication
+```
+
+The first Hummingbird-owned write pilot should grant only a bounded, revocable **offer-making capability** with payload bounds, rate/resource limits, schema validation, replay/duplicate controls, and no implied publication, canonical admission, moderation, treasury, or governance authority. See [ADR 0014](docs/decisions/0014-progressive-capability-rollout.md) and the [Offer Buffer working design](docs/protocols/PHASE_3_OFFER_BUFFER_DESIGN.md).
+
+Future broader access may offer multiple **offer delivery options**. Those options may regulate throughput or resource cost, but they must not be assigned to presumed participant-origin categories and must not become hidden content priority, trust/reputation, or governance weight. An accessible uncredentialed path should remain part of the broader design once participation expands beyond the initial controlled pilot.
+
+The Seed Bank concept will be reviewed and may be replaced or supplemented by Hummingbird-owned offer-making once the controlled write path is ready.
+
+Entry into Phase 3 remains blocked by the constitutional, governance, architecture, and security questions listed in the Open Questions Registry. A working Phase 2 database or accepted Offer Buffer design is not permission to bypass those decisions.
 
 ### Future participatory-space track — after basic controlled participation
 
@@ -154,7 +179,7 @@ Candidate experiments, in increasing order of governance/security complexity, in
 
 A game/wall experiment should favor visible explanation, uncertainty, prediction, revision, coordination, and other consequential interaction rather than global participant scores or leaderboards.
 
-Self-governed spaces and resource-amplifying guild capabilities remain blocked by their specifically registered open questions even if simpler Phase 3 submission endpoints already exist.
+Self-governed spaces and resource-amplifying guild capabilities remain blocked by their specifically registered open questions even if simpler Phase 3 offer-making already exists.
 
 ## Phase 4 — Governance Workflows
 

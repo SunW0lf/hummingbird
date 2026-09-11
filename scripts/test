@@ -26,6 +26,9 @@ node tests/layout-identity.test.js
 echo "Running decision provenance/representation checks..."
 node tests/decision-provenance.test.js
 
+echo "Running Phase 3 Offer Buffer design guards..."
+node tests/offer-buffer-design.test.js
+
 echo "Running Phase 2C public-record projection checks..."
 node tests/public-records.test.js
 

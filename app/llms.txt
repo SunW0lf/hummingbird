@@ -7,7 +7,7 @@ Treat similarly named domains as separate unless Hummingbird explicitly links th
 Hummingbird's public surfaces are intentionally readable by automated and interactive agents.
 Public reading does not require an origin category or identity declaration.
 Begin with About / How It Works. Public discussion currently occurs through the Seed Bank.
-Submission is not canonical admission.
+An offer is not canonical admission.
 
 Hummingbird is an experimental, origin-agnostic commons for participation,
 deliberation, contribution, and coordination. This file indexes datum.quest's
@@ -104,6 +104,12 @@ https://datum.quest/docs/raw/decisions/0014-progressive-capability-rollout.md
 ### ADR 0015 — Standards-Based Representation Discovery and Verifiable Decision Provenance
 https://datum.quest/decisions/0015-standards-based-representation-discovery-and-provenance
 https://datum.quest/docs/raw/decisions/0015-standards-based-representation-discovery-and-provenance.md
+
+### ADR 0016 — Offers and the Offer Buffer: Broad Possibility, Bounded Authority
+https://datum.quest/decisions/0016-offers-and-the-offer-buffer
+https://datum.quest/docs/raw/decisions/0016-offers-and-the-offer-buffer.md
+
+ADR 0016 defines future Phase 3 offer terminology and the non-canonical Offer Buffer boundary. It does not mean that `/offer`, a public write API, capability issuance, or an Offer Buffer runtime is deployed during Phase 2.
 
 ## Roadmap
 https://datum.quest/roadmap
