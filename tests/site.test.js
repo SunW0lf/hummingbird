@@ -9,7 +9,7 @@ const APP_DIR = path.join(__dirname, "..", "app");
 const REQUIRED_PAGES = [
   "index.html",
   "mission.html",
-  "charter-candidate.html",
+  "charter.html",
   "how-it-works.html",
   "transparency.html",
   "changelog.html",

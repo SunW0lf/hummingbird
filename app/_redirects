@@ -1,0 +1,6 @@
+# Cloudflare Pages redirects.
+# The Charter route was renamed from /charter-candidate to /charter, since
+# no Charter Candidate (C1) has been published yet — see CHARTER.md and
+# docs/charter/README.md for the C0-C3 lifecycle.
+/charter-candidate.html  /charter.html  301
+/charter-candidate       /charter       301
