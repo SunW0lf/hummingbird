@@ -8,6 +8,7 @@ This records meaningful releases and changes, not a raw Git log.
 - Verified and closed out Phase 0 against the [ROADMAP.md](ROADMAP.md) checklist; corrected documentation drift (credential scope, deployment status, repository trust-boundary language).
 - Hardened the steady-state CI/deployment path: deterministic `npm ci`, high-severity dependency audit as a blocking check, external GitHub Actions pinned to exact commit SHAs, and production deployment now fails closed when its Cloudflare configuration is missing. Corrected public/operational copy that overstated branch protection or misstated the Phase 1 security-contact gate.
 - Recorded dated, Phase-1-only risk acceptances for the unavailable `main` branch protection and unrestricted repository-level GitHub Actions allow-list while Hummingbird remains private and single-steward. Both underlying questions remain open and must be revisited before repository publication; the private vulnerability-reporting channel remains the unresolved Phase 1 completion blocker.
+- Steward authorized public repository visibility in principle on 2026-09-10, contingent on a coordinated public-mode security activation. Added CODEOWNERS, weekly Dependabot monitoring for npm and GitHub Actions, and explicit requirements for branch protection, restricted Actions, private vulnerability reporting, secret scanning/push protection, Dependabot security controls, and code scanning before publication is treated as complete.
 
 ## Phase 0 — Foundation (complete)
 
