@@ -49,13 +49,9 @@ function getCommitSha() {
 // Canonical Markdown cross-links each other by repo-root-relative filename
 // (e.g. "GOVERNANCE.md"), which is correct in Git but does not resolve once
 // rendered into dist/. Rewrite links to documents we actually publish so the
-// rendered page is navigable. Links to documents not in the allowlist (e.g.
-// ARCHITECTURE.md, SECURITY.md, docs/decisions/, the internal Open Questions
-// Registry) are de-linked - the text is kept but the href is dropped and a
-// short note is appended - rather than left as a dead link that (on
-// Cloudflare Pages) silently falls through to the homepage. A visitor who
-// somehow reaches an unpublished path anyway lands on the custom 404 page
-// (app/404.html), which explains the allowlist model.
+// rendered page is navigable. Public ADR links are also rewritten to their
+// generated /decisions/<slug> pages. Other unpublished repo references are
+// de-linked rather than allowed to fall through to a misleading route.
 const LINK_REWRITES = new Map([
   ...CANONICAL_DOCS.map((d) => [d.file, d.route]),
   ["LICENSE", "docs/raw/LICENSE"],
@@ -65,7 +61,7 @@ function isInternalUnpublishedPath(base) {
   if (/^[a-z]+:\/\//i.test(base)) return false; // external URL
   if (base.startsWith("docs/raw/")) return false; // already a working raw path
   if (/^[A-Z0-9_]+\.md$/i.test(base) || base === "LICENSE") return true; // unlisted repo-root doc
-  if (base.startsWith("docs/")) return true; // docs/decisions/, docs/charter/, docs/governance/, etc.
+  if (base.startsWith("docs/")) return true; // unpublished docs subpaths
   return false;
 }
 
@@ -74,6 +70,12 @@ function rewriteInternalLinks(html) {
     if (LINK_REWRITES.has(base)) {
       return `<a href="${LINK_REWRITES.get(base)}${anchor || ""}">${text}</a>`;
     }
+
+    const decision = base.match(/^docs\/decisions\/(\d{4}-.+)\.md$/);
+    if (decision) {
+      return `<a href="decisions/${decision[1]}.html${anchor || ""}">${text}</a>`;
+    }
+
     if (isInternalUnpublishedPath(base)) {
       return `${text} <span class="unpublished-note">(internal reference, not yet public)</span>`;
     }
