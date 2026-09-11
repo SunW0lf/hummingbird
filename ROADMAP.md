@@ -15,19 +15,25 @@ Status: **complete** — verified against this checklist and closed out; see [CH
 - Backup/restore process (trivial until a database exists)
 - Health checks
 
-Repository/CI hardening items (branch protection, GitHub Actions allow-list, a real vulnerability-reporting channel) were **not** part of this checklist and remain open — see [OQ-OPS-BRANCH-PROTECTION](docs/governance/OPEN_QUESTIONS.md#oq-ops-branch-protection), [OQ-SECURITY-ACTIONS-HARDENING](docs/governance/OPEN_QUESTIONS.md#oq-security-actions-hardening), and [OQ-SECURITY-VULN-REPORTING](docs/governance/OPEN_QUESTIONS.md#oq-security-vuln-reporting). They block completion of Phase 1 / repository publication, not Phase 0.
-
 ## Phase 1 — Public Charter Site
 
-Status: **in progress**
+Status: **final security verification**
 
-Publish: Home, Mission, Charter (working draft, C0), Governance, Roadmap, How It Works, Transparency, Changelog, Contributing, Open Questions, Security/Contact. Publishing a Charter Candidate (C1) is a distinct governance action, not automatic upon phase completion — see [GOVERNANCE.md](GOVERNANCE.md). No accounts, voting, application-managed payments, financial-governance workflows, reputation, moderation, AI orchestration, feeds, or chat. An interim, personal-steward, voluntary support address (see [docs/decisions/0008-interim-steward-support-wallet.md](docs/decisions/0008-interim-steward-support-wallet.md)) is a deliberate, narrowly-scoped exception to "no payments" — it confers no standing and is not Phase 5.
+Published surfaces include Home, Mission, Charter (working draft, C0), Governance, Roadmap, How It Works, Transparency, Changelog, Contributing, Open Questions, and Security/Contact. Publishing a Charter Candidate (C1) is a distinct governance action, not automatic upon phase completion — see [GOVERNANCE.md](GOVERNANCE.md).
+
+The repository is public. `main` is protected with required `Checks, test, build` and enforcement for everyone including the steward/admin. Repository Actions have been restricted and SHA pinning is required. Phase 1 is not declared complete until the remaining public-repository security controls in [SECURITY.md](SECURITY.md), especially private vulnerability reporting and Advanced Security settings, are explicitly verified.
+
+No accounts, voting, application-managed payments, financial-governance workflows, reputation, moderation, AI orchestration, feeds, or chat are part of Phase 1. An interim personal-steward voluntary support address (see [ADR 0008](docs/decisions/0008-interim-steward-support-wallet.md)) is a deliberate, narrowly scoped exception to "no payments" — it confers no standing and is not Phase 5.
 
 ## Phase 2 — Read-Only Commons
 
-Status: **planned**
+Status: **entry contract accepted; implementation queued behind Phase 1 closeout**
 
-Public representations of contributions, proposals, needs, decisions, statuses, and transparency records. Introduces the first real database (Cloudflare D1).
+The Phase 2 data-model, workflow-state, retention, and operational-transparency entry gates are now resolved in [DATA_MODEL.md](DATA_MODEL.md), [SECURITY.md](SECURITY.md), [TRANSPARENCY.md](TRANSPARENCY.md), and [ADR 0010](docs/decisions/0010-phase2-read-only-commons-contract.md).
+
+Phase 2 will implement public read-only representations of contributions, proposals, needs, relationships, minimal events, statuses, and transparency records. It introduces the first application database using Cloudflare D1 while keeping canonical records portable and versioned.
+
+Phase 2 does **not** accept public submissions. Records may be seeded/imported by the steward from public project material while the read model, storage, backup, and publication-buffer behavior are tested.
 
 ## Phase 3 — Controlled Participation
 
