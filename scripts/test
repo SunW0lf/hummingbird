@@ -20,6 +20,9 @@ node scripts/admit-draft-d1.js admissions/candidates/seed15-visible-consequence.
 echo "Running site smoke tests..."
 node tests/site.test.js
 
+echo "Running layout/site-identity regression checks..."
+node tests/layout-identity.test.js
+
 echo "Running Phase 2C public-record projection checks..."
 node tests/public-records.test.js
 
