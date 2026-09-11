@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Build produces dist/ from app/. Phase 1 has no compilation step (plain HTML/CSS),
-# so "build" means: validate, then produce a clean, deployable copy.
+# Build produces dist/ from app/. Phase 2 remains intentionally simple:
+# static source is copied, then canonical Markdown surfaces are rendered.
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
@@ -14,6 +14,9 @@ cp -r app/. dist/
 
 echo "Rendering canonical reference documents..."
 node scripts/render-docs.js
+
+echo "Rendering public decision records..."
+node scripts/render-decisions.js
 
 echo "Rendering support page..."
 node scripts/render-support.js
