@@ -9,4 +9,5 @@ This records meaningful releases and changes, not a raw Git log.
 - Added minimal static Phase 1 site skeleton under `app/`.
 - Added GitHub Actions CI workflow (lint, test, build).
 - Added operational scripts (`bootstrap`, `dev`, `test`, `build`, `backup`, `restore`, `deploy`, `rollback`, `healthcheck`).
-- Production deployment to `datum.quest` not yet performed — the domain still serves its prior placeholder page pending an explicit cutover step.
+- Cut `datum.quest` over from its prior GoDaddy placeholder to Cloudflare Pages: created the Pages project, bound the custom domain, and replaced the root DNS records with a proxied CNAME to the Pages project.
+- Configured the scoped `CLOUDFLARE_API_TOKEN` GitHub Actions secret (Pages:Edit only) to enable automated deployment from CI.
