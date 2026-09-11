@@ -8,11 +8,11 @@ This is currently a passion project, not a conventional startup or commercial pr
 
 ## Project status
 
-**Phase 1 — Public Charter Site is in final security verification; the Phase 2 entry contract is accepted.** Phase 0 — Foundation is complete. The repository is public, `main` is protected, and required CI is active. Phase 2 implementation is queued immediately behind Phase 1 closeout. See [ROADMAP.md](ROADMAP.md).
+**Phase 2 — Read-Only Commons is in progress.** Phase 0 — Foundation and Phase 1 — Public Charter Site are complete. The repository is public, `main` is protected, required CI is active, and the public-repository security baseline is enabled. See [ROADMAP.md](ROADMAP.md).
 
 ## Quick start (development)
 
-The currently deployed site is a plain static site. Phase 2 will introduce the first application database while keeping the public surface read-only.
+The currently deployed public surface remains read-only. Phase 2 introduces the first application database while preserving portable canonical data and deliberately avoiding public submission until Phase 3.
 
 ```bash
 ./scripts/bootstrap   # one-time setup (npm install for devDependencies)
