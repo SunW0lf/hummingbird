@@ -1,6 +1,6 @@
 # Phase 2D — Canonical Backup and Recovery Protocol
 
-Status: **active verification contract; guarded remote recovery drill in progress, not yet complete**
+Status: **verified against current production canonical state; Phase 2D recovery exit satisfied**
 
 This protocol defines how Hummingbird backs up and recovers canonical application state without making Cloudflare D1 table layout, provider database identifiers, or public read projections the institution's only recovery source.
 
@@ -63,6 +63,8 @@ The first production exercise may use steward-controlled encrypted/offline stora
 
 A GitHub Actions artifact in this public repository is **not** a generally acceptable storage location for canonical backups because repository readers can retrieve public-repository artifacts. The one-shot Phase 2D drill contains a narrow safety exception: it uploads a backup artifact only after proving that every canonical record in the production backup is in a public lifecycle state **and** the full reconstructed canonical set deep-equals the already-public `publication/canonical` projection. If any draft or otherwise non-public canonical state exists, the workflow fails before artifact upload and the independent-retention exit criterion remains unsatisfied until a private storage path is used.
 
+The first successful production drill satisfied that narrow exception because the production backup contained one canonical record and it exactly matched already-public canonical state at the time of the exercise. The resulting GitHub Actions artifact is retained for 30 days. Future backups must fail closed to a private retention path if production contains any non-public canonical record.
+
 ## Backup commands
 
 Install dependencies first with `npm ci`.
@@ -118,7 +120,7 @@ The restore tool:
 - deep-compares restored meaning to the backup bundle;
 - does not modify remote D1.
 
-`./scripts/restore --remote` remains deliberately disabled. The first remote recovery exercise uses a separate one-shot runner that creates its own disposable D1 database through the Cloudflare API, applies the repository migration SQL through the D1 `/query` endpoint, imports the verified canonical bundle as a D1 batch, compares semantic state, rebuilds the public projection, and deletes the disposable database in cleanup. The live production database is never the recovery-test target.
+`./scripts/restore --remote` remains deliberately disabled. The remote recovery exercise uses a separate one-shot runner that creates its own disposable D1 database through the Cloudflare API, applies the repository migration SQL through the D1 `/query` endpoint, imports the verified canonical bundle as a D1 batch, compares semantic state, rebuilds the public projection, and deletes the disposable database in cleanup. The live production database is never the recovery-test target.
 
 Cloudflare documents that the D1 query API accepts API tokens with D1 Read or D1 Write and supports multiple semicolon-separated SQL statements as a batch. This makes the REST path suitable for the temporary account-owned recovery credential without broadening that credential or the existing Pages deployment token.
 
@@ -131,7 +133,7 @@ It has these boundaries:
 - it runs only on `main` when the merge commit message begins `Phase 2D: run remote recovery drill`;
 - it does not run on pull requests;
 - it uses the separate `CLOUDFLARE_D1_RECOVERY_TOKEN` GitHub Actions secret, not the Pages deployment token;
-- the credential is account-scoped for D1 recovery operations and is currently temporary rather than a permanent general-purpose automation credential;
+- the credential is account-scoped for D1 recovery operations and is temporary rather than a permanent general-purpose automation credential;
 - production access consists only of `SELECT` queries against canonical objects and relationships;
 - the recovery runner creates a uniquely named disposable D1 database and refuses to continue if its UUID somehow equals the production D1 UUID;
 - migration and restore writes are addressed directly to that disposable recovery UUID through the D1 REST API;
@@ -141,14 +143,28 @@ It has these boundaries:
 - database deletion runs from the cleanup path even when verification fails;
 - the portable backup is retained as a public-repository artifact for 30 days **only** when the backup is proven exactly equivalent to already-public canonical state as described in the storage boundary above.
 
-### Execution observations so far
+## Execution observations
 
-Two pre-success observations are retained because failure behavior is part of the recovery contract:
+Failure behavior is retained because it is part of the recovery contract:
 
-1. The first trigger attempt was rejected by GitHub before job creation because a colon-bearing trigger expression was left as an unquoted YAML scalar. No runner started, no secret was exposed to a job, and no D1 request occurred. The expression is now quoted and guarded by CI.
+1. The first trigger attempt was rejected by GitHub before job creation because a colon-bearing trigger expression was left as an unquoted YAML scalar. No runner started, no secret was exposed to a job, and no D1 request occurred. The expression was quoted and guarded by CI.
 2. The next attempt created a real recovery job but Wrangler failed on the initial production `SELECT` while using the new account-owned recovery token. The failure happened before a portable backup completed and before any disposable database was created, so no D1 mutation or cleanup was required. The one-shot runner was then moved to Cloudflare's documented D1 REST API rather than broadening credential permissions.
+3. The first REST attempt exposed a credential/configuration mistake through a `401`, and the next correctly formed credential exposed an account-policy mismatch through a `403`. Both stopped on the first production read before any disposable D1 database existed. No production mutation occurred and no backup artifact was retained from either failed attempt.
+4. After the recovery token was recreated with account-scoped **D1 Read + D1 Write** and no IP restriction, the same audited workflow succeeded end to end without a code change.
 
-Neither observation satisfies the remote recovery exit criterion. Success is recorded only after the end-to-end drill completes.
+The successful exercise proved:
+
+- `BACKUP_VERIFIED`: one production canonical record was exported and the portable bundle hash verified;
+- `ARTIFACT_SAFETY`: the complete backup deep-equaled already-public `publication/canonical` state before public-repository artifact retention was permitted;
+- a disposable D1 recovery database was created with an identifier distinct from production;
+- repository migration `0001_canonical_v1.sql` reproduced an empty compatible schema;
+- `SEMANTIC_EQUALITY`: restored canonical state deep-equaled the production backup;
+- `PUBLIC_PROJECTION_EQUALITY`: the recovered machine-readable public projection byte-equaled the expected publication output;
+- `PHASE2D_REMOTE_RECOVERY_DRILL: SUCCESS` was reached;
+- the disposable recovery database was deleted after verification;
+- the verified public-equivalent backup artifact was retained independently of live D1 for 30 days.
+
+The compact public operational summary is released through the publication-buffer rules in [TRANSPARENCY.md](../../TRANSPARENCY.md) under [ADR 0017](../decisions/0017-phase2-publication-buffer-policy.md). It deliberately omits temporary provider identifiers, credentials, exact request timing, raw logs, and other correlation-rich execution detail.
 
 ## Recovery order
 
@@ -177,16 +193,16 @@ During the low-write steward-controlled phase, the minimum practical recovery ru
 
 A later scheduled cadence may supplement this rule when mutation frequency grows. Hummingbird should not add high-frequency backup automation merely to appear mature.
 
-## Phase 2D evidence still required
+## Phase 2D recovery exit evidence
 
-This protocol, local tooling, and one-shot workflow do **not** complete Phase 2D until a real recovery exercise succeeds using current production canonical data:
+The recovery portion of Phase 2D is satisfied against current production canonical state:
 
-- read-only export from remote production D1;
-- independent retention and hash verification of the bundle;
-- restoration into an empty disposable replacement database;
-- deep semantic equality after restore;
-- rebuild and comparison of the public projection;
-- documented failure/recovery observations;
-- a compact public operational record released through the publication-buffer rules without leaking credentials, exact sensitive timing, or unnecessary provider metadata.
+- read-only export from remote production D1 — **verified**;
+- independent retention and hash verification of the bundle — **verified under the public-equivalent safety exception**;
+- restoration into an empty disposable replacement database — **verified**;
+- deep semantic equality after restore — **verified**;
+- rebuild and comparison of the public projection — **verified**;
+- documented failure/recovery observations — **recorded above**;
+- compact public operational record released through the publication-buffer rules — **recorded in `TRANSPARENCY.md` via ADR 0017**.
 
-Only after those steps succeed may the backup/restore exit criterion be marked complete.
+No recovery test wrote to production canonical state. The live production database was used only as the read source for the portable backup.
