@@ -50,6 +50,14 @@ To reconstruct Hummingbird from scratch, someone needs:
 
 Branch protection on `main` is currently unavailable: GitHub disables branch protection rules for private repositories on this account's plan. There is no enforced required-review or required-status-check GitHub rule. The deployment workflow still refuses to deploy until its `verify` job succeeds, but GitHub itself does not prevent a direct push to `main`. The working convention is therefore branch → pull request → green CI → merge. Open question: [OQ-OPS-BRANCH-PROTECTION](docs/governance/OPEN_QUESTIONS.md#oq-ops-branch-protection).
 
+### Phase 1 risk acceptance — branch protection
+
+**Recorded 2026-09-10 (Pacific Time).** For completion of the current **private, single-steward Phase 1 only**, the steward accepts the residual risk that GitHub does not enforce required reviews or required status checks on `main`, and that a direct push could bypass the working pull-request convention.
+
+Current mitigations are the deliberately small trust boundary and deployment design: the repository is private and single-steward; routine changes use branch → pull request → green CI → merge; production deployment itself is gated by the workflow's successful verification job; and deployment credentials remain outside the repository.
+
+This acceptance **does not resolve** OQ-OPS-BRANCH-PROTECTION and **does not authorize repository publication**. Branch protection or an equivalent enforced control must receive a fresh disposition before public repository visibility, before adding additional maintainers, or whenever the trust model materially changes.
+
 ## Routine steward tasks
 
 - Review and merge pull requests after CI passes.
