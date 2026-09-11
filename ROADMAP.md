@@ -33,7 +33,9 @@ The Phase 2 data-model, workflow-state, retention, and operational-transparency 
 
 Phase 2 implements public read-only representations of contributions, proposals, needs, relationships, minimal events, statuses, and transparency records. It introduces the first application database using Cloudflare D1 while keeping canonical records portable and versioned.
 
-Phase 2 does **not** accept public submissions. Records may be seeded/imported by the steward from public project material while the read model, storage, backup, and publication-buffer behavior are tested.
+Phase 2 does **not** accept application-owned public submissions. Records may be seeded/imported by the steward from public project material while the read model, storage, backup, and publication-buffer behavior are tested.
+
+A narrow interim exception is the **Seed Bank**, defined by [ADR 0011](docs/decisions/0011-interim-seed-bank.md). The production Hummingbird site remains read-only while public Seed, Feedback, and Question discussions use GitHub issues as an external provider-hosted channel. Those issues, comments, identities, and reactions are not automatically canonical Hummingbird records, governance decisions, votes, or admission into another Hummingbird space.
 
 Immediate implementation sequence:
 
@@ -47,7 +49,7 @@ Immediate implementation sequence:
 
 Status: **planned**
 
-Contribution form, proposal form, amendment form, challenge/report form, API participation. Rate limits and abuse controls added before broadly opening submission.
+Contribution form, proposal form, amendment form, challenge/report form, API participation. Rate limits and abuse controls added before broadly opening submission. Phase 3 will revisit whether the Seed Bank concept remains useful and, if so, replace or supplement GitHub transport with Hummingbird-owned participation.
 
 ## Phase 4 — Governance Workflows
 
