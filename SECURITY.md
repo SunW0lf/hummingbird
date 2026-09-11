@@ -4,7 +4,7 @@ Security protects the commons without depending on proving participant origin.
 
 ## Current attack surface
 
-Phase 2 is now in progress. The deployed Hummingbird application surface remains read-only while the first D1-backed commons substrate is introduced. There are no Hummingbird-owned public submission forms or participant accounts yet.
+Phase 2 is now in progress. The deployed Hummingbird application surface remains read-only while Cloudflare D1 holds deliberately admitted canonical application state behind a separate operational boundary. There are no Hummingbird-owned public submission forms or participant accounts yet.
 
 The interim Seed Bank defined by [ADR 0011](docs/decisions/0011-interim-seed-bank.md) introduces a bounded external write surface through public GitHub issue forms and discussion threads. That surface inherits GitHub's account, spam, abuse, and moderation mechanisms; it does not create Hummingbird application credentials or a direct write path into Hummingbird persistence.
 
@@ -12,9 +12,9 @@ The realistic attack surface is concentrated in:
 
 - public GitHub repository and Actions (source and CI compromise)
 - public Seed Bank issue intake (spam, harassment, malicious links, social engineering, accidental disclosure, and attempts to smuggle vulnerability details into public threads)
-- Cloudflare account and deployment token (deployment compromise)
+- Cloudflare account, Pages deployment credential, and separate D1 operational/recovery credentials (deployment or persistence compromise)
 - dependency compromise (npm devDependencies used for CI tooling)
-- Phase 2 persistence and migrations as D1 is introduced
+- production D1 persistence, migrations, backup, recovery, and future mutation boundaries
 
 ## Interim Seed Bank safety boundary
 
@@ -33,13 +33,16 @@ Not applicable to Hummingbird-owned public participation yet — no participant 
 
 ## Secrets
 
-- Deployment uses a single Cloudflare API Token scoped to Pages:Edit only, stored as a GitHub Actions secret. The account ID is stored as a non-secret repository variable (`CLOUDFLARE_ACCOUNT_ID`).
-- No secrets are required to build or test the site locally.
+- Production Pages deployment uses a Cloudflare API Token scoped to Pages:Edit only, stored as a GitHub Actions secret. The account ID is stored as a non-secret repository variable (`CLOUDFLARE_ACCOUNT_ID`).
+- D1 persistence/recovery operations use separate deliberate credentials rather than widening the Pages deployment token. The guarded Phase 2D recovery drill used a separate account-owned D1 recovery token whose production access was limited to canonical `SELECT` queries while writes targeted only the disposable recovery database.
+- No secrets are required to build or test the ordinary site/canonical contract locally.
 - Secrets are never committed to the repository. `.env.example` documents the shape of any future required local secret without real values.
 
 ## Least privilege
 
-- The deployment token is restricted to the capability needed for deployment rather than broad account administration.
+- The Pages deployment token is restricted to the capability needed for deployment rather than broad account administration or database access.
+- D1 operations use a separate credential boundary and must not gain unrelated Pages/deployment authority merely for convenience.
+- Recovery testing writes only to an explicitly disposable replacement database; the live production database is not a restore-test target.
 - GitHub Actions workflows request only the permissions they need (see `.github/workflows/`).
 - Repository workflow-token default permissions are configured read-only; the workflow also declares read-only repository-content permission explicitly.
 
