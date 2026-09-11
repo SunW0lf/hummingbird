@@ -40,6 +40,9 @@ node tests/agent-access.test.js
 echo "Running documentation consistency checks..."
 node tests/consistency.test.js
 
+echo "Running Phase 2D recovery documentation/changelog checks..."
+node tests/recovery-docs.test.js
+
 echo "Running canonical corpus contract checks..."
 node tests/canonical.test.js
 
