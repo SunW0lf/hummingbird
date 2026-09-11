@@ -11,6 +11,9 @@ echo "Building before tests..."
 echo "Running site smoke tests..."
 node tests/site.test.js
 
+echo "Running agent/public-read acceptance tests..."
+node tests/agent-access.test.js
+
 echo "Running documentation consistency checks..."
 node tests/consistency.test.js
 

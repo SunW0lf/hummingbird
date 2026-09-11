@@ -31,6 +31,7 @@ const PUBLIC_DECISIONS = [
   "0010-phase2-read-only-commons-contract.md",
   "0011-interim-seed-bank.md",
   "0012-reference-corpus-before-persistence.md",
+  "0013-public-read-accessibility.md",
 ];
 
 const ROOT_PUBLIC_ROUTES = new Map([

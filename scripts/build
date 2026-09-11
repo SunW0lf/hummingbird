@@ -21,6 +21,9 @@ node scripts/render-decisions.js
 echo "Rendering support page..."
 node scripts/render-support.js
 
+echo "Finalizing public HTML accessibility/navigation..."
+node scripts/finalize-html.js
+
 echo "Rendering sitemap..."
 node scripts/render-sitemap.js
 

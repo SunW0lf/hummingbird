@@ -1,3 +1,7 @@
+# Project-owned crawler policy for the public commons.
+# Public reading is open to search/discovery and user-directed automated clients.
+# Technical crawl access is not itself a content-use or model-training license;
+# training/reuse policy is a separate institutional decision.
 User-agent: *
 Allow: /
 
