@@ -71,6 +71,16 @@ The JSON detail representation is the projected canonical record. The HTML route
 
 Draft records must never enter the public projection. The renderer fails closed if a projected record has `state: draft`, an unsupported v1 type/state, an unsafe/empty identifier, malformed relationships, or duplicate canonical IDs.
 
+### Publication-state decision
+
+A durable canonical draft becomes eligible for the public projection only through a separate, explicit steward action:
+
+```powershell
+node scripts/mark-published-d1.js <canonical-id> --confirm-publication-decision
+```
+
+The tool only accepts an existing `draft` record with no prior publication metadata and changes that record to `state: published` with public-release metadata. It does not stage, promote, commit, deploy, or create a public route. Therefore a publication-state decision remains distinct from public deployment.
+
 ### Staging from remote D1
 
 After a canonical record has independently been made publishable (that is, it is no longer in `draft`), the steward can reconstruct the current non-draft canonical set from remote D1 without modifying either D1 or the Git working tree's deployable projection:
@@ -102,6 +112,7 @@ This means none of the following actions alone publishes a record:
 - external submission;
 - canonical admission;
 - existence in D1;
+- changing canonical state to `published`;
 - running the read-only staging command.
 
 ## First admission exercise
@@ -123,6 +134,16 @@ For one chosen external source:
 11. publish through the normal protected-main CI/deploy path;
 12. verify ordinary browser/curl/agent retrieval of the new routes;
 13. record the admission/publication evidence without exposing security-sensitive operational metadata.
+
+### First admission evidence — 2026-09-11
+
+The first durable real canonical admission completed successfully using the existing public Seed Bank #15 exploratory comment, “Visible consequence without engagement pressure,” as the external source.
+
+The reviewed candidate was `contribution-visible-consequence`. It retained the admitted idea and one stable public source reference while omitting GitHub account identity, reactions, labels, app metadata, source/network metadata, and other provider state. Offline candidate validation passed before any remote action.
+
+The steward then deliberately executed the guarded admission command with `--confirm-admission`. Post-write verification reported the record present in remote D1 as `state: draft`. The admission tool also confirmed that no publication projection changed and no governance status was granted.
+
+At that point Hummingbird had, for the first time, durable canonical institutional memory derived from an external contribution while the public canonical-record projection remained unchanged. This establishes the external-source → consideration → explicit-admission boundary independently of publication. The separate publication-state decision and public deployment remain the next steps.
 
 ## Rollback and correction
 
