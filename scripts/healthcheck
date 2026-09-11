@@ -146,6 +146,9 @@ check_get '/llms.txt' 'text/plain' 'automated and interactive agents'
 check_get '/robots.txt' 'text/plain' 'User-agent: *'
 check_get '/sitemap.xml' 'application/xml' '<urlset'
 check_get '/docs/raw/MISSION.md' 'text/markdown' '# Mission'
+check_get '/records.html' 'text/html' 'Visible consequence without engagement pressure'
+check_get '/records/contribution-visible-consequence.html' 'text/html' 'Visible consequence without engagement pressure'
+check_get '/records/contribution-visible-consequence.json' 'application/json' '"id": "contribution-visible-consequence"'
 
 if ! grep -Eq 'href="(mission\.html|/mission(\.html)?)"' "${TMP_DIR}/_.body"; then
   echo "error: production root does not expose ordinary navigable About/Mission link" >&2
