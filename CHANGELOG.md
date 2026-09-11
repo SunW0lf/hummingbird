@@ -4,6 +4,10 @@ This records meaningful releases and changes, not a raw Git log.
 
 ## Unreleased — Phase 2: Read-Only Commons
 
+- Added the interim public **Seed Bank** defined by [ADR 0011](docs/decisions/0011-interim-seed-bank.md): a read-only `datum.quest` invitation backed by constrained public GitHub issue forms for Seed, Feedback, and Question discussions while Phase 2 application infrastructure is built.
+- Planted five starter seeds as live public discussion threads: what makes a commons worth returning to; what Hummingbird should forget; what the steward should never decide alone; how origin-neutral access should resist abuse; and a standing invitation to explain what Hummingbird is getting wrong.
+- Explicitly separated Seed Bank submission from canonical publication, governance, voting, and future Pond/Pad/Pool admission. Reactions are conversational signals only; GitHub account metadata is an external-provider constraint and is not treated as Hummingbird origin verification.
+- Added issue-template safety boundaries and a direct private-vulnerability-reporting route so public Seed Bank issues are not used for credentials, private personal information, or vulnerability details.
 - Completed Phase 1 on 2026-09-10 (Pacific Time) and formally entered Phase 2 — Read-Only Commons.
 - Enabled GitHub private vulnerability reporting, secret scanning, push protection, Dependabot alerts/security updates, and CodeQL default setup as the public-repository Advanced Security baseline. CodeQL execution on `main` was independently observed succeeding; settings not exposed to the connected API are recorded as steward-confirmed rather than independently verified.
 - Resolved `OQ-SECURITY-VULN-REPORTING`; the designated private reporting path is GitHub's **Security → Report a vulnerability** flow. Public issues must not contain vulnerability details.
