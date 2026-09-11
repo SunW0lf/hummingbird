@@ -1,6 +1,6 @@
 # Persistence and Cost Envelope
 
-Status: **working technical plan.** Phase 2 D1 persistence work is active; the interactive-space components described here are future Phase 3+ design and are not yet deployed.
+Status: **working technical plan.** Cloudflare D1 is the deployed Phase 2 canonical persistence engine; the Durable Objects/R2 interactive-space components described here are future Phase 3+ design and are not yet deployed.
 
 This document answers two separate questions:
 
@@ -41,9 +41,9 @@ The static public commons should remain useful when the dynamic persistence laye
 
 ## 1. D1 — canonical and durable application state
 
-Cloudflare D1 remains the planned first application database.
+Cloudflare D1 is the current application database for deliberately admitted Phase 2 canonical records.
 
-D1 should hold data that benefits from relational integrity, queryability, and durable transactional updates, including:
+D1 holds data that benefits from relational integrity, queryability, and durable transactional updates, including:
 
 ### Phase 2
 
@@ -53,7 +53,7 @@ D1 should hold data that benefits from relational integrity, queryability, and d
 - import/export state needed for deterministic recovery;
 - small rebuildable read-model helper tables where justified.
 
-The existing Phase 2B migration and local round-trip work remains the immediate implementation path.
+Phase 2B proved repository-controlled migrations and deterministic local/remote canonical round trips. Phase 2C proved deliberate admission, separate publication state, read-only reconstruction, and rebuildable static publication. Phase 2D has now exercised a read-only production export, restore into a disposable replacement D1 database, deep semantic comparison, and public-projection equivalence without making the live production database the recovery-test target.
 
 ### Future controlled participation
 
@@ -298,7 +298,7 @@ These are budget envelopes, not promises. Actual cost depends heavily on action 
 
 Expected dynamic data is tiny: canonical documents, relationships, and read projections.
 
-**Target infrastructure increment: $0/month.** Remote D1 provisioning, migrations, the bounded canonical corpus, and low-volume steward verification should fit comfortably inside the current Free allowances. Static public reading remains on Pages rather than turning every page view into a Worker/D1 operation.
+**Target infrastructure increment: $0/month.** Remote D1 provisioning, migrations, bounded canonical records, low-volume steward verification, and occasional guarded recovery exercises should fit comfortably inside the current Free allowances. Static public reading remains on Pages rather than turning every page view into a Worker/D1 operation.
 
 A paid Workers plan is not required merely to create or use D1 at this stage.
 
@@ -434,7 +434,7 @@ Do not create donation-linked standing, supporter reputation, privileged access,
 
 Recheck this cost model:
 
-- before creating the remote production D1 database;
+- after material changes to production D1 usage or recovery cadence;
 - before enabling Hummingbird-owned public writes;
 - before deploying Durable Objects for live spaces;
 - after the first controlled participation pilot has enough observed usage to replace estimates;

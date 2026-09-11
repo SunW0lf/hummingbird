@@ -94,30 +94,33 @@ Phase 2C proved the complete boundary rather than merely implementing static pag
 
 ### Phase 2D — Publication buffer, backup, and recovery
 
-Status: **in progress**
+Status: **in progress — remote backup/recovery proof complete; publication-buffer/transparency closure remains**
 
-Phase 2D now focuses on durability and safe operational transparency rather than adding new participation features.
+Phase 2D focuses on durability and safe operational transparency rather than adding new participation features.
 
-Completed foundation in the current slice:
+Completed evidence:
 
 - replaced the original Phase 0 backup/restore no-ops with a portable canonical backup bundle and guarded restore tooling;
 - defined the backup format as storage-independent canonical JSON plus SHA-256 record/bundle verification rather than a provider-only database snapshot;
 - added local CI recovery proof: export from one migrated local D1, verify the bundle, restore into a separately migrated empty D1, reconstruct canonical state, and deep-compare semantic equality;
-- restore refuses non-empty targets and remote restore remains deliberately disabled until a disposable recovery database is provisioned;
+- restore refuses non-empty targets and the general-purpose restore command does not write to remote D1;
 - documented the recovery order, independent-storage requirement, and low-write recovery-point rule in [docs/protocols/PHASE_2D_RECOVERY.md](docs/protocols/PHASE_2D_RECOVERY.md);
-- corrected stale operational/transparency documentation that still described Hummingbird as having no production database.
+- corrected stale operational/transparency documentation that still described Hummingbird as having no production database;
+- executed the guarded production-state recovery drill against current remote D1 using read-only production access and a separate account-owned recovery credential;
+- created and migrated a disposable replacement D1 database, restored the verified portable canonical bundle, and proved deep semantic equality after restore;
+- rebuilt the public canonical projection from recovered state and byte-compared the machine-readable projection with the expected publication output;
+- cleaned up the disposable recovery database after the exercise;
+- retained the pre-success failure observations because they demonstrate fail-closed behavior before production mutation;
+- emitted the narrowly permitted 30-day public-equivalent backup artifact only after proving the production canonical set exactly matched already-public `publication/canonical` state.
 
 Remaining work:
 
-- run the read-only portable backup exporter against current production D1 and independently retain/verify the resulting bundle;
-- provision an empty disposable replacement D1 database and apply repository-controlled migrations;
-- restore the verified production bundle there and prove semantic equivalence;
-- rebuild the public read projection from restored state and compare it with expected publication output;
-- define and exercise publication-buffer boundaries for delayed/coarsened public operational records, using the recovery drill as a candidate material event;
-- document failure behavior, recovery observations, and the smallest acceptable recovery point;
-- extend health/operational checks only where they prove real recovery properties rather than accumulating telemetry.
+- publish a compact material operational record of the successful recovery exercise through the publication-buffer rules, with delayed/coarsened detail where appropriate and without credentials, provider database identifiers, or unnecessary correlation metadata;
+- confirm the ordinary independent-storage path for future backups when canonical state includes drafts or otherwise non-public records, since public GitHub artifacts are only allowed for the bounded public-equivalent exercise;
+- document the final Phase 2D observations and mark the milestone complete only after the publication-buffer/transparency exercise is real rather than merely described;
+- hand off cleanly to Phase 2E review rather than using recovery success as an implicit Phase 3 authorization.
 
-**Exit:** backup and restore have been exercised successfully against current production canonical state through an isolated replacement database, canonical/read-model equivalence is demonstrated after recovery, and public transparency does not expose security-sensitive or unnecessary correlation metadata.
+**Exit:** backup and restore have been exercised successfully against current production canonical state through an isolated replacement database, and canonical/read-model equivalence has been demonstrated after recovery. Phase 2D remains open until the material recovery outcome is released through the publication-buffer/transparency boundary and the normal independent-backup rule is operationally clear.
 
 ### Phase 2E — Phase review and Phase 3 gate
 

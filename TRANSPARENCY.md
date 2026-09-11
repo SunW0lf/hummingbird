@@ -6,7 +6,7 @@
 
 Cloudflare D1 now holds deliberately admitted canonical application state. The first real canonical contribution has moved through draft admission, a separate publication decision, and rebuildable static publication. Public page views remain static at request time and do not query D1.
 
-Phase 2D is now implementing and exercising the remaining durability/transparency boundary: a portable canonical backup/recovery path plus the publication buffer for compact delayed/coarsened operational records. The publication buffer is designed but has not yet completed its real operational-event exercise.
+Phase 2D has now exercised the portable production backup/recovery path end-to-end against an isolated disposable replacement database. The remaining durability/transparency work is to release a compact public operational record of that material recovery exercise through the publication buffer, with unnecessary security-sensitive and correlation-rich detail removed or coarsened.
 
 ## Phase 2 model
 
@@ -24,7 +24,7 @@ public transparency record
 - The **publication buffer** may remove unnecessary metadata, coarsen exact timing, aggregate related events, batch publication, or delay release within the bounds defined in [SECURITY.md](SECURITY.md).
 - The **public record** must remain truthful. Delay and aggregation are allowed. Fabrication, invented chronology, and misleading omission are not.
 
-The current implementation does not maintain a second raw provider-log database. The Phase 2D exercise will prove the publication-buffer behavior with a compact material operational event rather than by cloning Cloudflare or GitHub telemetry.
+The current implementation does not maintain a second raw provider-log database. The successful Phase 2D recovery exercise is the first concrete material event selected to prove the publication-buffer behavior rather than by cloning Cloudflare or GitHub telemetry.
 
 See [ADR 0004](docs/decisions/0004-publication-buffer.md), [ADR 0010](docs/decisions/0010-phase2-read-only-commons-contract.md), and the [Phase 2D recovery protocol](docs/protocols/PHASE_2D_RECOVERY.md).
 
@@ -53,6 +53,12 @@ A public operational event should identify what changed, the affected project ob
 
 Non-urgent operational events may be released in batches and with coarsened timing. The publication buffer exists specifically so transparency does not become an accidental surveillance or exploit-assistance mechanism.
 
+### Phase 2D recovery event awaiting buffered publication
+
+The first remote production-state recovery drill succeeded on 2026-09-11. At an institutional level, the event demonstrated that Hummingbird could read current canonical state from production, verify a portable storage-independent backup, reconstruct an empty replacement database from repository-controlled migrations, restore canonical records without semantic loss, rebuild the public canonical projection, compare the recovered projection with the expected public output, and clean up the disposable recovery database without treating the live production database as the restore target.
+
+The raw provider execution history remains externally authoritative. The public Hummingbird record should publish the consequence — successful recovery equivalence and the relevant fail-closed observations — rather than copying credential names, provider database identifiers, exact infrastructure timing, or verbose job telemetry into canonical institutional memory.
+
 ## Canonical backup transparency
 
 Canonical recovery bundles are operational recovery artifacts, not public datasets by default. They may contain durable canonical records that are not currently published, including drafts. Therefore:
@@ -61,6 +67,8 @@ Canonical recovery bundles are operational recovery artifacts, not public datase
 - public transparency records may report that a backup/restore exercise succeeded or failed without publishing the bundle itself;
 - bundle hashes may be published when useful for evidence, but a hash does not make the underlying non-public records public;
 - public read projections remain rebuildable outputs and are not substitutes for canonical backups.
+
+The first remote recovery drill used a narrow exception because the workflow first proved that the complete production canonical set was exactly equivalent to already-public `publication/canonical` state. Only then was a short-lived public Actions artifact permitted. That exception does not authorize public artifact storage for future backups containing drafts or other non-public canonical state.
 
 ## Repository publication
 

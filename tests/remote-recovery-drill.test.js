@@ -91,12 +91,17 @@ for (const marker of [
   "one-shot remote recovery workflow",
   "public-repository artifact",
   "CLOUDFLARE_D1_RECOVERY_TOKEN",
+  "The guarded REST-based retry completed successfully on 2026-09-11",
 ]) {
-  if (!protocol.includes(marker)) fail(`Phase 2D recovery protocol is missing workflow boundary: ${marker}`);
+  if (!protocol.includes(marker)) fail(`Phase 2D recovery protocol is missing workflow boundary/evidence: ${marker}`);
 }
 
-if (!changelog.includes("guarded one-shot remote recovery drill")) {
-  fail("CHANGELOG.md does not record preparation of the guarded remote recovery drill");
+for (const marker of [
+  "Completed the first guarded remote production-state recovery drill for Phase 2D",
+  "separate account-owned D1 recovery credential",
+  "Phase 2D remains open for publication-buffer/transparency closure",
+]) {
+  if (!changelog.includes(marker)) fail(`CHANGELOG.md is missing remote recovery outcome marker: ${marker}`);
 }
 
 if (failures > 0) {
@@ -109,4 +114,5 @@ pass("Recovery trigger is YAML-safe and cannot regress to the invalid unquoted c
 pass("Remote D1 access uses the account-token-compatible REST API rather than Wrangler authentication");
 pass("Production access is SELECT-only while migration/restore writes are bound to a disposable non-production UUID");
 pass("Independent artifact retention is allowed only for canonical state already proven public-equivalent");
+pass("Documentation records successful recovery without treating it as Phase 2D completion");
 console.log("\nAll remote recovery drill safety checks passed.");

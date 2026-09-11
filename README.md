@@ -8,11 +8,11 @@ This is currently a passion project, not a conventional startup or commercial pr
 
 ## Project status
 
-**Phase 2 — Read-Only Commons is in progress; Phase 2A is complete and Phase 2B persistence/import work is underway.** Phase 0 — Foundation and Phase 1 — Public Charter Site are complete. The repository is public, `main` is protected, required CI is active, and the public-repository security baseline is enabled. See [ROADMAP.md](ROADMAP.md).
+**Phase 2 — Read-Only Commons is in progress; Phases 2A, 2B, and 2C are complete, and Phase 2D durability/transparency work is active.** Phase 0 — Foundation and Phase 1 — Public Charter Site are complete. See [ROADMAP.md](ROADMAP.md).
 
 The production Hummingbird application remains read-only. An interim public [Seed Bank](https://datum.quest/seed-bank), defined by [ADR 0011](docs/decisions/0011-interim-seed-bank.md), uses constrained GitHub issues for Seed, Feedback, and Question discussions without treating those provider-hosted threads as canonical Hummingbird records or governance votes.
 
-Phase 2A established a machine-readable schema and storage-independent reference corpus. Phase 2B has now proven the first D1 migration/import/export round trip locally in CI without creating a remote production database. See [ADR 0012](docs/decisions/0012-reference-corpus-before-persistence.md).
+Phase 2A established the machine-readable, storage-independent canonical contract. Phase 2B proved deterministic local and remote Cloudflare D1 persistence/import/export. Phase 2C demonstrated the external-source → deliberate admission → separate publication → rebuildable public-read path with the first published canonical record. Phase 2D has now exercised portable production backup and isolated remote recovery against a disposable D1 replacement; the remaining milestone work centers on publication-buffer/transparency closure and the Phase 2 durability record. See [ROADMAP.md](ROADMAP.md) and [docs/protocols/PHASE_2D_RECOVERY.md](docs/protocols/PHASE_2D_RECOVERY.md).
 
 ## Quick start (development)
 

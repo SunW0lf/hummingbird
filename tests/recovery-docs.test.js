@@ -28,29 +28,37 @@ for (const [name, content, markers] of [
   ["Operations", operations, [
     "Cloudflare D1 is now the production persistence engine",
     "portable canonical exporter",
-    "Remote restore is deliberately disabled",
+    "`./scripts/restore --remote` remains deliberately disabled",
+    "the guarded remote drill completed successfully",
     "PHASE_2D_RECOVERY.md",
   ]],
   ["Transparency", transparency, [
     "Cloudflare D1 now holds deliberately admitted canonical application state",
+    "Phase 2D has now exercised the portable production backup/recovery path end-to-end",
+    "Phase 2D recovery event awaiting buffered publication",
     "Canonical backup transparency",
-    "publication buffer is designed but has not yet completed its real operational-event exercise",
+    "That exception does not authorize public artifact storage for future backups containing drafts or other non-public canonical state",
   ]],
   ["Roadmap", roadmap, [
     "replaced the original Phase 0 backup/restore no-ops",
+    "remote backup/recovery proof complete; publication-buffer/transparency closure remains",
     "Remaining work:",
+    "publish a compact material operational record of the successful recovery exercise",
     "disposable replacement D1 database",
   ]],
   ["Recovery protocol", protocol, [
     "Hummingbird must be able to lose its live database without losing institutional meaning",
     "Storage boundary",
     "Recovery point rule",
-    "guarded remote recovery drill in progress, not yet complete",
-    "Execution observations so far",
+    "remote production-state recovery exercise completed successfully; publication-buffer/transparency closure remains",
+    "Execution observations and successful exercise",
+    "The guarded REST-based retry completed successfully on 2026-09-11",
     "D1 REST API",
+    "Only after the publication-buffer/transparency work is exercised and recorded should Phase 2D be marked complete",
   ]],
   ["Changelog", changelog, [
-    "Began the substantive Phase 2D recovery slice",
+    "Completed the first guarded remote production-state recovery drill for Phase 2D",
+    "Phase 2D remains open for publication-buffer/transparency closure",
     "Accepted [ADR 0016]",
     "Accepted [ADR 0015]",
   ]],
@@ -63,10 +71,13 @@ for (const [name, content, markers] of [
 for (const [name, content, stale] of [
   ["OPERATIONS.md", operations, "No production application database exists yet"],
   ["TRANSPARENCY.md", transparency, "There is not yet a production application database"],
+  ["ROADMAP.md", roadmap, "run the read-only portable backup exporter against current production D1"],
+  ["docs/protocols/PHASE_2D_RECOVERY.md", protocol, "guarded remote recovery drill in progress, not yet complete"],
+  ["CHANGELOG.md", changelog, "This entry records preparation only — remote success is not claimed until the post-merge drill actually runs"],
   ["scripts/backup", backup, "No database exists yet"],
   ["scripts/restore", restore, "No database exists yet"],
 ]) {
-  if (content.includes(stale)) fail(`${name} still contains stale database-state text: ${stale}`);
+  if (content.includes(stale)) fail(`${name} still contains stale recovery/database-state text: ${stale}`);
 }
 
 if (!backup.includes("export-canonical-backup.js")) fail("scripts/backup does not invoke the portable canonical exporter");
@@ -77,5 +88,5 @@ if (failures > 0) {
   process.exit(1);
 }
 
-console.log("PASS: Phase 2D recovery state, protocol, and changelog are internally consistent");
-console.log("PASS: original no-database/no-op operational claims are gone from current-state sources");
+console.log("PASS: Phase 2D recovery proof and remaining transparency boundary are internally consistent");
+console.log("PASS: successful recovery is not confused with Phase 2D completion or a general public-backup policy");
