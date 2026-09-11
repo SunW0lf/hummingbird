@@ -6,7 +6,7 @@ Detailed governance protocol documents, once written, live in [docs/governance/]
 
 ## Proposals
 
-Open question: [OQ-GOVERNANCE-PROPOSALS](docs/governance/OPEN_QUESTIONS.md#oq-governance-proposals) — who may submit a proposal, in what form, and where (GitHub issue/PR, in-app form once Phase 3 exists)?
+Open question: [OQ-GOVERNANCE-PROPOSALS](docs/governance/OPEN_QUESTIONS.md#oq-governance-proposals) — who may **offer** a proposal, in what form, and where (GitHub issue/PR today; a Hummingbird-owned Offer surface only after the Phase 3 gate opens)?
 
 ## Charter publication lifecycle
 
