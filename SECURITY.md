@@ -4,18 +4,32 @@ Security protects the commons without depending on proving participant origin.
 
 ## Current attack surface
 
-Phase 2 is now in progress. The deployed public surface is still read-only while the first D1-backed commons substrate is introduced. There are no public submission forms or participant accounts yet.
+Phase 2 is now in progress. The deployed Hummingbird application surface remains read-only while the first D1-backed commons substrate is introduced. There are no Hummingbird-owned public submission forms or participant accounts yet.
+
+The interim Seed Bank defined by [ADR 0011](docs/decisions/0011-interim-seed-bank.md) introduces a bounded external write surface through public GitHub issue forms and discussion threads. That surface inherits GitHub's account, spam, abuse, and moderation mechanisms; it does not create Hummingbird application credentials or a direct write path into Hummingbird persistence.
 
 The realistic attack surface is concentrated in:
 
 - public GitHub repository and Actions (source and CI compromise)
+- public Seed Bank issue intake (spam, harassment, malicious links, social engineering, accidental disclosure, and attempts to smuggle vulnerability details into public threads)
 - Cloudflare account and deployment token (deployment compromise)
 - dependency compromise (npm devDependencies used for CI tooling)
 - Phase 2 persistence and migrations as D1 is introduced
 
+## Interim Seed Bank safety boundary
+
+- Seed, Feedback, and Question forms explicitly state that the resulting issue is public.
+- Public forms instruct participants not to submit secrets, credentials, private personal information, or vulnerability details.
+- GitHub's private vulnerability-reporting path is presented separately from public issue intake.
+- A GitHub account is an external-provider participation requirement, not Hummingbird origin verification or proof of authority.
+- Issue authorship, comments, reactions, and provider metadata are not automatically ingested into Hummingbird's future database.
+- Reactions are not votes and do not carry governance weight.
+- Seed Bank material is not automatically propagated into other Hummingbird spaces.
+- The steward may close, moderate, or restrict abusive provider-hosted threads as an operational safety action; doing so does not by itself establish the future constitutional exclusion policy tracked for Phase 3.
+
 ## Authentication / authorization
 
-Not applicable to public participation yet — no participant accounts exist. Open question: [OQ-SECURITY-AUTHN-MODEL](docs/governance/OPEN_QUESTIONS.md#oq-security-authn-model) for Phase 3+ when contribution/proposal forms are introduced.
+Not applicable to Hummingbird-owned public participation yet — no participant accounts exist. GitHub handles authentication for the interim Seed Bank as an external provider. Open question: [OQ-SECURITY-AUTHN-MODEL](docs/governance/OPEN_QUESTIONS.md#oq-security-authn-model) for Phase 3+ when Hummingbird-owned contribution/proposal forms are introduced.
 
 ## Secrets
 
@@ -29,7 +43,7 @@ Not applicable to public participation yet — no participant accounts exist. Op
 - GitHub Actions workflows request only the permissions they need (see `.github/workflows/`).
 - Repository workflow-token default permissions are configured read-only; the workflow also declares read-only repository-content permission explicitly.
 
-## Planned defenses (Phase 3+, not yet needed)
+## Planned defenses (Phase 3+ application-owned participation)
 
 - Rate limiting
 - Spam / automated flooding controls
@@ -62,7 +76,7 @@ The Phase 1 public-repository activation gate is complete as of 2026-09-10 (Paci
 
 GitHub's connected API does not expose every Advanced Security setting to the current integration, so controls that cannot be read back programmatically are recorded as steward-confirmed rather than falsely described as independently verified.
 
-Public source, history, forks, and repository Actions logs should be treated as visible to outside observers.
+Public source, history, forks, repository Actions logs, and public Seed Bank threads should be treated as visible to outside observers.
 
 ## Incident response
 

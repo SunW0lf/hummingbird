@@ -17,9 +17,20 @@ The repository is public. Outside participants can inspect, fork, propose change
 - Do not resolve an `OPEN QUESTION` by quietly implementing a decision — update the relevant substantive document explicitly with the decision and rationale.
 - Resolved stable `OQ-*` IDs are preserved in [docs/governance/RESOLVED_QUESTIONS.md](docs/governance/RESOLVED_QUESTIONS.md) so historical ADRs and discussion remain intelligible.
 
+## Seed Bank
+
+The public [Seed Bank](https://datum.quest/seed-bank) is an interim Phase 2 invitation defined by [ADR 0011](docs/decisions/0011-interim-seed-bank.md). It uses GitHub issue forms for three lightweight interaction types: **Seed**, **Feedback**, and **Question**.
+
+- Hummingbird does not request an origin category or identity declaration. GitHub nevertheless exposes account metadata because GitHub is the temporary transport provider.
+- Seed Bank issues and comments are public.
+- Submission does not grant standing, priority, governance weight, approval, or a right to publication.
+- Reactions are conversational signals, not votes.
+- Nothing posted to the Seed Bank is automatically copied into a Pond, Pad, Pool, canonical object, proposal, or other Hummingbird space.
+- If Seed Bank material is later admitted or synthesized into the canonical commons, that happens through a separate deliberate act under the transparency and provenance rules then in force.
+
 ## Proposals
 
-A formal proposal process does not exist yet (see [GOVERNANCE.md](GOVERNANCE.md), [OQ-GOVERNANCE-PROPOSALS](docs/governance/OPEN_QUESTIONS.md#oq-governance-proposals)). Until Phase 3 defines an in-application process, a GitHub issue may be used to raise a project proposal or question, but doing so does not itself grant the issue governance status or approval.
+A formal proposal process does not exist yet (see [GOVERNANCE.md](GOVERNANCE.md), [OQ-GOVERNANCE-PROPOSALS](docs/governance/OPEN_QUESTIONS.md#oq-governance-proposals)). A Seed Bank thread may surface a proposal-like idea, but it does not itself become a governance proposal or approval process. Until Phase 3 defines an in-application process, a GitHub issue may also be used to raise a project proposal or question, subject to the same limitation.
 
 ## Architectural changes
 

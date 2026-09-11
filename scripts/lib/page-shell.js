@@ -1,7 +1,7 @@
 // Shared HTML page shell for build-time generated pages (canonical documents,
 // the support page). Kept in sync by hand with the header/nav/footer markup
 // in the hand-authored pages under app/ (index.html, how-it-works.html,
-// security.html, open-questions.html, llms.txt has no shell).
+// seed-bank.html, security.html, open-questions.html; llms.txt has no shell).
 "use strict";
 
 const NAV_LINKS = [
@@ -10,6 +10,7 @@ const NAV_LINKS = [
   ["governance.html", "Governance"],
   ["roadmap.html", "Roadmap"],
   ["how-it-works.html", "How it works"],
+  ["seed-bank.html", "Seed Bank"],
   ["transparency.html", "Transparency"],
   ["changelog.html", "Changelog"],
   ["contributing.html", "Contributing"],

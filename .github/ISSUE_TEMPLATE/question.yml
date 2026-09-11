@@ -1,0 +1,31 @@
+name: Ask a question
+description: Ask about Hummingbird's ideas, documents, current behavior, or direction.
+title: "[Question] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Questions are welcome, including skeptical ones. This is a public discussion channel, not a private support or security channel.
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+      description: What are you trying to understand?
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: What prompted it?
+      description: Optional context, document link, or assumption you want checked.
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Public-space boundaries
+      options:
+        - label: I understand this issue and its discussion are public.
+          required: true
+        - label: I have not included secrets, private personal information, credentials, or vulnerability details.
+          required: true
+        - label: I understand answers here are discussion, not automatically governance decisions or canonical policy.
+          required: true

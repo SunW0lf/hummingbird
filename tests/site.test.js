@@ -8,7 +8,8 @@
 const fs = require("fs");
 const path = require("path");
 
-const APP_DIR = path.join(__dirname, "..", "dist");
+const ROOT = path.join(__dirname, "..");
+const APP_DIR = path.join(ROOT, "dist");
 const REQUIRED_PAGES = [
   "index.html",
   "mission.html",
@@ -16,6 +17,7 @@ const REQUIRED_PAGES = [
   "governance.html",
   "roadmap.html",
   "how-it-works.html",
+  "seed-bank.html",
   "transparency.html",
   "changelog.html",
   "contributing.html",
@@ -37,6 +39,13 @@ const REQUIRED_RAW_DOCS = [
   "docs/raw/LICENSE",
 ];
 
+const REQUIRED_SEED_FORMS = [
+  ".github/ISSUE_TEMPLATE/seed.yml",
+  ".github/ISSUE_TEMPLATE/feedback.yml",
+  ".github/ISSUE_TEMPLATE/question.yml",
+  ".github/ISSUE_TEMPLATE/config.yml",
+];
+
 let failures = 0;
 
 function fail(message) {
@@ -54,7 +63,7 @@ for (const page of REQUIRED_PAGES) {
   if (fs.existsSync(fullPath)) {
     pass(`${page} exists`);
   } else {
-    fail(`${page} is missing from app/`);
+    fail(`${page} is missing from dist/`);
   }
 }
 
@@ -82,6 +91,31 @@ for (const page of REQUIRED_PAGES.filter((p) => p.endsWith(".html"))) {
       fail(`${page} links to missing file ${match[1]}`);
     }
   }
+}
+
+// 4. Seed Bank must expose the bounded interim interaction contract.
+const seedBankPath = path.join(APP_DIR, "seed-bank.html");
+if (fs.existsSync(seedBankPath)) {
+  const seedBank = fs.readFileSync(seedBankPath, "utf8");
+  const requiredPhrases = [
+    "Plant a seed",
+    "Leave feedback",
+    "Ask a question",
+    "Reactions are conversational signals, not votes",
+    "security/advisories/new",
+    "issues/15",
+    "issues/19",
+  ];
+  for (const phrase of requiredPhrases) {
+    if (!seedBank.includes(phrase)) fail(`seed-bank.html is missing required interaction boundary: ${phrase}`);
+  }
+  pass("Seed Bank exposes starter discussions and participation boundaries");
+}
+
+// 5. Constrained GitHub forms and private-security routing must exist in-repo.
+for (const form of REQUIRED_SEED_FORMS) {
+  if (!fs.existsSync(path.join(ROOT, form))) fail(`${form} is missing`);
+  else pass(`${form} exists`);
 }
 
 if (failures > 0) {

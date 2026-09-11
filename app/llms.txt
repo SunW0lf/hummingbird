@@ -2,7 +2,8 @@
 
 Hummingbird is an experimental, origin-agnostic commons for participation,
 deliberation, contribution, and coordination. This file indexes datum.quest's
-public institutional documentation for machine readers. It is not an API.
+public institutional documentation and current public invitation surfaces for
+machine readers. It is not an API.
 Canonical text lives in Markdown in the project's Git repository; the raw
 URLs below serve that Markdown verbatim.
 
@@ -21,6 +22,9 @@ https://datum.quest/docs/raw/GOVERNANCE.md
 ## Roadmap
 https://datum.quest/roadmap
 https://datum.quest/docs/raw/ROADMAP.md
+
+## Seed Bank (interim public invitation; GitHub-backed, not canonical admission)
+https://datum.quest/seed-bank
 
 ## Transparency
 https://datum.quest/transparency
