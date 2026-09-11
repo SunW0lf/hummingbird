@@ -12,6 +12,7 @@ echo "Checking steward-tool syntax without remote access..."
 node --check scripts/stage-public-d1.js
 node --check scripts/promote-publication.js
 node --check scripts/admit-draft-d1.js
+node --check scripts/mark-published-d1.js
 
 echo "Validating first Phase 2C draft-admission candidate without remote access..."
 node scripts/admit-draft-d1.js admissions/candidates/seed15-visible-consequence.json --validate-only
