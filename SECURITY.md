@@ -38,9 +38,10 @@ Not applicable yet — no accounts exist. Open question: [OQ-SECURITY-AUTHN-MODE
 
 ## CI/CD security
 
-- Production deployment is gated by the CI workflow's own job dependency (`deploy` `needs: verify`), which requires lint/test/build to pass first. This is enforced by the workflow definition, not by a GitHub branch protection rule — see [OQ-OPS-BRANCH-PROTECTION](docs/governance/OPEN_QUESTIONS.md#oq-ops-branch-protection).
-- Dependency/security validation runs in CI where practical (see `.github/workflows/ci.yml`).
-- GitHub Actions is currently configured with `allowed_actions: all` rather than a restricted allow-list. Open question: [OQ-SECURITY-ACTIONS-HARDENING](docs/governance/OPEN_QUESTIONS.md#oq-security-actions-hardening).
+- Production deployment is gated by the CI workflow's own job dependency (`deploy` `needs: verify`), which requires tests, a successful build, and the high-severity dependency audit to pass first. This is enforced by the workflow definition, not by a GitHub branch protection rule — see [OQ-OPS-BRANCH-PROTECTION](docs/governance/OPEN_QUESTIONS.md#oq-ops-branch-protection).
+- External GitHub Actions used by the workflow are pinned to exact commit SHAs rather than mutable version tags.
+- The workflow-level `GITHUB_TOKEN` permission is read-only for repository contents.
+- GitHub Actions is currently configured with repository-level `allowed_actions: all` rather than a restricted allow-list. Pinning action commits reduces supply-chain exposure but does not resolve that repository-policy gap. Open question: [OQ-SECURITY-ACTIONS-HARDENING](docs/governance/OPEN_QUESTIONS.md#oq-security-actions-hardening).
 
 ## Incident response
 
