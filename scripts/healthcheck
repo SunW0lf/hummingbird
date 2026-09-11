@@ -15,9 +15,22 @@ TMP_DIR=$(mktemp -d)
 trap 'rm -rf "${TMP_DIR}"' EXIT
 
 challenge_check() {
-  local body="$1"
-  if grep -Eiq 'cf-chl-|challenge-platform|just a moment|attention required|captcha|verify you are human|enable javascript to continue' "${body}"; then
+  local headers="$1"
+  local body="$2"
+  local matched=""
+
+  if grep -Eiq '^cf-mitigated:[[:space:]]*challenge([[:space:]]|$)' "${headers}"; then
+    matched="cf-mitigated: challenge"
+  else
+    matched=$(grep -Eio -m1 'cf-chl-|challenge-platform|just a moment|attention required|captcha|verify you are human|enable javascript to continue' "${body}" || true)
+  fi
+
+  if [ -n "${matched}" ]; then
     echo "error: response appears to contain a challenge, CAPTCHA, or browser interstitial" >&2
+    echo "matched signature: ${matched}" >&2
+    echo "response diagnostics:" >&2
+    grep -Ei '^HTTP/|^content-type:|^server:|^cf-ray:|^cf-mitigated:|^location:' "${headers}" >&2 || true
+    grep -Eio -m1 '<title>[^<]*</title>|<h1[^>]*>[^<]*</h1>' "${body}" >&2 || true
     return 1
   fi
 }
@@ -54,7 +67,7 @@ check_get() {
       status="000"
     fi
 
-    if ! challenge_check "${body}"; then
+    if ! challenge_check "${headers}" "${body}"; then
       exit 1
     fi
     if [ "${status}" = "401" ] || [ "${status}" = "403" ]; then
