@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
-# Run all automated tests. Builds first since the canonical document pages
-# and support page are generated at build time - tests check dist/, the
-# actual deployable output, not app/ alone.
+# Run all automated tests. Builds first since canonical document pages and
+# other generated surfaces are checked from dist/, the deployable output.
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-echo "Building before tests (canonical pages are generated at build time)..."
+echo "Building before tests..."
 ./scripts/build
 
 echo "Running site smoke tests..."
@@ -17,3 +16,6 @@ node tests/consistency.test.js
 
 echo "Running canonical corpus contract checks..."
 node tests/canonical.test.js
+
+echo "Running local D1 migration/import/export round-trip checks..."
+node tests/d1-roundtrip.test.js
