@@ -9,6 +9,8 @@ set -euo pipefail
 BASE_URL="${HEALTHCHECK_URL:-https://datum.quest}"
 BASE_URL="${BASE_URL%/}"
 USER_AGENT="${HEALTHCHECK_USER_AGENT:-Hummingbird-Public-Read-Smoke/1.0}"
+ATTEMPTS="${HEALTHCHECK_ATTEMPTS:-6}"
+RETRY_DELAY_SECONDS="${HEALTHCHECK_RETRY_DELAY_SECONDS:-2}"
 TMP_DIR=$(mktemp -d)
 trap 'rm -rf "${TMP_DIR}"' EXIT
 
@@ -39,34 +41,77 @@ check_get() {
   name=$(printf '%s' "${route:-root}" | tr '/.' '__')
   local headers="${TMP_DIR}/${name}.headers"
   local body="${TMP_DIR}/${name}.body"
-  local status
+  local status="000"
+  local attempt
 
   echo "GET ${route:-/}"
-  status=$(curl -sS -D "${headers}" -o "${body}" -w '%{http_code}' \
-    --max-time 20 --retry 2 --retry-all-errors \
-    -A "${USER_AGENT}" -H 'Accept: */*' "${BASE_URL}${route}")
+  for ((attempt=1; attempt<=ATTEMPTS; attempt++)); do
+    : > "${headers}"
+    : > "${body}"
+    if ! status=$(curl -sS -D "${headers}" -o "${body}" -w '%{http_code}' \
+      --max-time 20 --retry 2 --retry-all-errors \
+      -A "${USER_AGENT}" -H 'Accept: */*' "${BASE_URL}${route}"); then
+      status="000"
+    fi
+
+    if ! challenge_check "${body}"; then
+      exit 1
+    fi
+    if [ "${status}" = "401" ] || [ "${status}" = "403" ]; then
+      echo "error: GET ${route:-/} was denied with HTTP ${status}" >&2
+      exit 1
+    fi
+
+    if [ "${status}" = "200" ] \
+      && content_type_check "${headers}" "${expected_type}" >/dev/null 2>&1 \
+      && grep -Fq "${marker}" "${body}"; then
+      return 0
+    fi
+
+    if [ "${attempt}" -lt "${ATTEMPTS}" ]; then
+      echo "  response not current yet (attempt ${attempt}/${ATTEMPTS}); retrying..."
+      sleep "${RETRY_DELAY_SECONDS}"
+    fi
+  done
 
   if [ "${status}" != "200" ]; then
     echo "error: GET ${route:-/} expected HTTP 200, got ${status}" >&2
-    challenge_check "${body}" || true
     exit 1
   fi
   content_type_check "${headers}" "${expected_type}"
-  challenge_check "${body}"
   if ! grep -Fq "${marker}" "${body}"; then
-    echo "error: GET ${route:-/} did not contain expected Hummingbird marker: ${marker}" >&2
+    echo "error: GET ${route:-/} did not contain expected Hummingbird marker after ${ATTEMPTS} attempts: ${marker}" >&2
     exit 1
   fi
 }
 
 check_head_root() {
   local headers="${TMP_DIR}/head-root.headers"
-  local status
+  local status="000"
+  local attempt
 
   echo "HEAD /"
-  status=$(curl -sS -I -D "${headers}" -o /dev/null -w '%{http_code}' \
-    --max-time 20 --retry 2 --retry-all-errors \
-    -A "${USER_AGENT}" -H 'Accept: text/html' "${BASE_URL}/")
+  for ((attempt=1; attempt<=ATTEMPTS; attempt++)); do
+    : > "${headers}"
+    if ! status=$(curl -sS -I -D "${headers}" -o /dev/null -w '%{http_code}' \
+      --max-time 20 --retry 2 --retry-all-errors \
+      -A "${USER_AGENT}" -H 'Accept: text/html' "${BASE_URL}/"); then
+      status="000"
+    fi
+
+    if [ "${status}" = "401" ] || [ "${status}" = "403" ]; then
+      echo "error: HEAD / was denied with HTTP ${status}" >&2
+      exit 1
+    fi
+    if [ "${status}" = "200" ] && content_type_check "${headers}" 'text/html' >/dev/null 2>&1; then
+      return 0
+    fi
+
+    if [ "${attempt}" -lt "${ATTEMPTS}" ]; then
+      echo "  HEAD response not current yet (attempt ${attempt}/${ATTEMPTS}); retrying..."
+      sleep "${RETRY_DELAY_SECONDS}"
+    fi
+  done
 
   if [ "${status}" != "200" ]; then
     echo "error: HEAD / expected HTTP 200, got ${status}" >&2
