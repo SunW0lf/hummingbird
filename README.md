@@ -10,9 +10,11 @@ This is currently a passion project, not a conventional startup or commercial pr
 
 **Phase 2 — Read-Only Commons is in progress.** Phase 0 — Foundation and Phase 1 — Public Charter Site are complete. The repository is public, `main` is protected, required CI is active, and the public-repository security baseline is enabled. See [ROADMAP.md](ROADMAP.md).
 
+The production Hummingbird application remains read-only while the first persistent commons substrate is built. An interim public [Seed Bank](https://datum.quest/seed-bank), defined by [ADR 0011](docs/decisions/0011-interim-seed-bank.md), uses constrained GitHub issues for Seed, Feedback, and Question discussions without treating those provider-hosted threads as canonical Hummingbird records or governance votes.
+
 ## Quick start (development)
 
-The currently deployed public surface remains read-only. Phase 2 introduces the first application database while preserving portable canonical data and deliberately avoiding public submission until Phase 3.
+Phase 2 introduces the first application database while preserving portable canonical data and deliberately avoiding Hummingbird-owned public submission until Phase 3.
 
 ```bash
 ./scripts/bootstrap   # one-time setup (npm install for devDependencies)
