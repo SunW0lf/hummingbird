@@ -111,6 +111,12 @@ https://datum.quest/docs/raw/decisions/0016-offers-and-the-offer-buffer.md
 
 ADR 0016 defines future Phase 3 offer terminology and the non-canonical Offer Buffer boundary. It does not mean that `/offer`, a public write API, capability issuance, or an Offer Buffer runtime is deployed during Phase 2.
 
+### ADR 0017 — Phase 2 Publication Buffer Policy
+https://datum.quest/decisions/0017-phase2-publication-buffer-policy
+https://datum.quest/docs/raw/decisions/0017-phase2-publication-buffer-policy.md
+
+ADR 0017 records the exercised Phase 2 publication-buffer policy: raw provider evidence remains externally authoritative, while a minimized truthful operational summary is reviewed through protected Git and published through the Transparency record. No runtime queue or additional datastore is introduced.
+
 ## Roadmap
 https://datum.quest/roadmap
 https://datum.quest/docs/raw/ROADMAP.md
@@ -129,6 +135,8 @@ https://datum.quest/seed-bank
 ## Transparency
 https://datum.quest/transparency
 https://datum.quest/docs/raw/TRANSPARENCY.md
+
+Phase 2D has exercised a real production-state recovery path and the publication buffer. The public Transparency record reports the consequential recovery result while omitting temporary provider identifiers, credentials, raw request timing, and duplicate provider telemetry.
 
 ## Changelog
 https://datum.quest/changelog
