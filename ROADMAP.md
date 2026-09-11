@@ -19,11 +19,11 @@ Status: **complete** — verified against this checklist and closed out; see [CH
 
 Status: **complete** — public surfaces are live and the public-repository security baseline has been activated and verified to the extent exposed by GitHub, with remaining repository-setting controls explicitly confirmed by the steward on 2026-09-10 (Pacific Time).
 
-Published surfaces include Home, Mission, Charter (working draft, C0), Governance, Roadmap, How It Works, Transparency, Changelog, Contributing, Open Questions, Seed Bank, Security/Contact, and Support. Publishing a Charter Candidate (C1) is a distinct governance action, not automatic upon phase completion — see [GOVERNANCE.md](GOVERNANCE.md).
+Publishing a Charter Candidate (C1) is a distinct governance action, not automatic upon phase completion — see [GOVERNANCE.md](GOVERNANCE.md).
 
-The repository is public. `main` is protected with required `Checks, test, build` and enforcement for everyone including the steward/admin. Repository Actions are restricted and full-length SHA pinning is required. GitHub private vulnerability reporting, secret scanning/push protection, Dependabot security controls, and CodeQL default setup are enabled; CodeQL execution has been independently observed succeeding on `main`.
+The repository is public. `main` is protected with required `Checks, test, build` and enforcement for everyone including the steward/admin. Repository Actions are restricted and full-length SHA pinning is required. GitHub private vulnerability reporting, secret scanning/push protection, Dependabot security controls, and CodeQL default setup are enabled.
 
-No Hummingbird-owned participant accounts, voting, application-managed payments, financial-governance workflows, reputation, moderation, AI orchestration, feeds, or chat were added in Phase 1. An interim personal-steward voluntary support address (see [ADR 0008](docs/decisions/0008-interim-steward-support-wallet.md)) remains a deliberate, narrowly scoped exception to "no payments" — it confers no standing and is not Phase 5.
+No Hummingbird-owned participant accounts, voting, application-managed payments, financial-governance workflows, reputation, moderation, AI orchestration, feeds, or chat were added in Phase 1. An interim personal-steward voluntary support address remains a narrowly scoped exception to "no payments" — it confers no standing and is not Phase 5.
 
 ## Phase 2 — Read-Only Commons
 
@@ -33,31 +33,32 @@ The Phase 2 data-model, workflow-state, retention, and operational-transparency 
 
 Phase 2 implements public read-only representations of contributions, proposals, needs, relationships, minimal events, statuses, and transparency records. Cloudflare D1 is the planned first persistence engine, while canonical record meaning remains portable and storage-independent.
 
-Phase 2 does **not** accept application-owned public submissions. Records may be deliberately admitted/imported by the steward from public project material while the read model, storage, backup, and publication-buffer behavior are tested.
-
-A narrow interim exception is the **Seed Bank**, defined by [ADR 0011](docs/decisions/0011-interim-seed-bank.md). The production Hummingbird site remains read-only while public Seed, Feedback, and Question discussions use GitHub issues as an external provider-hosted channel. Those issues, comments, identities, and reactions are not automatically canonical Hummingbird records, governance decisions, votes, or admission into another Hummingbird space.
+Phase 2 does **not** accept application-owned public submissions. A narrow interim exception is the **Seed Bank**, defined by [ADR 0011](docs/decisions/0011-interim-seed-bank.md), using GitHub as external provider-hosted discussion transport without automatically creating canonical records or governance weight.
 
 ### Phase 2A — Canonical contract and reference corpus
 
-Status: **in progress**
+Status: **complete**
 
-Before production persistence, prove the record model independently of a database. See [ADR 0012](docs/decisions/0012-reference-corpus-before-persistence.md).
+Completed in PR #26. See [ADR 0012](docs/decisions/0012-reference-corpus-before-persistence.md).
 
-- Maintain a machine-readable v1 canonical-object schema.
-- Maintain a small deterministic reference corpus covering contribution, proposal, need, event, lifecycle state, typed relationships, provenance, and publication metadata.
-- Validate the corpus in CI without requiring participant identity/origin fields or database-provider fields.
-- Define the portable relationship shape and verify local references resolve.
+- Machine-readable v1 canonical-object schema exists.
+- Deterministic reference corpus covers contribution, proposal, need, event, lifecycle state, typed relationships, provenance, and publication metadata.
+- CI validates the corpus without participant identity/origin or database-provider fields.
+- Portable `{type, target_ref}` relationships are defined and local fixture references resolve.
 
-**Exit:** the reference corpus passes CI and can serve as the required round-trip input for persistence work.
+**Exit satisfied:** the reference corpus passes CI and is the required round-trip input for persistence work.
 
 ### Phase 2B — Persistence and deterministic import
 
-Status: **planned**
+Status: **in progress**
 
-- Provision/configure Cloudflare D1 without placing credentials in the repository.
-- Add versioned migrations for canonical documents, minimal events, and typed relationships.
-- Add a deterministic import path for the reference corpus and later deliberately admitted seed material.
-- Demonstrate that D1 row/storage details are not required to reconstruct equivalent canonical records.
+The first substep is intentionally **local-only**: validate D1 migrations/import/export semantics through Wrangler's local D1 environment before any remote production database is created.
+
+- Add versioned migrations for canonical documents and typed relationships.
+- Apply migrations from empty state in CI using local D1.
+- Add a deterministic import path for the reference corpus.
+- Reconstruct canonical records from D1 and compare them with the original storage-independent corpus.
+- Only after local round-trip tests are green, provision/configure remote Cloudflare D1 without placing credentials in the repository.
 
 **Exit:** an empty database can be migrated and populated deterministically from storage-independent input, and canonical records can be exported without loss of institutional meaning.
 
