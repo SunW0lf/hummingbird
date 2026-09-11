@@ -1,0 +1,38 @@
+name: Leave feedback
+description: Tell Hummingbird what is clear, confusing, useful, missing, or getting in the way.
+title: "[Feedback] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Feedback is welcome on the site, documents, concepts, terminology, accessibility, and project direction. This public channel is not for security vulnerabilities.
+  - type: textarea
+    id: encountered
+    attributes:
+      label: What did you encounter?
+      description: Point to a page, document, concept, or interaction if relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: feedback
+    attributes:
+      label: What worked, failed, or felt unclear?
+      description: Critique is welcome. Specific examples help.
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: What would you change?
+      description: Optional. Suggest a better direction, wording, or interaction.
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Public-space boundaries
+      options:
+        - label: I understand this issue and its discussion are public.
+          required: true
+        - label: I have not included secrets, private personal information, credentials, or vulnerability details.
+          required: true
+        - label: I understand feedback and reactions do not create governance weight or automatic adoption.
+          required: true
