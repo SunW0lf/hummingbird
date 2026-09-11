@@ -32,6 +32,7 @@ const PUBLIC_DECISIONS = [
   "0011-interim-seed-bank.md",
   "0012-reference-corpus-before-persistence.md",
   "0013-public-read-accessibility.md",
+  "0014-progressive-capability-rollout.md",
 ];
 
 const ROOT_PUBLIC_ROUTES = new Map([
