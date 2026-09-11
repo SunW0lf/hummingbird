@@ -45,7 +45,7 @@ for (const [name, content, markers] of [
     "Hummingbird must be able to lose its live database without losing institutional meaning",
     "Storage boundary",
     "Recovery point rule",
-    "remote recovery drill not yet executed",
+    "guarded remote recovery drill prepared but not yet executed",
   ]],
   ["Changelog", changelog, [
     "Began the substantive Phase 2D recovery slice",
