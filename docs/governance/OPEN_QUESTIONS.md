@@ -167,16 +167,16 @@ Review gate: during Phase 2.
 Status: OPEN.
 
 ### OQ-SECURITY-VULN-REPORTING
-**Dedicated, genuinely private security contact address/process** (e.g. `security@datum.quest` via Cloudflare Email Routing). No public channel may be advertised until it technically exists (documented risk acceptance permitted for the interim state — public copy must say "not yet established," never imply a working channel).
+**Dedicated, genuinely private security contact address/process** (e.g. `security@datum.quest` via Cloudflare Email Routing or GitHub private vulnerability reporting). No public channel may be advertised until it technically exists.
 Raised in: [SECURITY.md](../../SECURITY.md), [CONTRIBUTING.md](../../CONTRIBUTING.md).
 Blocks: completion of Phase 1, or repository publication, whichever occurs first.
-Status: IN PROGRESS — feasibility confirmed (Cloudflare Email Routing available on the `datum.quest` zone), not yet configured.
+Status: IN PROGRESS — public repository transition authorized in principle; intended Phase 1 solution is GitHub private vulnerability reporting enabled and verified as part of the publication security activation.
 
 ### OQ-SECURITY-ACTIONS-HARDENING
-**GitHub Actions permissions hardening.** Repository currently has `allowed_actions: all` (any public action may run) rather than a restricted allow-list. (Documented risk acceptance permitted.)
+**GitHub Actions permissions hardening.** Repository currently has `allowed_actions: all` (any public action may run) rather than a restricted allow-list. (Documented risk acceptance permitted only for the current private state.)
 Raised in: [SECURITY.md](../../SECURITY.md).
 Blocks: completion of Phase 1, or repository publication, whichever occurs first.
-Status: OPEN — Phase 1 risk acceptance recorded 2026-09-10 in SECURITY.md for the current private, single-steward phase; must be revisited before repository publication or a material trust-model change.
+Status: IN PROGRESS — private-mode Phase 1 risk acceptance expires at publication; public-mode target is GitHub-owned/explicitly approved actions only, with workflow references remaining SHA-pinned.
 
 ## Operations
 
@@ -193,10 +193,10 @@ Review gate: during Phase 2.
 Status: OPEN.
 
 ### OQ-OPS-BRANCH-PROTECTION
-**Branch protection on `main` is currently unavailable** (GitHub disables it for private repositories on this plan). No enforced required-review or required-status-check rule exists; CI-before-deploy is enforced only by the workflow's own `needs:`/`if:` structure, not by GitHub branch rules. (Documented risk acceptance permitted while the repository remains private and single-steward.)
+**Branch protection on `main` is currently unavailable while the repository is private on the current plan.** No enforced required-review or required-status-check rule exists; CI-before-deploy is enforced only by the workflow's own `needs:`/`if:` structure, not by GitHub branch rules. (Documented risk acceptance permitted only while the repository remains private and single-steward.)
 Raised in: [OPERATIONS.md](../../OPERATIONS.md), [SECURITY.md](../../SECURITY.md).
 Blocks: completion of Phase 1, or repository publication, whichever occurs first.
-Status: OPEN — Phase 1 risk acceptance recorded 2026-09-10 in OPERATIONS.md for the current private, single-steward phase; must be revisited before repository publication, adding maintainers, or a material trust-model change.
+Status: IN PROGRESS — private-mode Phase 1 risk acceptance expires at publication; public-mode target is protected `main` with pull-request flow, required `Checks, test, build`, and force-push/deletion disabled.
 
 ## Transparency
 
@@ -207,10 +207,10 @@ Blocks: entry into Phase 2 (public transparency-record implementation).
 Status: OPEN.
 
 ### OQ-TRANSPARENCY-REPO-VISIBILITY
-**When and how to make the repository public.** The repository is currently **private**. Making it public is a deliberate, one-way-in-practice action gated on a completed git-history audit for secrets/sensitive data, not an automatic consequence of any phase completing.
-Raised in: [TRANSPARENCY.md](../../TRANSPARENCY.md), [docs/decisions/](../decisions/).
+**When and how to make the repository public.** The repository is currently **private**. Making it public is a deliberate action gated on a completed git-history audit for secrets/sensitive data and the public-mode security activation described in ADR 0009.
+Raised in: [TRANSPARENCY.md](../../TRANSPARENCY.md), [docs/decisions/0009-public-repository-security-transition.md](../decisions/0009-public-repository-security-transition.md).
 Review gate: before repository publication.
-Status: OPEN — git-history audit for secrets completed with no findings (see Phase 0 verification in CHANGELOG.md); publication decision itself still open.
+Status: IN PROGRESS — steward authorized public visibility in principle on 2026-09-10; history audit previously found no secrets; visibility change remains pending activation and verification of the public security baseline.
 
 ## Licensing
 
@@ -218,12 +218,12 @@ Status: OPEN — git-history audit for secrets completed with no findings (see P
 **Distinct content/reuse license for Charter, Mission, and Governance documents** (as opposed to the MIT license, which covers only software in this repository). E.g. a Creative Commons license.
 Raised in: [LICENSE](../../LICENSE).
 Review gate: before repository publication or C1 Charter Candidate publication.
-Status: OPEN.
+Status: OPEN — reviewed at the publication gate; no distinct content license has been selected. Publication does not itself change the reuse terms stated in `LICENSE`.
 
 ## Index by phase gate
 
 - **Blocks entry into Phase 2:** OQ-DATA-CONTRIBUTION-MODEL, OQ-DATA-PROPOSAL-MODEL, OQ-DATA-NEED-MODEL, OQ-DATA-AUDIT-EVENT-MODEL, OQ-DATA-WORKFLOW-STATES, OQ-SECURITY-RETENTION-PERIODS, OQ-TRANSPARENCY-OPERATIONAL-HISTORY.
-- **Blocks completion of Phase 1 / repository publication:** OQ-SECURITY-VULN-REPORTING, OQ-SECURITY-ACTIONS-HARDENING, OQ-OPS-BRANCH-PROTECTION. For the current private, single-steward Phase 1, the latter two have dated documented risk acceptances; OQ-SECURITY-VULN-REPORTING remains the unresolved Phase 1 completion blocker. All three require fresh disposition before repository publication.
+- **Blocks completion of Phase 1 / repository publication:** OQ-SECURITY-VULN-REPORTING, OQ-SECURITY-ACTIONS-HARDENING, OQ-OPS-BRANCH-PROTECTION. All three are now IN PROGRESS as one coordinated public-mode security transition; private-mode risk acceptances do not carry into publication.
 - **Blocks entry into Phase 3:** OQ-CHARTER-RIGHTS, OQ-CHARTER-EXCLUSION, OQ-CHARTER-PARTICIPANT-RESPONSIBILITIES, OQ-GOVERNANCE-EMERGENCY-AUTHORITY, OQ-GOVERNANCE-PROPOSALS, OQ-ARCH-FRAMEWORK, OQ-SECURITY-ACCESS-CONTROL-RETENTION, OQ-SECURITY-AUTHN-MODEL.
 - **Blocks entry into Phase 4:** OQ-GOVERNANCE-DISPUTES, OQ-GOVERNANCE-VALIDATED-NEEDS.
 - **Blocks entry into Phase 5:** OQ-PROJECT-LEGAL-STRUCTURE.
