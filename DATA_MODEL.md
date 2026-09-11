@@ -1,6 +1,10 @@
 # Data Model
 
-Phase 0/1 stores no participant or contribution data — the site is static. Phase 2 introduces the first application data as a **read-only commons**. The logical model below is authoritative for Phase 2; see [ADR 0010](docs/decisions/0010-phase2-read-only-commons-contract.md).
+Phase 2 introduces the first application data as a **read-only commons**. The logical model below is authoritative for Phase 2; see [ADR 0010](docs/decisions/0010-phase2-read-only-commons-contract.md).
+
+A machine-readable v1 contract lives at [`schemas/canonical-object-v1.schema.json`](schemas/canonical-object-v1.schema.json). A deterministic, storage-independent reference corpus lives under [`fixtures/canonical/`](fixtures/canonical/) and is governed by [ADR 0012](docs/decisions/0012-reference-corpus-before-persistence.md).
+
+The reference corpus is **contract material, not production institutional memory**. Inclusion there does not itself publish, admit, approve, validate, or grant governance status to content.
 
 ## Participant model
 
@@ -17,16 +21,18 @@ participant
 
 - A **declaration** is a voluntary claim made by a participant about itself.
 - A **credential** verifies only the specific claim it attests to. It does not define the participant's underlying nature and does not grant additional authority.
-- Anonymous or pseudonymous participation should remain possible where security permits (see [SECURITY.md](SECURITY.md)).
+- Anonymous or pseudonymous participation should remain possible where security permits.
 - **Phase 2 canonical records do not require a participant record.** Optional attribution may be attached only where voluntarily supplied and appropriate for publication.
 
 ## Portability principle
 
-**Canonical Hummingbird records use portable, versioned representations whose institutional meaning is independent of the database engine used to store them.** The logical model must not depend on a particular vendor. It must remain compatible with document databases, JSON-in-SQL, PostgreSQL JSONB, D1/SQLite JSON, MongoDB, Firestore, and future object/event storage approaches.
+**Canonical Hummingbird records use portable, versioned representations whose institutional meaning is independent of the database engine used to store them.**
 
 Cloudflare D1 is the planned first Phase 2 persistence engine because it fits the existing deployment footprint and hobby-scale runway. That choice does not make D1 semantics canonical.
 
-Prefer **schema-flexible, versioned documents**, not unstructured schema-less blobs: every canonical object declares its own `type` and `schema_version` rather than relying on the database's schema (or lack of one) to convey meaning.
+Prefer **schema-flexible, versioned documents**, not unstructured schema-less blobs: every canonical object declares its own `type` and `schema_version` rather than relying on a database schema to convey institutional meaning.
+
+Before production D1 persistence, the v1 contract is exercised outside any database through the reference corpus. D1 migrations/import/export must round-trip those records without depending on provider row IDs, triggers, hidden state, or database-only meaning.
 
 ## Canonical object core shape
 
@@ -39,10 +45,19 @@ schema_version
 created_at
 state
 content
-relationships
+relationships[]
 ```
 
-Optional `attribution`, `provenance`, or `publication` fields are added only where a specific institutional function justifies them. Do not add speculative future fields on the chance they become useful.
+Optional `attribution`, `provenance`, or `publication` fields are added only where a specific institutional function justifies them. Do not add speculative future fields merely because storage is cheap.
+
+The v1 machine-readable contract currently permits these record families:
+
+```text
+contribution
+proposal
+need
+event
+```
 
 ## Phase 2 record families
 
@@ -57,7 +72,7 @@ schema_version: 1
 created_at
 state
 content:
-  title? 
+  title?
   body
   format
 relationships[]
@@ -66,7 +81,7 @@ provenance?       # source reference when institutionally useful
 publication?
 ```
 
-The model deliberately does not require a participant identity, origin category, device identifier, wallet, or account.
+The model deliberately does not require a participant identity, origin category, device identifier, wallet, provider account, or source address.
 
 ### Proposal
 
@@ -121,6 +136,7 @@ id
 type: event
 schema_version: 1
 created_at
+state
 event_type
 subject_ref
 content
@@ -138,14 +154,23 @@ Phase 2 uses one deliberately small publication/lifecycle state machine:
 draft -> published -> corrected | superseded | withdrawn | archived
 ```
 
-- A record may enter directly as `published` when imported from an already-public authoritative source.
+- A record may enter directly as `published` when deliberately imported from an already-public authoritative source.
 - A correction is attached to history rather than silently erasing what was previously represented.
 - `superseded`, `withdrawn`, and `archived` preserve the fact that the record existed.
 - Approval, validation, voting, disputes, moderation, and reputation are **not** Phase 2 states.
 
 ## Typed relationships
 
-Canonical records may express bounded relationships such as:
+The portable v1 relationship shape is deliberately small:
+
+```json
+{
+  "type": "references",
+  "target_ref": "some-canonical-id-or-stable-external-reference"
+}
+```
+
+Allowed v1 relationship types are:
 
 - `responds_to`
 - `references`
@@ -157,11 +182,42 @@ Canonical records may express bounded relationships such as:
 - `summarizes`
 - `implements`
 
-This does not imply deploying a graph database. The canonical model simply remains compatible with a graph projection later.
+The relationship object does not require a graph database. D1 may normalize relationships into helper tables for querying, but the canonical export remains the portable `{type, target_ref}` representation.
 
-**External artifacts** (large files) should be stored once and referenced from canonical objects rather than copied into multiple records.
+**External artifacts** should be stored once in their authoritative system and referenced rather than copied into multiple records.
 
-**Derived projections** — search indexes, caches, summaries, embeddings, analytics, and other derived representations — are not canonical. They should remain rebuildable and disposable wherever practical; losing one should never lose institutional meaning.
+**Derived projections** — search indexes, caches, summaries, embeddings, analytics, database helper rows, and public view models — are not canonical. They should remain rebuildable and disposable wherever practical; losing one should never lose institutional meaning.
+
+## External ingress and admission
+
+Phase 2 distinguishes material that exists outside the canonical commons from material deliberately admitted into it.
+
+```text
+external offer/source
+        ↓
+consideration / synthesis
+        ↓
+explicit admission
+        ↓
+canonical record
+```
+
+The interim Seed Bank is the first live example. A GitHub issue, comment, reaction, provider identity, or issue timestamp is not automatically canonical Hummingbird data. If material is later admitted, Hummingbird should store the admitted meaning plus only the provenance/reference needed to understand where it came from.
+
+**Submission ≠ publication ≠ admission ≠ governance approval.**
+
+## Reference corpus and persistence test
+
+The Phase 2A reference corpus must:
+
+- contain at least one representative object for every v1 record family;
+- exercise typed relationships and relevant optional fields;
+- contain no required participant identity/origin classification;
+- contain no provider-specific persistence keys such as D1 row identity;
+- pass CI contract checks;
+- become the required input for D1 import/export round-trip testing.
+
+A future D1 design fails the portability requirement if an equivalent canonical export cannot be reconstructed from the stored data without hidden database-specific semantics.
 
 ## Data classification and retention
 
@@ -169,8 +225,8 @@ Visibility classification and retention class are separate axes. See [SECURITY.m
 
 Retention classes are:
 
-- **EPHEMERAL** — maximum 7 days unless a shorter control-specific limit applies. Temporary processing and short-lived coordination belong here.
-- **OPERATIONAL** — 90 days by default. Diagnostics, ordinary operational support records, and review support material belong here unless another classification overrides the period.
+- **EPHEMERAL** — maximum 7 days unless a shorter control-specific limit applies.
+- **OPERATIONAL** — 90 days by default.
 - **DURABLE** — no automatic expiry for material deliberately admitted to institutional memory, subject to correction/removal policy and future participant rights.
 
 Nothing becomes durable merely because storage is cheap. **Durability must be earned or deliberately granted**, not defaulted into.
@@ -197,12 +253,14 @@ If those questions cannot be answered, do not collect the information by default
 - Bound metadata size, relationship counts, event payloads, operational logs, security data, attachments, and abuse-control state.
 - An ordinary textual contribution should remain small in canonical storage — it should not silently create orders of magnitude more permanent backend data than the contribution itself.
 
-## Blockchain-derived data (interim support, see [ROADMAP.md](ROADMAP.md) — this is not Phase 5)
+## Blockchain-derived data (interim support; not Phase 5)
 
-Hummingbird does not require supporter identity collection for the interim voluntary support mechanism, and does not create donor accounts, supporter profiles, donor emails/names, participant identities derived from wallets, leaderboards, badges, or donation-linked reputation. A public wallet address and its on-chain activity are not treated as a durable canonical record inside Hummingbird's own storage: the chain itself is the authoritative record of any inbound value. If financial transparency reporting is built later, it should derive activity from the chain or an appropriate indexer rather than maintaining a separate internal transaction ledger; any local index or cache must remain rebuildable and non-authoritative. This is the portability/lean-data principle applied to an external system: **store Hummingbird's decisions; reference external authoritative facts.**
+Hummingbird does not require supporter identity collection for the interim voluntary support mechanism, and does not create donor accounts, supporter profiles, participant identities derived from wallets, leaderboards, badges, or donation-linked reputation.
 
-Unsolicited inbound support and any future project-authorized expenditure are separate concepts. Inbound support to the public address has `governance_effect: none` and does not itself authorize any action. A future `ExpenditureAuthorization` record (conceptually: `authorization_id`, `purpose`, `authorized amount/limit`, `decision reference`, `status`) would represent a governance decision to use resources for a defined purpose — this is a Phase 5 design note only and is not implemented.
+A public wallet address and its on-chain activity are not a durable canonical transaction ledger inside Hummingbird. The chain remains authoritative. If financial transparency is built later, activity should be derived from the chain/indexer; any local index/cache remains rebuildable and non-authoritative.
+
+Unsolicited inbound support and future project-authorized expenditure are separate concepts. A future expenditure-authorization record would represent a governance decision to use resources for a defined purpose; that remains Phase 5 design, not current implementation.
 
 ## Current state
 
-The Phase 2 logical model is now defined. No production database has been deployed yet; implementing D1, migrations, seed/import paths, and read-only public projections is Phase 2 work.
+The Phase 2 logical model and storage-independent v1 reference contract are defined. The reference corpus precedes production persistence. No production D1 database has been deployed yet; D1 migrations/import/export are Phase 2B work.
