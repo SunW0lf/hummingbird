@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Backup: Phase 0/1 has no database. The Git repository (mirrored on GitHub) is the
-# entire durable state, and GitHub already retains full history.
+# Portable canonical backup entry point.
 #
-# This script is intentionally a documented no-op until Cloudflare D1 is introduced
-# (see OPERATIONS.md). It exits successfully rather than failing, so it stays safe
-# to wire into scheduled automation ahead of time.
+# Production use is read-only:
+#   ./scripts/backup --remote --output /secure/off-repo/hummingbird-backup
+#
+# Local verification:
+#   ./scripts/backup --local --persist-to /path/to/local-state --output /tmp/hummingbird-backup
 set -euo pipefail
 
-echo "No database exists yet (Phase 0/1). Nothing to back up beyond the Git repository itself, which GitHub already retains."
-echo "This script will be extended to export Cloudflare D1 once that database exists. See OPERATIONS.md."
-exit 0
+cd "$(dirname "$0")/.."
+exec node scripts/export-canonical-backup.js "$@"

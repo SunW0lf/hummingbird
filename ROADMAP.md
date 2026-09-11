@@ -98,17 +98,26 @@ Status: **in progress**
 
 Phase 2D now focuses on durability and safe operational transparency rather than adding new participation features.
 
-Immediate work:
+Completed foundation in the current slice:
 
-- define and exercise publication-buffer boundaries for delayed/coarsened public operational records;
-- add a D1 backup/export procedure to storage independent of the live database;
-- keep backup artifacts outside the public web root and avoid unnecessary security/correlation metadata;
-- restore canonical state into an empty replacement database and verify semantic equivalence;
-- rebuild the public read projection from restored canonical state and compare it with the expected publication output;
-- document failure behavior, recovery order, and the smallest acceptable recovery point;
+- replaced the original Phase 0 backup/restore no-ops with a portable canonical backup bundle and guarded restore tooling;
+- defined the backup format as storage-independent canonical JSON plus SHA-256 record/bundle verification rather than a provider-only database snapshot;
+- added local CI recovery proof: export from one migrated local D1, verify the bundle, restore into a separately migrated empty D1, reconstruct canonical state, and deep-compare semantic equality;
+- restore refuses non-empty targets and remote restore remains deliberately disabled until a disposable recovery database is provisioned;
+- documented the recovery order, independent-storage requirement, and low-write recovery-point rule in [docs/protocols/PHASE_2D_RECOVERY.md](docs/protocols/PHASE_2D_RECOVERY.md);
+- corrected stale operational/transparency documentation that still described Hummingbird as having no production database.
+
+Remaining work:
+
+- run the read-only portable backup exporter against current production D1 and independently retain/verify the resulting bundle;
+- provision an empty disposable replacement D1 database and apply repository-controlled migrations;
+- restore the verified production bundle there and prove semantic equivalence;
+- rebuild the public read projection from restored state and compare it with expected publication output;
+- define and exercise publication-buffer boundaries for delayed/coarsened public operational records, using the recovery drill as a candidate material event;
+- document failure behavior, recovery observations, and the smallest acceptable recovery point;
 - extend health/operational checks only where they prove real recovery properties rather than accumulating telemetry.
 
-**Exit:** backup and restore have been exercised successfully, canonical/read-model equivalence is demonstrated after recovery, and public transparency does not expose security-sensitive or unnecessary correlation metadata.
+**Exit:** backup and restore have been exercised successfully against current production canonical state through an isolated replacement database, canonical/read-model equivalence is demonstrated after recovery, and public transparency does not expose security-sensitive or unnecessary correlation metadata.
 
 ### Phase 2E — Phase review and Phase 3 gate
 

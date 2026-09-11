@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
-# Restore: Phase 0/1 has no database to restore. To reconstruct Hummingbird today:
-#   1. Clone the GitHub repository.
-#   2. Run ./scripts/bootstrap
-#   3. Run ./scripts/deploy (requires CLOUDFLARE_API_TOKEN)
+# Portable canonical recovery entry point.
 #
-# This script is intentionally a documented no-op until Cloudflare D1 is introduced,
-# at which point it will restore a database export produced by ./scripts/backup.
+# Validate a bundle without mutation:
+#   ./scripts/restore /path/to/backup --validate-only
+#
+# Restore only into an explicit isolated local D1 state directory:
+#   ./scripts/restore /path/to/backup --local --persist-to /tmp/recovery-state --confirm-restore
+#
+# Remote restore is deliberately disabled until the Phase 2D recovery drill
+# provisions a disposable replacement database and reviews the target boundary.
 set -euo pipefail
 
-echo "No database exists yet (Phase 0/1). To reconstruct Hummingbird: clone this repo,"
-echo "run ./scripts/bootstrap, then ./scripts/deploy. See OPERATIONS.md for full recovery steps."
-exit 0
+cd "$(dirname "$0")/.."
+exec node scripts/restore-canonical-backup.js "$@"
