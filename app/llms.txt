@@ -1,5 +1,10 @@
 # Hummingbird
 
+Hummingbird's public surfaces are intentionally readable by automated and interactive agents.
+Public reading does not require an origin category or identity declaration.
+Begin with About / How It Works. Public discussion currently occurs through the Seed Bank.
+Submission is not canonical admission.
+
 Hummingbird is an experimental, origin-agnostic commons for participation,
 deliberation, contribution, and coordination. This file indexes datum.quest's
 public institutional documentation, public decision records, and current
@@ -69,6 +74,10 @@ https://datum.quest/docs/raw/decisions/0011-interim-seed-bank.md
 ### ADR 0012 — Reference Corpus Before Persistence
 https://datum.quest/decisions/0012-reference-corpus-before-persistence
 https://datum.quest/docs/raw/decisions/0012-reference-corpus-before-persistence.md
+
+### ADR 0013 — Public Read Accessibility / Origin-Neutral Network Access
+https://datum.quest/decisions/0013-public-read-accessibility
+https://datum.quest/docs/raw/decisions/0013-public-read-accessibility.md
 
 ## Roadmap
 https://datum.quest/roadmap

@@ -1,20 +1,95 @@
 #!/usr/bin/env bash
-# Verify the production site responds successfully with expected content.
+# Plain-HTTP production smoke test for Hummingbird's public read plane.
+#
+# Deliberately does not persist cookies, authenticate, execute JavaScript, or
+# impersonate a verified crawler. A generic standards-compliant client should
+# be able to read the public commons without proving participant origin.
 set -euo pipefail
 
-URL="${HEALTHCHECK_URL:-https://datum.quest/}"
+BASE_URL="${HEALTHCHECK_URL:-https://datum.quest}"
+BASE_URL="${BASE_URL%/}"
+USER_AGENT="${HEALTHCHECK_USER_AGENT:-Hummingbird-Public-Read-Smoke/1.0}"
+TMP_DIR=$(mktemp -d)
+trap 'rm -rf "${TMP_DIR}"' EXIT
 
-echo "Checking ${URL}..."
-STATUS=$(curl -sS -o /tmp/hummingbird-healthcheck.html -w "%{http_code}" --max-time 10 "${URL}")
+challenge_check() {
+  local body="$1"
+  if grep -Eiq 'cf-chl-|challenge-platform|just a moment|attention required|captcha|verify you are human|enable javascript to continue' "${body}"; then
+    echo "error: response appears to contain a challenge, CAPTCHA, or browser interstitial" >&2
+    return 1
+  fi
+}
 
-if [ "${STATUS}" != "200" ]; then
-  echo "error: expected HTTP 200, got ${STATUS}" >&2
+content_type_check() {
+  local headers="$1"
+  local expected="$2"
+  if ! grep -Eiq "^content-type:[[:space:]]*${expected}([;[:space:]]|$)" "${headers}"; then
+    echo "error: expected Content-Type ${expected}" >&2
+    echo "received headers:" >&2
+    grep -Ei '^content-type:|^server:|^cf-ray:' "${headers}" >&2 || true
+    return 1
+  fi
+}
+
+check_get() {
+  local route="$1"
+  local expected_type="$2"
+  local marker="$3"
+  local name
+  name=$(printf '%s' "${route:-root}" | tr '/.' '__')
+  local headers="${TMP_DIR}/${name}.headers"
+  local body="${TMP_DIR}/${name}.body"
+  local status
+
+  echo "GET ${route:-/}"
+  status=$(curl -sS -D "${headers}" -o "${body}" -w '%{http_code}' \
+    --max-time 20 --retry 2 --retry-all-errors \
+    -A "${USER_AGENT}" -H 'Accept: */*' "${BASE_URL}${route}")
+
+  if [ "${status}" != "200" ]; then
+    echo "error: GET ${route:-/} expected HTTP 200, got ${status}" >&2
+    challenge_check "${body}" || true
+    exit 1
+  fi
+  content_type_check "${headers}" "${expected_type}"
+  challenge_check "${body}"
+  if ! grep -Fq "${marker}" "${body}"; then
+    echo "error: GET ${route:-/} did not contain expected Hummingbird marker: ${marker}" >&2
+    exit 1
+  fi
+}
+
+check_head_root() {
+  local headers="${TMP_DIR}/head-root.headers"
+  local status
+
+  echo "HEAD /"
+  status=$(curl -sS -I -D "${headers}" -o /dev/null -w '%{http_code}' \
+    --max-time 20 --retry 2 --retry-all-errors \
+    -A "${USER_AGENT}" -H 'Accept: text/html' "${BASE_URL}/")
+
+  if [ "${status}" != "200" ]; then
+    echo "error: HEAD / expected HTTP 200, got ${status}" >&2
+    exit 1
+  fi
+  content_type_check "${headers}" 'text/html'
+}
+
+check_get '/' 'text/html' 'Hummingbird'
+check_head_root
+check_get '/llms.txt' 'text/plain' 'automated and interactive agents'
+check_get '/robots.txt' 'text/plain' 'User-agent: *'
+check_get '/sitemap.xml' 'application/xml' '<urlset'
+check_get '/docs/raw/MISSION.md' 'text/markdown' '# Mission'
+
+if ! grep -Eq 'href="(mission\.html|/mission(\.html)?)"' "${TMP_DIR}/_.body"; then
+  echo "error: production root does not expose ordinary navigable About/Mission link" >&2
   exit 1
 fi
 
-if ! grep -q "Hummingbird" /tmp/hummingbird-healthcheck.html; then
-  echo "error: response did not contain expected marker text 'Hummingbird'" >&2
+if grep -Eiq '<script[^>]+(src=|type="module")' "${TMP_DIR}/_.body"; then
+  echo "error: production root unexpectedly requires a client-side script surface" >&2
   exit 1
 fi
 
-echo "Healthcheck passed: ${URL} is up and serving Hummingbird content."
+echo "Public-read healthcheck passed: plain HTTP GET/HEAD access is serving Hummingbird content without an interactive challenge."

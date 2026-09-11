@@ -51,9 +51,25 @@ Database rollback policy will be defined with the first D1 migrations. Destructi
 
 ## Monitoring
 
-`./scripts/healthcheck` checks that `https://datum.quest` returns a successful response with expected content. Open question: [OQ-OPS-MONITORING-CADENCE](docs/governance/OPEN_QUESTIONS.md#oq-ops-monitoring-cadence) — continuous/scheduled monitoring versus manual checks only.
+`./scripts/healthcheck` is the plain-HTTP production smoke test for the public read plane. It checks the root with `GET` and `HEAD`, verifies the machine-facing entry points and raw Markdown with their expected media types, requires useful Hummingbird marker content, and rejects obvious challenge/CAPTCHA/browser-interstitial responses. The CI deployment job runs this check after production deployment.
 
-During Phase 2, monitoring should remain lean: service availability, deployment health, migration/import success, backup success, and restore-test outcome are higher priority than broad behavioral telemetry.
+The healthcheck deliberately does not persist cookies, authenticate, execute JavaScript, impersonate a verified crawler, or collect participant identity/fingerprinting data. Cloudflare zone-level bot, WAF, Browser Integrity Check, crawler, rate-limit, and managed-`robots.txt` settings remain steward-managed operational configuration. Settings that cannot be read back using the intentionally narrow Pages deployment credential must be recorded as steward-verified rather than falsely described as independently verified. See [ADR 0013](docs/decisions/0013-public-read-accessibility.md).
+
+### Cloudflare public-read configuration review
+
+The following is a steward dashboard checklist, not repository-controlled configuration. Provider labels may change; preserve the purpose distinction rather than relying on a particular UI name.
+
+- **Managed `robots.txt`:** keep provider-managed replacement/prepending disabled so the repository's `app/robots.txt` remains the deliberate project policy.
+- **AI crawler controls / Block AI Bots:** do not use one global AI-bot switch that blocks search/discovery or user-directed/agent retrieval together with training. Search and agent/user-directed categories should remain readable where the provider supports purpose-specific controls. Training remains a separate policy question under `OQ-LEGAL-CONTENT-LICENSE`.
+- **Bot Fight Mode:** if enabled, verify it does not challenge benign public readers. Cloudflare's basic Bot Fight Mode is not designed for path-specific WAF skip exceptions; if it conflicts with the public-read contract, prefer a more granular configuration rather than treating all automation as abuse.
+- **Super Bot Fight Mode (where available):** use its granular controls/skip capability so harmless public reads and reputable verified search/user-directed crawlers are not forced through interactive challenges. Do not disable ordinary network/DDoS protection.
+- **Browser Integrity Check:** configure it so benign standards-compliant `GET`/`HEAD` requests to the public read plane are not challenged merely for having a non-browser or unusual user agent.
+- **WAF and rate limiting:** retain controls for harmful behavior, attacks, and abusive request patterns, but do not make browser execution, participant classification, or human verification a blanket prerequisite for the public read plane.
+- **Challenge/interstitial rules:** no CAPTCHA, JavaScript challenge, login/interstitial, or browser-attestation rule should apply to ordinary harmless public `GET`/`HEAD` requests.
+
+After any material Cloudflare bot-policy change, run `./scripts/healthcheck` against production. The smoke test proves the externally observable read contract; it does not reveal or collect participant identity.
+
+Open question: [OQ-OPS-MONITORING-CADENCE](docs/governance/OPEN_QUESTIONS.md#oq-ops-monitoring-cadence) — scheduled monitoring beyond the post-deployment smoke test versus additional manual checks only. During Phase 2, monitoring should remain lean: service availability, deployment health, migration/import success, backup success, and restore-test outcome are higher priority than broad behavioral telemetry.
 
 ## Upgrades
 
@@ -113,5 +129,6 @@ The public-repository security activation is complete. Repository Actions are re
 - Review Dependabot pull requests and security alerts; do not auto-merge dependency changes without CI.
 - Keep canonical schema, reference corpus, migrations, and data-model documentation aligned.
 - Review public Seed Bank activity for abuse/safety issues without treating popularity as governance weight.
+- Review Cloudflare public-read settings after material provider-policy changes so benign `GET`/`HEAD` access remains consistent with ADR 0013 without weakening network/DDoS or mutation-path protections.
 - Rotate the Cloudflare deployment token periodically. Open question: [OQ-OPS-TOKEN-ROTATION-CADENCE](docs/governance/OPEN_QUESTIONS.md#oq-ops-token-rotation-cadence) — exact cadence.
 - Keep the Open Questions Registry honest — resolve questions in substantive documents rather than letting implementation silently answer them.

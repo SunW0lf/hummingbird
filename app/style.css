@@ -56,6 +56,36 @@ nav a:hover, nav a:focus {
   color: var(--accent);
 }
 
+nav a[aria-current="page"] {
+  color: var(--fg);
+  text-decoration: underline;
+  text-decoration-thickness: 0.12em;
+  text-underline-offset: 0.25em;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 0.15rem;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  z-index: 100;
+  padding: 0.55rem 0.8rem;
+  background: var(--fg);
+  color: var(--bg);
+  font-weight: 700;
+  transform: translateY(-250%);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
 h1, h2, h3 { line-height: 1.25; }
 
 a { color: var(--accent); }
