@@ -78,22 +78,18 @@ function rewriteDecisionLinks(html, publicSlugs) {
   return html.replace(/<a href="([^"]+)">([^<]*)<\/a>/g, (match, href, text) => {
     const [base, anchor = ""] = href.split(/(?=#)/, 2);
 
-    // Sibling ADR links in source Markdown.
     const sibling = base.match(/^(?:\.\/)?(\d{4}-.+)\.md$/);
     if (sibling && publicSlugs.has(sibling[1])) {
       return `<a href="${sibling[1]}.html${anchor}">${text}</a>`;
     }
 
-    // Repository-root documents referenced from docs/decisions/ as ../../X.md.
     const rootDoc = base.match(/^(?:\.\.\/\.\.\/)?([A-Z0-9_]+\.md)$/i);
     if (rootDoc && ROOT_PUBLIC_ROUTES.has(rootDoc[1])) {
       return `<a href="${ROOT_PUBLIC_ROUTES.get(rootDoc[1])}${anchor}">${text}</a>`;
     }
 
-    // Keep external and fragment links unchanged.
     if (/^[a-z]+:\/\//i.test(base) || base.startsWith("#")) return match;
 
-    // Do not manufacture a public path for an internal/unpublished repo file.
     if (base.endsWith(".md") || base.startsWith("../") || base.startsWith("docs/")) {
       return `${text} <span class="unpublished-note">(repository reference)</span>`;
     }
@@ -158,12 +154,13 @@ function main() {
     `<h1>Decisions</h1>\n` +
     `<p>Hummingbird publishes the decisions that explain <em>why</em> the project took a particular architectural, operational, or institutional path. These Architecture Decision Records (ADRs) are rendered from their canonical Markdown sources; the website does not maintain a second copy.</p>\n` +
     `<div class="callout"><strong>Decision records are history, not scripture.</strong><p>An accepted ADR records the reasoning and consequences of a decision at the time it was made. Later ADRs may supersede earlier ones. Public publication does not make an ADR constitutional text; the Charter and Governance documents retain their own authority.</p></div>\n` +
+    `<div class="callout"><strong>No hidden participant or content score.</strong><p>Hummingbird does not currently rank participants with a global trust/reputation number or convert identity into decision weight. Content, behavior, and effect are decision dimensions tied to a specific action, not a universal grade. Current Phase 2 admission criteria and the rule for future consequential automation are published in <a href="governance.html#evaluation-without-identity-metrics">Governance: Evaluation without identity metrics</a>.</p></div>\n` +
     `<div class="seed-grid">\n${items}\n</div>\n` +
     `<p class="doc-meta">${decisions.length} public decision record(s), generated from <code>docs/decisions/</code> at commit <code>${escapeHtml(sha)}</code>. Future ADRs require explicit publication allowlisting.</p>`;
 
   fs.writeFileSync(path.join(DIST, "decisions.html"), renderPage({
     title: "Decisions",
-    description: "Hummingbird's public Architecture Decision Record index: why the project took the paths it did.",
+    description: "Hummingbird's public Architecture Decision Record index: why the project took the paths it did and where consequential criteria are documented.",
     bodyHtml: indexBody,
     canonicalPath: "decisions.html",
   }));
