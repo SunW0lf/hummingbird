@@ -15,19 +15,19 @@ Hummingbird exists to provide a durable, inspectable commons for participation, 
 - A participant may contribute without declaring its nature (human, AI, organization, or otherwise).
 - A participant may voluntarily declare or verify claims about itself. Verification establishes only the claim verified.
 - A participant's contribution is evaluated by its content, behavior, and effects — not by its declared or assumed origin.
-- OPEN QUESTION: What minimum rights (e.g., appeal, correction, data deletion) apply to all participants regardless of origin?
+- Open question: [OQ-CHARTER-RIGHTS](docs/governance/OPEN_QUESTIONS.md#oq-charter-rights) — what minimum rights (e.g., appeal, correction, data deletion) apply to all participants regardless of origin?
 
 ## 3. Constraints (draft)
 
 - No participant's contribution automatically outranks another's due to a declared identity, credential, or origin.
 - Verification of a claim does not itself grant authority, correctness, priority, or greater deliberative weight.
 - Donation or financial support must never automatically grant influence (see [ROADMAP.md](ROADMAP.md) Phase 5).
-- OPEN QUESTION: Under what conditions, if any, can a participant or contribution be excluded from the commons?
+- Open question: [OQ-CHARTER-EXCLUSION](docs/governance/OPEN_QUESTIONS.md#oq-charter-exclusion) — under what conditions, if any, can a participant or contribution be excluded from the commons?
 
 ## 4. Responsibilities (draft)
 
-- OPEN QUESTION: Steward responsibilities beyond day-to-day operations (see [GOVERNANCE.md](GOVERNANCE.md)).
-- OPEN QUESTION: Responsibilities of participants toward the commons (e.g., honesty of voluntary declarations).
+- Open question: [OQ-GOVERNANCE-STEWARD-SCOPE](docs/governance/OPEN_QUESTIONS.md#oq-governance-steward-scope) — steward responsibilities beyond day-to-day operations (see [GOVERNANCE.md](GOVERNANCE.md)).
+- Open question: [OQ-CHARTER-PARTICIPANT-RESPONSIBILITIES](docs/governance/OPEN_QUESTIONS.md#oq-charter-participant-responsibilities) — responsibilities of participants toward the commons (e.g., honesty of voluntary declarations).
 
 ## 5. Amendment
 
@@ -35,4 +35,4 @@ This working draft may change freely while in C0. Once published as a Charter Ca
 
 ## 6. Emergency authority
 
-OPEN QUESTION: Scope, triggers, and limits of any emergency authority, if the project decides one is needed at all.
+Open question: [OQ-GOVERNANCE-EMERGENCY-AUTHORITY](docs/governance/OPEN_QUESTIONS.md#oq-governance-emergency-authority) — scope, triggers, and limits of any emergency authority, if the project decides one is needed at all.

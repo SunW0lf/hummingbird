@@ -12,11 +12,11 @@ The deployed site is static with no forms, no accounts, and no database. The rea
 
 ## Authentication / authorization
 
-Not applicable yet — no accounts exist. OPEN QUESTION for Phase 3+ when contribution/proposal forms are introduced.
+Not applicable yet — no accounts exist. Open question: [OQ-SECURITY-AUTHN-MODEL](docs/governance/OPEN_QUESTIONS.md#oq-security-authn-model) for Phase 3+ when contribution/proposal forms are introduced.
 
 ## Secrets
 
-- Deployment uses a single Cloudflare API Token scoped to only the `datum.quest` zone (DNS:Edit, Pages:Edit), stored as a GitHub Actions secret.
+- Deployment uses a single Cloudflare API Token scoped to only the `datum.quest` zone (Pages:Edit only — DNS is managed separately and not covered by this token), stored as a GitHub Actions secret. The account ID is stored as a non-secret repository variable (`CLOUDFLARE_ACCOUNT_ID`).
 - No secrets are required to build or test the site locally.
 - Secrets are never committed to the repository. `.env.example` documents the shape of any future required local secret without real values.
 
@@ -38,16 +38,17 @@ Not applicable yet — no accounts exist. OPEN QUESTION for Phase 3+ when contri
 
 ## CI/CD security
 
-- Production deployment requires CI (lint, test, build) to pass on the protected `main` branch.
+- Production deployment is gated by the CI workflow's own job dependency (`deploy` `needs: verify`), which requires lint/test/build to pass first. This is enforced by the workflow definition, not by a GitHub branch protection rule — see [OQ-OPS-BRANCH-PROTECTION](docs/governance/OPEN_QUESTIONS.md#oq-ops-branch-protection).
 - Dependency/security validation runs in CI where practical (see `.github/workflows/ci.yml`).
+- GitHub Actions is currently configured with `allowed_actions: all` rather than a restricted allow-list. Open question: [OQ-SECURITY-ACTIONS-HARDENING](docs/governance/OPEN_QUESTIONS.md#oq-security-actions-hardening).
 
 ## Incident response
 
-OPEN QUESTION: formal incident response process. Until defined, the steward is the point of contact — see [CONTRIBUTING.md](CONTRIBUTING.md) for the security contact channel.
+Open question: [OQ-SECURITY-INCIDENT-RESPONSE](docs/governance/OPEN_QUESTIONS.md#oq-security-incident-response) — formal incident response process. Until defined, the steward is the point of contact — see [CONTRIBUTING.md](CONTRIBUTING.md) for the security contact channel.
 
 ## Vulnerability reporting
 
-OPEN QUESTION: dedicated security contact address/process. Until established, report via a private channel to the repository owner rather than a public GitHub issue.
+Open question: [OQ-SECURITY-VULN-REPORTING](docs/governance/OPEN_QUESTIONS.md#oq-security-vuln-reporting) — dedicated security contact address/process. Until established, do not open a public GitHub issue for a vulnerability; there is currently no working private channel either, so treat this as unresolved rather than assuming one exists.
 
 ## Data classification
 

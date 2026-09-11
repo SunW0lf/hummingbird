@@ -24,7 +24,7 @@ datum.quest (Cloudflare DNS + proxy)
 ## Trust boundaries
 
 - **GitHub**: holds source code, secrets (as GitHub Actions secrets), and CI execution. Compromise of GitHub Actions or repository write access is a critical risk (see [SECURITY.md](SECURITY.md)).
-- **Cloudflare**: holds DNS for `datum.quest` and (once cutover happens) the Pages deployment. A scoped Cloudflare API Token (Pages:Edit, DNS:Edit on the `datum.quest` zone only) is used for deployment, distinct from any broader account-level credential.
+- **Cloudflare**: holds DNS for `datum.quest` and the Pages deployment (cutover complete as of Phase 0). A scoped Cloudflare API Token (Pages:Edit only, on the `datum.quest` zone) is used for deployment, distinct from any broader account-level credential. DNS itself is managed separately and is not covered by this token — see [SECURITY.md](SECURITY.md).
 - **Local development machine**: not part of the production trust boundary. No production secrets should be required for local development of the Phase 1 static site.
 
 ## External services

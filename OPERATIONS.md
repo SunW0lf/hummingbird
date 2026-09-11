@@ -26,7 +26,7 @@ Cloudflare Pages retains prior deployments. `./scripts/rollback` lists recent de
 
 ## Monitoring
 
-`./scripts/healthcheck` checks that `https://datum.quest` returns a successful response with expected content. OPEN QUESTION: continuous/scheduled monitoring (e.g., a GitHub Actions cron job) versus manual checks only.
+`./scripts/healthcheck` checks that `https://datum.quest` returns a successful response with expected content. Open question: [OQ-OPS-MONITORING-CADENCE](docs/governance/OPEN_QUESTIONS.md#oq-ops-monitoring-cadence) — continuous/scheduled monitoring (e.g., a GitHub Actions cron job) versus manual checks only.
 
 ## Upgrades
 
@@ -45,8 +45,12 @@ To reconstruct Hummingbird from scratch, someone needs:
 3. A fresh Cloudflare Pages project connected to this repository.
 4. This documentation.
 
+## Repository protection
+
+Branch protection on `main` is currently unavailable: GitHub disables branch protection rules for private repositories on this account's plan. There is no enforced required-review or required-status-check GitHub rule; the only enforcement is the CI workflow's own `deploy` job depending on the `verify` job succeeding. Open question: [OQ-OPS-BRANCH-PROTECTION](docs/governance/OPEN_QUESTIONS.md#oq-ops-branch-protection).
+
 ## Routine steward tasks
 
 - Review and merge pull requests after CI passes.
-- Rotate the Cloudflare deployment token periodically (OPEN QUESTION: exact cadence).
-- Keep `OPEN QUESTION` markers honest — resolve them in the relevant document rather than letting implementation silently answer them.
+- Rotate the Cloudflare deployment token periodically. Open question: [OQ-OPS-TOKEN-ROTATION-CADENCE](docs/governance/OPEN_QUESTIONS.md#oq-ops-token-rotation-cadence) — exact cadence.
+- Keep `OPEN QUESTION` markers honest — resolve them in the relevant document rather than letting implementation silently answer them. The authoritative list is [docs/governance/OPEN_QUESTIONS.md](docs/governance/OPEN_QUESTIONS.md).

@@ -15,7 +15,7 @@ Hummingbird welcomes contributions from any participant — human, AI, organizat
 
 ## Proposals
 
-OPEN QUESTION: formal proposal process does not exist yet (see [GOVERNANCE.md](GOVERNANCE.md)). Until then, open a GitHub issue describing the proposal.
+A formal proposal process does not exist yet (see [GOVERNANCE.md](GOVERNANCE.md), [OQ-GOVERNANCE-PROPOSALS](docs/governance/OPEN_QUESTIONS.md#oq-governance-proposals)). Until then, open a GitHub issue describing the proposal.
 
 ## Architectural changes
 
@@ -23,4 +23,4 @@ Significant architectural changes should include a new Architecture Decision Rec
 
 ## Security issues
 
-Do not open a public issue for a security vulnerability. See [SECURITY.md](SECURITY.md) for reporting guidance (currently OPEN QUESTION pending a dedicated contact channel).
+Do not open a public issue for a security vulnerability. See [SECURITY.md](SECURITY.md) for reporting guidance — a dedicated contact channel does not exist yet ([OQ-SECURITY-VULN-REPORTING](docs/governance/OPEN_QUESTIONS.md#oq-security-vuln-reporting)).

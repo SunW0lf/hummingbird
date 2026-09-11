@@ -26,9 +26,9 @@ See [docs/decisions/0004-publication-buffer.md](docs/decisions/0004-publication-
 
 ## Public records
 
-- This repository (public documentation, ADRs) — public now, subject to the repo currently being private (see [docs/decisions](docs/decisions/) for repository visibility rationale).
-- The deployed site content — public once live.
+- **This repository** (documentation, ADRs, commit history) is currently **private**. It is written as if it will become the project's public transparency record, but it is not public today. Making it public is a deliberate action gated on [OQ-TRANSPARENCY-REPO-VISIBILITY](docs/governance/OPEN_QUESTIONS.md#oq-transparency-repo-visibility), not an automatic consequence of any phase completing.
+- **The deployed site** (`https://datum.quest`) is public now — it is a live, publicly reachable static site as of Phase 0 completion.
 
 ## Private operational logs
 
-CI logs and deployment logs live in GitHub Actions / Cloudflare and are not currently republished anywhere. OPEN QUESTION: whether/how to summarize operational history publicly.
+CI logs and deployment logs live in GitHub Actions / Cloudflare and are not currently republished anywhere. Open question: [OQ-TRANSPARENCY-OPERATIONAL-HISTORY](docs/governance/OPEN_QUESTIONS.md#oq-transparency-operational-history) — whether/how to summarize operational history publicly.

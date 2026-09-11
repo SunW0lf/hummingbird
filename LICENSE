@@ -22,5 +22,6 @@ SOFTWARE.
 
 Note: Hummingbird's Charter, Mission, and Governance documents are project
 governance artifacts, not software, and their reuse/amendment terms are
-addressed separately in GOVERNANCE.md as the project matures (OPEN QUESTION
-for now regarding a distinct content license, e.g. Creative Commons).
+addressed separately in GOVERNANCE.md as the project matures. A distinct
+content license (e.g. Creative Commons) is tracked as
+OQ-LEGAL-CONTENT-LICENSE in docs/governance/OPEN_QUESTIONS.md.

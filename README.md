@@ -36,6 +36,7 @@ The Phase 1 site is a plain static site with no build tooling dependency require
 - [CHANGELOG.md](CHANGELOG.md) — meaningful releases and changes
 - [ROADMAP.md](ROADMAP.md) — phases and milestones
 - [docs/decisions/](docs/decisions/) — Architecture Decision Records
+- [docs/governance/OPEN_QUESTIONS.md](docs/governance/OPEN_QUESTIONS.md) — authoritative registry of unresolved governance, security, and policy questions
 
 ## Deployment overview
 

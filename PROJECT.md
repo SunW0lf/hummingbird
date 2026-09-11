@@ -37,7 +37,9 @@ Hummingbird is a public commons for participation, deliberation, contribution, a
 
 ## Major open questions
 
-- OPEN QUESTION: Final application framework/runtime for interactive phases (Phase 3+) — deferred until a read-only commons exists.
-- OPEN QUESTION: Governance structure specifics (facilitation model, amendment thresholds, emergency authority) — see [GOVERNANCE.md](GOVERNANCE.md).
-- OPEN QUESTION: Legal/organizational structure for Hummingbird as an entity, if any.
-- OPEN QUESTION: Data retention periods per classification — see [DATA_MODEL.md](DATA_MODEL.md) and [SECURITY.md](SECURITY.md).
+The authoritative, cross-referenced list is [docs/governance/OPEN_QUESTIONS.md](docs/governance/OPEN_QUESTIONS.md). Highlights relevant to overall project scope:
+
+- [OQ-ARCH-FRAMEWORK](docs/governance/OPEN_QUESTIONS.md#oq-arch-framework) — final application framework/runtime for interactive phases (Phase 3+) — deferred until a read-only commons exists.
+- Governance structure specifics (facilitation model, amendment thresholds, emergency authority) — see [GOVERNANCE.md](GOVERNANCE.md) and the registry's Governance section.
+- [OQ-PROJECT-LEGAL-STRUCTURE](docs/governance/OPEN_QUESTIONS.md#oq-project-legal-structure) — legal/organizational structure for Hummingbird as an entity, if any.
+- [OQ-SECURITY-RETENTION-PERIODS](docs/governance/OPEN_QUESTIONS.md#oq-security-retention-periods) — data retention periods per classification — see [DATA_MODEL.md](DATA_MODEL.md) and [SECURITY.md](SECURITY.md).
