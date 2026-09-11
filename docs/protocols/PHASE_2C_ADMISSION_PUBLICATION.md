@@ -19,7 +19,11 @@ canonical record admitted to D1 as draft
         ↓
 explicit publication decision
         ↓
-rebuildable publication projection
+read-only local staging from D1
+        ↓
+steward review
+        ↓
+explicit promotion to deployable projection
         ↓
 static HTML + JSON at datum.quest
 ```
@@ -67,6 +71,39 @@ The JSON detail representation is the projected canonical record. The HTML route
 
 Draft records must never enter the public projection. The renderer fails closed if a projected record has `state: draft`, an unsupported v1 type/state, an unsafe/empty identifier, malformed relationships, or duplicate canonical IDs.
 
+### Staging from remote D1
+
+After a canonical record has independently been made publishable (that is, it is no longer in `draft`), the steward can reconstruct the current non-draft canonical set from remote D1 without modifying either D1 or the Git working tree's deployable projection:
+
+```powershell
+node scripts/stage-public-d1.js
+```
+
+This writes only to the ignored local directory:
+
+```text
+.hummingbird-stage/
+```
+
+The steward should inspect those JSON records before any promotion.
+
+### Explicit promotion
+
+Promotion from reviewed local staging into the deployable derived projection requires an explicit confirmation flag:
+
+```powershell
+node scripts/promote-publication.js --confirm-publication
+```
+
+The promotion tool refuses draft records and refuses to silently remove a record that was already present in the deployable projection. It changes only repository working-tree files under `publication/canonical/`; the change still requires normal Git review, protected-main CI, and deployment before it becomes public.
+
+This means none of the following actions alone publishes a record:
+
+- external submission;
+- canonical admission;
+- existence in D1;
+- running the read-only staging command.
+
 ## First admission exercise
 
 The first real admission should be intentionally boring and traceable. Do not bulk-import the Seed Bank.
@@ -80,11 +117,12 @@ For one chosen external source:
 5. admit the record to D1 as `draft`;
 6. independently review the canonical record;
 7. make an explicit publication decision by moving the canonical record out of `draft`;
-8. rebuild the publication projection from canonical state;
-9. inspect the static HTML and JSON output before deployment;
-10. publish through the normal protected-main CI/deploy path;
-11. verify ordinary browser/curl/agent retrieval of the new routes;
-12. record the admission/publication evidence without exposing security-sensitive operational metadata.
+8. run `node scripts/stage-public-d1.js` and inspect `.hummingbird-stage/`;
+9. run `node scripts/promote-publication.js --confirm-publication` only after review;
+10. build and inspect the static HTML and JSON output before deployment;
+11. publish through the normal protected-main CI/deploy path;
+12. verify ordinary browser/curl/agent retrieval of the new routes;
+13. record the admission/publication evidence without exposing security-sensitive operational metadata.
 
 ## Rollback and correction
 
