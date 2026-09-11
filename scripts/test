@@ -11,6 +11,9 @@ echo "Building before tests..."
 echo "Running site smoke tests..."
 node tests/site.test.js
 
+echo "Running Phase 2C public-record projection checks..."
+node tests/public-records.test.js
+
 echo "Running agent/public-read acceptance tests..."
 node tests/agent-access.test.js
 
