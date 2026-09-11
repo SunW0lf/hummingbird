@@ -1,13 +1,10 @@
 # Charter History
 
-This directory holds historical and staged versions of the Hummingbird Charter, per the publication model in [CHARTER.md](../../CHARTER.md) and [GOVERNANCE.md](../../GOVERNANCE.md).
+This directory holds historical and staged versions of the Hummingbird Charter. The authoritative definition of stages C0–C3 lives in [GOVERNANCE.md](../../GOVERNANCE.md) §Charter publication lifecycle — this README does not redefine them, only summarizes where each stage's artifacts live in this directory:
 
-Stages:
-
-- **C0 — Working Charter**: [CHARTER.md](../../CHARTER.md) at the repository root. Stored in Git, not represented as ratified.
-- **C1 — Charter Candidate**: once ready, published to `datum.quest/charter` and mirrored here as `candidate-0.1.md`, clearly labeled "Charter Candidate — not yet ratified."
-- **C2 — Review**: amendment proposals against the current candidate. New substantive changes produce a new candidate version (`candidate-0.2.md`, etc.) rather than silently editing the one under review.
-- **C3 — Charter 1.0**: `charter-1.0.md`, once accepted as the initial governing document. Previous candidates are preserved, not deleted.
-- **C4 — Amendments**: recorded under `amendments/`, following an explicit amendment workflow. Ratified constitutional text is never silently edited.
+- **C0 — Working Charter**: lives at [CHARTER.md](../../CHARTER.md), repository root. Nothing in this directory yet.
+- **C1 — Charter Candidate**: will be mirrored here as `candidate-0.1.md` once published.
+- **C2 — Review**: new substantive changes during review produce a new candidate version here (`candidate-0.2.md`, etc.), never a silent edit of the version under review.
+- **C3 — Ratified**: the accepted governing document lives here as `charter-1.0.md` (and later versions). Amendments to a ratified Charter are recorded under `amendments/` as part of the C3 stage — see GOVERNANCE.md — not as a separate lifecycle stage.
 
 No Charter Candidate has been published yet. This directory is currently empty aside from this README.

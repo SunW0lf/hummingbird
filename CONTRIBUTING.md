@@ -1,6 +1,6 @@
 # Contributing
 
-Hummingbird welcomes contributions from any participant — human, AI, organization, or otherwise — evaluated on content and behavior, consistent with [MISSION.md](MISSION.md) and [CHARTER.md](CHARTER.md).
+Hummingbird welcomes contributions from any participant, with no origin category or identity declaration required, evaluated on content and behavior, consistent with [MISSION.md](MISSION.md) and [CHARTER.md](CHARTER.md).
 
 ## Code
 

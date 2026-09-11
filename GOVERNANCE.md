@@ -8,10 +8,16 @@ Detailed governance protocol documents, once written, live in [docs/governance/]
 
 Open question: [OQ-GOVERNANCE-PROPOSALS](docs/governance/OPEN_QUESTIONS.md#oq-governance-proposals) — who may submit a proposal, in what form, and where (GitHub issue/PR, in-app form once Phase 3 exists)?
 
-## Amendments
+## Charter publication lifecycle
 
-- Charter amendments follow the publication-stage model defined in [CHARTER.md](CHARTER.md) §5 and tracked under [docs/charter/](docs/charter/).
-- Open question: [OQ-GOVERNANCE-AMENDMENT-THRESHOLD](docs/governance/OPEN_QUESTIONS.md#oq-governance-amendment-threshold) — amendment approval threshold and process.
+This is the authoritative definition of the Charter's publication stages. [CHARTER.md](CHARTER.md) and [docs/charter/](docs/charter/) reference this section rather than redefining it.
+
+- **C0 — Working Charter.** The Charter as stored in Git at [CHARTER.md](CHARTER.md), root of the repository. Not represented as ratified or under formal review. May change freely; every change is an ordinary commit, not a governed amendment.
+- **C1 — Charter Candidate.** A version of the Charter explicitly published for review at a stable public location (e.g. `datum.quest/charter` once the site supports it) and mirrored in [docs/charter/](docs/charter/) (e.g. `candidate-0.1.md`). Clearly labeled "Charter Candidate — not yet ratified." Publishing a candidate is a deliberate steward/governance action, never automatic.
+- **C2 — Review.** The period during which amendment proposals against the current candidate are considered. A substantive change produces a new candidate version (`candidate-0.2.md`, etc.) rather than silently editing the version under review.
+- **C3 — Ratified.** The current governing Charter once accepted (`charter-1.0.md`, and later versions). Ratified constitutional text is never silently edited: subsequent amendments go through C1/C2 again against the ratified text and produce a new ratified version plus a dated record under `docs/charter/amendments/`. Previous ratified and candidate versions are preserved, never deleted.
+
+Open question: [OQ-GOVERNANCE-AMENDMENT-THRESHOLD](docs/governance/OPEN_QUESTIONS.md#oq-governance-amendment-threshold) — amendment approval threshold, constituency, and voting process for moving C1→C2→C3 or amending a C3 Charter. This lifecycle defines the stages a change moves through; it does not define who approves the move or by what margin.
 
 ## Decisions
 

@@ -2,9 +2,9 @@
 
 Phases are sequential by design. Later phases are not commitments — they are planned or experimental until actually underway.
 
-## Phase 0 — Foundation (in progress)
+## Phase 0 — Foundation (complete)
 
-Status: **in progress**
+Status: **complete** — verified against this checklist and closed out; see [CHANGELOG.md](CHANGELOG.md).
 
 - Local and GitHub repository
 - Documentation skeleton
@@ -15,11 +15,13 @@ Status: **in progress**
 - Backup/restore process (trivial until a database exists)
 - Health checks
 
+Repository/CI hardening items (branch protection, GitHub Actions allow-list, a real vulnerability-reporting channel) were **not** part of this checklist and remain open — see [OQ-OPS-BRANCH-PROTECTION](docs/governance/OPEN_QUESTIONS.md#oq-ops-branch-protection), [OQ-SECURITY-ACTIONS-HARDENING](docs/governance/OPEN_QUESTIONS.md#oq-security-actions-hardening), and [OQ-SECURITY-VULN-REPORTING](docs/governance/OPEN_QUESTIONS.md#oq-security-vuln-reporting). They block completion of Phase 1 / repository publication, not Phase 0.
+
 ## Phase 1 — Public Charter Site
 
-Status: **planned**
+Status: **in progress**
 
-Publish: Home, Mission, Charter Candidate, How It Works, Transparency philosophy, Changelog, Security/Contact. No accounts, voting, payments, reputation, moderation, AI orchestration, feeds, chat, or cryptocurrency.
+Publish: Home, Mission, Charter (working draft, C0), How It Works, Transparency philosophy, Changelog, Security/Contact. Publishing a Charter Candidate (C1) is a distinct governance action, not automatic upon phase completion — see [GOVERNANCE.md](GOVERNANCE.md). No accounts, voting, payments, reputation, moderation, AI orchestration, feeds, chat, or cryptocurrency.
 
 ## Phase 2 — Read-Only Commons
 

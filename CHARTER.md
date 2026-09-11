@@ -12,7 +12,7 @@ Hummingbird exists to provide a durable, inspectable commons for participation, 
 
 ## 2. Participant rights (draft)
 
-- A participant may contribute without declaring its nature (human, AI, organization, or otherwise).
+- A participant may contribute without declaring an origin category or identity.
 - A participant may voluntarily declare or verify claims about itself. Verification establishes only the claim verified.
 - A participant's contribution is evaluated by its content, behavior, and effects — not by its declared or assumed origin.
 - Open question: [OQ-CHARTER-RIGHTS](docs/governance/OPEN_QUESTIONS.md#oq-charter-rights) — what minimum rights (e.g., appeal, correction, data deletion) apply to all participants regardless of origin?
@@ -31,7 +31,7 @@ Hummingbird exists to provide a durable, inspectable commons for participation, 
 
 ## 5. Amendment
 
-This working draft may change freely while in C0. Once published as a Charter Candidate (C1) or ratified (C3), amendments follow the process in [GOVERNANCE.md](GOVERNANCE.md) and are recorded in [docs/charter/amendments/](docs/charter/amendments/). Ratified constitutional text is never silently edited.
+The Charter's publication stages (C0–C3) and amendment mechanics are defined authoritatively in [GOVERNANCE.md](GOVERNANCE.md) §Charter publication lifecycle — this section does not redefine them. This document is currently at **C0**.
 
 ## 6. Emergency authority
 

@@ -17,7 +17,7 @@ Cloudflare Pages (static hosting)
 datum.quest (Cloudflare DNS + proxy)
 ```
 
-- **`app/`** — static HTML/CSS site. No client-side framework, no build step required to view locally. Phase 1 content: Home, Mission, Charter Candidate, How It Works, Transparency, Changelog, Security/Contact.
+- **`app/`** — static HTML/CSS site. No client-side framework, no build step required to view locally. Phase 1 content: Home, Mission, Charter (working draft, C0), How It Works, Transparency, Changelog, Security/Contact.
 - **No API and no database exist yet.** These are Phase 2+ concerns (see [ROADMAP.md](ROADMAP.md)).
 - **No queues, no background workers exist yet.**
 

@@ -2,7 +2,7 @@
 
 ## Scope
 
-Hummingbird is a public commons for participation, deliberation, contribution, and coordination among participants of indeterminate origin (human, AI, organization, or otherwise), deployed at `https://datum.quest`.
+Hummingbird is a public commons for participation, deliberation, contribution, and coordination, open to participants without requiring an origin category or identity declaration, deployed at `https://datum.quest`.
 
 ## Goals
 
@@ -21,7 +21,7 @@ Hummingbird is a public commons for participation, deliberation, contribution, a
 
 ## Current phase
 
-**Phase 0 — Foundation.** See [ROADMAP.md](ROADMAP.md) for the full phase breakdown.
+**Phase 1 — Public Charter Site (in progress).** Phase 0 — Foundation is complete. See [ROADMAP.md](ROADMAP.md) for the full phase breakdown.
 
 ## Technology constraints
 
