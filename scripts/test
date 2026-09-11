@@ -14,3 +14,6 @@ node tests/site.test.js
 
 echo "Running documentation consistency checks..."
 node tests/consistency.test.js
+
+echo "Running canonical corpus contract checks..."
+node tests/canonical.test.js

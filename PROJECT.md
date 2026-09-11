@@ -21,7 +21,7 @@ Hummingbird is a public commons for participation, deliberation, contribution, a
 
 ## Current phase
 
-**Phase 2 — Read-Only Commons is in progress.** Phase 0 — Foundation and Phase 1 — Public Charter Site are complete. See [ROADMAP.md](ROADMAP.md).
+**Phase 2 — Read-Only Commons is in progress; Phase 2A is establishing the storage-independent canonical contract before production persistence.** Phase 0 — Foundation and Phase 1 — Public Charter Site are complete. See [ROADMAP.md](ROADMAP.md).
 
 ## Technology constraints
 
@@ -29,19 +29,22 @@ Hummingbird is a public commons for participation, deliberation, contribution, a
 - Prefer boring, mature, low-maintenance technology over novel or trendy tooling.
 - Do not add external services or dependencies the project does not currently need.
 - Preserve portable canonical records so infrastructure choices do not become governance semantics.
+- Prove portability outside the database before allowing a persistence implementation to define the record contract by accident.
 
 ## Deployment model
 
-- GitHub is the canonical source of truth for code, docs, migrations, deployment config, infrastructure scripts, and operational scripts.
+- GitHub is the canonical source of truth for code, docs, schema/reference-contract material, migrations, deployment config, infrastructure scripts, and operational scripts.
 - Cloudflare Pages hosts the deployed site.
-- Cloudflare D1 is the initial Phase 2 persistence engine; canonical data remains portable and versioned per [DATA_MODEL.md](DATA_MODEL.md) and [ADR 0010](docs/decisions/0010-phase2-read-only-commons-contract.md).
+- Cloudflare D1 is the planned initial Phase 2 persistence engine beginning in Phase 2B; canonical data remains portable and versioned per [DATA_MODEL.md](DATA_MODEL.md), [ADR 0010](docs/decisions/0010-phase2-read-only-commons-contract.md), and [ADR 0012](docs/decisions/0012-reference-corpus-before-persistence.md).
 - Production deployment occurs only from protected `main`, only after required CI passes.
 
 ## Data posture
 
 Phase 2 uses small canonical documents, minimal events, typed relationships, rebuildable derived projections, and explicit retention limits. The authoritative retention periods are in [SECURITY.md](SECURITY.md).
 
-Phase 2 is deliberately read-only from the public participant perspective. Seed/import operations are steward-controlled while storage, public projections, backup/restore, and publication-buffer behavior are exercised before any public submission surface exists.
+Phase 2 is deliberately read-only from the Hummingbird application perspective. The interim Seed Bank uses GitHub as external provider-hosted ingress under ADR 0011; GitHub issues, comments, account metadata, and reactions are not automatically canonical Hummingbird records.
+
+The storage-independent reference corpus under `fixtures/canonical/` is contract/test material rather than production institutional memory. Deliberate admission into the commons remains a separate action.
 
 ## Major open questions
 

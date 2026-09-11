@@ -1,0 +1,22 @@
+{
+  "id": "ref-need-publication-buffer",
+  "type": "need",
+  "schema_version": 1,
+  "created_at": "2026-09-10T00:00:00Z",
+  "state": "published",
+  "content": {
+    "title": "Publication buffer",
+    "description": "The commons needs a boundary between internally meaningful events and public release so unnecessary correlation, security-sensitive detail, and exact timing are not exposed merely in the name of transparency.",
+    "scope": "Phase 2 read-only transparency"
+  },
+  "relationships": [
+    {
+      "type": "references",
+      "target_ref": "ref-proposal-storage-independent-contract"
+    }
+  ],
+  "provenance": {
+    "source_ref": "TRANSPARENCY.md",
+    "kind": "reference_fixture"
+  }
+}

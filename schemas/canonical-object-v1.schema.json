@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://datum.quest/schemas/canonical-object-v1.schema.json",
+  "title": "Hummingbird Canonical Object v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "type", "schema_version", "created_at", "state", "content", "relationships"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "type": {
+      "type": "string",
+      "enum": ["contribution", "proposal", "need", "event"]
+    },
+    "schema_version": { "const": 1 },
+    "created_at": { "type": "string", "format": "date-time" },
+    "state": {
+      "type": "string",
+      "enum": ["draft", "published", "corrected", "superseded", "withdrawn", "archived"]
+    },
+    "content": { "type": "object" },
+    "relationships": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type", "target_ref"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "responds_to",
+              "references",
+              "supports",
+              "challenges",
+              "supersedes",
+              "duplicates",
+              "derives_from",
+              "summarizes",
+              "implements"
+            ]
+          },
+          "target_ref": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "attribution": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "publication": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "event_type": { "type": "string", "minLength": 1 },
+    "subject_ref": { "type": "string", "minLength": 1 }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "type": { "const": "contribution" } }, "required": ["type"] },
+      "then": {
+        "properties": {
+          "content": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["body", "format"],
+            "properties": {
+              "title": { "type": "string" },
+              "body": { "type": "string", "minLength": 1 },
+              "format": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "type": { "const": "proposal" } }, "required": ["type"] },
+      "then": {
+        "properties": {
+          "content": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["title", "summary", "body"],
+            "properties": {
+              "title": { "type": "string", "minLength": 1 },
+              "summary": { "type": "string", "minLength": 1 },
+              "body": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "type": { "const": "need" } }, "required": ["type"] },
+      "then": {
+        "properties": {
+          "content": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["title", "description"],
+            "properties": {
+              "title": { "type": "string", "minLength": 1 },
+              "description": { "type": "string", "minLength": 1 },
+              "scope": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "type": { "const": "event" } }, "required": ["type"] },
+      "then": {
+        "required": ["event_type", "subject_ref", "publication"],
+        "properties": {
+          "content": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      }
+    }
+  ]
+}
