@@ -15,6 +15,12 @@ if [ -z "${CLOUDFLARE_API_TOKEN:-}" ]; then
   exit 1
 fi
 
+if [ -z "${CLOUDFLARE_ACCOUNT_ID:-}" ]; then
+  echo "error: CLOUDFLARE_ACCOUNT_ID is not set. Refusing to deploy." >&2
+  echo "Not a secret - just an identifier. Set it as a GitHub Actions repo variable (CI) or a local environment variable." >&2
+  exit 1
+fi
+
 if [ ! -d dist ]; then
   echo "error: dist/ not found. Run ./scripts/build first." >&2
   exit 1
