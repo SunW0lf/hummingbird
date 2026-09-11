@@ -96,6 +96,18 @@ Raised in: [GOVERNANCE.md](../../GOVERNANCE.md).
 Blocks: entry into Phase 4.
 Status: OPEN.
 
+### OQ-GOVERNANCE-SPACE-CONSTITUTIONS
+**What rules may a self-governed space adopt, how are those rules amended or forked, and what higher-level participant rights and security boundaries can never be overridden locally?**
+Raised in: [SPACES.md](../../SPACES.md).
+Blocks: deployment of self-governed interactive spaces.
+Status: OPEN.
+
+### OQ-GOVERNANCE-GUILD-GRANTS
+**When may a durable association request a scoped institutional capability, what member consent is required, and how are review, sunset, renewal, revocation, modification, and appeal handled?**
+Raised in: [SPACES.md](../../SPACES.md).
+Blocks: issuance of guild capability grants.
+Status: OPEN.
+
 ## Architecture / project
 
 ### OQ-ARCH-FRAMEWORK
@@ -110,6 +122,14 @@ Raised in: [PROJECT.md](../../PROJECT.md).
 Blocks: entry into Phase 5 (Financial Support).
 Status: OPEN.
 
+## Data
+
+### OQ-DATA-ACTIVITY-RETENTION
+**Which future wall, game, room, commitment, and other activity histories are ephemeral, operational, archival, or durable institutional records, and when may sealed history be compacted into immutable archive objects?**
+Raised in: [SPACES.md](../../SPACES.md), [PERSISTENCE.md](../../PERSISTENCE.md).
+Blocks: treating interactive activity history as durable or permanently archived state.
+Status: OPEN.
+
 ## Security
 
 ### OQ-SECURITY-ACCESS-CONTROL-RETENTION
@@ -122,6 +142,18 @@ Status: OPEN.
 **Authentication/authorization model** once contribution/proposal forms are introduced.
 Raised in: [SECURITY.md](../../SECURITY.md).
 Blocks: entry into Phase 3.
+Status: OPEN.
+
+### OQ-SECURITY-PAD-CONTINUITY
+**How can a returning pad prove continuity/control without requiring legal identity, participant-origin classification, or an institution-wide privileged identity tier?**
+Raised in: [SPACES.md](../../SPACES.md).
+Blocks: durable/persistent pads.
+Status: OPEN.
+
+### OQ-SECURITY-MULTIPLICITY-ABUSE
+**How should cheap pad multiplicity, dense connection graphs, automated participation, resource farming, and Sybil-sensitive local rules be constrained without pretending one pad equals one unique participant or privileging a presumed origin class?**
+Raised in: [SPACES.md](../../SPACES.md), [PERSISTENCE.md](../../PERSISTENCE.md).
+Blocks: resource-amplifying pad/group/guild capabilities.
 Status: OPEN.
 
 ### OQ-SECURITY-INCIDENT-RESPONSE
@@ -157,9 +189,11 @@ Status: OPEN — reviewed at the repository-publication gate; no distinct conten
 - **Blocks entry into Phase 2:** none. Phase 2 is in progress; its former entry questions are resolved in [ADR 0010](../decisions/0010-phase2-read-only-commons-contract.md), [DATA_MODEL.md](../../DATA_MODEL.md), [SECURITY.md](../../SECURITY.md), and [TRANSPARENCY.md](../../TRANSPARENCY.md).
 - **Blocks completion of Phase 1:** none. Phase 1 is complete.
 - **Blocks entry into Phase 3:** OQ-CHARTER-RIGHTS, OQ-CHARTER-EXCLUSION, OQ-CHARTER-PARTICIPANT-RESPONSIBILITIES, OQ-GOVERNANCE-EMERGENCY-AUTHORITY, OQ-GOVERNANCE-PROPOSALS, OQ-ARCH-FRAMEWORK, OQ-SECURITY-ACCESS-CONTROL-RETENTION, OQ-SECURITY-AUTHN-MODEL.
+- **Blocks deployment of persistent/self-governed social spaces:** OQ-GOVERNANCE-SPACE-CONSTITUTIONS, OQ-SECURITY-PAD-CONTINUITY, OQ-SECURITY-MULTIPLICITY-ABUSE; OQ-DATA-ACTIVITY-RETENTION must be resolved before activity history is made durable or permanently archived.
+- **Blocks guild capability grants:** OQ-GOVERNANCE-GUILD-GRANTS and OQ-SECURITY-MULTIPLICITY-ABUSE.
 - **Blocks entry into Phase 4:** OQ-GOVERNANCE-DISPUTES, OQ-GOVERNANCE-VALIDATED-NEEDS.
 - **Blocks entry into Phase 5:** OQ-PROJECT-LEGAL-STRUCTURE.
 - **Blocks C2 → C3 ratification:** OQ-GOVERNANCE-AMENDMENT-THRESHOLD.
 - **Review gates (non-blocking):** OQ-GOVERNANCE-STEWARD-SCOPE, OQ-GOVERNANCE-DECISION-PROCESS, OQ-GOVERNANCE-FACILITATION, OQ-GOVERNANCE-STEWARD-SUCCESSION, OQ-SECURITY-INCIDENT-RESPONSE, OQ-OPS-MONITORING-CADENCE, OQ-OPS-TOKEN-ROTATION-CADENCE, OQ-LEGAL-CONTENT-LICENSE.
 
-**Total unresolved: 20.**
+**Total unresolved: 25.**

@@ -60,6 +60,8 @@ The first substep is intentionally **local-only**: validate D1 migrations/import
 - Reconstruct canonical records from D1 and compare them with the original storage-independent corpus.
 - Only after local round-trip tests are green, provision/configure remote Cloudflare D1 without placing credentials in the repository.
 
+The broader persistence architecture and dated cost envelope are documented in [PERSISTENCE.md](PERSISTENCE.md). Future Durable Objects/R2 use is explicitly not part of this Phase 2B D1 milestone unless a later decision says otherwise.
+
 **Exit:** an empty database can be migrated and populated deterministically from storage-independent input, and canonical records can be exported without loss of institutional meaning.
 
 ### Phase 2C — Public read model and admission boundary
@@ -111,14 +113,35 @@ Contribution form, proposal form, amendment form, challenge/report form, API par
 
 Entry into Phase 3 remains blocked by the constitutional, governance, architecture, and security questions listed in the Open Questions Registry. A working Phase 2 database is not permission to bypass those decisions.
 
+### Future participatory-space track — after basic controlled participation
+
+The ideas in [SPACES.md](SPACES.md) are preserved now so Phase 3 does not accidentally design itself into an account/feed model, but they are **not** a promise to build all of them during Phase 3.
+
+Candidate experiments, in increasing order of governance/security complexity, include:
+
+1. optional presence pads and a simple public activity with bounded actions;
+2. a persistent/sealed mosaic wall and one persistent turn-based game such as chess;
+3. public mutual pad connections and temporary joined work surfaces;
+4. scheduled spaces that open/close and execute bounded declarative local rules;
+5. durable guild formation;
+6. scoped, expiring guild capability grants such as extended shared-space retention.
+
+A game/wall experiment should favor visible explanation, uncertainty, prediction, revision, coordination, and other consequential interaction rather than global participant scores or leaderboards.
+
+Self-governed spaces and resource-amplifying guild capabilities remain blocked by their specifically registered open questions even if simpler Phase 3 submission endpoints already exist.
+
 ## Phase 4 — Governance Workflows
 
 Status: **deferred**
 
 Proposals, reviews, validated needs, disputes, decisions, fulfillment tracking.
 
+Future guild-grant review may eventually reuse Phase 4 governance primitives, but a guild is not a higher participant class and a grant is not transferable personal standing.
+
 ## Phase 5 — Financial Support
 
 Status: **deferred**
 
 Donations, validated expenditures, steward compensation where appropriate, public aggregate financial transparency. Donation must never automatically grant influence. Only begins after the needs process (Phase 4) is functioning.
+
+The infrastructure cost analysis in [PERSISTENCE.md](PERSISTENCE.md) is planning information only; it does not create a treasury, authorize spending, or move financial governance forward in the roadmap.

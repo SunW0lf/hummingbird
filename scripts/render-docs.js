@@ -29,6 +29,8 @@ const CANONICAL_DOCS = [
   { file: "CHARTER.md", route: "charter.html", title: "Charter", badge: "C0 — Working Draft — Not Ratified" },
   { file: "GOVERNANCE.md", route: "governance.html", title: "Governance" },
   { file: "ROADMAP.md", route: "roadmap.html", title: "Roadmap" },
+  { file: "SPACES.md", route: "spaces.html", title: "Persistent Spaces" },
+  { file: "PERSISTENCE.md", route: "persistence.html", title: "Persistence & Cost Envelope" },
   { file: "TRANSPARENCY.md", route: "transparency.html", title: "Transparency" },
   { file: "CHANGELOG.md", route: "changelog.html", title: "Changelog" },
   { file: "CONTRIBUTING.md", route: "contributing.html", title: "Contributing" },
