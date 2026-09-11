@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://datum.quest/decisions/proposal-schema.json",
+  "title": "Hummingbird ADR Proposal Contract v1",
+  "description": "Static documentation of the fields Hummingbird expects when a participant offers material for a possible architecture or institutional decision. This schema is not a write API, does not allocate an ADR number, and does not imply admission, publication, or governance approval.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "title",
+    "context",
+    "decision",
+    "consequences",
+    "alternatives_considered",
+    "affected_principles"
+  ],
+  "properties": {
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Short descriptive title for the proposed decision."
+    },
+    "context": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 20000,
+      "description": "The architectural or institutional forces that make a decision necessary."
+    },
+    "decision": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 20000,
+      "description": "The specific change or rule being proposed."
+    },
+    "consequences": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 20000,
+      "description": "Expected benefits, costs, tradeoffs, failure modes, or new constraints."
+    },
+    "alternatives_considered": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 5000
+      },
+      "maxItems": 50,
+      "description": "Material alternatives considered, including keeping the current state where relevant."
+    },
+    "affected_principles": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      },
+      "maxItems": 50,
+      "description": "Hummingbird principles, ADRs, charter sections, or governance boundaries affected by the proposed decision."
+    }
+  }
+}
