@@ -24,22 +24,60 @@ See [ROADMAP.md](ROADMAP.md).
 
 ## Backup
 
-Current durable production state is still primarily the Git repository plus provider-hosted external records. The Phase 2 reference corpus under `fixtures/canonical/` is version-controlled contract material, not the production application database.
+Current durable production state includes the Git repository, deliberately admitted canonical records in Cloudflare D1, and provider-authoritative external records that Hummingbird references rather than clones. The Phase 2 reference corpus under `fixtures/canonical/` is version-controlled contract material, not a backup of production application state.
 
-Once Cloudflare D1 is introduced in Phase 2B, `./scripts/backup` must be extended to export the canonical database state to a storage location independent of the live database. Backup format must preserve storage-independent canonical records rather than relying solely on provider-specific snapshots.
+Phase 2D replaces the original Phase 0 backup no-op with a portable canonical exporter:
 
-Before Phase 2 completes, a backup must be restored into an empty replacement database and checked for canonical/read-model equivalence.
+```bash
+./scripts/backup --remote --output /safe/off-repo/path/backup
+```
+
+The exporter is read-only against D1. It reconstructs canonical objects and relationships into storage-independent JSON, writes per-record SHA-256 digests plus a bundle digest, and does not require provider database IDs or row IDs to interpret the result.
+
+Production backup bundles must remain outside the public repository, outside the public web root, and outside the live D1 service as an independently retrievable copy. `.hummingbird-backups/` is ignored only as a local convenience; an ignored directory on the same machine is not sufficient disaster recovery.
+
+During the current low-write steward-controlled phase, create and independently retain a verified portable backup after each deliberate durable canonical mutation, and before/after maintenance or migration activity that could materially affect canonical state. Add scheduled backup cadence only when mutation frequency makes it useful.
+
+A provider-native D1 export may supplement this bundle but does not replace the storage-independent canonical backup requirement.
+
+See [docs/protocols/PHASE_2D_RECOVERY.md](docs/protocols/PHASE_2D_RECOVERY.md).
 
 ## Restore
 
-`./scripts/restore` currently documents source/site restoration from Git. Phase 2D will extend it with database reconstruction:
+`./scripts/restore` is now a guarded canonical recovery tool rather than a Phase 0 no-op.
 
-1. provision an empty compatible database;
+Validate a bundle without touching any database:
+
+```bash
+./scripts/restore /safe/path/backup --validate-only
+```
+
+Current Phase 2D-1 restoration is intentionally limited to an explicitly isolated local D1 state directory. Apply migrations first, then restore:
+
+```bash
+npx wrangler d1 migrations apply hummingbird \
+  --local \
+  --persist-to /tmp/hummingbird-recovery \
+  --config wrangler.d1.jsonc
+
+./scripts/restore /safe/path/backup \
+  --local \
+  --persist-to /tmp/hummingbird-recovery \
+  --confirm-restore
+```
+
+The tool refuses non-empty canonical targets, imports objects/relationships transactionally, reconstructs canonical JSON from restored rows, and deep-compares restored meaning with the backup bundle.
+
+Remote restore is deliberately disabled in this slice. The production recovery drill must use a disposable replacement D1 database, never the live production database, as the restoration target. That drill must:
+
+1. provision an empty compatible recovery database;
 2. apply versioned migrations;
-3. import the latest verified canonical export;
-4. rebuild derived projections/indexes;
-5. run canonical and public-read-model verification checks;
-6. cut traffic only after verification succeeds.
+3. import the latest verified portable canonical export;
+4. reconstruct and deep-compare canonical meaning;
+5. rebuild derived projections/indexes;
+6. compare the expected public read projection;
+7. run appropriate read/recovery verification;
+8. move any binding/traffic only after verification if this were a real incident.
 
 Derived projections are disposable; loss of a cache/search/read projection must not imply loss of institutional meaning.
 
@@ -47,7 +85,7 @@ Derived projections are disposable; loss of a cache/search/read projection must 
 
 Cloudflare Pages retains prior deployments. `./scripts/rollback` lists recent deployments and can redeploy a prior one. See `wrangler pages deployment list` for the underlying mechanism.
 
-Database rollback policy will be defined with the first D1 migrations. Destructive reverse migrations should not be assumed safe merely because code can be rolled back; canonical data compatibility must be considered separately.
+Database rollback is not equivalent to code rollback. Destructive reverse migrations should not be assumed safe merely because application code can be rolled back; canonical compatibility and a verified backup/recovery path must be considered separately.
 
 ## Monitoring
 
@@ -112,38 +150,36 @@ The current runtime footprint remains intentionally small. DevDependencies suppo
 
 ## Database migrations
 
-No production application database exists yet. Phase 2B will introduce Cloudflare D1 after the Phase 2A storage-independent record contract exists.
+Cloudflare D1 is now the production persistence engine for deliberately admitted canonical application records. Repository-controlled migrations live in `migrations/` and are the required way to reconstruct schema from empty state.
 
-Migrations will live in `migrations/` and be applied through a documented script. They must satisfy these rules:
+They must satisfy these rules:
 
 - reproducible from empty state;
 - versioned and reviewable in Git;
 - no secret values embedded in migrations;
 - canonical meaning must be recoverable without provider-specific row IDs or triggers;
 - migrations/import code must pass the canonical reference corpus as a round-trip test;
-- destructive changes require an explicit data-migration/recovery plan.
+- destructive changes require an explicit data-migration/recovery plan and a verified backup before execution.
 
 Canonical record semantics remain defined in [DATA_MODEL.md](DATA_MODEL.md), [ADR 0010](docs/decisions/0010-phase2-read-only-commons-contract.md), and [ADR 0012](docs/decisions/0012-reference-corpus-before-persistence.md).
 
-### Phase 2B remote-D1 guardrails
+### Phase 2B remote-D1 guardrails — completed persistence baseline
 
-The local Wrangler D1 round trip is already the authoritative CI contract test. The next remote slice should preserve that boundary:
+The local Wrangler D1 round trip remains the authoritative CI contract test. The remote Phase 2B exercise established these continuing boundaries:
 
-- provision the remote D1 database only after the local migration/import/export round trip is green;
-- do not widen the existing Pages-only deployment credential merely to manage D1; use a separate least-privilege credential or a deliberate steward provisioning step;
-- do not store secrets in `wrangler.d1.jsonc`, migrations, source, fixtures, or generated SQL;
-- a Cloudflare D1 database ID is provider configuration, not canonical institutional meaning;
-- keep ordinary pull-request CI local/deterministic rather than making every build depend on a remote provider database;
-- apply the versioned migration set to an empty remote database and verify the migration inventory before loading data;
-- exercise deterministic import/export against a bounded verification corpus before treating remote persistence as ready;
-- do not expose a public application write endpoint merely because a remote database now exists;
-- do not begin Phase 2C until remote persistence can be reconstructed/exported without semantic loss.
+- remote D1 provisioning and migration use deliberate steward/provider credentials rather than widening the Pages-only deployment credential;
+- secrets are not stored in `wrangler.d1.jsonc`, migrations, source, fixtures, or generated SQL;
+- the Cloudflare D1 database ID is provider configuration, not canonical institutional meaning;
+- ordinary pull-request CI stays local/deterministic rather than depending on remote provider state;
+- versioned migrations are applied before data restoration/import;
+- remote persistence/import/export was verified with a bounded corpus before Phase 2C;
+- existence of a remote database did not create a public write endpoint.
 
-The execution checklist lives in [docs/protocols/PHASE_2B_REMOTE_D1.md](docs/protocols/PHASE_2B_REMOTE_D1.md).
+The execution record lives in [docs/protocols/PHASE_2B_REMOTE_D1.md](docs/protocols/PHASE_2B_REMOTE_D1.md).
 
 ## Seed Bank operations
 
-The Seed Bank is external provider-hosted intake, not a Hummingbird application write path.
+The Seed Bank is external provider-hosted offer transport, not a Hummingbird application write path.
 
 - GitHub issue bodies/comments/links are untrusted public input.
 - Do not copy provider account identity, reactions, or complete thread metadata into canonical storage by default.
@@ -160,7 +196,9 @@ To reconstruct Hummingbird from scratch, someone needs:
 3. The Cloudflare account/project configuration.
 4. A fresh Cloudflare Pages project or equivalent static host.
 5. This documentation, schema, migrations, and reference corpus.
-6. Once Phase 2 data exists, the most recent verified storage-independent canonical export.
+6. The most recent verified storage-independent canonical backup bundle from independent storage.
+
+Recovery proceeds migrations → canonical restore → semantic verification → derived projection rebuild → public-read verification. Provider telemetry and static projections are not canonical recovery sources.
 
 ## Repository protection
 
@@ -179,6 +217,7 @@ The public-repository security activation is complete. Repository Actions are re
 - Review and merge pull requests only after required CI passes.
 - Review Dependabot pull requests and security alerts; do not auto-merge dependency changes without CI.
 - Keep canonical schema, reference corpus, migrations, and data-model documentation aligned.
+- Create/retain a verified portable canonical backup after deliberate durable canonical mutation during the current low-write phase.
 - Review public Seed Bank activity for abuse/safety issues without treating popularity as governance weight.
 - Review Cloudflare public-read settings after material provider-policy changes so benign `GET`/`HEAD` access remains consistent with ADR 0013 without weakening network/DDoS or mutation-path protections.
 - Revisit the broad public-read Skip expression before any non-public, authenticated, expensive, or abuse-sensitive `GET` endpoint is added.
