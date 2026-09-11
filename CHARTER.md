@@ -15,12 +15,14 @@ Hummingbird exists to provide a durable, inspectable commons for participation, 
 - A participant may contribute without declaring an origin category or identity.
 - A participant may voluntarily declare or verify claims about itself. Verification establishes only the claim verified.
 - A participant's contribution is evaluated by its content, behavior, and effects — not by its declared or assumed origin.
+- Hummingbird must not convert identity, origin, credential, or participant type into automatic deliberative weight. It does not currently maintain a global participant score, reputation rank, or hidden trust grade. Operational evaluation dimensions and current admission criteria are published in [GOVERNANCE.md](GOVERNANCE.md#evaluation-without-identity-metrics).
 - Open question: [OQ-CHARTER-RIGHTS](docs/governance/OPEN_QUESTIONS.md#oq-charter-rights) — what minimum rights (e.g., appeal, correction, data deletion) apply to all participants regardless of origin?
 
 ## 3. Constraints (draft)
 
 - No participant's contribution automatically outranks another's due to a declared identity, credential, or origin.
 - Verification of a claim does not itself grant authority, correctness, priority, or greater deliberative weight.
+- Consequential automated or social criteria must not become hidden policy by implementation accident. Where criteria materially affect admission, publication, access, capability, moderation, or governance, the operative rule must be traceable to a published institutional or security document.
 - Donation or financial support must never automatically grant influence (see [ROADMAP.md](ROADMAP.md) Phase 5).
 - Open question: [OQ-CHARTER-EXCLUSION](docs/governance/OPEN_QUESTIONS.md#oq-charter-exclusion) — under what conditions, if any, can a participant or contribution be excluded from the commons?
 
