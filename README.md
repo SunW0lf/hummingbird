@@ -8,18 +8,20 @@ This is currently a passion project, not a conventional startup or commercial pr
 
 ## Project status
 
-**Phase 2 — Read-Only Commons is in progress.** Phase 0 — Foundation and Phase 1 — Public Charter Site are complete. The repository is public, `main` is protected, required CI is active, and the public-repository security baseline is enabled. See [ROADMAP.md](ROADMAP.md).
+**Phase 2 — Read-Only Commons is in progress; Phase 2A is defining and testing the storage-independent canonical contract before production persistence.** Phase 0 — Foundation and Phase 1 — Public Charter Site are complete. The repository is public, `main` is protected, required CI is active, and the public-repository security baseline is enabled. See [ROADMAP.md](ROADMAP.md).
 
-The production Hummingbird application remains read-only while the first persistent commons substrate is built. An interim public [Seed Bank](https://datum.quest/seed-bank), defined by [ADR 0011](docs/decisions/0011-interim-seed-bank.md), uses constrained GitHub issues for Seed, Feedback, and Question discussions without treating those provider-hosted threads as canonical Hummingbird records or governance votes.
+The production Hummingbird application remains read-only. An interim public [Seed Bank](https://datum.quest/seed-bank), defined by [ADR 0011](docs/decisions/0011-interim-seed-bank.md), uses constrained GitHub issues for Seed, Feedback, and Question discussions without treating those provider-hosted threads as canonical Hummingbird records or governance votes.
+
+Before D1 is introduced, Phase 2A uses a machine-readable schema and a small reference corpus to prove that canonical record meaning exists independently of any database. See [ADR 0012](docs/decisions/0012-reference-corpus-before-persistence.md).
 
 ## Quick start (development)
 
-Phase 2 introduces the first application database while preserving portable canonical data and deliberately avoiding Hummingbird-owned public submission until Phase 3.
+The current Phase 2 path is: storage-independent canonical contract → D1 persistence/import → public read model/admission → publication buffer/backup/recovery → phase review.
 
 ```bash
 ./scripts/bootstrap   # one-time setup (npm install for devDependencies)
 ./scripts/dev         # serve app/ locally
-./scripts/test        # run tests
+./scripts/test        # build + site/docs + canonical-corpus contract tests
 ./scripts/build       # produce dist/ output
 ```
 
@@ -38,6 +40,8 @@ Phase 2 introduces the first application database while preserving portable cano
 - [CHANGELOG.md](CHANGELOG.md) — meaningful releases and changes
 - [ROADMAP.md](ROADMAP.md) — phases and milestones
 - [docs/decisions/](docs/decisions/) — Architecture Decision Records
+- [schemas/canonical-object-v1.schema.json](schemas/canonical-object-v1.schema.json) — machine-readable Phase 2 canonical object contract
+- [fixtures/canonical/](fixtures/canonical/) — storage-independent reference corpus (contract fixtures, not production admission)
 - [docs/governance/OPEN_QUESTIONS.md](docs/governance/OPEN_QUESTIONS.md) — authoritative registry of unresolved questions
 - [docs/governance/RESOLVED_QUESTIONS.md](docs/governance/RESOLVED_QUESTIONS.md) — archive of stable IDs after resolution
 
