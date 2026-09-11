@@ -1,8 +1,8 @@
 // Final build-time pass over public HTML.
 //
-// Keeps accessibility, canonical discovery metadata, and agent-readable
-// navigation guarantees consistent across hand-authored and generated pages
-// without introducing a client-side runtime dependency.
+// Keeps accessibility, canonical discovery metadata, site identity, and
+// agent-readable navigation guarantees consistent across hand-authored and
+// generated pages without introducing a client-side runtime dependency.
 "use strict";
 
 const fs = require("fs");
@@ -11,6 +11,21 @@ const path = require("path");
 const ROOT = path.join(__dirname, "..");
 const DIST = path.join(ROOT, "dist");
 const SITE_ORIGIN = "https://datum.quest";
+
+const SITE_MAP_LINKS = [
+  ["/", "Home"],
+  ["/mission", "About / Mission"],
+  ["/how-it-works", "Commons"],
+  ["/seed-bank", "Seed Bank"],
+  ["/records", "Records"],
+  ["/decisions", "Decisions"],
+  ["/charter", "Charter"],
+  ["/governance", "Governance"],
+  ["/roadmap", "Roadmap"],
+  ["/more", "More"],
+  ["/llms.txt", "llms.txt"],
+  ["/sitemap.xml", "sitemap.xml"],
+];
 
 function htmlFiles(dir) {
   const results = [];
@@ -37,6 +52,33 @@ function publicUrl(relativePath) {
   return `${SITE_ORIGIN}/${route}`;
 }
 
+function normalizeTitle(relativePath, html) {
+  if (relativePath === "index.html") {
+    return "Hummingbird — Origin-Agnostic Commons | datum.quest";
+  }
+
+  const match = html.match(/<title>([^<]+)<\/title>/i);
+  const raw = match ? match[1].trim() : relativePath.replace(/\.html$/, "");
+  const pageTitle = raw
+    .replace(/\s+—\s+Hummingbird\s+\|\s+Origin-Agnostic Commons$/i, "")
+    .replace(/\s+—\s+Hummingbird$/i, "")
+    .replace(/\s+—\s+datum\.quest$/i, "")
+    .trim();
+
+  return `${pageTitle} — Hummingbird | Origin-Agnostic Commons`;
+}
+
+function siteMapHtml() {
+  const items = SITE_MAP_LINKS
+    .map(([href, label]) => `      <li><a href="${href}">${label}</a></li>`)
+    .join("\n");
+
+  return `  <nav class="site-map" aria-label="Site map">\n` +
+    `    <p class="site-map-title">Explore Hummingbird</p>\n` +
+    `    <ul>\n${items}\n    </ul>\n` +
+    `  </nav>`;
+}
+
 function finalizeHtml(relativePath, html) {
   let output = html;
 
@@ -57,6 +99,13 @@ function finalizeHtml(relativePath, html) {
     });
   });
 
+  // Keep the visible front door small, but make the durable public institution
+  // traversable from every page through a curated semantic footer. Exhaustive
+  // route discovery remains the responsibility of sitemap.xml and llms.txt.
+  if (!output.includes('class="site-map"')) {
+    output = output.replace("</footer>", `${siteMapHtml()}\n</footer>`);
+  }
+
   // Cloudflare Pages serves clean HTML routes and redirects their .html forms.
   // Advertise the final 200 URL to crawlers rather than a redirecting alias.
   if (relativePath !== "404.html") {
@@ -70,6 +119,15 @@ function finalizeHtml(relativePath, html) {
       `<meta property="og:url" content="${canonical}">`
     );
   }
+
+  // Keep each page's specific identity while making the project identity
+  // explicit enough to resist similarly named-domain collisions.
+  const title = normalizeTitle(relativePath, output);
+  output = output.replace(/<title>[^<]*<\/title>/i, `<title>${title}</title>`);
+  output = output.replace(
+    /<meta property="og:title" content="[^"]*">/,
+    `<meta property="og:title" content="${title}">`
+  );
 
   return output;
 }
