@@ -24,6 +24,37 @@ Open question: [OQ-GOVERNANCE-AMENDMENT-THRESHOLD](docs/governance/OPEN_QUESTION
 - Technical/architectural decisions affecting the codebase or infrastructure are recorded as Architecture Decision Records in [docs/decisions/](docs/decisions/).
 - Open question: [OQ-GOVERNANCE-DECISION-PROCESS](docs/governance/OPEN_QUESTIONS.md#oq-governance-decision-process) — process for non-technical/governance decisions.
 
+## Evaluation without identity metrics
+
+Hummingbird does **not** currently maintain a global participant score, content score, trust rank, reputation number, identity-weight multiplier, or hidden behavior grade. There is no algorithm that turns a participant into a scalar standing value.
+
+When Hummingbird says that contributions are evaluated by **content, behavior, and effect**, those words describe decision dimensions, not a universal scoring formula:
+
+- **Content** concerns the offered material itself: whether it is intelligible enough to consider, relevant to the stated scope, materially duplicative or connected to existing work, supported where factual claims require support, and representable without importing unnecessary provider metadata.
+- **Behavior** concerns observable interaction with the commons: compliance with published safety and space rules, flooding/replay/duplication patterns, attempts to evade bounded controls, and other actions that affect the integrity or availability of the shared system.
+- **Effect** concerns consequences: whether an action improves or degrades the commons, creates avoidable security/privacy/resource burden, corrects or compounds error, preserves reversibility where appropriate, or materially affects other participants or public institutional records.
+
+These dimensions must be tied to a **specific decision**. Examples include admitting, deferring, combining, declining, rate-limiting, correcting, superseding, withdrawing, or escalating material for a different process. They do not automatically create durable standing for the participant associated with the action.
+
+### Current Phase 2 admission criteria
+
+During the current steward-controlled Phase 2 admission path, a candidate should be admitted to canonical memory only when all of the following are true:
+
+1. there is a concrete meaning Hummingbird intends to remember rather than merely a provider-hosted discussion artifact;
+2. the record fits the published canonical model and lifecycle;
+3. provenance is sufficient to understand the source/reference without copying unnecessary identity, reaction, thread, device, or provider metadata;
+4. the candidate does not contain secrets, private personal information, vulnerability details, or other material inappropriate for durable/public institutional memory;
+5. durable retention is proportionate — references are preferred over copies and obvious duplication should be avoided;
+6. admission is not being represented as publication, endorsement, governance approval, or proof that the underlying claim is correct.
+
+A separate publication decision is required before a canonical record is released on the public read plane.
+
+### No hidden institutional criteria
+
+If Hummingbird later introduces an automated classifier, admission rule, moderation threshold, capability-grant test, or other consequential decision procedure, its operative criteria must be documented before or with deployment. Material criteria should be traceable to the Charter, Governance documents, Security rules, or an explicit Decision Record.
+
+Where no published rule exists, a steward judgment must be described as judgment rather than presented as an objective score or settled governance process. Unresolved criteria remain open questions instead of becoming policy by implementation accident.
+
 ## Future local governance — not yet active
 
 The working participatory-space design in [SPACES.md](SPACES.md) allows a future room, cafe, pub, workshop, garden, game room, or similar space to govern bounded local interactions through a public constitution.
