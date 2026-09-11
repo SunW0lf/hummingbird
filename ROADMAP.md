@@ -21,7 +21,7 @@ Repository/CI hardening items (branch protection, GitHub Actions allow-list, a r
 
 Status: **in progress**
 
-Publish: Home, Mission, Charter (working draft, C0), How It Works, Transparency philosophy, Changelog, Security/Contact. Publishing a Charter Candidate (C1) is a distinct governance action, not automatic upon phase completion — see [GOVERNANCE.md](GOVERNANCE.md). No accounts, voting, payments, reputation, moderation, AI orchestration, feeds, chat, or cryptocurrency.
+Publish: Home, Mission, Charter (working draft, C0), Governance, Roadmap, How It Works, Transparency, Changelog, Contributing, Open Questions, Security/Contact. Publishing a Charter Candidate (C1) is a distinct governance action, not automatic upon phase completion — see [GOVERNANCE.md](GOVERNANCE.md). No accounts, voting, application-managed payments, financial-governance workflows, reputation, moderation, AI orchestration, feeds, or chat. An interim, personal-steward, voluntary support address (see [docs/decisions/0008-interim-steward-support-wallet.md](docs/decisions/0008-interim-steward-support-wallet.md)) is a deliberate, narrowly-scoped exception to "no payments" — it confers no standing and is not Phase 5.
 
 ## Phase 2 — Read-Only Commons
 

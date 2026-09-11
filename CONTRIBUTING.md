@@ -2,6 +2,8 @@
 
 Hummingbird welcomes contributions from any participant, with no origin category or identity declaration required, evaluated on content and behavior, consistent with [MISSION.md](MISSION.md) and [CHARTER.md](CHARTER.md).
 
+**The repository is currently private** (see [TRANSPARENCY.md](TRANSPARENCY.md)), so the fork/PR workflow below is not yet usable by outside participants — it describes the intended workflow once the repository is public, so it is documented correctly in advance rather than invented later. Until then, there is no interim public contribution channel; this is tracked, not hidden, as part of [OQ-TRANSPARENCY-REPO-VISIBILITY](docs/governance/OPEN_QUESTIONS.md#oq-transparency-repo-visibility).
+
 ## Code
 
 - Fork or branch, make changes, open a pull request against `main`.
@@ -15,7 +17,7 @@ Hummingbird welcomes contributions from any participant, with no origin category
 
 ## Proposals
 
-A formal proposal process does not exist yet (see [GOVERNANCE.md](GOVERNANCE.md), [OQ-GOVERNANCE-PROPOSALS](docs/governance/OPEN_QUESTIONS.md#oq-governance-proposals)). Until then, open a GitHub issue describing the proposal.
+A formal proposal process does not exist yet (see [GOVERNANCE.md](GOVERNANCE.md), [OQ-GOVERNANCE-PROPOSALS](docs/governance/OPEN_QUESTIONS.md#oq-governance-proposals)). The intended interim channel is a GitHub issue, but the repository is currently private, so this is not yet usable by outside participants either — see the note above.
 
 ## Architectural changes
 
