@@ -38,6 +38,7 @@ const PUBLIC_DECISIONS = [
   "0014-progressive-capability-rollout.md",
   "0015-standards-based-representation-discovery-and-provenance.md",
   "0016-offers-and-the-offer-buffer.md",
+  "0017-phase2-publication-buffer-policy.md",
 ];
 
 const ROOT_PUBLIC_ROUTES = new Map([
