@@ -15,16 +15,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: "22"
           cache: "npm"
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Lint
         run: |
@@ -38,7 +38,7 @@ jobs:
         run: ./scripts/build
 
       - name: Dependency audit
-        run: npm audit --audit-level=high || echo "npm audit reported issues - review before relying on this devDependency in production tooling."
+        run: npm audit --audit-level=high
 
   deploy:
     name: Deploy to Cloudflare Pages
@@ -47,16 +47,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: "22"
           cache: "npm"
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build
         run: ./scripts/build
