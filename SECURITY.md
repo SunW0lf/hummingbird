@@ -38,9 +38,11 @@ Not applicable yet — no accounts exist. Open question: [OQ-SECURITY-AUTHN-MODE
 
 ## CI/CD security
 
-- Production deployment is gated by the CI workflow's own job dependency (`deploy` `needs: verify`), which requires tests, a successful build, and the high-severity dependency audit to pass first. This is enforced by the workflow definition, not by a GitHub branch protection rule — see [OQ-OPS-BRANCH-PROTECTION](docs/governance/OPEN_QUESTIONS.md#oq-ops-branch-protection).
+- Production deployment is gated by the CI workflow's own job dependency (`deploy` `needs: verify`), which requires tests, a successful build, and the high-severity dependency audit to pass first. This is enforced by the workflow definition, not yet by a GitHub branch protection rule — see [OQ-OPS-BRANCH-PROTECTION](docs/governance/OPEN_QUESTIONS.md#oq-ops-branch-protection).
 - External GitHub Actions used by the workflow are pinned to exact commit SHAs rather than mutable version tags.
 - The workflow-level `GITHUB_TOKEN` permission is read-only for repository contents.
+- `.github/dependabot.yml` monitors npm and GitHub Actions dependencies on a weekly cadence so updates to packages and pinned Action SHAs arrive as reviewable pull requests.
+- `.github/CODEOWNERS` records the current steward as the default code owner; enforcement depends on the repository protection settings.
 - GitHub Actions is currently configured with repository-level `allowed_actions: all` rather than a restricted allow-list. Pinning action commits reduces supply-chain exposure but does not resolve that repository-policy gap. Open question: [OQ-SECURITY-ACTIONS-HARDENING](docs/governance/OPEN_QUESTIONS.md#oq-security-actions-hardening).
 
 ### Phase 1 risk acceptance — repository Actions policy
@@ -49,7 +51,20 @@ Not applicable yet — no accounts exist. Open question: [OQ-SECURITY-AUTHN-MODE
 
 Current mitigations are deliberately narrow and verifiable: the repository is private and single-steward; the workflow uses only `actions/checkout` and `actions/setup-node`; both are pinned to exact commit SHAs; the workflow token is read-only for repository contents; CI runs tests, build, and a blocking high-severity dependency audit before deployment; and the production deploy job cannot run until verification succeeds.
 
-This acceptance **does not resolve** OQ-SECURITY-ACTIONS-HARDENING and **does not authorize repository publication**. The Actions policy must receive a fresh disposition before public repository visibility or whenever the trust model changes.
+This acceptance expires when the repository becomes public. Publication has been authorized in principle, but public mode requires the Actions policy to be restricted to GitHub-owned/explicitly approved actions and then verified.
+
+## Public repository security baseline
+
+Before or immediately as the repository becomes public, the following controls are required and must be verified rather than merely assumed:
+
+- GitHub private vulnerability reporting enabled for the repository, providing a genuinely private reporting path.
+- Secret scanning enabled and push protection enabled so supported secrets are detected and blocked before new pushes land.
+- Dependabot alerts and security updates enabled; version updates remain driven by `.github/dependabot.yml` and must pass normal CI before merge.
+- CodeQL/default code scanning enabled where GitHub makes it available for the public repository.
+- `main` protected as described in `OPERATIONS.md`, including required CI and no force-push/deletion path.
+- Repository Actions policy restricted to GitHub-owned/explicitly approved actions while workflow references remain SHA-pinned.
+
+A public repository exposes source, history, and Actions logs to anyone. No repository visibility change should be treated as complete until these controls have been checked after the transition.
 
 ## Incident response
 
@@ -58,6 +73,8 @@ Open question: [OQ-SECURITY-INCIDENT-RESPONSE](docs/governance/OPEN_QUESTIONS.md
 ## Vulnerability reporting
 
 Open question: [OQ-SECURITY-VULN-REPORTING](docs/governance/OPEN_QUESTIONS.md#oq-security-vuln-reporting) — dedicated security contact address/process. Until established, do not open a public GitHub issue for a vulnerability; there is currently no working private channel either, so treat this as unresolved rather than assuming one exists.
+
+The intended public-repository solution is GitHub private vulnerability reporting. This document and the public Security page must not advertise that path as active until the repository is public, the setting is enabled, and the reporting path is verified.
 
 ## Data classification
 

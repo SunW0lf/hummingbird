@@ -4,7 +4,7 @@
 
 Everything on `datum.quest` is public static content. There is no internal event log, no publication buffer, and no dynamic transparency record yet, because there is no dynamic data at all.
 
-The repository itself (documentation, ADRs, commit history) is the transparency record for the project's own decisions.
+The repository itself (documentation, ADRs, commit history) is intended to become the transparency record for the project's own decisions.
 
 ## Intended model (Phase 2+, not yet built)
 
@@ -26,9 +26,11 @@ See [docs/decisions/0004-publication-buffer.md](docs/decisions/0004-publication-
 
 ## Public records
 
-- **This repository** (documentation, ADRs, commit history) is currently **private**. It is written as if it will become the project's public transparency record, but it is not public today. Making it public is a deliberate action gated on [OQ-TRANSPARENCY-REPO-VISIBILITY](docs/governance/OPEN_QUESTIONS.md#oq-transparency-repo-visibility), not an automatic consequence of any phase completing.
+- **This repository** (documentation, ADRs, commit history) is currently **private**, but publication was authorized in principle by the steward on 2026-09-10. The visibility change is intentionally coupled to the public-repository security activation gate in [OPERATIONS.md](OPERATIONS.md) and [SECURITY.md](SECURITY.md); authorization is not the same as claiming publication has already occurred.
 - **The deployed site** (`https://datum.quest`) is public now — it is a live, publicly reachable static site as of Phase 0 completion.
+
+The repository's earlier git-history review found no committed secrets. Publication still requires a current-state verification and activation of public-mode controls before the transition is treated as complete. See [OQ-TRANSPARENCY-REPO-VISIBILITY](docs/governance/OPEN_QUESTIONS.md#oq-transparency-repo-visibility).
 
 ## Private operational logs
 
-CI logs and deployment logs live in GitHub Actions / Cloudflare and are not currently republished anywhere. Open question: [OQ-TRANSPARENCY-OPERATIONAL-HISTORY](docs/governance/OPEN_QUESTIONS.md#oq-transparency-operational-history) — whether/how to summarize operational history publicly.
+While the repository is private, CI and deployment logs are visible only through the repository's access controls. Once the repository becomes public, GitHub Actions history/logs associated with the public repository should be treated as public operational records unless GitHub explicitly marks specific data otherwise. Open question: [OQ-TRANSPARENCY-OPERATIONAL-HISTORY](docs/governance/OPEN_QUESTIONS.md#oq-transparency-operational-history) — whether/how to summarize operational history separately from the raw provider logs.
