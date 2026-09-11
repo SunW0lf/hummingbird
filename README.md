@@ -8,11 +8,11 @@ This is currently a passion project, not a conventional startup or commercial pr
 
 ## Project status
 
-**Phase 1 — Public Charter Site (in progress).** Phase 0 — Foundation is complete: the repository, documentation, minimal static site, CI, and production deployment are established and verified. No accounts, voting, payments, or governance workflows exist yet. See [ROADMAP.md](ROADMAP.md) for the full phase plan.
+**Phase 1 — Public Charter Site is in final security verification; the Phase 2 entry contract is accepted.** Phase 0 — Foundation is complete. The repository is public, `main` is protected, and required CI is active. Phase 2 implementation is queued immediately behind Phase 1 closeout. See [ROADMAP.md](ROADMAP.md).
 
 ## Quick start (development)
 
-The Phase 1 site is a plain static site with no build tooling dependency required to view it.
+The currently deployed site is a plain static site. Phase 2 will introduce the first application database while keeping the public surface read-only.
 
 ```bash
 ./scripts/bootstrap   # one-time setup (npm install for devDependencies)
@@ -36,7 +36,8 @@ The Phase 1 site is a plain static site with no build tooling dependency require
 - [CHANGELOG.md](CHANGELOG.md) — meaningful releases and changes
 - [ROADMAP.md](ROADMAP.md) — phases and milestones
 - [docs/decisions/](docs/decisions/) — Architecture Decision Records
-- [docs/governance/OPEN_QUESTIONS.md](docs/governance/OPEN_QUESTIONS.md) — authoritative registry of unresolved governance, security, and policy questions
+- [docs/governance/OPEN_QUESTIONS.md](docs/governance/OPEN_QUESTIONS.md) — authoritative registry of unresolved questions
+- [docs/governance/RESOLVED_QUESTIONS.md](docs/governance/RESOLVED_QUESTIONS.md) — archive of stable IDs after resolution
 
 ## Public documentation access
 
@@ -45,10 +46,10 @@ Selected canonical documents (Mission, Charter, Governance, Roadmap, Transparenc
 ## Deployment overview
 
 ```text
-Local machine → Git → GitHub → GitHub Actions (lint, test, build) → approved main → datum.quest
+Local machine → Git → GitHub → GitHub Actions (test, build, audit) → protected main → datum.quest
 ```
 
-Deployment target is Cloudflare Pages, gated on CI passing before the `deploy` job runs (branch protection on `main` is not available on this plan for a private repository — see [OQ-OPS-BRANCH-PROTECTION](docs/governance/OPEN_QUESTIONS.md#oq-ops-branch-protection)). `datum.quest` is live and serving the Hummingbird Phase 1 site. See [docs/decisions/0005-ci-gated-production-deployment.md](docs/decisions/0005-ci-gated-production-deployment.md).
+Deployment target is Cloudflare Pages. `main` is protected and requires the `Checks, test, build` status check before merge; production deployment is also gated by the workflow's successful verification job. See [OPERATIONS.md](OPERATIONS.md) and [docs/decisions/0005-ci-gated-production-deployment.md](docs/decisions/0005-ci-gated-production-deployment.md).
 
 ## License
 
