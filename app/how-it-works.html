@@ -59,7 +59,7 @@
     <div><span class="phase-state planned">Later</span><strong>Phase 5</strong><span>Financial Support</span></div>
   </div>
 
-  <p><strong>Phase 2 is currently in Phase 2D:</strong> publication-buffer, backup, and recovery work. Phase 3 does not begin merely because the database works.</p>
+  <p><strong>Phase 2 is currently in Phase 2D:</strong> the production backup/recovery path has been exercised successfully; the remaining work is to close the publication-buffer/transparency boundary and then conduct the Phase 2 review.</p>
   <div class="callout">
     <strong>What must be true before Phase 3?</strong>
     <p>The persistence layer must rebuild from migrations; canonical records must round-trip without losing meaning; public projections must be rebuildable and origin-neutral; external ingress must remain distinct from admission; publication-buffer behavior must be tested; backup and restore must be exercised; the public read model must exclude security-sensitive fields; and the Phase 2 governance/review gates must be resolved or explicitly deferred with reasons.</p>
@@ -68,7 +68,7 @@
   <ol>
     <li><strong>Phase 0 — Foundation (complete).</strong> Repository, documentation, minimal site, CI, deployment.</li>
     <li><strong>Phase 1 — Public Charter Site (complete).</strong> Mission, working Charter, governance, transparency, public repository, security baseline, and supporting project surfaces.</li>
-    <li><strong>Phase 2 — Read-only commons (current).</strong> Canonical persistence, explicit admission/publication boundaries, and the static read model are proven. Durability, delayed/coarsened operational publication, backup, recovery, and phase review remain.</li>
+    <li><strong>Phase 2 — Read-only commons (current).</strong> Canonical persistence, explicit admission/publication boundaries, static public projections, and production-state backup/recovery are proven. Publication-buffer transparency closure and the Phase 2 review remain.</li>
     <li><strong>Phase 3 — Controlled participation.</strong> Hummingbird-owned offer-making begins as a bounded capability pilot rather than a private read beta. Public reading stays open; mutation authority remains narrow, revocable, and rate-limited. A future non-canonical Offer Buffer separates receiving an offer from deciding to remember it.</li>
     <li><strong>Phase 4 — Governance workflows.</strong> Proposals, disputes, validated needs, decisions.</li>
     <li><strong>Phase 5 — Financial support.</strong> Donations and transparent expenditure, only after the needs process works, and never in exchange for influence.</li>
