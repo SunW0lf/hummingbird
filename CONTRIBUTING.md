@@ -27,4 +27,4 @@ Significant architectural changes should include a new Architecture Decision Rec
 
 ## Security issues
 
-Do **not** open a public issue containing security-vulnerability details. See [SECURITY.md](SECURITY.md) for current reporting guidance. GitHub private vulnerability reporting is the intended private channel but remains a Phase 1 closeout item until its public reporting affordance is explicitly verified ([OQ-SECURITY-VULN-REPORTING](docs/governance/OPEN_QUESTIONS.md#oq-security-vuln-reporting)).
+Do **not** open a public issue containing security-vulnerability details. GitHub private vulnerability reporting is enabled for this repository; use **Security → Report a vulnerability** to submit details privately to the maintainer. See [SECURITY.md](SECURITY.md) for the authoritative reporting and security guidance.

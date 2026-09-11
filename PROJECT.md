@@ -21,7 +21,7 @@ Hummingbird is a public commons for participation, deliberation, contribution, a
 
 ## Current phase
 
-**Phase 1 is in final security verification; the Phase 2 read-only commons contract is accepted and implementation is queued immediately behind Phase 1 closeout.** Phase 0 — Foundation is complete. See [ROADMAP.md](ROADMAP.md).
+**Phase 2 — Read-Only Commons is in progress.** Phase 0 — Foundation and Phase 1 — Public Charter Site are complete. See [ROADMAP.md](ROADMAP.md).
 
 ## Technology constraints
 
@@ -34,12 +34,14 @@ Hummingbird is a public commons for participation, deliberation, contribution, a
 
 - GitHub is the canonical source of truth for code, docs, migrations, deployment config, infrastructure scripts, and operational scripts.
 - Cloudflare Pages hosts the deployed site.
-- Cloudflare D1 is the planned initial Phase 2 persistence engine; canonical data remains portable and versioned per [DATA_MODEL.md](DATA_MODEL.md) and [ADR 0010](docs/decisions/0010-phase2-read-only-commons-contract.md).
+- Cloudflare D1 is the initial Phase 2 persistence engine; canonical data remains portable and versioned per [DATA_MODEL.md](DATA_MODEL.md) and [ADR 0010](docs/decisions/0010-phase2-read-only-commons-contract.md).
 - Production deployment occurs only from protected `main`, only after required CI passes.
 
 ## Data posture
 
-Phase 2 uses small canonical documents, minimal events, typed relationships, rebuildable derived projections, and explicit retention limits. The authoritative retention periods are in [SECURITY.md](SECURITY.md); they are no longer an open Phase 2 question.
+Phase 2 uses small canonical documents, minimal events, typed relationships, rebuildable derived projections, and explicit retention limits. The authoritative retention periods are in [SECURITY.md](SECURITY.md).
+
+Phase 2 is deliberately read-only from the public participant perspective. Seed/import operations are steward-controlled while storage, public projections, backup/restore, and publication-buffer behavior are exercised before any public submission surface exists.
 
 ## Major open questions
 
@@ -48,4 +50,3 @@ The authoritative unresolved list is [docs/governance/OPEN_QUESTIONS.md](docs/go
 - [OQ-ARCH-FRAMEWORK](docs/governance/OPEN_QUESTIONS.md#oq-arch-framework) — final application framework/runtime for interactive phases (Phase 3+) — deferred until the read-only commons exists.
 - Governance structure specifics (facilitation model, amendment thresholds, emergency authority) — see [GOVERNANCE.md](GOVERNANCE.md) and the registry's Governance section.
 - [OQ-PROJECT-LEGAL-STRUCTURE](docs/governance/OPEN_QUESTIONS.md#oq-project-legal-structure) — legal/organizational structure for Hummingbird as an entity, if any.
-- [OQ-SECURITY-VULN-REPORTING](docs/governance/OPEN_QUESTIONS.md#oq-security-vuln-reporting) — final Phase 1 verification of a genuinely private vulnerability-reporting path.

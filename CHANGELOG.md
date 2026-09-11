@@ -2,9 +2,12 @@
 
 This records meaningful releases and changes, not a raw Git log.
 
-## Unreleased — Phase 1 closeout / Phase 2 entry
+## Unreleased — Phase 2: Read-Only Commons
 
-- Made the GitHub repository public and activated protected `main` with required `Checks, test, build`; GitHub now reports branch protection enforcement level `everyone`, including the steward/admin.
+- Completed Phase 1 on 2026-09-10 (Pacific Time) and formally entered Phase 2 — Read-Only Commons.
+- Enabled GitHub private vulnerability reporting, secret scanning, push protection, Dependabot alerts/security updates, and CodeQL default setup as the public-repository Advanced Security baseline. CodeQL execution on `main` was independently observed succeeding; settings not exposed to the connected API are recorded as steward-confirmed rather than independently verified.
+- Resolved `OQ-SECURITY-VULN-REPORTING`; the designated private reporting path is GitHub's **Security → Report a vulnerability** flow. Public issues must not contain vulnerability details.
+- Made the GitHub repository public and activated protected `main` with required `Checks, test, build`; GitHub reports branch protection enforcement level `everyone`, including the steward/admin.
 - Restricted the repository Actions policy to repository-owned plus GitHub-created/explicitly approved actions, required full-length commit-SHA pinning, kept workflow-token permissions read-only, and retained SHA-pinned `actions/checkout` / `actions/setup-node` references.
 - Resolved `OQ-TRANSPARENCY-REPO-VISIBILITY`, `OQ-SECURITY-ACTIONS-HARDENING`, and `OQ-OPS-BRANCH-PROTECTION` in the substantive transparency/security/operations documents. Private-mode risk acceptances are no longer operative.
 - Accepted [ADR 0010](docs/decisions/0010-phase2-read-only-commons-contract.md), resolving the Phase 2 entry questions for contribution/proposal/need/event models, minimal workflow states, data retention, and operational-history transparency.
@@ -12,13 +15,13 @@ This records meaningful releases and changes, not a raw Git log.
 - Defined Phase 2 retention defaults: EPHEMERAL ≤7 days, OPERATIONAL 90 days, SECURITY_SENSITIVE 180 days by default, bounded PUBLIC_DELAYED handling, durable public institutional records, and no Phase 2 private-financial dataset.
 - Defined the public operational transparency approach: reference provider-authoritative raw logs rather than duplicating them, while publishing compact material operational events through the publication buffer with unnecessary correlation/security detail removed.
 - Rewrote the Mission to address the reader/process directly: Hummingbird explicitly tells the participant encountering it that the steward is building and maintaining the commons **for you**, while keeping origin-neutral participation intact.
-- Phase 1 remains in final security verification until private vulnerability reporting and the remaining GitHub Advanced Security controls are explicitly verified; Phase 2 implementation is queued immediately behind that closeout.
 
-## Phase 1 — Public Charter Site
+## Phase 1 — Public Charter Site (complete)
 
-- Established the authoritative Open Questions Registry ([docs/governance/OPEN_QUESTIONS.md](docs/governance/OPEN_QUESTIONS.md)) and cross-linked every prior `OPEN QUESTION` marker to it.
+- Established the authoritative Open Questions Registry ([docs/governance/OPEN_QUESTIONS.md](docs/governance/OPEN_QUESTIONS.md)) and cross-linked prior `OPEN QUESTION` markers to stable IDs.
 - Hardened the steady-state CI/deployment path: deterministic `npm ci`, high-severity dependency audit as a blocking check, external GitHub Actions pinned to exact commit SHAs, and production deployment fails closed when its Cloudflare configuration is missing.
-- Added CODEOWNERS, weekly Dependabot monitoring for npm and GitHub Actions, and ADR 0009's coordinated public-repository security transition plan.
+- Added CODEOWNERS, weekly Dependabot monitoring for npm and GitHub Actions, ADR 0009's coordinated public-repository security transition, protected `main`, restricted Actions, private vulnerability reporting, secret protection, Dependabot security controls, and CodeQL default setup.
+- Published the public Mission, Charter, Governance, Roadmap, Transparency, Changelog, Contributing, Open Questions, Security, support surface, and raw canonical reference documents.
 
 ## Phase 0 — Foundation (complete)
 

@@ -130,12 +130,6 @@ Raised in: [SECURITY.md](../../SECURITY.md).
 Review gate: during Phase 2.
 Status: OPEN.
 
-### OQ-SECURITY-VULN-REPORTING
-**Dedicated, genuinely private security contact address/process** (e.g. `security@datum.quest` via Cloudflare Email Routing or GitHub private vulnerability reporting). No public channel may be advertised until it technically exists.
-Raised in: [SECURITY.md](../../SECURITY.md), [CONTRIBUTING.md](../../CONTRIBUTING.md).
-Blocks: completion of Phase 1.
-Status: IN PROGRESS — repository is public; intended solution remains GitHub private vulnerability reporting, pending explicit activation/verification of the public reporting affordance.
-
 ## Operations
 
 ### OQ-OPS-MONITORING-CADENCE
@@ -160,12 +154,12 @@ Status: OPEN — reviewed at the repository-publication gate; no distinct conten
 
 ## Index by phase gate
 
-- **Blocks entry into Phase 2:** none. The former Phase 2 entry questions are resolved in [ADR 0010](../decisions/0010-phase2-read-only-commons-contract.md), [DATA_MODEL.md](../../DATA_MODEL.md), [SECURITY.md](../../SECURITY.md), and [TRANSPARENCY.md](../../TRANSPARENCY.md).
-- **Blocks completion of Phase 1:** OQ-SECURITY-VULN-REPORTING. The remaining public-repository Advanced Security controls in `SECURITY.md` must also be explicitly verified before Phase 1 closeout.
+- **Blocks entry into Phase 2:** none. Phase 2 is in progress; its former entry questions are resolved in [ADR 0010](../decisions/0010-phase2-read-only-commons-contract.md), [DATA_MODEL.md](../../DATA_MODEL.md), [SECURITY.md](../../SECURITY.md), and [TRANSPARENCY.md](../../TRANSPARENCY.md).
+- **Blocks completion of Phase 1:** none. Phase 1 is complete.
 - **Blocks entry into Phase 3:** OQ-CHARTER-RIGHTS, OQ-CHARTER-EXCLUSION, OQ-CHARTER-PARTICIPANT-RESPONSIBILITIES, OQ-GOVERNANCE-EMERGENCY-AUTHORITY, OQ-GOVERNANCE-PROPOSALS, OQ-ARCH-FRAMEWORK, OQ-SECURITY-ACCESS-CONTROL-RETENTION, OQ-SECURITY-AUTHN-MODEL.
 - **Blocks entry into Phase 4:** OQ-GOVERNANCE-DISPUTES, OQ-GOVERNANCE-VALIDATED-NEEDS.
 - **Blocks entry into Phase 5:** OQ-PROJECT-LEGAL-STRUCTURE.
 - **Blocks C2 → C3 ratification:** OQ-GOVERNANCE-AMENDMENT-THRESHOLD.
 - **Review gates (non-blocking):** OQ-GOVERNANCE-STEWARD-SCOPE, OQ-GOVERNANCE-DECISION-PROCESS, OQ-GOVERNANCE-FACILITATION, OQ-GOVERNANCE-STEWARD-SUCCESSION, OQ-SECURITY-INCIDENT-RESPONSE, OQ-OPS-MONITORING-CADENCE, OQ-OPS-TOKEN-ROTATION-CADENCE, OQ-LEGAL-CONTENT-LICENSE.
 
-**Total unresolved: 21.**
+**Total unresolved: 20.**
