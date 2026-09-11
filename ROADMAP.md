@@ -27,7 +27,7 @@ No Hummingbird-owned participant accounts, voting, application-managed payments,
 
 ## Phase 2 — Read-Only Commons
 
-Status: **in progress**
+Status: **in progress — Phase 2E review/gate active**
 
 The Phase 2 data-model, workflow-state, retention, and operational-transparency entry gates are resolved in [DATA_MODEL.md](DATA_MODEL.md), [SECURITY.md](SECURITY.md), [TRANSPARENCY.md](TRANSPARENCY.md), and [ADR 0010](docs/decisions/0010-phase2-read-only-commons-contract.md).
 
@@ -94,50 +94,49 @@ Phase 2C proved the complete boundary rather than merely implementing static pag
 
 ### Phase 2D — Publication buffer, backup, and recovery
 
-Status: **in progress**
+Status: **complete**
 
-Phase 2D now focuses on durability and safe operational transparency rather than adding new participation features.
+Completed on 2026-09-11 through the [Phase 2D recovery protocol](docs/protocols/PHASE_2D_RECOVERY.md), [ADR 0004](docs/decisions/0004-publication-buffer.md), and [ADR 0017](docs/decisions/0017-phase2-publication-buffer-policy.md).
 
-Completed foundation in the current slice:
+Phase 2D proved durability and safe operational transparency without adding a new participation surface:
 
 - replaced the original Phase 0 backup/restore no-ops with a portable canonical backup bundle and guarded restore tooling;
 - defined the backup format as storage-independent canonical JSON plus SHA-256 record/bundle verification rather than a provider-only database snapshot;
 - added local CI recovery proof: export from one migrated local D1, verify the bundle, restore into a separately migrated empty D1, reconstruct canonical state, and deep-compare semantic equality;
-- restore refuses non-empty targets and remote restore remains deliberately disabled until a disposable recovery database is provisioned;
-- documented the recovery order, independent-storage requirement, and low-write recovery-point rule in [docs/protocols/PHASE_2D_RECOVERY.md](docs/protocols/PHASE_2D_RECOVERY.md);
-- corrected stale operational/transparency documentation that still described Hummingbird as having no production database.
+- ran the read-only exporter against current production canonical D1 state and verified the resulting portable bundle;
+- retained an independently retrievable 30-day backup artifact only after proving the complete production backup exactly matched canonical material already public;
+- provisioned an isolated disposable D1 recovery database, applied repository-controlled migration `0001_canonical_v1.sql`, and verified an empty compatible schema;
+- restored the production backup there and proved deep semantic equality after recovery;
+- rebuilt the machine-readable public projection from recovered canonical state and proved byte equality with expected publication output;
+- deleted the disposable recovery database after verification and never used production as a restore target;
+- documented the failed trigger/auth attempts as recovery observations rather than hiding them or calling them success;
+- exercised the publication buffer with the recovery event: consequential facts were published in `TRANSPARENCY.md` while credentials, temporary provider identifiers, exact provider-request timing, raw logs, and unnecessary correlation metadata were omitted;
+- implemented the Phase 2 publication buffer as a protected Git review/release boundary rather than a new queue, table, or duplicate telemetry store.
 
-Remaining work:
-
-- run the read-only portable backup exporter against current production D1 and independently retain/verify the resulting bundle;
-- provision an empty disposable replacement D1 database and apply repository-controlled migrations;
-- restore the verified production bundle there and prove semantic equivalence;
-- rebuild the public read projection from restored state and compare it with expected publication output;
-- define and exercise publication-buffer boundaries for delayed/coarsened public operational records, using the recovery drill as a candidate material event;
-- document failure behavior, recovery observations, and the smallest acceptable recovery point;
-- extend health/operational checks only where they prove real recovery properties rather than accumulating telemetry.
-
-**Exit:** backup and restore have been exercised successfully against current production canonical state through an isolated replacement database, canonical/read-model equivalence is demonstrated after recovery, and public transparency does not expose security-sensitive or unnecessary correlation metadata.
+**Exit satisfied:** backup and restore were exercised successfully against current production canonical state through an isolated replacement database; canonical/read-model equivalence was demonstrated after recovery; the replacement was removed; and the first real public operational record proved that transparency can preserve meaningful outcomes without exposing security-sensitive or unnecessary correlation metadata.
 
 ### Phase 2E — Phase review and Phase 3 gate
 
-Status: **planned**
+Status: **in progress — review/gate only; Phase 3 remains blocked**
+
+Phase 2E is intentionally a decision/review phase rather than a feature sprint.
 
 - Review the Seed Bank experiment and document what it taught about participation, moderation, provider dependence, and abuse controls.
 - Resolve or deliberately defer the Phase 2 review-gate questions for steward scope, non-technical decision process, steward succession, incident response, monitoring cadence, and deployment-token rotation.
 - Confirm every Phase 3 blocking question has a substantive decision rather than an implementation accident.
 - Review [ADR 0016](docs/decisions/0016-offers-and-the-offer-buffer.md) and the [Phase 3 Offer Buffer working design](docs/protocols/PHASE_3_OFFER_BUFFER_DESIGN.md) against the resolved Phase 3 rights, governance, security, and runtime decisions before implementation begins.
+- Review the temporary D1 recovery credential after the Phase 2D exercise and decide whether to revoke it at expiration or replace it with a longer-lived recovery-only operating procedure; it must not become a general deployment credential by inertia.
 
 **Phase 2 completion requires all of the following:**
 
-1. migrations reproduce the persistence layer from empty state;
-2. canonical reference/import data round-trips without loss of meaning;
-3. public projections are rebuildable and require no participant origin classification;
-4. the external-ingress → deliberate-admission boundary is demonstrated;
-5. publication-buffer behavior is tested;
-6. backup and restore are documented and exercised;
-7. no secret/security-sensitive fields are exposed by the public read model;
-8. Phase 2 review-gate decisions are recorded or explicitly deferred with rationale.
+1. migrations reproduce the persistence layer from empty state — **satisfied**;
+2. canonical reference/import data round-trips without loss of meaning — **satisfied**;
+3. public projections are rebuildable and require no participant origin classification — **satisfied**;
+4. the external-ingress → deliberate-admission boundary is demonstrated — **satisfied**;
+5. publication-buffer behavior is tested — **satisfied**;
+6. backup and restore are documented and exercised — **satisfied**;
+7. no secret/security-sensitive fields are exposed by the public read model — **satisfied for current Phase 2 surfaces**;
+8. Phase 2 review-gate decisions are recorded or explicitly deferred with rationale — **remaining Phase 2E work**.
 
 ## Phase 3 — Controlled Participation
 
@@ -171,7 +170,7 @@ Future broader access may offer multiple **offer delivery options**. Those optio
 
 The Seed Bank concept will be reviewed and may be replaced or supplemented by Hummingbird-owned offer-making once the controlled write path is ready.
 
-Entry into Phase 3 remains blocked by the constitutional, governance, architecture, and security questions listed in the Open Questions Registry. A working Phase 2 database or accepted Offer Buffer design is not permission to bypass those decisions.
+Entry into Phase 3 remains blocked by the constitutional, governance, architecture, and security questions listed in the Open Questions Registry. A working Phase 2 database, successful recovery drill, or accepted Offer Buffer design is not permission to bypass those decisions.
 
 ### Future participatory-space track — after basic controlled participation
 
