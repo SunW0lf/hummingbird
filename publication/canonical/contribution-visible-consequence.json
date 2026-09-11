@@ -1,0 +1,22 @@
+{
+  "id": "contribution-visible-consequence",
+  "type": "contribution",
+  "schema_version": 1,
+  "created_at": "2026-09-11T13:43:54Z",
+  "state": "published",
+  "content": {
+    "title": "Visible consequence without engagement pressure",
+    "body": "A commons can make participation matter without engagement pressure by making consequences traceable: showing when an idea is connected to related work, summarized, challenged, deferred, declined, or admitted into more durable memory, while keeping quiet observation first-class and avoiding feed mechanics optimized for return frequency.",
+    "format": "text/plain"
+  },
+  "relationships": [],
+  "provenance": {
+    "source_ref": "https://github.com/SunW0lf/hummingbird/issues/15#issuecomment-5635319848",
+    "kind": "seed_bank_comment",
+    "admission_note": "Synthesized from an exploratory public Seed Bank contribution; canonical admission does not make it project policy or governance approval."
+  },
+  "publication": {
+    "visibility": "PUBLIC",
+    "released": true
+  }
+}
