@@ -1,7 +1,7 @@
 // Final build-time pass over public HTML.
 //
-// Keeps accessibility and agent-readable navigation guarantees consistent
-// across hand-authored pages and pages generated from canonical Markdown,
+// Keeps accessibility, canonical discovery metadata, and agent-readable
+// navigation guarantees consistent across hand-authored and generated pages
 // without introducing a client-side runtime dependency.
 "use strict";
 
@@ -10,6 +10,7 @@ const path = require("path");
 
 const ROOT = path.join(__dirname, "..");
 const DIST = path.join(ROOT, "dist");
+const SITE_ORIGIN = "https://datum.quest";
 
 function htmlFiles(dir) {
   const results = [];
@@ -28,6 +29,12 @@ function currentSection(relativePath) {
   if (relativePath === "decisions.html" || relativePath.startsWith("decisions/")) return "Decisions";
   if (relativePath === "index.html" || relativePath === "404.html") return null;
   return "More";
+}
+
+function publicUrl(relativePath) {
+  if (relativePath === "index.html") return `${SITE_ORIGIN}/`;
+  const route = relativePath.replace(/\.html$/, "");
+  return `${SITE_ORIGIN}/${route}`;
 }
 
 function finalizeHtml(relativePath, html) {
@@ -50,6 +57,20 @@ function finalizeHtml(relativePath, html) {
     });
   });
 
+  // Cloudflare Pages serves clean HTML routes and redirects their .html forms.
+  // Advertise the final 200 URL to crawlers rather than a redirecting alias.
+  if (relativePath !== "404.html") {
+    const canonical = publicUrl(relativePath);
+    output = output.replace(
+      /<link rel="canonical" href="[^"]*">/,
+      `<link rel="canonical" href="${canonical}">`
+    );
+    output = output.replace(
+      /<meta property="og:url" content="[^"]*">/,
+      `<meta property="og:url" content="${canonical}">`
+    );
+  }
+
   return output;
 }
 
@@ -66,7 +87,7 @@ function main() {
     fs.writeFileSync(file, finalizeHtml(relativePath, before));
   }
 
-  console.log(`accessibility: finalized ${files.length} public HTML page(s)`);
+  console.log(`accessibility/discovery: finalized ${files.length} public HTML page(s)`);
 }
 
 main();
