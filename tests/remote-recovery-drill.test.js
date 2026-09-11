@@ -34,7 +34,7 @@ const changelog = read("CHANGELOG.md");
 
 for (const marker of [
   "branches: [main]",
-  "startsWith(github.event.head_commit.message, 'Phase 2D: run remote recovery drill')",
+  `if: "\${{ startsWith(github.event.head_commit.message, 'Phase 2D: run remote recovery drill') }}"`,
   "secrets.CLOUDFLARE_D1_RECOVERY_TOKEN",
   "permissions:\n  contents: read",
   "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
@@ -43,6 +43,9 @@ for (const marker of [
   if (!workflow.includes(marker)) fail(`remote recovery workflow is missing guard: ${marker}`);
 }
 
+if (/^\s*if:\s+startsWith\(/m.test(workflow)) {
+  fail("remote recovery workflow condition is an unquoted YAML scalar; colon-bearing trigger text can invalidate the workflow");
+}
 if (workflow.includes("pull_request:")) fail("remote recovery workflow must not run on pull_request");
 if (workflow.includes("secrets.CLOUDFLARE_API_TOKEN")) fail("remote recovery workflow must not use the Pages deployment token");
 if (workflow.includes("write-all")) fail("remote recovery workflow requests broad GitHub write permissions");
@@ -86,6 +89,7 @@ if (failures > 0) {
 }
 
 pass("Remote recovery drill is main-only, one-shot gated, and uses the separate D1 recovery credential");
+pass("Recovery trigger is YAML-safe and cannot regress to the invalid unquoted colon-bearing scalar");
 pass("Production access remains backup/read-only while restore writes are bound to a disposable non-production UUID");
 pass("Independent artifact retention is allowed only for canonical state already proven public-equivalent");
 console.log("\nAll remote recovery drill safety checks passed.");
