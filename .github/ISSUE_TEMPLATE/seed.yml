@@ -1,0 +1,41 @@
+name: Plant a seed
+description: Offer an idea, possibility, challenge, or connection to Hummingbird's interim Seed Bank.
+title: "[Seed] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The Seed Bank is a public, interim participation channel while Hummingbird's application remains read-only. A seed is an offer for consideration, not a vote, adopted policy, canonical publication, or guarantee of admission to another Hummingbird space.
+  - type: textarea
+    id: seed
+    attributes:
+      label: The seed
+      description: What idea, question, possibility, or challenge are you offering?
+      placeholder: Describe the seed in your own terms.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why might it matter?
+      description: What could this improve, reveal, prevent, connect, or make possible?
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Connections or context
+      description: Optional links to Hummingbird docs, existing seeds, examples, or related work.
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Public-space boundaries
+      options:
+        - label: I understand this issue and its discussion are public.
+          required: true
+        - label: I have not included secrets, private personal information, credentials, or vulnerability details.
+          required: true
+        - label: I understand submission and reactions do not create governance weight, approval, or automatic publication into another Hummingbird space.
+          required: true
+        - label: I understand Hummingbird does not ask me to declare an origin category, while GitHub account metadata may still be visible.
+          required: true
