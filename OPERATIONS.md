@@ -2,13 +2,13 @@
 
 ## Deployment
 
-Production deployment is triggered only from the protected `main` branch after CI (lint, test, build) passes. See `.github/workflows/ci.yml` and `scripts/deploy`.
+Production deployment is triggered from `main` only after the CI verification job (tests, build, and dependency audit) succeeds. See `.github/workflows/ci.yml` and `scripts/deploy`.
 
 ```text
 main branch → CI passes → scripts/deploy → Cloudflare Pages → datum.quest
 ```
 
-Manual/local deployment (steward only, emergencies): `./scripts/deploy`. Requires `CLOUDFLARE_API_TOKEN` to be set locally; the script refuses to run without it rather than failing silently.
+The normal production path is repository change → CI → deployment. Manual/local deployment is reserved for steward emergency recovery: `./scripts/deploy`. It requires `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` to be set locally and refuses to run when either is missing.
 
 ## Backup
 
@@ -26,7 +26,7 @@ Cloudflare Pages retains prior deployments. `./scripts/rollback` lists recent de
 
 ## Monitoring
 
-`./scripts/healthcheck` checks that `https://datum.quest` returns a successful response with expected content. Open question: [OQ-OPS-MONITORING-CADENCE](docs/governance/OPEN_QUESTIONS.md#oq-ops-monitoring-cadence) — continuous/scheduled monitoring (e.g., a GitHub Actions cron job) versus manual checks only.
+`./scripts/healthcheck` checks that `https://datum.quest` returns a successful response with expected content. Open question: [OQ-OPS-MONITORING-CADENCE](docs/governance/OPEN_QUESTIONS.md#oq-ops-monitoring-cadence) — continuous/scheduled monitoring (e.g. a GitHub Actions cron job) versus manual checks only.
 
 ## Upgrades
 
@@ -42,12 +42,13 @@ To reconstruct Hummingbird from scratch, someone needs:
 
 1. This GitHub repository (or a clone/mirror of it).
 2. The Cloudflare API Token secret (or the ability to generate a new one with the same scope).
-3. A fresh Cloudflare Pages project connected to this repository.
-4. This documentation.
+3. The Cloudflare account ID.
+4. A fresh Cloudflare Pages project connected to this repository.
+5. This documentation.
 
 ## Repository protection
 
-Branch protection on `main` is currently unavailable: GitHub disables branch protection rules for private repositories on this account's plan. There is no enforced required-review or required-status-check GitHub rule; the only enforcement is the CI workflow's own `deploy` job depending on the `verify` job succeeding. Open question: [OQ-OPS-BRANCH-PROTECTION](docs/governance/OPEN_QUESTIONS.md#oq-ops-branch-protection).
+Branch protection on `main` is currently unavailable: GitHub disables branch protection rules for private repositories on this account's plan. There is no enforced required-review or required-status-check GitHub rule. The deployment workflow still refuses to deploy until its `verify` job succeeds, but GitHub itself does not prevent a direct push to `main`. The working convention is therefore branch → pull request → green CI → merge. Open question: [OQ-OPS-BRANCH-PROTECTION](docs/governance/OPEN_QUESTIONS.md#oq-ops-branch-protection).
 
 ## Routine steward tasks
 

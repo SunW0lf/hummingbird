@@ -12,6 +12,10 @@
 //  4. Nothing except app/_redirects still links to the old charter-candidate
 //     path now that /charter is canonical.
 //  5. Phase 0 is not described as "in progress" or "planned" anywhere.
+//  6. Current operations/deploy copy does not claim main has branch protection.
+//  7. The public Security page reflects the Phase 1 private-reporting gate.
+//  8. External GitHub Actions are pinned to immutable 40-character SHAs.
+//  9. Production CI does not silently skip deployment as a Phase 0 bootstrap case.
 
 const fs = require("fs");
 const path = require("path");
@@ -130,6 +134,64 @@ for (const file of [...docFiles, ...htmlFiles]) {
   }
 }
 pass("Phase 0 is not described as in progress/planned anywhere");
+
+// 6. Current operational sources must not claim main is protected while the
+// authoritative repository-protection section says branch protection is unavailable.
+for (const relativePath of ["OPERATIONS.md", "scripts/deploy"]) {
+  const file = path.join(ROOT, relativePath);
+  const content = fs.readFileSync(file, "utf8");
+  if (/protected\s+`?main`?\s+branch/i.test(content) || /protected\s+main\s+branch/i.test(content)) {
+    fail(`${relativePath} incorrectly claims main is a protected branch`);
+  }
+}
+pass("Operational sources do not overstate main-branch protection");
+
+// 7. The public Security page must reflect the current Phase 1 gate rather
+// than implying private vulnerability reporting can wait until Phase 3.
+const securityPagePath = path.join(DIST_DIR, "security.html");
+const securityPage = fs.readFileSync(securityPagePath, "utf8");
+if (securityPage.includes("before Hummingbird accepts public contributions in Phase 3")) {
+  fail("dist/security.html contains the stale Phase 3 vulnerability-reporting deadline");
+}
+if (!securityPage.includes("blocker for completing Phase 1 or publishing the repository")) {
+  fail("dist/security.html does not state the Phase 1/repository-publication security-contact gate");
+} else {
+  pass("Public Security page states the current private-reporting gate");
+}
+
+// 8. External Actions in the workflow must use immutable full commit SHAs.
+const workflowPath = path.join(ROOT, ".github", "workflows", "ci.yml");
+const workflow = fs.readFileSync(workflowPath, "utf8");
+const usesPattern = /uses:\s+([^\s@]+)@([^\s#]+)/g;
+let actionMatch;
+let unpinnedActions = 0;
+while ((actionMatch = usesPattern.exec(workflow)) !== null) {
+  const action = actionMatch[1];
+  const ref = actionMatch[2];
+  if (action.startsWith("./")) continue;
+  if (!/^[0-9a-f]{40}$/i.test(ref)) {
+    fail(`.github/workflows/ci.yml uses ${action}@${ref} instead of an immutable commit SHA`);
+    unpinnedActions += 1;
+  }
+}
+if (unpinnedActions === 0) {
+  pass("External GitHub Actions are pinned to immutable commit SHAs");
+}
+
+// 9. A missing production deploy credential is no longer an expected bootstrap
+// condition. scripts/deploy owns fail-closed validation of required values.
+if (/expected during Phase 0 bootstrap|skipping deploy/i.test(workflow)) {
+  fail(".github/workflows/ci.yml can still silently skip production deployment as a Phase 0/bootstrap case");
+} else {
+  pass("Production CI no longer silently skips deployment for missing bootstrap configuration");
+}
+
+const deployScript = fs.readFileSync(path.join(ROOT, "scripts", "deploy"), "utf8");
+if (/Pages:Edit,\s*DNS:Edit/i.test(deployScript)) {
+  fail("scripts/deploy still claims the deployment token requires DNS:Edit");
+} else {
+  pass("Deploy script no longer overstates Cloudflare token scope");
+}
 
 if (failures > 0) {
   console.error(`\n${failures} consistency check(s) failed.`);

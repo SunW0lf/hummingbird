@@ -11,25 +11,20 @@ permissions:
 
 jobs:
   verify:
-    name: Lint, test, build
+    name: Checks, test, build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
 
       - name: Set up Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: "22"
           cache: "npm"
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Lint
-        run: |
-          echo "No linter configured yet for the static site (plain HTML/CSS)."
-          echo "This step is intentionally a documented placeholder rather than a fake pass - see CONTRIBUTING.md."
 
       - name: Test
         run: ./scripts/test
@@ -47,10 +42,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
 
       - name: Set up Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: "22"
           cache: "npm"
@@ -61,14 +56,8 @@ jobs:
       - name: Build
         run: ./scripts/build
 
-      - name: Deploy (skips gracefully until CLOUDFLARE_API_TOKEN secret exists)
+      - name: Deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
-        run: |
-          if [ -z "${CLOUDFLARE_API_TOKEN:-}" ]; then
-            echo "CLOUDFLARE_API_TOKEN secret is not yet configured - skipping deploy."
-            echo "This is expected during Phase 0 bootstrap. See docs/decisions/0005-ci-gated-production-deployment.md."
-            exit 0
-          fi
-          ./scripts/deploy
+        run: ./scripts/deploy

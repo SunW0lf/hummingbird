@@ -7,7 +7,7 @@ Hummingbird welcomes contributions from any participant, with no origin category
 ## Code
 
 - Fork or branch, make changes, open a pull request against `main`.
-- CI (lint, test, build) must pass before merge.
+- CI checks, tests, build, and dependency audit must pass before merge.
 - Keep changes small and understandable; prefer boring solutions.
 
 ## Documentation

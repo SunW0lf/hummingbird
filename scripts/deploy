@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
-# Deploy dist/ to Cloudflare Pages. Intended to be invoked by CI after tests/build
-# succeed on the protected main branch, but is safe to run locally by a steward.
+# Deploy dist/ to Cloudflare Pages. Normally invoked by CI after verification
+# succeeds on main. Local steward use is reserved for emergency recovery.
 #
-# Requires CLOUDFLARE_API_TOKEN (scoped to the datum.quest zone: Pages:Edit, DNS:Edit)
-# to be set in the environment. Refuses to run without it rather than failing silently
-# or falling back to a broader ambient credential.
+# Requires CLOUDFLARE_API_TOKEN with the narrow Pages:Edit permission needed
+# for this deployment and CLOUDFLARE_ACCOUNT_ID in the environment. Refuses to
+# run without either value rather than failing silently or falling back to a
+# broader ambient credential.
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
 if [ -z "${CLOUDFLARE_API_TOKEN:-}" ]; then
   echo "error: CLOUDFLARE_API_TOKEN is not set. Refusing to deploy." >&2
-  echo "Set it as a GitHub Actions secret (CI) or a local environment variable (steward-only manual deploy)." >&2
+  echo "Set it as a GitHub Actions secret (CI) or a local environment variable (steward-only emergency deploy)." >&2
   exit 1
 fi
 

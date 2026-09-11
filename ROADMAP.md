@@ -9,7 +9,7 @@ Status: **complete** — verified against this checklist and closed out; see [CH
 - Local and GitHub repository
 - Documentation skeleton
 - Minimal static application skeleton
-- CI (lint, test, build)
+- CI (consistency checks, tests, build, dependency audit)
 - Deployment scripts and server/DNS connection
 - HTTPS on `datum.quest`
 - Backup/restore process (trivial until a database exists)
