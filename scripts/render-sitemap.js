@@ -23,6 +23,11 @@ function xmlEscape(value) {
   return String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
+function publicUrl(route) {
+  if (route === "index.html") return `${SITE_ORIGIN}/`;
+  return `${SITE_ORIGIN}/${route.replace(/\.html$/, "")}`;
+}
+
 function main() {
   if (!fs.existsSync(DIST)) {
     console.error("error: dist/ does not exist. Run the build copy/render steps first.");
@@ -33,7 +38,7 @@ function main() {
     .map((file) => path.relative(DIST, file).replace(/\\/g, "/"))
     .filter((route) => route !== "404.html")
     .sort()
-    .map((route) => route === "index.html" ? `${SITE_ORIGIN}/` : `${SITE_ORIGIN}/${route}`);
+    .map(publicUrl);
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n` +
     `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
@@ -41,7 +46,7 @@ function main() {
     `\n</urlset>\n`;
 
   fs.writeFileSync(path.join(DIST, "sitemap.xml"), xml);
-  console.log(`discovery: sitemap.xml (${urls.length} public HTML routes)`);
+  console.log(`discovery: sitemap.xml (${urls.length} clean public HTML routes)`);
 }
 
 main();

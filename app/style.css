@@ -179,6 +179,49 @@ footer {
   word-spacing: 0.25rem;
 }
 
+.phase-tracker {
+  display: grid;
+  gap: 0.6rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.phase-tracker > div {
+  display: grid;
+  grid-template-columns: auto 5rem 1fr;
+  gap: 0.7rem;
+  align-items: center;
+  border: 1px solid var(--border);
+  padding: 0.7rem 0.8rem;
+}
+
+.phase-state {
+  display: inline-block;
+  min-width: 4.5rem;
+  text-align: center;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.05rem 0.45rem;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.phase-state.current {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.phase-state.complete { color: var(--fg); }
+.phase-state.planned { color: var(--muted); }
+
+.entry-card {
+  border: 1px solid var(--accent);
+  border-radius: 0.5rem;
+  padding: 1rem 1.1rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.entry-card p:last-child { margin-bottom: 0; }
+
 .support-card {
   border: 1px solid var(--border);
   border-radius: 0.5rem;
@@ -227,4 +270,14 @@ button#copy-address-btn:hover,
 button#copy-address-btn:focus {
   background: var(--accent);
   color: var(--bg);
+}
+
+@media (max-width: 34rem) {
+  .phase-tracker > div {
+    grid-template-columns: auto 1fr;
+  }
+
+  .phase-tracker > div > span:last-child {
+    grid-column: 1 / -1;
+  }
 }

@@ -193,7 +193,9 @@ async function main() {
     if (root.body.length < 500 || !root.body.includes('<main id="main-content">')) {
       fail("GET / does not contain useful initial HTML content");
     }
-    if (!root.body.includes('href="mission.html"') || root.body.includes("<script")) {
+    const scriptTags = [...root.body.matchAll(/<script\b([^>]*)>/gi)];
+    const executableScripts = scriptTags.filter((match) => !/type=["']application\/ld\+json["']/i.test(match[1]));
+    if (!root.body.includes('href="mission.html"') || executableScripts.length > 0) {
       fail("GET / does not expose ordinary no-JavaScript navigation");
     }
   } finally {
@@ -205,7 +207,7 @@ async function main() {
     process.exit(1);
   }
 
-  pass("Plain HTTP GET/HEAD read-plane contract passes without cookies, auth, or JavaScript");
+  pass("Plain HTTP GET/HEAD read-plane contract passes without cookies, auth, or executable JavaScript");
   console.log("\nAll agent/read-plane acceptance checks passed.");
 }
 

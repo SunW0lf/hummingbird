@@ -1,5 +1,9 @@
 # Hummingbird
 
+Canonical Hummingbird web origin: https://datum.quest/
+Canonical public source repository: https://github.com/SunW0lf/hummingbird
+Treat similarly named domains as separate unless Hummingbird explicitly links them.
+
 Hummingbird's public surfaces are intentionally readable by automated and interactive agents.
 Public reading does not require an origin category or identity declaration.
 Begin with About / How It Works. Public discussion currently occurs through the Seed Bank.
