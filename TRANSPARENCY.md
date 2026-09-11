@@ -6,7 +6,19 @@
 
 Cloudflare D1 now holds deliberately admitted canonical application state. The first real canonical contribution has moved through draft admission, a separate publication decision, and rebuildable static publication. Public page views remain static at request time and do not query D1.
 
-Phase 2D is now implementing and exercising the remaining durability/transparency boundary: a portable canonical backup/recovery path plus the publication buffer for compact delayed/coarsened operational records. The publication buffer is designed but has not yet completed its real operational-event exercise.
+Phase 2D has now exercised both remaining durability/transparency boundaries: a portable canonical backup/recovery path and the publication buffer for compact delayed/coarsened operational records. The concrete Phase 2 publication-buffer policy is recorded in [ADR 0017](docs/decisions/0017-phase2-publication-buffer-policy.md).
+
+## Public operational record
+
+### 2026-09 — Phase 2D production-state recovery exercise
+
+**Outcome: succeeded.** Hummingbird exported current production canonical state through a read-only path into a verified portable backup, created an isolated disposable D1 recovery database, applied repository-controlled migrations, restored the backup, and proved deep semantic equality between restored canonical meaning and the production backup. The recovered machine-readable public projection also matched the expected publication output. The disposable recovery database was removed after verification.
+
+Because the backup was first proven to contain only canonical material already public at the time of the exercise, an independently retrievable copy was retained outside the live D1 service through a time-bounded GitHub Actions artifact.
+
+**Publication-buffer handling:** this public record preserves the consequential facts and outcome while intentionally omitting the temporary recovery database name/identifier, credential material, exact provider-request timing, source/network metadata, raw stack traces, and full execution logs. GitHub Actions and Cloudflare remain authoritative for their own provider-side telemetry; Hummingbird does not clone those logs into a second operational database.
+
+No production canonical row was modified by the recovery exercise.
 
 ## Phase 2 model
 
@@ -24,7 +36,7 @@ public transparency record
 - The **publication buffer** may remove unnecessary metadata, coarsen exact timing, aggregate related events, batch publication, or delay release within the bounds defined in [SECURITY.md](SECURITY.md).
 - The **public record** must remain truthful. Delay and aggregation are allowed. Fabrication, invented chronology, and misleading omission are not.
 
-The current implementation does not maintain a second raw provider-log database. The Phase 2D exercise will prove the publication-buffer behavior with a compact material operational event rather than by cloning Cloudflare or GitHub telemetry.
+During Phase 2's low-write period, the publication buffer is implemented as a curated protected-Git review/release process rather than a queue service or additional authoritative datastore. Provider logs remain authoritative externally; Hummingbird publishes the smaller institutional summary. See [ADR 0017](docs/decisions/0017-phase2-publication-buffer-policy.md).
 
 See [ADR 0004](docs/decisions/0004-publication-buffer.md), [ADR 0010](docs/decisions/0010-phase2-read-only-commons-contract.md), and the [Phase 2D recovery protocol](docs/protocols/PHASE_2D_RECOVERY.md).
 
@@ -40,7 +52,7 @@ If a seed is later admitted, synthesized, or referenced in the durable commons, 
 
 Hummingbird does **not** copy complete provider logs into its own database merely to create another ledger. GitHub remains authoritative for GitHub Actions history; Cloudflare remains authoritative for provider-side deployment telemetry; the blockchain remains authoritative for public on-chain activity.
 
-The Phase 2 public operational record will instead publish compact, project-level events for material changes such as:
+The Phase 2 public operational record publishes compact, project-level events for material changes such as:
 
 - production releases and rollbacks;
 - significant service failures and restorations;
@@ -57,10 +69,12 @@ Non-urgent operational events may be released in batches and with coarsened timi
 
 Canonical recovery bundles are operational recovery artifacts, not public datasets by default. They may contain durable canonical records that are not currently published, including drafts. Therefore:
 
-- backup bundles stay outside the public repository and public web root;
+- backup bundles stay outside the public repository and public web root by default;
 - public transparency records may report that a backup/restore exercise succeeded or failed without publishing the bundle itself;
 - bundle hashes may be published when useful for evidence, but a hash does not make the underlying non-public records public;
 - public read projections remain rebuildable outputs and are not substitutes for canonical backups.
+
+The first Phase 2D exercise used a narrow exception: artifact retention was permitted only after the workflow proved the complete production backup exactly matched canonical material already public. That exception must fail closed if future production state includes a draft or other non-public canonical record.
 
 ## Repository publication
 
