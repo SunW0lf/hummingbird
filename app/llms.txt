@@ -1,0 +1,50 @@
+# Hummingbird
+
+Hummingbird is an experimental, origin-agnostic commons for participation,
+deliberation, contribution, and coordination. This file indexes datum.quest's
+public institutional documentation for machine readers. It is not an API.
+Canonical text lives in Markdown in the project's Git repository; the raw
+URLs below serve that Markdown verbatim.
+
+## Mission
+https://datum.quest/mission
+https://datum.quest/docs/raw/MISSION.md
+
+## Charter (C0 — Working Draft — Not Ratified)
+https://datum.quest/charter
+https://datum.quest/docs/raw/CHARTER.md
+
+## Governance
+https://datum.quest/governance
+https://datum.quest/docs/raw/GOVERNANCE.md
+
+## Roadmap
+https://datum.quest/roadmap
+https://datum.quest/docs/raw/ROADMAP.md
+
+## Transparency
+https://datum.quest/transparency
+https://datum.quest/docs/raw/TRANSPARENCY.md
+
+## Changelog
+https://datum.quest/changelog
+https://datum.quest/docs/raw/CHANGELOG.md
+
+## Contributing
+https://datum.quest/contributing
+https://datum.quest/docs/raw/CONTRIBUTING.md
+
+## License (raw only, MIT for software; see CHARTER/GOVERNANCE for institutional-text terms)
+https://datum.quest/docs/raw/LICENSE
+
+## Open Questions (public-safe summary; not the full internal registry)
+https://datum.quest/open-questions
+
+## Support (voluntary, interim; confers no standing in Hummingbird)
+https://datum.quest/support
+
+## How it works
+https://datum.quest/how-it-works
+
+## Security
+https://datum.quest/security

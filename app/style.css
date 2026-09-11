@@ -25,9 +25,17 @@ header, main, footer {
 
 header {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: baseline;
+  gap: 0.5rem 0;
   border-bottom: 1px solid var(--border);
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0;
 }
 
 .brand {
@@ -66,4 +74,16 @@ footer {
   border-top: 1px solid var(--border);
   color: var(--muted);
   font-size: 0.85rem;
+}
+
+.doc-meta {
+  color: var(--muted);
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.doc-meta code {
+  color: var(--fg);
 }

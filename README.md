@@ -38,6 +38,10 @@ The Phase 1 site is a plain static site with no build tooling dependency require
 - [docs/decisions/](docs/decisions/) — Architecture Decision Records
 - [docs/governance/OPEN_QUESTIONS.md](docs/governance/OPEN_QUESTIONS.md) — authoritative registry of unresolved governance, security, and policy questions
 
+## Public documentation access
+
+Selected canonical documents (Mission, Charter, Governance, Roadmap, Transparency, Changelog, Contributing, License) are published on `datum.quest` both as rendered pages (e.g. `/charter`) and as raw Markdown for direct/machine access (e.g. `/docs/raw/CHARTER.md`). See [docs/decisions/0006-canonical-documents-drive-publication.md](docs/decisions/0006-canonical-documents-drive-publication.md). A machine-readable index lives at `/llms.txt`.
+
 ## Deployment overview
 
 ```text

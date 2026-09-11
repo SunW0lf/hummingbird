@@ -1,20 +1,40 @@
-// Minimal, zero-dependency smoke test for the Phase 1 static site.
-// Verifies every linked page exists and every internal link resolves to a real file.
+// Minimal, zero-dependency smoke test for the built static site.
+// Verifies every expected page/asset exists in dist/ (the actual deployable
+// output - canonical document pages and the support page are generated at
+// build time, so this checks dist/, not app/) and every internal link
+// resolves to a real file.
 // Intentionally avoids adding a test framework dependency for a project this size.
 
 const fs = require("fs");
 const path = require("path");
 
-const APP_DIR = path.join(__dirname, "..", "app");
+const APP_DIR = path.join(__dirname, "..", "dist");
 const REQUIRED_PAGES = [
   "index.html",
   "mission.html",
   "charter.html",
+  "governance.html",
+  "roadmap.html",
   "how-it-works.html",
   "transparency.html",
   "changelog.html",
+  "contributing.html",
+  "open-questions.html",
   "security.html",
+  "support.html",
   "style.css",
+  "llms.txt",
+];
+
+const REQUIRED_RAW_DOCS = [
+  "docs/raw/MISSION.md",
+  "docs/raw/CHARTER.md",
+  "docs/raw/GOVERNANCE.md",
+  "docs/raw/ROADMAP.md",
+  "docs/raw/TRANSPARENCY.md",
+  "docs/raw/CHANGELOG.md",
+  "docs/raw/CONTRIBUTING.md",
+  "docs/raw/LICENSE",
 ];
 
 let failures = 0;
@@ -38,7 +58,17 @@ for (const page of REQUIRED_PAGES) {
   }
 }
 
-// 2. Every internal href in every HTML page resolves to a file in app/.
+// 2. Every raw canonical document was copied into dist/docs/raw/.
+for (const doc of REQUIRED_RAW_DOCS) {
+  const fullPath = path.join(APP_DIR, doc);
+  if (fs.existsSync(fullPath)) {
+    pass(`${doc} exists`);
+  } else {
+    fail(`${doc} is missing from dist/`);
+  }
+}
+
+// 3. Every internal href in every HTML page resolves to a file in dist/.
 const hrefPattern = /href="([^"]+\.html)"/g;
 
 for (const page of REQUIRED_PAGES.filter((p) => p.endsWith(".html"))) {

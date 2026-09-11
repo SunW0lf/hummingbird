@@ -1,17 +1,22 @@
 #!/usr/bin/env bash
-# Serve app/ locally for development. No build step required to view the Phase 1 site.
+# Build, then serve dist/ locally for development. Canonical documents
+# (mission.html, charter.html, etc.) are generated at build time from the
+# root Markdown files, so dev must build first rather than serving app/
+# directly - otherwise it would show stale or missing canonical content.
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
+./scripts/build
+
 PORT="${PORT:-8080}"
 
 if command -v python3 >/dev/null 2>&1; then
-  echo "Serving app/ at http://localhost:${PORT} (python3)"
-  python3 -m http.server "${PORT}" --directory app
+  echo "Serving dist/ at http://localhost:${PORT} (python3)"
+  python3 -m http.server "${PORT}" --directory dist
 elif command -v python >/dev/null 2>&1; then
-  echo "Serving app/ at http://localhost:${PORT} (python)"
-  python -m http.server "${PORT}" --directory app
+  echo "Serving dist/ at http://localhost:${PORT} (python)"
+  python -m http.server "${PORT}" --directory dist
 else
   echo "error: python or python3 is required for the dev server but was not found" >&2
   exit 1

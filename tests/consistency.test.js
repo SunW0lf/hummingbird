@@ -43,7 +43,12 @@ function walk(dir, matches, out = []) {
 }
 
 const docFiles = walk(ROOT, (name) => name.endsWith(".md") || name === "LICENSE");
-const htmlFiles = walk(path.join(ROOT, "app"), (name) => name.endsWith(".html"));
+const DIST_DIR = path.join(ROOT, "dist");
+if (!fs.existsSync(DIST_DIR)) {
+  console.error("error: dist/ does not exist. Run ./scripts/build before this check.");
+  process.exit(1);
+}
+const htmlFiles = walk(DIST_DIR, (name) => name.endsWith(".html"));
 
 function rel(file) {
   return path.relative(ROOT, file).replace(/\\/g, "/");

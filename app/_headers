@@ -1,0 +1,11 @@
+# Cloudflare Pages custom headers.
+# Serve raw canonical documents with content types appropriate for
+# direct/machine access rather than Cloudflare's default guess.
+/docs/raw/*.md
+  Content-Type: text/markdown; charset=utf-8
+
+/docs/raw/LICENSE
+  Content-Type: text/plain; charset=utf-8
+
+/llms.txt
+  Content-Type: text/plain; charset=utf-8

@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
-# Run all automated tests. Currently: the zero-dependency static site smoke test.
+# Run all automated tests. Builds first since the canonical document pages
+# and support page are generated at build time - tests check dist/, the
+# actual deployable output, not app/ alone.
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
+
+echo "Building before tests (canonical pages are generated at build time)..."
+./scripts/build
 
 echo "Running site smoke tests..."
 node tests/site.test.js

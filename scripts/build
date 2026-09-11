@@ -12,4 +12,10 @@ mkdir -p dist
 echo "Copying app/ -> dist/..."
 cp -r app/. dist/
 
+echo "Rendering canonical reference documents..."
+node scripts/render-docs.js
+
+echo "Rendering support page..."
+node scripts/render-support.js
+
 echo "Build complete: dist/"
