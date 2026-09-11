@@ -22,7 +22,7 @@ Hummingbird is a public commons for participation, deliberation, contribution, a
 
 ## Current phase
 
-**Phase 2 — Read-Only Commons is in progress; Phase 2A is complete and Phase 2B persistence/import work is underway.** Phase 0 — Foundation and Phase 1 — Public Charter Site are complete. See [ROADMAP.md](ROADMAP.md).
+**Phase 2 — Read-Only Commons is in progress; Phases 2A, 2B, and 2C are complete, and Phase 2D durability/transparency work is active.** Phase 0 — Foundation and Phase 1 — Public Charter Site are complete. See [ROADMAP.md](ROADMAP.md).
 
 Future interactive-space ideas are preserved in [SPACES.md](SPACES.md) as a working design, not as implemented capability or settled governance policy.
 
@@ -40,8 +40,8 @@ Future interactive-space ideas are preserved in [SPACES.md](SPACES.md) as a work
 
 - GitHub is the canonical source of truth for code, docs, schema/reference-contract material, migrations, deployment config, infrastructure scripts, and operational scripts.
 - Cloudflare Pages hosts the deployed site.
-- Cloudflare D1 is the planned initial Phase 2 persistence engine. The Phase 2B local migration/import/export round trip is already exercised in CI; no remote production D1 database has been created yet. Canonical data remains portable and versioned per [DATA_MODEL.md](DATA_MODEL.md), [ADR 0010](docs/decisions/0010-phase2-read-only-commons-contract.md), and [ADR 0012](docs/decisions/0012-reference-corpus-before-persistence.md).
-- Future interactive rooms, games, walls, and other highly concurrent state machines may use hibernating Cloudflare Durable Objects as a coordination layer while D1 remains the durable relational/canonical store and R2 provides backup/archive storage. See [PERSISTENCE.md](PERSISTENCE.md). This is a working technical plan, not current deployed architecture.
+- Cloudflare D1 is the current Phase 2 persistence engine for deliberately admitted canonical application records. Phase 2B proved deterministic local and remote migration/import/export equivalence; Phase 2C proved deliberate admission, publication-state transition, read-only reconstruction, and static projection; Phase 2D has now exercised portable production backup and isolated remote recovery against a disposable replacement database. Canonical data remains portable and versioned per [DATA_MODEL.md](DATA_MODEL.md), [ADR 0010](docs/decisions/0010-phase2-read-only-commons-contract.md), [ADR 0012](docs/decisions/0012-reference-corpus-before-persistence.md), and [docs/protocols/PHASE_2D_RECOVERY.md](docs/protocols/PHASE_2D_RECOVERY.md).
+- Future interactive rooms, games, walls, and other highly concurrent state machines may use hibernating Cloudflare Durable Objects as a coordination layer while D1 remains the durable relational/canonical store and R2 provides backup/archive storage. See [PERSISTENCE.md](PERSISTENCE.md). This is a working technical plan, not current deployed architecture beyond D1.
 - Production deployment occurs only from protected `main`, only after required CI passes.
 
 ## Data posture
