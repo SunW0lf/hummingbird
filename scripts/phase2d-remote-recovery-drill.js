@@ -10,11 +10,12 @@ const {
   loadAndVerifyBundle,
   reconstructCanonical,
   recordsToSql,
+  writeBundle,
 } = require("./lib/canonical-backup");
 
 const ROOT = path.join(__dirname, "..");
 const PRODUCTION_CONFIG = path.join(ROOT, "wrangler.d1.jsonc");
-const WRANGLER = path.join(ROOT, "node_modules", "wrangler", "bin", "wrangler.js");
+const MIGRATIONS_DIR = path.join(ROOT, "migrations");
 const PUBLICATION_DIR = path.join(ROOT, "publication", "canonical");
 const BASELINE_DIST = path.join(ROOT, "dist");
 const PUBLIC_STATES = new Set(["published", "corrected", "superseded", "withdrawn", "archived"]);
@@ -29,26 +30,9 @@ function run(command, args, options = {}) {
   return execFileSync(command, args, {
     cwd: ROOT,
     encoding: "utf8",
-    env: { ...process.env, NO_D1_WARNING: "true", ...options.env },
+    env: { ...process.env, ...options.env },
     stdio: ["ignore", "pipe", "pipe"],
   });
-}
-
-function runWrangler(args, config = PRODUCTION_CONFIG) {
-  return run(process.execPath, [WRANGLER, ...args, "--config", config]);
-}
-
-function queryRecovery(config, sql) {
-  const stdout = runWrangler([
-    "d1", "execute", "DB",
-    "--remote",
-    "--json",
-    "--command", sql,
-  ], config);
-  const parsed = JSON.parse(stdout);
-  assert(Array.isArray(parsed) && parsed.length === 1, "D1 query should return one result set");
-  assert.strictEqual(parsed[0].success, true, "D1 query should succeed");
-  return parsed[0].results || [];
 }
 
 function loadJsonRecords(dir) {
@@ -118,6 +102,27 @@ async function cloudflareApi(method, pathname, body) {
   return payload.result;
 }
 
+async function d1Query(accountId, databaseId, sql) {
+  const result = await cloudflareApi(
+    "POST",
+    `/accounts/${accountId}/d1/database/${databaseId}/query`,
+    { sql }
+  );
+  if (!Array.isArray(result) || result.length === 0) {
+    throw new Error("D1 query returned no result sets");
+  }
+  for (const [index, item] of result.entries()) {
+    if (!item || item.success !== true) throw new Error(`D1 query result set ${index} did not succeed`);
+  }
+  return result;
+}
+
+async function d1Rows(accountId, databaseId, sql) {
+  const result = await d1Query(accountId, databaseId, sql);
+  if (result.length !== 1) throw new Error(`expected one D1 result set, received ${result.length}`);
+  return result[0].results || [];
+}
+
 function safeRecoveryName() {
   const runId = String(process.env.GITHUB_RUN_ID || "manual").replace(/[^0-9A-Za-z-]/g, "").slice(-18);
   const stamp = new Date().toISOString().slice(0, 10).replace(/-/g, "");
@@ -125,22 +130,26 @@ function safeRecoveryName() {
   return `hummingbird-recovery-${stamp}-${runId}-${random}`.slice(0, 63);
 }
 
-function writeRecoveryConfig(file, name, databaseId) {
-  const config = {
-    d1_databases: [
-      {
-        binding: "DB",
-        database_name: name,
-        database_id: databaseId,
-        migrations_dir: path.join(ROOT, "migrations"),
-      },
-    ],
-  };
-  fs.writeFileSync(file, `${JSON.stringify(config, null, 2)}\n`, "utf8");
+function migrationFiles() {
+  if (!fs.existsSync(MIGRATIONS_DIR)) throw new Error("migrations directory is missing");
+  const files = fs.readdirSync(MIGRATIONS_DIR)
+    .filter((name) => /^\d+.*\.sql$/.test(name))
+    .sort();
+  if (files.length === 0) throw new Error("no repository-controlled D1 migrations found");
+  return files;
+}
+
+function restoreBatchSql(records) {
+  // Cloudflare's D1 /query endpoint executes semicolon-separated statements as
+  // a batch. Remove the explicit BEGIN/COMMIT wrapper generated for file-based
+  // local restores so the remote API owns the batch transaction boundary.
+  return recordsToSql(records)
+    .split("\n")
+    .filter((line) => line !== "BEGIN TRANSACTION;" && line !== "COMMIT;")
+    .join("\n");
 }
 
 async function main() {
-  if (!fs.existsSync(WRANGLER)) throw new Error("Wrangler is not installed. Run npm ci first.");
   if (!fs.existsSync(path.join(BASELINE_DIST, "records", "index.json"))) {
     throw new Error("baseline dist/ public record projection is missing; run ./scripts/build before the drill");
   }
@@ -156,8 +165,6 @@ async function main() {
   if (!productionDatabaseId) throw new Error("production D1 database_id is missing from wrangler.d1.jsonc");
 
   const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "hummingbird-remote-recovery-"));
-  const recoveryConfig = path.join(tempRoot, "wrangler.recovery.jsonc");
-  const restoreSql = path.join(tempRoot, "restore.sql");
   const recoveredPublication = path.join(tempRoot, "publication", "canonical");
   const recoveredDist = path.join(tempRoot, "dist");
   let recoveryId = null;
@@ -165,10 +172,24 @@ async function main() {
   let primaryError = null;
 
   try {
-    // Production access in this drill is read-only: the existing backup command
-    // performs SELECT queries only against the production binding.
-    run(path.join(ROOT, "scripts", "backup"), ["--remote", "--output", artifactDir]);
-    const { manifest, records } = loadAndVerifyBundle(artifactDir);
+    // Account-owned API tokens are service-principal credentials. Use the D1
+    // REST API directly for the remote drill rather than depending on Wrangler's
+    // user-token authentication path. Production receives SELECT statements only.
+    const productionObjects = await d1Rows(
+      accountId,
+      productionDatabaseId,
+      "SELECT id, type, schema_version, created_at, state, content_json, attribution_json, provenance_json, publication_json, event_type, subject_ref FROM canonical_objects ORDER BY id"
+    );
+    const productionRelationships = await d1Rows(
+      accountId,
+      productionDatabaseId,
+      "SELECT source_id, ordinal, type, target_ref FROM canonical_relationships ORDER BY source_id, ordinal"
+    );
+    const productionRecords = reconstructCanonical(productionObjects, productionRelationships);
+    const manifest = writeBundle(artifactDir, productionRecords, {
+      source: "remote production D1 canonical_objects/canonical_relationships via read-only REST query",
+    });
+    const { records } = loadAndVerifyBundle(artifactDir);
     assertPublicArtifactSafe(records);
     console.log(`BACKUP_VERIFIED: ${records.length} canonical record(s); bundle ${manifest.bundle_sha256}`);
     console.log("ARTIFACT_SAFETY: canonical backup exactly matches already-public publication/canonical state");
@@ -184,29 +205,28 @@ async function main() {
     if (recoveryId === productionDatabaseId) throw new Error("recovery database unexpectedly equals production database; refusing all writes");
     console.log(`RECOVERY_DATABASE: created disposable database ${recoveryName}`);
 
-    writeRecoveryConfig(recoveryConfig, recoveryName, recoveryId);
+    for (const file of migrationFiles()) {
+      const sql = fs.readFileSync(path.join(MIGRATIONS_DIR, file), "utf8");
+      await d1Query(accountId, recoveryId, sql);
+      console.log(`RECOVERY_MIGRATION: applied ${file}`);
+    }
 
-    runWrangler(["d1", "migrations", "apply", "DB", "--remote"], recoveryConfig);
-    const beforeObjects = queryRecovery(recoveryConfig, "SELECT COUNT(*) AS count FROM canonical_objects");
-    const beforeRelationships = queryRecovery(recoveryConfig, "SELECT COUNT(*) AS count FROM canonical_relationships");
+    const beforeObjects = await d1Rows(accountId, recoveryId, "SELECT COUNT(*) AS count FROM canonical_objects");
+    const beforeRelationships = await d1Rows(accountId, recoveryId, "SELECT COUNT(*) AS count FROM canonical_relationships");
     assert.strictEqual(Number(beforeObjects[0]?.count), 0, "recovery target canonical_objects is not empty after migrations");
     assert.strictEqual(Number(beforeRelationships[0]?.count), 0, "recovery target canonical_relationships is not empty after migrations");
-    console.log("RECOVERY_MIGRATIONS: applied repository migrations to empty disposable database");
+    console.log("RECOVERY_MIGRATIONS: repository migration SQL reproduced an empty compatible schema");
 
-    fs.writeFileSync(restoreSql, recordsToSql(records), "utf8");
-    runWrangler([
-      "d1", "execute", "DB",
-      "--remote",
-      "--yes",
-      "--file", restoreSql,
-    ], recoveryConfig);
+    await d1Query(accountId, recoveryId, restoreBatchSql(records));
 
-    const objectRows = queryRecovery(
-      recoveryConfig,
+    const objectRows = await d1Rows(
+      accountId,
+      recoveryId,
       "SELECT id, type, schema_version, created_at, state, content_json, attribution_json, provenance_json, publication_json, event_type, subject_ref FROM canonical_objects ORDER BY id"
     );
-    const relationshipRows = queryRecovery(
-      recoveryConfig,
+    const relationshipRows = await d1Rows(
+      accountId,
+      recoveryId,
       "SELECT source_id, ordinal, type, target_ref FROM canonical_relationships ORDER BY source_id, ordinal"
     );
     const restored = reconstructCanonical(objectRows, relationshipRows);
