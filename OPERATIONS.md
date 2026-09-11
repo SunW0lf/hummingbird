@@ -40,6 +40,8 @@ During the current low-write steward-controlled phase, create and independently 
 
 A provider-native D1 export may supplement this bundle but does not replace the storage-independent canonical backup requirement.
 
+The first remote recovery drill used a narrow exception because the workflow first proved that the complete production canonical set exactly matched already-public `publication/canonical` state. Only then was a short-lived public GitHub Actions artifact permitted. That exception does not authorize public artifact storage for future backups containing drafts or other non-public canonical state.
+
 See [docs/protocols/PHASE_2D_RECOVERY.md](docs/protocols/PHASE_2D_RECOVERY.md).
 
 ## Restore
@@ -52,7 +54,7 @@ Validate a bundle without touching any database:
 ./scripts/restore /safe/path/backup --validate-only
 ```
 
-Current Phase 2D-1 restoration is intentionally limited to an explicitly isolated local D1 state directory. Apply migrations first, then restore:
+The general-purpose restore command remains intentionally limited to an explicitly isolated local D1 state directory. Apply migrations first, then restore:
 
 ```bash
 npx wrangler d1 migrations apply hummingbird \
@@ -68,16 +70,21 @@ npx wrangler d1 migrations apply hummingbird \
 
 The tool refuses non-empty canonical targets, imports objects/relationships transactionally, reconstructs canonical JSON from restored rows, and deep-compares restored meaning with the backup bundle.
 
-Remote restore is deliberately disabled in this slice. The production recovery drill must use a disposable replacement D1 database, never the live production database, as the restoration target. That drill must:
+`./scripts/restore --remote` remains deliberately disabled. The first production-state remote recovery exercise used a separate guarded one-shot workflow against a disposable replacement D1 database rather than enabling a general remote restore command or writing to the live production database.
 
-1. provision an empty compatible recovery database;
-2. apply versioned migrations;
-3. import the latest verified portable canonical export;
-4. reconstruct and deep-compare canonical meaning;
-5. rebuild derived projections/indexes;
-6. compare the expected public read projection;
-7. run appropriate read/recovery verification;
-8. move any binding/traffic only after verification if this were a real incident.
+On 2026-09-11 the guarded remote drill completed successfully. It:
+
+1. read current production canonical objects/relationships with `SELECT` only through the D1 REST API;
+2. constructed and verified the portable canonical backup bundle;
+3. provisioned an empty disposable recovery database with a UUID distinct from production;
+4. applied repository-controlled migration SQL;
+5. restored the verified canonical bundle into the disposable database;
+6. reconstructed and deep-compared canonical meaning;
+7. rebuilt the public canonical projection in isolated output;
+8. byte-compared the recovered machine-readable public projection with the expected built projection;
+9. deleted the disposable recovery database from cleanup.
+
+The exercise used a separate account-owned recovery credential rather than widening the Pages deployment token. Earlier failed attempts are retained in the recovery protocol because they demonstrate fail-closed behavior before production mutation.
 
 Derived projections are disposable; loss of a cache/search/read projection must not imply loss of institutional meaning.
 
@@ -176,6 +183,21 @@ The local Wrangler D1 round trip remains the authoritative CI contract test. The
 - existence of a remote database did not create a public write endpoint.
 
 The execution record lives in [docs/protocols/PHASE_2B_REMOTE_D1.md](docs/protocols/PHASE_2B_REMOTE_D1.md).
+
+### Phase 2D recovery guardrails — exercised baseline
+
+The first remote recovery exercise established these additional boundaries:
+
+- production canonical reads used a separate D1 recovery credential rather than the Pages deployment token;
+- production access for the drill was read-only `SELECT` against the canonical tables;
+- all recovery writes targeted a uniquely created disposable D1 database whose provider ID was checked against production before use;
+- repository-controlled migration SQL reconstructed the recovery schema before import;
+- restored canonical records had to deep-equal the verified portable backup;
+- recovered public projection output had to byte-equal the expected public machine-readable projection;
+- cleanup deleted the disposable recovery database even when verification failed;
+- public artifact retention was allowed only after proving the production canonical set exactly matched already-public state.
+
+See [docs/protocols/PHASE_2D_RECOVERY.md](docs/protocols/PHASE_2D_RECOVERY.md) for the detailed execution contract and observations.
 
 ## Seed Bank operations
 
