@@ -6,3 +6,6 @@ cd "$(dirname "$0")/.."
 
 echo "Running site smoke tests..."
 node tests/site.test.js
+
+echo "Running documentation consistency checks..."
+node tests/consistency.test.js
