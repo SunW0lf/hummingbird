@@ -25,9 +25,10 @@
 </header>
 <main>
   <h1>Security &amp; Contact</h1>
-  <p>Hummingbird's Phase 0/1 site is static, with no accounts, forms, or database. The realistic attack surface is therefore concentrated in the source and deployment pipeline: the GitHub repository and Actions workflow, Cloudflare deployment credentials, and the small set of build-time dependencies.</p>
-  <p>A dedicated private security contact channel has not yet been established. Until then, do not open a public issue for a security vulnerability. Establishing and verifying a private reporting channel is a blocker for completing Phase 1 or publishing the repository, whichever comes first.</p>
-  <p>The repository's <code>SECURITY.md</code> is the authoritative source for the current threat model, controls, and unresolved security questions.</p>
+  <p>Hummingbird's repository is public and its current deployed site remains static, with no public accounts, submission forms, or production application database. The realistic attack surface is concentrated in the source/deployment pipeline today and will expand deliberately when Phase 2 persistence is introduced.</p>
+  <p><code>main</code> is protected with required CI, repository Actions are restricted and SHA-pinned, and workflow permissions are read-only. The remaining public-repository security settings are being verified before Phase 1 is declared complete.</p>
+  <p>A dedicated private vulnerability-reporting path has not yet been verified. Until it is, do not open a public issue containing vulnerability details. Verifying GitHub private vulnerability reporting is a blocker for completing Phase 1.</p>
+  <p>The repository's <code>SECURITY.md</code> is the authoritative source for the current threat model, controls, retention rules, and unresolved security questions.</p>
 </main>
 <footer>
   <p><a href="index.html">&larr; Back home</a></p>

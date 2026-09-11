@@ -2,13 +2,15 @@
 
 This is the single authoritative ledger of unresolved policy, governance, architecture, data, security, and operational decisions for Hummingbird. Every `OPEN QUESTION` marker anywhere in this repository must reference exactly one ID from this registry rather than restating the question independently.
 
-This registry **records** open questions. It does not resolve them. Adding, splitting, or re-scoping an entry here is a bookkeeping change, not a policy decision — resolving a question still requires updating the substantive document it lives in (Charter, Governance, Security, etc.) with the actual decision and rationale.
+This registry **records** open questions. It does not resolve them. Adding, splitting, or re-scoping an entry here is a bookkeeping change, not a policy decision — resolving a question requires updating the substantive document it lives in (Charter, Governance, Security, etc.) with the actual decision and rationale.
+
+Resolved questions are removed from this registry after their decision is recorded in substantive documentation and the changelog. Stable IDs are never reused.
 
 ## How to use this registry
 
 - Each question has a stable ID (`OQ-<AREA>-<NAME>`). IDs are never reused or renumbered once assigned.
 - Source documents reference an ID rather than duplicating question text, so a question is never accidentally answered differently in two places.
-- **Blocks** means the question must be genuinely resolved (not merely risk-accepted) before the named phase or milestone may begin or be considered complete.
+- **Blocks** means the question must be genuinely resolved before the named phase or milestone may begin or be considered complete.
 - **Review gate** means the question should be revisited at the named point, but does not by itself halt progress.
 - **Status** is one of: `OPEN`, `IN PROGRESS` (steward actively working the question), `RESOLVED` (moved out of this registry into the substantive document, with a dated changelog entry).
 
@@ -16,7 +18,7 @@ This registry **records** open questions. It does not resolve them. Adding, spli
 
 Constitutional questions (Charter) and governance-legitimacy questions (who may govern, how authority is granted or limited, how disputes and amendments work) **cannot** be bypassed by risk acceptance. They must be genuinely resolved before the phase they block begins.
 
-Operational and security-hardening questions explicitly marked "(documented risk acceptance permitted)" below may instead be closed for a given phase by the steward recording an explicit, dated risk-acceptance note in the relevant document (e.g. SECURITY.md, OPERATIONS.md) — stating what the residual risk is and why it is accepted for now — rather than requiring implementation. This does not resolve the underlying question; it only permits the phase gate to pass while the question remains open.
+Operational and security-hardening questions may permit explicitly documented, phase-bounded risk acceptance where their substantive document says so. A risk acceptance never silently resolves the underlying question.
 
 ## Charter (constitutional)
 
@@ -108,45 +110,7 @@ Raised in: [PROJECT.md](../../PROJECT.md).
 Blocks: entry into Phase 5 (Financial Support).
 Status: OPEN.
 
-## Data model
-
-### OQ-DATA-CONTRIBUTION-MODEL
-**Entity model for a contribution** (fields, states, relationship to participants and proposals).
-Raised in: [DATA_MODEL.md](../../DATA_MODEL.md).
-Blocks: entry into Phase 2.
-Status: OPEN.
-
-### OQ-DATA-PROPOSAL-MODEL
-**Entity model for a proposal** (fields, states, relationship to contributions and decisions).
-Raised in: [DATA_MODEL.md](../../DATA_MODEL.md).
-Blocks: entry into Phase 2.
-Status: OPEN.
-
-### OQ-DATA-NEED-MODEL
-**Entity model for a "need"** as referenced in the Mission and Phase 4 governance workflows.
-Raised in: [DATA_MODEL.md](../../DATA_MODEL.md).
-Blocks: entry into Phase 2.
-Status: OPEN.
-
-### OQ-DATA-AUDIT-EVENT-MODEL
-**Entity model for the audit/event log**, consistent with the three-layer transparency design (internal log / publication buffer / public log).
-Raised in: [DATA_MODEL.md](../../DATA_MODEL.md), [TRANSPARENCY.md](../../TRANSPARENCY.md).
-Blocks: entry into Phase 2.
-Status: OPEN.
-
-### OQ-DATA-WORKFLOW-STATES
-**Workflow state machines** governing how contributions/proposals/needs move between states.
-Raised in: [DATA_MODEL.md](../../DATA_MODEL.md).
-Blocks: entry into Phase 2.
-Status: OPEN.
-
 ## Security
-
-### OQ-SECURITY-RETENTION-PERIODS
-**Specific retention periods per data classification** (`PUBLIC`, `PUBLIC_DELAYED`, `OPERATIONAL`, `SECURITY_SENSITIVE`, `FINANCIAL_PRIVATE`, `SECRET`).
-Raised in: [DATA_MODEL.md](../../DATA_MODEL.md), [SECURITY.md](../../SECURITY.md), [PROJECT.md](../../PROJECT.md).
-Blocks: entry into Phase 2.
-Status: OPEN.
 
 ### OQ-SECURITY-ACCESS-CONTROL-RETENTION
 **Bounded retention for rate-limit/abuse state**, kept separate from the identity/participant model.
@@ -169,19 +133,13 @@ Status: OPEN.
 ### OQ-SECURITY-VULN-REPORTING
 **Dedicated, genuinely private security contact address/process** (e.g. `security@datum.quest` via Cloudflare Email Routing or GitHub private vulnerability reporting). No public channel may be advertised until it technically exists.
 Raised in: [SECURITY.md](../../SECURITY.md), [CONTRIBUTING.md](../../CONTRIBUTING.md).
-Blocks: completion of Phase 1, or repository publication, whichever occurs first.
-Status: IN PROGRESS — public repository transition authorized in principle; intended Phase 1 solution is GitHub private vulnerability reporting enabled and verified as part of the publication security activation.
-
-### OQ-SECURITY-ACTIONS-HARDENING
-**GitHub Actions permissions hardening.** Repository currently has `allowed_actions: all` (any public action may run) rather than a restricted allow-list. (Documented risk acceptance permitted only for the current private state.)
-Raised in: [SECURITY.md](../../SECURITY.md).
-Blocks: completion of Phase 1, or repository publication, whichever occurs first.
-Status: IN PROGRESS — private-mode Phase 1 risk acceptance expires at publication; public-mode target is GitHub-owned/explicitly approved actions only, with workflow references remaining SHA-pinned.
+Blocks: completion of Phase 1.
+Status: IN PROGRESS — repository is public; intended solution remains GitHub private vulnerability reporting, pending explicit activation/verification of the public reporting affordance.
 
 ## Operations
 
 ### OQ-OPS-MONITORING-CADENCE
-**Continuous/scheduled monitoring** (e.g. a GitHub Actions cron job) versus manual `./scripts/healthcheck` runs only.
+**Continuous/scheduled monitoring** versus manual `./scripts/healthcheck` runs only.
 Raised in: [OPERATIONS.md](../../OPERATIONS.md).
 Review gate: during Phase 2.
 Status: OPEN.
@@ -192,42 +150,22 @@ Raised in: [OPERATIONS.md](../../OPERATIONS.md).
 Review gate: during Phase 2.
 Status: OPEN.
 
-### OQ-OPS-BRANCH-PROTECTION
-**Branch protection on `main` is currently unavailable while the repository is private on the current plan.** No enforced required-review or required-status-check rule exists; CI-before-deploy is enforced only by the workflow's own `needs:`/`if:` structure, not by GitHub branch rules. (Documented risk acceptance permitted only while the repository remains private and single-steward.)
-Raised in: [OPERATIONS.md](../../OPERATIONS.md), [SECURITY.md](../../SECURITY.md).
-Blocks: completion of Phase 1, or repository publication, whichever occurs first.
-Status: IN PROGRESS — private-mode Phase 1 risk acceptance expires at publication; public-mode target is protected `main` with pull-request flow, required `Checks, test, build`, and force-push/deletion disabled.
-
-## Transparency
-
-### OQ-TRANSPARENCY-OPERATIONAL-HISTORY
-**Whether/how to summarize CI and deployment operational history publicly**, since raw CI/Cloudflare logs are not currently republished anywhere.
-Raised in: [TRANSPARENCY.md](../../TRANSPARENCY.md).
-Blocks: entry into Phase 2 (public transparency-record implementation).
-Status: OPEN.
-
-### OQ-TRANSPARENCY-REPO-VISIBILITY
-**When and how to make the repository public.** The repository is currently **private**. Making it public is a deliberate action gated on a completed git-history audit for secrets/sensitive data and the public-mode security activation described in ADR 0009.
-Raised in: [TRANSPARENCY.md](../../TRANSPARENCY.md), [docs/decisions/0009-public-repository-security-transition.md](../decisions/0009-public-repository-security-transition.md).
-Review gate: before repository publication.
-Status: IN PROGRESS — steward authorized public visibility in principle on 2026-09-10; history audit previously found no secrets; visibility change remains pending activation and verification of the public security baseline.
-
 ## Licensing
 
 ### OQ-LEGAL-CONTENT-LICENSE
 **Distinct content/reuse license for Charter, Mission, and Governance documents** (as opposed to the MIT license, which covers only software in this repository). E.g. a Creative Commons license.
 Raised in: [LICENSE](../../LICENSE).
-Review gate: before repository publication or C1 Charter Candidate publication.
-Status: OPEN — reviewed at the publication gate; no distinct content license has been selected. Publication does not itself change the reuse terms stated in `LICENSE`.
+Review gate: before C1 Charter Candidate publication.
+Status: OPEN — reviewed at the repository-publication gate; no distinct content license has been selected. Publication does not itself change the reuse terms stated in `LICENSE`.
 
 ## Index by phase gate
 
-- **Blocks entry into Phase 2:** OQ-DATA-CONTRIBUTION-MODEL, OQ-DATA-PROPOSAL-MODEL, OQ-DATA-NEED-MODEL, OQ-DATA-AUDIT-EVENT-MODEL, OQ-DATA-WORKFLOW-STATES, OQ-SECURITY-RETENTION-PERIODS, OQ-TRANSPARENCY-OPERATIONAL-HISTORY.
-- **Blocks completion of Phase 1 / repository publication:** OQ-SECURITY-VULN-REPORTING, OQ-SECURITY-ACTIONS-HARDENING, OQ-OPS-BRANCH-PROTECTION. All three are now IN PROGRESS as one coordinated public-mode security transition; private-mode risk acceptances do not carry into publication.
+- **Blocks entry into Phase 2:** none. The former Phase 2 entry questions are resolved in [ADR 0010](../decisions/0010-phase2-read-only-commons-contract.md), [DATA_MODEL.md](../../DATA_MODEL.md), [SECURITY.md](../../SECURITY.md), and [TRANSPARENCY.md](../../TRANSPARENCY.md).
+- **Blocks completion of Phase 1:** OQ-SECURITY-VULN-REPORTING. The remaining public-repository Advanced Security controls in `SECURITY.md` must also be explicitly verified before Phase 1 closeout.
 - **Blocks entry into Phase 3:** OQ-CHARTER-RIGHTS, OQ-CHARTER-EXCLUSION, OQ-CHARTER-PARTICIPANT-RESPONSIBILITIES, OQ-GOVERNANCE-EMERGENCY-AUTHORITY, OQ-GOVERNANCE-PROPOSALS, OQ-ARCH-FRAMEWORK, OQ-SECURITY-ACCESS-CONTROL-RETENTION, OQ-SECURITY-AUTHN-MODEL.
 - **Blocks entry into Phase 4:** OQ-GOVERNANCE-DISPUTES, OQ-GOVERNANCE-VALIDATED-NEEDS.
 - **Blocks entry into Phase 5:** OQ-PROJECT-LEGAL-STRUCTURE.
 - **Blocks C2 → C3 ratification:** OQ-GOVERNANCE-AMENDMENT-THRESHOLD.
-- **Review gates (non-blocking):** OQ-GOVERNANCE-STEWARD-SCOPE, OQ-GOVERNANCE-DECISION-PROCESS, OQ-GOVERNANCE-FACILITATION, OQ-GOVERNANCE-STEWARD-SUCCESSION, OQ-SECURITY-INCIDENT-RESPONSE, OQ-OPS-MONITORING-CADENCE, OQ-OPS-TOKEN-ROTATION-CADENCE, OQ-TRANSPARENCY-REPO-VISIBILITY, OQ-LEGAL-CONTENT-LICENSE.
+- **Review gates (non-blocking):** OQ-GOVERNANCE-STEWARD-SCOPE, OQ-GOVERNANCE-DECISION-PROCESS, OQ-GOVERNANCE-FACILITATION, OQ-GOVERNANCE-STEWARD-SUCCESSION, OQ-SECURITY-INCIDENT-RESPONSE, OQ-OPS-MONITORING-CADENCE, OQ-OPS-TOKEN-ROTATION-CADENCE, OQ-LEGAL-CONTENT-LICENSE.
 
-**Total: 31 open questions. 0 resolved.**
+**Total unresolved: 21.**
