@@ -18,18 +18,12 @@ challenge_check() {
   local headers="$1"
   local body="$2"
 
-  # Cloudflare documents cf-mitigated: challenge as the authoritative signal
-  # that the requested resource was replaced by a Challenge Page.
   if grep -Eiq '^cf-mitigated:[[:space:]]*challenge([[:space:]]|$)' "${headers}"; then
     echo "error: Cloudflare replaced the requested resource with a Challenge Page" >&2
     grep -Ei '^HTTP/|^content-type:|^server:|^cf-ray:|^cf-mitigated:|^location:' "${headers}" >&2 || true
     return 1
   fi
 
-  # Keep a provider-independent fallback for obvious interactive interstitials.
-  # Do not treat /cdn-cgi/challenge-platform/ alone as a failure: Cloudflare's
-  # passive JavaScript Detections can inject that path into an otherwise normal
-  # 200 HTML response without requiring the client to execute it.
   if grep -Eiq '<title>[^<]*(just a moment|attention required)[^<]*</title>|verify you are human|enable javascript to continue|captcha' "${body}"; then
     echo "error: response appears to contain an interactive challenge or CAPTCHA" >&2
     grep -Ei '^HTTP/|^content-type:|^server:|^cf-ray:|^cf-mitigated:|^location:' "${headers}" >&2 || true
@@ -149,6 +143,11 @@ check_get '/docs/raw/MISSION.md' 'text/markdown' '# Mission'
 check_get '/records' 'text/html' 'Visible consequence without engagement pressure'
 check_get '/records/contribution-visible-consequence' 'text/html' 'Visible consequence without engagement pressure'
 check_get '/records/contribution-visible-consequence.json' 'application/json' '"id": "contribution-visible-consequence"'
+check_get '/decisions' 'text/html' 'Verifiable source provenance'
+check_get '/decisions/index.json' 'application/json' '"source_sha256"'
+check_get '/decisions/proposal-schema.json' 'application/schema+json' '"affected_principles"'
+check_get '/decisions/0015-standards-based-representation-discovery-and-provenance' 'text/html' 'Standards-Based Representation Discovery'
+check_get '/docs/raw/decisions/0015-standards-based-representation-discovery-and-provenance.md' 'text/markdown' '# ADR 0015'
 
 if ! grep -Eq 'href="(mission\.html|/mission(\.html)?)"' "${TMP_DIR}/_.body"; then
   echo "error: production root does not expose ordinary navigable About/Mission link" >&2
