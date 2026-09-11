@@ -35,7 +35,14 @@ challenge_check() {
 content_type_check() {
   local headers="$1"
   local expected="$2"
-  if ! grep -Eiq "^content-type:[[:space:]]*${expected}([;[:space:]]|$)" "${headers}"; then
+  local actual
+  local actual_base
+
+  actual=$(awk 'BEGIN { IGNORECASE=1 } /^content-type:/ { sub(/\r$/, ""); sub(/^[^:]+:[[:space:]]*/, ""); print; exit }' "${headers}")
+  actual_base="${actual%%;*}"
+  actual_base="${actual_base//[[:space:]]/}"
+
+  if [ "${actual_base,,}" != "${expected,,}" ]; then
     echo "error: expected Content-Type ${expected}" >&2
     echo "received headers:" >&2
     grep -Ei '^content-type:|^server:|^cf-ray:' "${headers}" >&2 || true
