@@ -12,9 +12,9 @@ The realistic attack surface is concentrated in:
 
 - public GitHub repository and Actions (source and CI compromise)
 - public Seed Bank issue intake (spam, harassment, malicious links, social engineering, accidental disclosure, and attempts to smuggle vulnerability details into public threads)
-- Cloudflare account and deployment token (deployment compromise)
+- Cloudflare account and scoped operational credentials (deployment/recovery compromise)
 - dependency compromise (npm devDependencies used for CI tooling)
-- Phase 2 persistence and migrations as D1 is introduced
+- Phase 2 persistence and migrations in D1
 
 ## Interim Seed Bank safety boundary
 
@@ -33,15 +33,19 @@ Not applicable to Hummingbird-owned public participation yet — no participant 
 
 ## Secrets
 
-- Deployment uses a single Cloudflare API Token scoped to Pages:Edit only, stored as a GitHub Actions secret. The account ID is stored as a non-secret repository variable (`CLOUDFLARE_ACCOUNT_ID`).
+- Production Pages deployment uses `CLOUDFLARE_API_TOKEN`, scoped to Pages:Edit only and stored as a GitHub Actions secret. The account ID is stored as a non-secret repository variable (`CLOUDFLARE_ACCOUNT_ID`).
+- The Phase 2D recovery exercise uses a separate GitHub Actions secret, `CLOUDFLARE_D1_RECOVERY_TOKEN`, backed by a temporary account-scoped Cloudflare token with only D1 Read + D1 Write. It is not the Pages deployment token and is not authorized as a general-purpose account credential by project policy.
+- The current recovery token expires on 2026-10-11. Phase 2E must decide whether to let it expire/revoke it after the exercise or replace it with an explicitly recovery-only operating credential/process; it must not silently become a permanent general automation token.
 - No secrets are required to build or test the site locally.
 - Secrets are never committed to the repository. `.env.example` documents the shape of any future required local secret without real values.
 
 ## Least privilege
 
-- The deployment token is restricted to the capability needed for deployment rather than broad account administration.
+- The Pages deployment token is restricted to the capability needed for deployment rather than broad account administration.
+- The temporary recovery credential is restricted to D1 Read + D1 Write and is kept separate because the recovery exercise must create/delete an isolated recovery database while production access in the workflow remains read-only by code contract.
 - GitHub Actions workflows request only the permissions they need (see `.github/workflows/`).
 - Repository workflow-token default permissions are configured read-only; the workflow also declares read-only repository-content permission explicitly.
+- Production D1 is not a restore-test target; the guarded recovery runner requires a newly created recovery UUID distinct from production before any migration/restore write occurs.
 
 ## Planned defenses (Phase 3+ application-owned participation)
 
@@ -59,10 +63,11 @@ Not applicable to Hummingbird-owned public participation yet — no participant 
 - `main` is protected. Changes require the `Checks, test, build` status check, and protection is enforced for everyone including the steward/admin. Force pushes and deletion remain disallowed by policy. The branch-level API independently reports protection enabled, required `Checks, test, build`, and enforcement level `everyone`.
 - Production deployment is also gated by the CI workflow's own `deploy` → `needs: verify` dependency, so the deployment job cannot run until tests, build, and the high-severity dependency audit succeed.
 - External GitHub Actions used by the workflow are pinned to exact full-length commit SHAs rather than mutable version tags.
-- Repository Actions policy is steward-configured to allow repository-owned actions plus GitHub-created/explicitly approved actions, with full-length SHA pinning required. The current workflow uses only `actions/checkout` and `actions/setup-node`.
+- Repository Actions policy is steward-configured to allow repository-owned actions plus GitHub-created/explicitly approved actions, with full-length SHA pinning required. The current workflow uses only SHA-pinned GitHub-owned actions.
 - The workflow-level `GITHUB_TOKEN` permission is read-only for repository contents.
 - `.github/dependabot.yml` monitors npm and GitHub Actions dependencies weekly so package and pinned-Action updates arrive as reviewable pull requests.
 - `.github/CODEOWNERS` records the current steward as default code owner.
+- The one-shot Phase 2D recovery workflow uses the separate D1 recovery secret and requests only read-only repository contents from GitHub; it does not use or widen the Pages credential.
 
 The earlier private-mode risk acceptances for missing branch protection and unrestricted Actions expired when the repository became public and are no longer operative.
 
@@ -112,6 +117,8 @@ Material deliberately admitted to the public institutional record is **DURABLE**
 ### PUBLIC_DELAYED
 
 Material awaiting the publication buffer may remain delayed for **no more than 30 days** before it is published or explicitly reclassified. Temporary pre-publication metadata that is not part of the public record is deleted within **30 days after release**, unless it has become necessary to an active security incident.
+
+During Phase 2's low-write period, [ADR 0017](docs/decisions/0017-phase2-publication-buffer-policy.md) implements this boundary through protected Git review rather than a new runtime queue: consequential facts are retained, while unnecessary credentials, temporary provider identifiers, raw request timing/logs, source/network metadata, and duplicate provider telemetry are omitted from the public summary.
 
 ### OPERATIONAL
 
