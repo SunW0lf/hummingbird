@@ -83,6 +83,14 @@ https://datum.quest/docs/raw/decisions/0013-public-read-accessibility.md
 https://datum.quest/roadmap
 https://datum.quest/docs/raw/ROADMAP.md
 
+## Persistent Spaces — working design, not yet implemented
+https://datum.quest/spaces
+https://datum.quest/docs/raw/SPACES.md
+
+## Persistence & Cost Envelope — working technical plan
+https://datum.quest/persistence
+https://datum.quest/docs/raw/PERSISTENCE.md
+
 ## Seed Bank (interim public invitation; GitHub-backed, not canonical admission)
 https://datum.quest/seed-bank
 
