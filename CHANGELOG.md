@@ -7,6 +7,7 @@ This records meaningful releases and changes, not a raw Git log.
 - Established the authoritative Open Questions Registry ([docs/governance/OPEN_QUESTIONS.md](docs/governance/OPEN_QUESTIONS.md)) and cross-linked every prior `OPEN QUESTION` marker to it.
 - Verified and closed out Phase 0 against the [ROADMAP.md](ROADMAP.md) checklist; corrected documentation drift (credential scope, deployment status, repository trust-boundary language).
 - Hardened the steady-state CI/deployment path: deterministic `npm ci`, high-severity dependency audit as a blocking check, external GitHub Actions pinned to exact commit SHAs, and production deployment now fails closed when its Cloudflare configuration is missing. Corrected public/operational copy that overstated branch protection or misstated the Phase 1 security-contact gate.
+- Recorded dated, Phase-1-only risk acceptances for the unavailable `main` branch protection and unrestricted repository-level GitHub Actions allow-list while Hummingbird remains private and single-steward. Both underlying questions remain open and must be revisited before repository publication; the private vulnerability-reporting channel remains the unresolved Phase 1 completion blocker.
 
 ## Phase 0 — Foundation (complete)
 
