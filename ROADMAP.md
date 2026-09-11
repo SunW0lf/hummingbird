@@ -31,7 +31,7 @@ Status: **in progress**
 
 The Phase 2 data-model, workflow-state, retention, and operational-transparency entry gates are resolved in [DATA_MODEL.md](DATA_MODEL.md), [SECURITY.md](SECURITY.md), [TRANSPARENCY.md](TRANSPARENCY.md), and [ADR 0010](docs/decisions/0010-phase2-read-only-commons-contract.md).
 
-Phase 2 implements public read-only representations of contributions, proposals, needs, relationships, minimal events, statuses, and transparency records. Cloudflare D1 is the planned first persistence engine, while canonical record meaning remains portable and storage-independent.
+Phase 2 implements public read-only representations of contributions, proposals, needs, relationships, minimal events, statuses, and transparency records. Cloudflare D1 is the first persistence engine, while canonical record meaning remains portable and storage-independent.
 
 Phase 2 does **not** accept application-owned public submissions. A narrow interim exception is the **Seed Bank**, defined by [ADR 0011](docs/decisions/0011-interim-seed-bank.md), using GitHub as external provider-hosted discussion transport without automatically creating canonical records or governance weight.
 
@@ -50,30 +50,54 @@ Completed in PR #26. See [ADR 0012](docs/decisions/0012-reference-corpus-before-
 
 ### Phase 2B — Persistence and deterministic import
 
-Status: **in progress**
+Status: **complete**
 
-The local-only substep is now implemented: the repository contains the first versioned D1 migration, deterministic reference-corpus seed generation, and a Wrangler local-D1 round-trip test that reconstructs all four reference records and checks deep equality without semantic loss.
+Phase 2B proved the same portable canonical contract through both isolated local D1 and the real remote Cloudflare D1 database.
 
-That local test remains the authoritative CI contract. The next execution slice is **remote D1 provisioning and reconstruction verification**, not public writes. See [docs/protocols/PHASE_2B_REMOTE_D1.md](docs/protocols/PHASE_2B_REMOTE_D1.md).
+Completed evidence:
 
-Immediate next steps:
+- the first versioned D1 migration is repository-controlled;
+- deterministic seed generation uses the storage-independent reference corpus;
+- the local Wrangler D1 test reconstructs all four reference records and deep-compares them without semantic loss;
+- the remote D1 database was provisioned separately from the public Pages deployment credential and bound by provider ID without making that ID canonical meaning;
+- `0001_canonical_v1.sql` was applied through Wrangler migration history rather than dashboard-only schema edits;
+- the remote verifier loaded the bounded four-record corpus, reconstructed canonical JSON, deep-compared it with the source fixtures, and cleaned the verification records back to an empty canonical database;
+- ordinary pull-request CI remains local/deterministic and does not depend on remote Cloudflare credentials or state.
 
-- provision an empty remote Cloudflare D1 database without attaching a public mutation surface;
-- keep the existing Pages deployment credential narrow and use a separate least-privilege D1 provisioning/automation credential if remote automation is needed;
-- bind the remote database identifier without making provider IDs part of canonical meaning;
-- apply repository-controlled migrations from empty state;
-- load the bounded reference corpus through the deterministic import path;
-- export/reconstruct canonical records from remote D1 and compare them with the storage-independent corpus;
-- keep ordinary pull-request CI local and deterministic rather than dependent on remote Cloudflare state;
-- document the successful remote reconstruction before moving into Phase 2C.
+See [docs/protocols/PHASE_2B_REMOTE_D1.md](docs/protocols/PHASE_2B_REMOTE_D1.md) for the execution protocol and recorded evidence.
 
-The broader persistence architecture and dated cost envelope are documented in [PERSISTENCE.md](PERSISTENCE.md). Future Durable Objects/R2 use is explicitly not part of this Phase 2B D1 milestone unless a later decision says otherwise.
+The broader persistence architecture and dated cost envelope are documented in [PERSISTENCE.md](PERSISTENCE.md). Future Durable Objects/R2 use remains out of scope until a later capability actually requires it.
 
-**Exit:** an empty database can be migrated and populated deterministically from storage-independent input, and canonical records can be exported without loss of institutional meaning. Remote-provider configuration must be reproducible enough that undocumented dashboard state is not required for correctness.
+**Exit satisfied:** an empty database can be migrated and populated deterministically from storage-independent input, and canonical records can be exported without loss of institutional meaning. Remote-provider configuration is reproducible without making undocumented dashboard state part of canonical correctness.
 
 ### Phase 2C — Public read model and admission boundary
 
-Status: **planned**
+Status: **in progress**
+
+Phase 2C follows [ADR 0014](docs/decisions/0014-progressive-capability-rollout.md): Hummingbird limits authority rather than visibility. Public reading stays open; admission/publication/control remain explicit and narrow.
+
+Current implementation slice:
+
+- a static `records.html` public canonical-record index is generated at build time;
+- each deliberately projected canonical record receives stable static HTML and JSON detail routes;
+- the machine index lives at `records/index.json`;
+- public page views do not query D1;
+- CI validates the derived publication projection without remote credentials;
+- draft records are rejected from the public projection;
+- the public projection can exist cleanly in an empty state before the first real admission;
+- the Seed Bank remains external ingress rather than automatic canonical ingestion.
+
+See [docs/protocols/PHASE_2C_ADMISSION_PUBLICATION.md](docs/protocols/PHASE_2C_ADMISSION_PUBLICATION.md).
+
+Immediate next steps:
+
+- choose one intentionally boring, traceable external source for the first real admission exercise;
+- synthesize only the meaning Hummingbird intends to admit, with minimal provenance;
+- admit one canonical record as `draft` through a steward-controlled path;
+- review it independently, then make a separate publication decision;
+- rebuild the static projection from canonical state and inspect the HTML/JSON before deployment;
+- publish through protected `main` and verify the record with an ordinary plain-HTTP client;
+- record evidence that provider identity/reactions/thread metadata were not automatically copied into canonical memory.
 
 - Publish rebuildable read-only projections and stable object/detail routes.
 - Provide machine-readable public representations alongside human-readable views where useful.
@@ -116,7 +140,9 @@ Status: **planned**
 
 Status: **planned**
 
-Contribution form, proposal form, amendment form, challenge/report form, API participation. Rate limits and abuse controls added before broadly opening submission. Phase 3 will revisit whether the Seed Bank concept remains useful and, if so, replace or supplement GitHub transport with Hummingbird-owned participation.
+Phase 3 begins with a narrow capability pilot rather than a private read beta or broad account registration. Public reading remains open. Early Hummingbird-owned write access should grant only bounded, revocable submission capabilities (for example draft contribution/proposal creation) with payload bounds, rate limits, schema validation, replay/duplicate controls, and no implied publication, canonical-admission, moderation, treasury, or governance authority. See [ADR 0014](docs/decisions/0014-progressive-capability-rollout.md).
+
+The Seed Bank concept will be reviewed and may be replaced or supplemented by Hummingbird-owned participation once the controlled write path is ready.
 
 Entry into Phase 3 remains blocked by the constitutional, governance, architecture, and security questions listed in the Open Questions Registry. A working Phase 2 database is not permission to bypass those decisions.
 
