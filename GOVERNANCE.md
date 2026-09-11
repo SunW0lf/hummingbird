@@ -24,6 +24,36 @@ Open question: [OQ-GOVERNANCE-AMENDMENT-THRESHOLD](docs/governance/OPEN_QUESTION
 - Technical/architectural decisions affecting the codebase or infrastructure are recorded as Architecture Decision Records in [docs/decisions/](docs/decisions/).
 - Open question: [OQ-GOVERNANCE-DECISION-PROCESS](docs/governance/OPEN_QUESTIONS.md#oq-governance-decision-process) — process for non-technical/governance decisions.
 
+## Future local governance — not yet active
+
+The working participatory-space design in [SPACES.md](SPACES.md) allows a future room, cafe, pub, workshop, garden, game room, or similar space to govern bounded local interactions through a public constitution.
+
+The intended boundary is:
+
+**Spaces may govern their own interactions, but may not alter the rights, security boundaries, or standing of participants outside those spaces.**
+
+A future local constitution may be able to choose from safe governance primitives such as opening hours, tile/action intervals, proposal thresholds, voting/consent rules, shared-object behavior, or delayed effective dates. It must not acquire arbitrary executable-code authority, infrastructure credentials, private security controls, or the ability to rewrite Hummingbird-wide constitutional rights.
+
+This is a direction, not an active delegation. [OQ-GOVERNANCE-SPACE-CONSTITUTIONS](docs/governance/OPEN_QUESTIONS.md#oq-governance-space-constitutions) must be resolved before self-governed spaces are deployed.
+
+## Future guilds and capability grants — not yet active
+
+A persistent association may eventually constitute a guild with a public constitution, membership history, and internal consent process. A guild is not a higher participant class.
+
+The working model permits a guild to request a narrowly scoped institutional capability, such as extended retention of a shared workshop between ordinary room-cleanup cycles. The request would expose the member decision, pass automatic policy/security checks, receive steward/security review where appropriate, and result in a public grant, modified grant, or denial.
+
+A grant should:
+
+- belong to the guild/shared activity rather than individual members;
+- name its exact scope and purpose;
+- expire or be reviewed rather than create permanent rank;
+- have explicit revocation/modification conditions;
+- never confer constitutional superiority, purchased influence, or rights over outsiders.
+
+Minimum guild membership may eventually create eligibility to **request** a grant, but membership count alone should not automatically produce authority or resource multipliers. Cheap multiplicity and Sybil-sensitive rules remain a security/governance concern.
+
+[OQ-GOVERNANCE-GUILD-GRANTS](docs/governance/OPEN_QUESTIONS.md#oq-governance-guild-grants) and [OQ-SECURITY-MULTIPLICITY-ABUSE](docs/governance/OPEN_QUESTIONS.md#oq-security-multiplicity-abuse) must be resolved before these grants exist.
+
 ## Facilitation
 
 Open question: [OQ-GOVERNANCE-FACILITATION](docs/governance/OPEN_QUESTIONS.md#oq-governance-facilitation) — is there a designated facilitator role distinct from the steward? What are its powers and limits?
@@ -52,4 +82,4 @@ See [CHARTER.md](CHARTER.md) §6 — [OQ-GOVERNANCE-EMERGENCY-AUTHORITY](docs/go
 
 ## Review and revision
 
-This document should be revisited as each Roadmap phase begins, since new phases introduce new governance surface area (proposals, disputes, financial transparency).
+This document should be revisited as each Roadmap phase begins, since new phases introduce new governance surface area (proposals, disputes, local-space constitutions, delegated capabilities, financial transparency).
