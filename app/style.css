@@ -148,3 +148,53 @@ footer {
   text-align: center;
   word-spacing: 0.25rem;
 }
+
+.support-card {
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 1rem 1.25rem;
+  margin: 1.25rem 0;
+}
+
+.wallet-address {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  word-break: break-all;
+  background: #17181b;
+  border: 1px solid var(--border);
+  border-radius: 0.35rem;
+  padding: 0.6rem 0.8rem;
+}
+
+.qr-code {
+  max-width: 220px;
+  margin: 1rem 0;
+}
+
+.qr-code svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.qr-note {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.warning { color: var(--accent); }
+
+button#copy-address-btn {
+  background: transparent;
+  color: var(--fg);
+  border: 1px solid var(--accent);
+  border-radius: 0.35rem;
+  padding: 0.4rem 0.9rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+button#copy-address-btn:hover,
+button#copy-address-btn:focus {
+  background: var(--accent);
+  color: var(--bg);
+}

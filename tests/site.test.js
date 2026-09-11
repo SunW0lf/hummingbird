@@ -22,8 +22,13 @@ const REQUIRED_PAGES = [
   "open-questions.html",
   "security.html",
   "support.html",
+  "more.html",
   "style.css",
+  "support.js",
   "llms.txt",
+  "robots.txt",
+  "sitemap.xml",
+  "_headers",
 ];
 
 const REQUIRED_RAW_DOCS = [
@@ -166,6 +171,54 @@ for (const form of REQUIRED_SEED_FORMS) {
   if (!fs.existsSync(path.join(ROOT, form))) fail(`${form} is missing`);
   else pass(`${form} exists`);
 }
+
+// 8. Primary navigation stays intentionally small and consistent.
+const primaryLabels = [">About</a>", ">Commons</a>", ">Seed Bank</a>", ">Decisions</a>", ">More</a>"];
+for (const fullPath of htmlFiles(APP_DIR)) {
+  const relPage = path.relative(APP_DIR, fullPath);
+  const content = fs.readFileSync(fullPath, "utf8");
+  for (const label of primaryLabels) {
+    if (!content.includes(label)) fail(`${relPage} is missing primary navigation item ${label}`);
+  }
+}
+pass("Primary navigation exposes five stable front-door choices");
+
+// 9. Public pages expose canonical URLs; the 404 is explicitly noindex.
+for (const fullPath of htmlFiles(APP_DIR)) {
+  const relPage = path.relative(APP_DIR, fullPath);
+  const content = fs.readFileSync(fullPath, "utf8");
+  if (relPage === "404.html") {
+    if (!content.includes('name="robots" content="noindex"')) fail("404.html is not marked noindex");
+  } else if (!content.includes('rel="canonical" href="https://datum.quest/')) {
+    fail(`${relPage} is missing a datum.quest canonical URL`);
+  }
+}
+pass("Public HTML exposes canonical URLs and the 404 is noindex");
+
+// 10. Support behavior is CSP-compatible: no inline script/style is required.
+const supportPath = path.join(APP_DIR, "support.html");
+if (fs.existsSync(supportPath)) {
+  const support = fs.readFileSync(supportPath, "utf8");
+  if (support.includes("onclick=")) fail("support.html still contains inline JavaScript");
+  if (support.includes("<style>")) fail("support.html still contains inline CSS");
+  if (!support.includes('src="support.js"')) fail("support.html does not load support.js");
+  else pass("Support page uses external static assets under the site CSP");
+}
+
+// 11. Browser hardening and discoverability artifacts are present.
+const headers = fs.readFileSync(path.join(APP_DIR, "_headers"), "utf8");
+for (const directive of ["Content-Security-Policy", "X-Content-Type-Options", "X-Frame-Options", "Referrer-Policy", "Permissions-Policy"]) {
+  if (!headers.includes(directive)) fail(`_headers is missing ${directive}`);
+}
+
+const robots = fs.readFileSync(path.join(APP_DIR, "robots.txt"), "utf8");
+if (!robots.includes("https://datum.quest/sitemap.xml")) fail("robots.txt does not advertise the sitemap");
+
+const sitemap = fs.readFileSync(path.join(APP_DIR, "sitemap.xml"), "utf8");
+for (const url of ["https://datum.quest/", "https://datum.quest/more.html", "https://datum.quest/support.html", "https://datum.quest/decisions/0012-reference-corpus-before-persistence.html"]) {
+  if (!sitemap.includes(`<loc>${url}</loc>`)) fail(`sitemap.xml is missing ${url}`);
+}
+pass("Security headers and basic discovery artifacts are present");
 
 if (failures > 0) {
   console.error(`\n${failures} test(s) failed.`);

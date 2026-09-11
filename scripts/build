@@ -21,4 +21,7 @@ node scripts/render-decisions.js
 echo "Rendering support page..."
 node scripts/render-support.js
 
+echo "Rendering sitemap..."
+node scripts/render-sitemap.js
+
 echo "Build complete: dist/"

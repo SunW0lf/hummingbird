@@ -3,20 +3,14 @@
 // header/nav/footer markup in the hand-authored pages under app/.
 "use strict";
 
+const SITE_ORIGIN = "https://datum.quest";
+
 const NAV_LINKS = [
-  ["mission.html", "Mission"],
-  ["charter.html", "Charter"],
-  ["governance.html", "Governance"],
-  ["decisions.html", "Decisions"],
-  ["roadmap.html", "Roadmap"],
-  ["how-it-works.html", "How it works"],
+  ["mission.html", "About"],
+  ["how-it-works.html", "Commons"],
   ["seed-bank.html", "Seed Bank"],
-  ["transparency.html", "Transparency"],
-  ["changelog.html", "Changelog"],
-  ["contributing.html", "Contributing"],
-  ["open-questions.html", "Open Questions"],
-  ["security.html", "Security"],
-  ["support.html", "Support"],
+  ["decisions.html", "Decisions"],
+  ["more.html", "More"],
 ];
 
 function renderNav(prefix = "") {
@@ -31,23 +25,35 @@ function escapeHtml(value) {
     .replace(/"/g, "&quot;");
 }
 
+function renderDiscoveryMeta(title, description, canonicalPath) {
+  if (!canonicalPath) return "";
+  const canonicalUrl = `${SITE_ORIGIN}/${canonicalPath.replace(/^\/+/, "")}`;
+  const fullTitle = `${title} — Hummingbird`;
+  return `\n<link rel="canonical" href="${escapeHtml(canonicalUrl)}">` +
+    `\n<meta property="og:type" content="website">` +
+    `\n<meta property="og:title" content="${escapeHtml(fullTitle)}">` +
+    (description ? `\n<meta property="og:description" content="${escapeHtml(description)}">` : "") +
+    `\n<meta property="og:url" content="${escapeHtml(canonicalUrl)}">` +
+    `\n<meta name="twitter:card" content="summary">`;
+}
+
 // Renders a full HTML document using the shared site shell.
-// options: { title, description, bodyHtml, extraHead, prefix }
+// options: { title, description, bodyHtml, extraHead, prefix, canonicalPath }
 // `prefix` is used by nested generated pages (for example decisions/*.html)
 // to link back to root-level site assets and navigation.
-function renderPage({ title, description, bodyHtml, extraHead, prefix = "" }) {
+function renderPage({ title, description, bodyHtml, extraHead, prefix = "", canonicalPath = "" }) {
   return `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${escapeHtml(title)} — Hummingbird</title>${description ? `\n<meta name="description" content="${escapeHtml(description)}">` : ""}
+<title>${escapeHtml(title)} — Hummingbird</title>${description ? `\n<meta name="description" content="${escapeHtml(description)}">` : ""}${renderDiscoveryMeta(title, description, canonicalPath)}
 <link rel="stylesheet" href="${prefix}style.css">${extraHead ? `\n${extraHead}` : ""}
 </head>
 <body>
 <header>
   <a class="brand" href="${prefix}index.html">Hummingbird</a>
-  <nav>
+  <nav aria-label="Primary">
 ${renderNav(prefix)}
   </nav>
 </header>

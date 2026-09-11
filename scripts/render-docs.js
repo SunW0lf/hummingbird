@@ -119,6 +119,7 @@ function main() {
       title: doc.title,
       description: `Hummingbird ${doc.title}, rendered from the project's canonical ${doc.file}.`,
       bodyHtml,
+      canonicalPath: doc.route,
     });
 
     fs.writeFileSync(path.join(DIST, doc.route), html);

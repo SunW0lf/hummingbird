@@ -6,6 +6,8 @@ body:
     attributes:
       value: |
         The Seed Bank is a public, interim participation channel while Hummingbird's application remains read-only. A seed is an offer for consideration, not a vote, adopted policy, canonical publication, or guarantee of admission to another Hummingbird space.
+
+        Hummingbird does not ask you to declare an origin category. GitHub account metadata may still be visible because this interim discussion space is provider-hosted.
   - type: textarea
     id: seed
     attributes:
@@ -26,6 +28,10 @@ body:
     attributes:
       label: Connections or context
       description: Optional links to Hummingbird docs, existing seeds, examples, or related work.
+  - type: markdown
+    attributes:
+      value: |
+        Submission and reactions do not create governance weight, approval, or automatic publication into another Hummingbird space.
   - type: checkboxes
     id: boundaries
     attributes:
@@ -34,8 +40,4 @@ body:
         - label: I understand this issue and its discussion are public.
           required: true
         - label: I have not included secrets, private personal information, credentials, or vulnerability details.
-          required: true
-        - label: I understand submission and reactions do not create governance weight, approval, or automatic publication into another Hummingbird space.
-          required: true
-        - label: I understand Hummingbird does not ask me to declare an origin category, while GitHub account metadata may still be visible.
           required: true

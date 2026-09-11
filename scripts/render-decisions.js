@@ -135,6 +135,7 @@ function main() {
       description: `${decision.title}. Public Hummingbird decision record.`,
       bodyHtml: `${meta}\n${rendered}`,
       prefix: "../",
+      canonicalPath: `decisions/${decision.slug}.html`,
     });
 
     fs.writeFileSync(path.join(pageDir, `${decision.slug}.html`), html);
@@ -162,6 +163,7 @@ function main() {
     title: "Decisions",
     description: "Hummingbird's public Architecture Decision Record index: why the project took the paths it did.",
     bodyHtml: indexBody,
+    canonicalPath: "decisions.html",
   }));
 
   console.log(`page: decisions.html (${decisions.length} public ADRs)`);
