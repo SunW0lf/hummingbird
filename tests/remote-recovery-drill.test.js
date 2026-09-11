@@ -48,13 +48,13 @@ if (workflow.includes("secrets.CLOUDFLARE_API_TOKEN")) fail("remote recovery wor
 if (workflow.includes("write-all")) fail("remote recovery workflow requests broad GitHub write permissions");
 
 for (const marker of [
-  "scripts\", \"backup\"), [\"--remote\"",
+  'path.join(ROOT, "scripts", "backup"), ["--remote", "--output", artifactDir]',
   "assertPublicArtifactSafe(records)",
   "recoveryId === productionDatabaseId",
   "recovery target canonical_objects is not empty",
   "SEMANTIC_EQUALITY",
   "PUBLIC_PROJECTION_EQUALITY",
-  "cloudflareApi(\"DELETE\"",
+  'cloudflareApi("DELETE"',
   "PHASE2D_REMOTE_RECOVERY_DRILL: SUCCESS",
 ]) {
   if (!drill.includes(marker)) fail(`remote recovery runner is missing safety/evidence marker: ${marker}`);
