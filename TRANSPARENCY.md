@@ -2,7 +2,7 @@
 
 ## Current state
 
-`datum.quest` is public static content and the GitHub repository is now public. Repository documentation, ADRs, commit history, pull requests, and public Actions history form the inspectable project record for source and governance-development work.
+`datum.quest` is public static content and the GitHub repository is public. Repository documentation, ADRs, commit history, pull requests, public issue discussions, and public Actions history form the inspectable project record for source and governance-development work.
 
 There is not yet a production application database, publication buffer, or dynamic transparency feed. Those are Phase 2 implementation work.
 
@@ -24,6 +24,14 @@ public transparency log
 
 See [ADR 0004](docs/decisions/0004-publication-buffer.md) and [ADR 0010](docs/decisions/0010-phase2-read-only-commons-contract.md).
 
+## Interim Seed Bank
+
+The Seed Bank in [ADR 0011](docs/decisions/0011-interim-seed-bank.md) uses GitHub issues as an external, public discussion surface while the Hummingbird application itself remains read-only.
+
+A public GitHub issue is authoritative for its own provider-hosted thread, but it is **not automatically a canonical Hummingbird object**. Hummingbird does not silently ingest issue authorship metadata, comments, reactions, or timing into its future application database merely because those fields are available.
+
+If a seed is later admitted, synthesized, or referenced in the durable commons, the resulting Hummingbird record should store Hummingbird's institutional meaning and a useful provenance/reference relationship to the source thread rather than cloning the entire GitHub conversation. Reactions remain conversational signals and are not governance votes.
+
 ## Operational history
 
 Hummingbird does **not** copy complete provider logs into its own database merely to create another ledger. GitHub remains authoritative for GitHub Actions history; Cloudflare remains authoritative for provider-side deployment telemetry; the blockchain remains authoritative for public on-chain activity.
@@ -44,10 +52,10 @@ Non-urgent operational events may be released in batches and with coarsened timi
 
 The repository is public. The publication transition was authorized by ADR 0009 and completed with public visibility plus protected `main`; the required `Checks, test, build` status check is active and branch protection is enforced for everyone including the steward/admin.
 
-The repository's earlier git-history review found no committed secrets. Public mode invalidated the earlier private-only risk acceptances, so the remaining public-repository security controls are tracked in [SECURITY.md](SECURITY.md) until their settings are explicitly verified.
+The repository's earlier git-history review found no committed secrets. Public-mode controls are documented in [SECURITY.md](SECURITY.md), including private vulnerability reporting, secret protection, Dependabot security controls, and CodeQL default setup.
 
 ## Public records and raw logs
 
-Public GitHub repository activity should be assumed visible. Hummingbird will not republish every raw CI line or provider diagnostic into a second database. When a raw provider record is useful, the project may reference it; when a durable institutional summary is needed, Hummingbird stores the small summary and its relationship to the relevant release/decision.
+Public GitHub repository activity should be assumed visible. Hummingbird will not republish every raw CI line, Seed Bank comment, reaction, or provider diagnostic into a second database. When a raw provider record is useful, the project may reference it; when a durable institutional summary is needed, Hummingbird stores the small summary and its relationship to the relevant release, discussion, or decision.
 
 This is the transparency version of the project's lean-data rule: **store Hummingbird's meaning; reference authoritative external facts.**
