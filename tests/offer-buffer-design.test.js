@@ -41,6 +41,8 @@ for (const [name, content, markers] of [
     "Offer Buffer",
     "delivery friction may regulate resource use",
     "This ADR defines terminology and architecture only",
+    "proof of thought",
+    "proof of cognition",
   ]],
   ["Offer Buffer working design", design, [
     "design only — not deployed; Phase 3 remains gated",
@@ -48,6 +50,7 @@ for (const [name, content, markers] of [
     "Uncredentialed bounded delivery",
     "Delivery is not priority",
     "Broad scope is not itself an abuse signal",
+    "no hidden proof-of-thought, proof-of-cognition",
   ]],
   ["Roadmap", roadmap, [
     "offer architecture documented, gate not yet open",
@@ -74,14 +77,12 @@ for (const [name, content, markers] of [
 const forbiddenDesignPhrases = [
   "Humans & LLMs",
   "Scripts & Agents",
-  "proof of thought",
-  "proof-of-thought",
-  "proof of cognition",
   "low-priority automated review sinkhole",
+  "determines how your offer is prioritized",
 ];
 for (const phrase of forbiddenDesignPhrases) {
   if (design.toLowerCase().includes(phrase.toLowerCase())) {
-    fail(`Offer Buffer working design contains rejected origin/proof language: ${phrase}`);
+    fail(`Offer Buffer working design contains rejected origin/priority language: ${phrase}`);
   }
 }
 
