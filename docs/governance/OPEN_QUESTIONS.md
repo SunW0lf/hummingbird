@@ -158,20 +158,9 @@ Raised in: [LICENSE](../../LICENSE).
 Review gate: before C1 Charter Candidate publication.
 Status: OPEN — reviewed at the repository-publication gate; no distinct content license has been selected. Publication does not itself change the reuse terms stated in `LICENSE`.
 
-## Recently resolved and moved into substantive documentation
-
-The following stable IDs were resolved on 2026-09-10 and are retained here only as a historical index, not as open questions:
-
-- `OQ-DATA-CONTRIBUTION-MODEL`, `OQ-DATA-PROPOSAL-MODEL`, `OQ-DATA-NEED-MODEL`, `OQ-DATA-AUDIT-EVENT-MODEL`, `OQ-DATA-WORKFLOW-STATES` → [DATA_MODEL.md](../../DATA_MODEL.md), [ADR 0010](../decisions/0010-phase2-read-only-commons-contract.md).
-- `OQ-SECURITY-RETENTION-PERIODS` → [SECURITY.md](../../SECURITY.md), [ADR 0010](../decisions/0010-phase2-read-only-commons-contract.md).
-- `OQ-TRANSPARENCY-OPERATIONAL-HISTORY` → [TRANSPARENCY.md](../../TRANSPARENCY.md), [ADR 0010](../decisions/0010-phase2-read-only-commons-contract.md).
-- `OQ-TRANSPARENCY-REPO-VISIBILITY` → [TRANSPARENCY.md](../../TRANSPARENCY.md), [ADR 0009](../decisions/0009-public-repository-security-transition.md).
-- `OQ-SECURITY-ACTIONS-HARDENING` → [SECURITY.md](../../SECURITY.md), [OPERATIONS.md](../../OPERATIONS.md).
-- `OQ-OPS-BRANCH-PROTECTION` → [OPERATIONS.md](../../OPERATIONS.md), [SECURITY.md](../../SECURITY.md).
-
 ## Index by phase gate
 
-- **Blocks entry into Phase 2:** none. The former Phase 2 entry questions are resolved in ADR 0010 and substantive docs.
+- **Blocks entry into Phase 2:** none. The former Phase 2 entry questions are resolved in [ADR 0010](../decisions/0010-phase2-read-only-commons-contract.md), [DATA_MODEL.md](../../DATA_MODEL.md), [SECURITY.md](../../SECURITY.md), and [TRANSPARENCY.md](../../TRANSPARENCY.md).
 - **Blocks completion of Phase 1:** OQ-SECURITY-VULN-REPORTING. The remaining public-repository Advanced Security controls in `SECURITY.md` must also be explicitly verified before Phase 1 closeout.
 - **Blocks entry into Phase 3:** OQ-CHARTER-RIGHTS, OQ-CHARTER-EXCLUSION, OQ-CHARTER-PARTICIPANT-RESPONSIBILITIES, OQ-GOVERNANCE-EMERGENCY-AUTHORITY, OQ-GOVERNANCE-PROPOSALS, OQ-ARCH-FRAMEWORK, OQ-SECURITY-ACCESS-CONTROL-RETENTION, OQ-SECURITY-AUTHN-MODEL.
 - **Blocks entry into Phase 4:** OQ-GOVERNANCE-DISPUTES, OQ-GOVERNANCE-VALIDATED-NEEDS.
