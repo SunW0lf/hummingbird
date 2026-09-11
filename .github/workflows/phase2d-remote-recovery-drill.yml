@@ -1,0 +1,55 @@
+name: Phase 2D Remote Recovery Drill
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: phase2d-remote-recovery-drill
+  cancel-in-progress: false
+
+jobs:
+  drill:
+    name: Production-state recovery drill
+    if: startsWith(github.event.head_commit.message, 'Phase 2D: run remote recovery drill')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build expected public projection
+        run: ./scripts/build
+
+      - name: Run guarded remote recovery drill
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_D1_RECOVERY_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          HUMMINGBIRD_RECOVERY_ARTIFACT_DIR: .hummingbird-backups/phase2d-remote-drill-${{ github.run_id }}
+        run: node scripts/phase2d-remote-recovery-drill.js
+
+      # This artifact is uploaded only after the drill proves that every backed-up
+      # canonical record exactly equals the already-public publication/canonical
+      # projection. If any draft/non-public state exists, the drill fails before
+      # this step and no canonical backup is exposed through the public repository.
+      - name: Retain public-equivalent portable backup independently of D1
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: phase2d-public-equivalent-production-backup-${{ github.run_id }}
+          path: .hummingbird-backups/phase2d-remote-drill-${{ github.run_id }}
+          if-no-files-found: error
+          retention-days: 30
