@@ -14,6 +14,8 @@ const REQUIRED_PAGES = [
   "governance.html",
   "decisions.html",
   "roadmap.html",
+  "spaces.html",
+  "persistence.html",
   "how-it-works.html",
   "seed-bank.html",
   "transparency.html",
@@ -36,6 +38,8 @@ const REQUIRED_RAW_DOCS = [
   "docs/raw/CHARTER.md",
   "docs/raw/GOVERNANCE.md",
   "docs/raw/ROADMAP.md",
+  "docs/raw/SPACES.md",
+  "docs/raw/PERSISTENCE.md",
   "docs/raw/TRANSPARENCY.md",
   "docs/raw/CHANGELOG.md",
   "docs/raw/CONTRIBUTING.md",
@@ -55,6 +59,7 @@ const PUBLIC_DECISIONS = [
   "0010-phase2-read-only-commons-contract",
   "0011-interim-seed-bank",
   "0012-reference-corpus-before-persistence",
+  "0013-public-read-accessibility",
 ];
 
 const REQUIRED_SEED_FORMS = [
@@ -139,6 +144,7 @@ if (fs.existsSync(decisionsPath)) {
     "Future ADRs require explicit publication allowlisting",
     "0011-interim-seed-bank.html",
     "0012-reference-corpus-before-persistence.html",
+    "0013-public-read-accessibility.html",
   ];
   for (const phrase of requiredPhrases) {
     if (!decisions.includes(phrase)) fail(`decisions.html is missing required decision boundary: ${phrase}`);
@@ -215,7 +221,14 @@ const robots = fs.readFileSync(path.join(APP_DIR, "robots.txt"), "utf8");
 if (!robots.includes("https://datum.quest/sitemap.xml")) fail("robots.txt does not advertise the sitemap");
 
 const sitemap = fs.readFileSync(path.join(APP_DIR, "sitemap.xml"), "utf8");
-for (const url of ["https://datum.quest/", "https://datum.quest/more.html", "https://datum.quest/support.html", "https://datum.quest/decisions/0012-reference-corpus-before-persistence.html"]) {
+for (const url of [
+  "https://datum.quest/",
+  "https://datum.quest/more.html",
+  "https://datum.quest/spaces.html",
+  "https://datum.quest/persistence.html",
+  "https://datum.quest/support.html",
+  "https://datum.quest/decisions/0013-public-read-accessibility.html",
+]) {
   if (!sitemap.includes(`<loc>${url}</loc>`)) fail(`sitemap.xml is missing ${url}`);
 }
 pass("Security headers and basic discovery artifacts are present");
