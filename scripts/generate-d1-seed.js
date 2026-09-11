@@ -28,9 +28,11 @@ const records = files.map((name) => {
   return JSON.parse(fs.readFileSync(file, "utf8"));
 }).sort((a, b) => a.id.localeCompare(b.id));
 
+// Do not emit explicit BEGIN/COMMIT statements. Wrangler's D1 file-import path
+// handles the import transaction, and Cloudflare's remote D1 import guidance
+// requires SQLite dump transaction wrappers to be removed.
 const lines = [
   "PRAGMA foreign_keys = ON;",
-  "BEGIN TRANSACTION;",
   "DELETE FROM canonical_relationships;",
   "DELETE FROM canonical_objects;"
 ];
@@ -71,5 +73,4 @@ for (const record of records) {
   });
 }
 
-lines.push("COMMIT;");
 process.stdout.write(lines.join("\n") + "\n");

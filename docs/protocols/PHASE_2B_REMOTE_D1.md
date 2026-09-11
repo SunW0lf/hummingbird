@@ -1,6 +1,6 @@
 # Phase 2B — Remote D1 Execution Checklist
 
-Status: **in progress — remote database provisioned and bound; migrations pending**
+Status: **in progress — remote database provisioned, bound, and migrated; corpus round-trip pending**
 Date: 2026-09-11
 
 This protocol is the next execution slice after the local Wrangler D1 round-trip test. It does not open public writes, change canonical semantics, or move Hummingbird into Phase 2C by itself.
@@ -17,15 +17,25 @@ Completed on 2026-09-11:
 
 - a remote Cloudflare D1 database named `hummingbird` exists;
 - its non-secret database UUID is bound in `wrangler.d1.jsonc`;
+- `0001_canonical_v1.sql` was applied through Wrangler's migration mechanism;
+- a subsequent remote migration listing reported no migrations pending;
+- remote schema inspection showed `canonical_objects`, `canonical_relationships`, and `d1_migrations`, plus Cloudflare/SQLite internal tables;
 - no application-owned public write endpoint has been attached;
 - the existing Pages deployment credential remains separate from D1 administration.
 
 Pending:
 
-- apply repository-controlled migrations to the empty remote database;
 - load the bounded verification corpus;
 - export/reconstruct the canonical representation and compare it with the storage-independent corpus;
 - exercise reproducible empty-state reconstruction and record the result.
+
+## Remote target semantics
+
+`database_id` identifies the production-intended remote `hummingbird` D1 resource for Wrangler operations. It is provider configuration, not canonical institutional identity.
+
+Do not set `preview_database_id` unless Hummingbird deliberately provisions a **separate remote preview D1 database**. Cloudflare documents that field for `wrangler dev --remote` preview use; leaving it absent avoids ambiguity between the production-intended D1 target and any future preview environment.
+
+Ordinary CI and local contract tests continue to use local Wrangler D1 state and do not depend on the remote database.
 
 ## Preconditions
 
@@ -64,22 +74,23 @@ Only the non-secret provider identifier required by Wrangler configuration is co
 
 ### 2. Bind configuration deliberately — complete
 
-`wrangler.d1.jsonc` now binds the `DB` binding and `hummingbird` database name to the provisioned remote database UUID.
+`wrangler.d1.jsonc` binds the `DB` binding and `hummingbird` database name to the provisioned remote database UUID.
 
-The local D1 path remains intact. Remote configuration must not make ordinary pull-request tests depend on network access or Cloudflare availability.
+No `preview_database_id` is configured because no separate remote preview database has been provisioned. The local D1 path remains intact.
 
-### 3. Apply migrations from empty state — next
+### 3. Apply migrations from empty state — complete
 
-Apply the repository migration set to the empty remote database using Wrangler's migration command rather than ad-hoc dashboard-created tables.
+`0001_canonical_v1.sql` was applied using Wrangler migrations rather than ad-hoc dashboard SQL.
 
-Acceptance checks:
+Verified afterward:
 
-- migration command succeeds;
-- expected migration inventory is present exactly once;
-- `canonical_objects` and `canonical_relationships` exist with the reviewed v1 shape;
-- no ad-hoc dashboard-created columns/tables are required for correctness.
+- Wrangler reported no remaining migrations to apply;
+- `canonical_objects` exists;
+- `canonical_relationships` exists;
+- `d1_migrations` exists;
+- provider/internal tables such as `_cf_KV` and SQLite bookkeeping tables are not treated as canonical Hummingbird schema.
 
-### 4. Load a bounded verification corpus
+### 4. Load a bounded verification corpus — next
 
 Use the deterministic reference-corpus import path against the remote database.
 
