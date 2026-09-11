@@ -2,7 +2,7 @@
 # Browser hardening applies to the full public surface. Route-specific rules
 # below retain direct/machine-readable content types for raw documents.
 /*
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'none'; script-src 'self' 'sha256-dp1wVc6ZZlwdE/gU7VMdc818oeIPeMQvqYaHYq0OzqQ='; style-src 'self'; img-src 'self' data:; connect-src 'self'; font-src 'self'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'none'; script-src 'self' 'sha256-/sMVbzFGwEC8nFBH8a2igmv2Z7UXRiurLvTLGLiAZMs='; style-src 'self'; img-src 'self' data:; connect-src 'self'; font-src 'self'; upgrade-insecure-requests
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
   Referrer-Policy: strict-origin-when-cross-origin
