@@ -15,6 +15,7 @@ node --check scripts/admit-draft-d1.js
 node --check scripts/mark-published-d1.js
 node --check scripts/export-canonical-backup.js
 node --check scripts/restore-canonical-backup.js
+node --check scripts/phase2d-remote-recovery-drill.js
 
 echo "Validating first Phase 2C draft-admission candidate without remote access..."
 node scripts/admit-draft-d1.js admissions/candidates/seed15-visible-consequence.json --validate-only
@@ -42,6 +43,9 @@ node tests/consistency.test.js
 
 echo "Running Phase 2D recovery documentation/changelog checks..."
 node tests/recovery-docs.test.js
+
+echo "Running remote Phase 2D drill safety checks without remote access..."
+node tests/remote-recovery-drill.test.js
 
 echo "Running canonical corpus contract checks..."
 node tests/canonical.test.js
