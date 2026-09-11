@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "hummingbird",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "preview_database_id": "DB",
+      "migrations_dir": "migrations"
+    }
+  ]
+}
