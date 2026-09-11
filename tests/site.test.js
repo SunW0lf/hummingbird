@@ -60,6 +60,7 @@ const PUBLIC_DECISIONS = [
   "0011-interim-seed-bank",
   "0012-reference-corpus-before-persistence",
   "0013-public-read-accessibility",
+  "0014-progressive-capability-rollout",
 ];
 
 const REQUIRED_SEED_FORMS = [
@@ -135,41 +136,48 @@ for (const fullPath of htmlFiles(APP_DIR)) {
 }
 pass("All generated HTML pages have resolvable internal .html links");
 
-// 5. Decisions index must explain authority and deliberate publication.
+// 5. Decisions index must explain authority, deliberate publication, and evaluation boundaries.
 const decisionsPath = path.join(APP_DIR, "decisions.html");
 if (fs.existsSync(decisionsPath)) {
   const decisions = fs.readFileSync(decisionsPath, "utf8");
   const requiredPhrases = [
     "Decision records are history, not scripture",
+    "No hidden participant or content score",
+    "evaluation-without-identity-metrics",
     "Future ADRs require explicit publication allowlisting",
     "0011-interim-seed-bank.html",
     "0012-reference-corpus-before-persistence.html",
     "0013-public-read-accessibility.html",
+    "0014-progressive-capability-rollout.html",
   ];
   for (const phrase of requiredPhrases) {
     if (!decisions.includes(phrase)) fail(`decisions.html is missing required decision boundary: ${phrase}`);
   }
-  pass("Decisions index exposes the public ADR set and authority boundary");
+  pass("Decisions index exposes the public ADR set and evaluation/authority boundaries");
 }
 
-// 6. Seed Bank must expose the bounded interim interaction contract.
+// 6. Seed Bank must expose the bounded interim interaction contract and a non-developer entry path.
 const seedBankPath = path.join(APP_DIR, "seed-bank.html");
 if (fs.existsSync(seedBankPath)) {
   const seedBank = fs.readFileSync(seedBankPath, "utf8");
   const requiredPhrases = [
+    "You do not need to be a developer",
+    "Open the guided Seed form",
     "Plant a seed",
     "Leave feedback",
     "Ask a question",
+    "What happens after you submit?",
     "Reactions are conversational signals, not votes",
     "security/advisories/new",
     "issues/15",
     "issues/19",
     "decisions/0011-interim-seed-bank.html",
+    "No Hummingbird-owned public write API is introduced by this page",
   ];
   for (const phrase of requiredPhrases) {
     if (!seedBank.includes(phrase)) fail(`seed-bank.html is missing required interaction boundary: ${phrase}`);
   }
-  pass("Seed Bank exposes starter discussions and participation boundaries");
+  pass("Seed Bank exposes low-friction onboarding and bounded participation boundaries");
 }
 
 // 7. Constrained GitHub forms and private-security routing must exist in-repo.
@@ -189,19 +197,24 @@ for (const fullPath of htmlFiles(APP_DIR)) {
 }
 pass("Primary navigation exposes five stable front-door choices");
 
-// 9. Public pages expose canonical URLs; the 404 is explicitly noindex.
+// 9. Public pages expose clean datum.quest canonical URLs; the 404 is explicitly noindex.
 for (const fullPath of htmlFiles(APP_DIR)) {
-  const relPage = path.relative(APP_DIR, fullPath);
+  const relPage = path.relative(APP_DIR, fullPath).replace(/\\/g, "/");
   const content = fs.readFileSync(fullPath, "utf8");
   if (relPage === "404.html") {
     if (!content.includes('name="robots" content="noindex"')) fail("404.html is not marked noindex");
-  } else if (!content.includes('rel="canonical" href="https://datum.quest/')) {
-    fail(`${relPage} is missing a datum.quest canonical URL`);
+  } else {
+    const expected = relPage === "index.html"
+      ? "https://datum.quest/"
+      : `https://datum.quest/${relPage.replace(/\.html$/, "")}`;
+    if (!content.includes(`rel="canonical" href="${expected}"`)) {
+      fail(`${relPage} does not advertise its clean canonical URL ${expected}`);
+    }
   }
 }
-pass("Public HTML exposes canonical URLs and the 404 is noindex");
+pass("Public HTML exposes clean datum.quest canonical URLs and the 404 is noindex");
 
-// 10. Support behavior is CSP-compatible: no inline script/style is required.
+// 10. Support behavior is CSP-compatible: no executable inline script/style is required.
 const supportPath = path.join(APP_DIR, "support.html");
 if (fs.existsSync(supportPath)) {
   const support = fs.readFileSync(supportPath, "utf8");
@@ -211,7 +224,7 @@ if (fs.existsSync(supportPath)) {
   else pass("Support page uses external static assets under the site CSP");
 }
 
-// 11. Browser hardening and discoverability artifacts are present.
+// 11. Browser hardening and discoverability artifacts are present and use clean routes.
 const headers = fs.readFileSync(path.join(APP_DIR, "_headers"), "utf8");
 for (const directive of ["Content-Security-Policy", "X-Content-Type-Options", "X-Frame-Options", "Referrer-Policy", "Permissions-Policy"]) {
   if (!headers.includes(directive)) fail(`_headers is missing ${directive}`);
@@ -223,15 +236,66 @@ if (!robots.includes("https://datum.quest/sitemap.xml")) fail("robots.txt does n
 const sitemap = fs.readFileSync(path.join(APP_DIR, "sitemap.xml"), "utf8");
 for (const url of [
   "https://datum.quest/",
-  "https://datum.quest/more.html",
-  "https://datum.quest/spaces.html",
-  "https://datum.quest/persistence.html",
-  "https://datum.quest/support.html",
-  "https://datum.quest/decisions/0013-public-read-accessibility.html",
+  "https://datum.quest/more",
+  "https://datum.quest/spaces",
+  "https://datum.quest/persistence",
+  "https://datum.quest/support",
+  "https://datum.quest/decisions/0013-public-read-accessibility",
+  "https://datum.quest/records/contribution-visible-consequence",
 ]) {
   if (!sitemap.includes(`<loc>${url}</loc>`)) fail(`sitemap.xml is missing ${url}`);
 }
-pass("Security headers and basic discovery artifacts are present");
+if (sitemap.includes(".html</loc>")) fail("sitemap.xml still advertises redirecting .html aliases");
+pass("Security headers and clean-route discovery artifacts are present");
+
+// 12. Root metadata uniquely identifies Hummingbird at datum.quest for search/model discovery.
+const index = fs.readFileSync(path.join(APP_DIR, "index.html"), "utf8");
+for (const marker of [
+  "<title>Hummingbird — Origin-Agnostic Commons | datum.quest</title>",
+  'type="application/ld+json"',
+  '"@type": "SoftwareSourceCode"',
+  '"url": "https://datum.quest/"',
+  '"codeRepository": "https://github.com/SunW0lf/hummingbird"',
+]) {
+  if (!index.includes(marker)) fail(`index.html is missing discovery marker: ${marker}`);
+}
+const llms = fs.readFileSync(path.join(APP_DIR, "llms.txt"), "utf8");
+if (!llms.includes("Canonical Hummingbird web origin: https://datum.quest/")) fail("llms.txt does not identify the canonical web origin");
+if (!llms.includes("Treat similarly named domains as separate")) fail("llms.txt lacks domain-disambiguation guidance");
+pass("Search and model discovery identify datum.quest and the public source repository explicitly");
+
+// 13. Commons onboarding and roadmap expose the real lifecycle/gates.
+const howItWorks = fs.readFileSync(path.join(APP_DIR, "how-it-works.html"), "utf8");
+for (const marker of [
+  "Lifecycle of a contribution",
+  "admit to canonical memory",
+  "Phase 2D",
+  "What must be true before Phase 3?",
+  "limit authority, not visibility",
+]) {
+  if (!howItWorks.includes(marker)) fail(`how-it-works.html is missing lifecycle/gate marker: ${marker}`);
+}
+pass("Commons page exposes contribution lifecycle and phase-gate progression");
+
+// 14. Governance and Charter expose evaluation criteria without inventing identity scoring.
+const governance = fs.readFileSync(path.join(APP_DIR, "governance.html"), "utf8");
+for (const marker of [
+  "Evaluation without identity metrics",
+  "does <strong>not</strong> currently maintain a global participant score",
+  "Current Phase 2 admission criteria",
+  "No hidden institutional criteria",
+]) {
+  if (!governance.includes(marker)) fail(`governance.html is missing evaluation marker: ${marker}`);
+}
+const charter = fs.readFileSync(path.join(APP_DIR, "charter.html"), "utf8");
+for (const marker of [
+  "global participant score",
+  "Consequential automated or social criteria",
+  "evaluation-without-identity-metrics",
+]) {
+  if (!charter.includes(marker)) fail(`charter.html is missing identity-neutral evaluation marker: ${marker}`);
+}
+pass("Governance/Charter expose explicit evaluation boundaries without identity metrics");
 
 if (failures > 0) {
   console.error(`\n${failures} test(s) failed.`);
