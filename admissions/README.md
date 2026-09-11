@@ -13,10 +13,16 @@ Admission rules for this Phase 2C slice:
 - admission does not publish the record and does not grant governance approval;
 - candidate files may be removed later as operational/review material after their evidentiary purpose is satisfied; D1 remains canonical persistence.
 
-Command pattern:
+Validate a candidate locally/CI without remote access:
+
+```powershell
+node scripts/admit-draft-d1.js admissions/candidates/<file>.json --validate-only
+```
+
+After inspecting the candidate, deliberately admit it as durable **draft** canonical memory:
 
 ```powershell
 node scripts/admit-draft-d1.js admissions/candidates/<file>.json --confirm-admission
 ```
 
-Always inspect the candidate first.
+The second command is a remote state-changing operation. It still does **not** publish the record. Publication requires a later independent decision and the separate staging/promotion path documented in the Phase 2C protocol.
