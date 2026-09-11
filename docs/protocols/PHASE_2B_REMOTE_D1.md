@@ -1,6 +1,6 @@
 # Phase 2B — Remote D1 Execution Checklist
 
-Status: **prepared, not yet executed**
+Status: **in progress — remote database provisioned and bound; migrations pending**
 Date: 2026-09-11
 
 This protocol is the next execution slice after the local Wrangler D1 round-trip test. It does not open public writes, change canonical semantics, or move Hummingbird into Phase 2C by itself.
@@ -10,6 +10,22 @@ This protocol is the next execution slice after the local Wrangler D1 round-trip
 Create a remote Cloudflare D1 persistence target that can be reconstructed from the repository's versioned migrations and storage-independent canonical records, then prove that records exported from D1 preserve institutional meaning.
 
 The remote database is infrastructure. It is not the source of Hummingbird's schema semantics, governance rules, participant identity model, or publication authority.
+
+## Current execution state
+
+Completed on 2026-09-11:
+
+- a remote Cloudflare D1 database named `hummingbird` exists;
+- its non-secret database UUID is bound in `wrangler.d1.jsonc`;
+- no application-owned public write endpoint has been attached;
+- the existing Pages deployment credential remains separate from D1 administration.
+
+Pending:
+
+- apply repository-controlled migrations to the empty remote database;
+- load the bounded verification corpus;
+- export/reconstruct the canonical representation and compare it with the storage-independent corpus;
+- exercise reproducible empty-state reconstruction and record the result.
 
 ## Preconditions
 
@@ -40,21 +56,21 @@ Requirements:
 
 ## Execution sequence
 
-### 1. Provision an empty remote D1 database
+### 1. Provision an empty remote D1 database — complete
 
-Create the production-intended D1 database for Hummingbird without attaching any public write surface.
+The production-intended D1 database exists without an attached public write surface.
 
-Record only the non-secret provider identifiers required by the deployment/configuration path. Do not commit credentials.
+Only the non-secret provider identifier required by Wrangler configuration is committed. No credential is stored in the repository.
 
-### 2. Bind configuration deliberately
+### 2. Bind configuration deliberately — complete
 
-Replace the placeholder remote database identifier in the D1 configuration only when the database exists and the intended repository/deployment workflow is clear.
+`wrangler.d1.jsonc` now binds the `DB` binding and `hummingbird` database name to the provisioned remote database UUID.
 
-Keep the local D1 path working. Remote configuration must not make ordinary pull-request tests depend on network access or Cloudflare availability.
+The local D1 path remains intact. Remote configuration must not make ordinary pull-request tests depend on network access or Cloudflare availability.
 
-### 3. Apply migrations from empty state
+### 3. Apply migrations from empty state — next
 
-Apply the repository migration set to the empty remote database.
+Apply the repository migration set to the empty remote database using Wrangler's migration command rather than ad-hoc dashboard-created tables.
 
 Acceptance checks:
 
