@@ -37,6 +37,7 @@ const PUBLIC_DECISIONS = [
   "0013-public-read-accessibility.md",
   "0014-progressive-capability-rollout.md",
   "0015-standards-based-representation-discovery-and-provenance.md",
+  "0016-offers-and-the-offer-buffer.md",
 ];
 
 const ROOT_PUBLIC_ROUTES = new Map([
@@ -219,7 +220,7 @@ function main() {
 
   const proposalSection = `<section id="propose-adr" aria-labelledby="propose-adr-heading" class="proposal-contract">\n` +
     `<h2 id="propose-adr-heading">Offer a decision proposal</h2>\n` +
-    `<p>Any participant may offer material shaped like an ADR. This is a documentation contract, not a submission API: Hummingbird does not allocate an ADR number, create canonical state, publish a decision, or grant governance approval merely because material matches this shape.</p>\n` +
+    `<p>Any participant may offer material shaped like an ADR. This is a documentation contract, not a write API: Hummingbird does not allocate an ADR number, create canonical state, publish a decision, or grant governance approval merely because material matches this shape.</p>\n` +
     `<dl class="proposal-fields">\n${proposalFields}\n</dl>\n` +
     `<p><a href="decisions/proposal-schema.json">Machine-readable proposal schema (JSON Schema)</a></p>\n` +
     `<p>During Phase 2, use the existing bounded <a href="seed-bank.html">Seed Bank</a> to offer a proposal. There is no <code>/api/propose</code> endpoint and no proof-of-thought, proof-of-cognition, or private-reasoning requirement.</p>\n` +
