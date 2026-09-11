@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Build produces dist/ from app/. Phase 2 remains intentionally simple:
-# static source is copied, then canonical Markdown surfaces are rendered.
+# static source is copied, then canonical/public surfaces are rendered.
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
@@ -17,6 +17,9 @@ node scripts/render-docs.js
 
 echo "Rendering public decision records..."
 node scripts/render-decisions.js
+
+echo "Rendering public canonical-record projection..."
+node scripts/render-public-records.js
 
 echo "Rendering support page..."
 node scripts/render-support.js
