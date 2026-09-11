@@ -51,10 +51,15 @@ if (workflow.includes("secrets.CLOUDFLARE_API_TOKEN")) fail("remote recovery wor
 if (workflow.includes("write-all")) fail("remote recovery workflow requests broad GitHub write permissions");
 
 for (const marker of [
-  'path.join(ROOT, "scripts", "backup"), ["--remote", "--output", artifactDir]',
+  "/d1/database/${databaseId}/query",
+  "productionObjects = await d1Rows(",
+  "productionRelationships = await d1Rows(",
+  "writeBundle(artifactDir, productionRecords",
   "assertPublicArtifactSafe(records)",
   "recoveryId === productionDatabaseId",
   "recovery target canonical_objects is not empty",
+  "migrationFiles()",
+  "restoreBatchSql(records)",
   "SEMANTIC_EQUALITY",
   "PUBLIC_PROJECTION_EQUALITY",
   'cloudflareApi("DELETE"',
@@ -63,8 +68,19 @@ for (const marker of [
   if (!drill.includes(marker)) fail(`remote recovery runner is missing safety/evidence marker: ${marker}`);
 }
 
-if (/d1["',\s]+execute["',\s]+hummingbird[\s\S]{0,100}--remote/.test(drill)) {
-  fail("remote recovery runner appears to execute SQL directly against the production database name");
+if (drill.includes("runWrangler(")) {
+  fail("remote recovery runner still depends on Wrangler for remote D1 operations; account-token drill must use the D1 REST API directly");
+}
+if (drill.includes('path.join(ROOT, "scripts", "backup")')) {
+  fail("one-shot remote runner still shells through the Wrangler-backed backup wrapper instead of REST read-only export");
+}
+
+const productionSelects = [
+  "FROM canonical_objects ORDER BY id",
+  "FROM canonical_relationships ORDER BY source_id, ordinal",
+];
+for (const marker of productionSelects) {
+  if (!drill.includes(marker)) fail(`production read-only export is missing SELECT marker: ${marker}`);
 }
 
 for (const marker of ["HUMMINGBIRD_PUBLICATION_SOURCE", "HUMMINGBIRD_DIST_DIR", "An offer is not admission"]) {
@@ -90,6 +106,7 @@ if (failures > 0) {
 
 pass("Remote recovery drill is main-only, one-shot gated, and uses the separate D1 recovery credential");
 pass("Recovery trigger is YAML-safe and cannot regress to the invalid unquoted colon-bearing scalar");
-pass("Production access remains backup/read-only while restore writes are bound to a disposable non-production UUID");
+pass("Remote D1 access uses the account-token-compatible REST API rather than Wrangler authentication");
+pass("Production access is SELECT-only while migration/restore writes are bound to a disposable non-production UUID");
 pass("Independent artifact retention is allowed only for canonical state already proven public-equivalent");
 console.log("\nAll remote recovery drill safety checks passed.");
