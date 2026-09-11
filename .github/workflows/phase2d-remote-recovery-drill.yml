@@ -14,7 +14,7 @@ concurrency:
 jobs:
   drill:
     name: Production-state recovery drill
-    if: startsWith(github.event.head_commit.message, 'Phase 2D: run remote recovery drill')
+    if: "${{ startsWith(github.event.head_commit.message, 'Phase 2D: run remote recovery drill') }}"
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
