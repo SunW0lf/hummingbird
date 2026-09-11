@@ -29,7 +29,7 @@ const FORBIDDEN_KEYS = new Set([
 ]);
 
 function usage() {
-  console.error("usage: node scripts/admit-draft-d1.js <candidate.json> --confirm-admission");
+  console.error("usage: node scripts/admit-draft-d1.js <candidate.json> (--validate-only | --confirm-admission)");
 }
 
 function isObject(value) {
@@ -140,17 +140,18 @@ function seedSql(record) {
 }
 
 const candidateArg = process.argv[2];
+const validateOnly = process.argv.includes("--validate-only");
 const confirmed = process.argv.includes("--confirm-admission");
 if (!candidateArg || candidateArg.startsWith("--")) {
   usage();
   process.exit(2);
 }
-if (!confirmed) {
+if (validateOnly === confirmed) {
   usage();
-  console.error("error: durable canonical admission requires explicit --confirm-admission");
+  console.error("error: choose exactly one of --validate-only or --confirm-admission");
   process.exit(2);
 }
-if (!fs.existsSync(WRANGLER)) {
+if (confirmed && !fs.existsSync(WRANGLER)) {
   console.error("error: Wrangler is not installed. Run npm ci first.");
   process.exit(1);
 }
@@ -161,12 +162,17 @@ try {
   const record = JSON.parse(fs.readFileSync(candidatePath, "utf8"));
   validate(record);
 
-  const existing = query(`SELECT id, state FROM canonical_objects WHERE id = ${sqlString(record.id)} LIMIT 1`);
-  if (existing.length) throw new Error(`canonical id ${record.id} already exists; admission is append/transition oriented, not overwrite`);
-
   console.log(`ADMISSION CANDIDATE: ${record.id}`);
   console.log(`type=${record.type} state=draft created_at=${record.created_at}`);
   if (record.provenance && record.provenance.source_ref) console.log(`source_ref=${record.provenance.source_ref}`);
+
+  if (validateOnly) {
+    console.log("VALID: candidate satisfies the guarded draft-admission contract; no remote access performed");
+    process.exit(0);
+  }
+
+  const existing = query(`SELECT id, state FROM canonical_objects WHERE id = ${sqlString(record.id)} LIMIT 1`);
+  if (existing.length) throw new Error(`canonical id ${record.id} already exists; admission is append/transition oriented, not overwrite`);
 
   tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "hummingbird-admit-"));
   const sqlFile = path.join(tempRoot, "admit.sql");
