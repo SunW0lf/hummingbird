@@ -10,9 +10,9 @@ const { execFileSync } = require("child_process");
 const ROOT = path.join(__dirname, "..");
 const CONFIG = path.join(ROOT, "wrangler.d1.jsonc");
 const CORPUS_DIR = path.join(ROOT, "fixtures", "canonical");
+const WRANGLER_BIN = path.join(ROOT, "node_modules", "wrangler", "bin", "wrangler.js");
 const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), "hummingbird-d1-remote-"));
 const seedFile = path.join(tempRoot, "seed.sql");
-const npx = process.platform === "win32" ? "npx.cmd" : "npx";
 
 function run(command, args, options = {}) {
   return execFileSync(command, args, {
@@ -25,7 +25,9 @@ function run(command, args, options = {}) {
 }
 
 function wrangler(args, options = {}) {
-  return run(npx, ["--no-install", "wrangler", ...args], options);
+  assert.ok(fs.existsSync(WRANGLER_BIN),
+    "Wrangler is not installed; run npm ci before remote D1 verification");
+  return run(process.execPath, [WRANGLER_BIN, ...args], options);
 }
 
 function query(sql) {
