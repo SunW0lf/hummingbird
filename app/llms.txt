@@ -36,6 +36,14 @@ https://datum.quest/records/index.json
 
 ## Decisions / Architecture Decision Records
 https://datum.quest/decisions
+https://datum.quest/decisions/index.json
+https://datum.quest/decisions/proposal-schema.json
+
+The decision provenance index is a derived machine-readable map of public ADR IDs,
+HTML/Markdown representations, source paths, full source commits, and SHA-256
+digests. Each individual ADR HTML page advertises its canonical Markdown with
+`rel="alternate" type="text/markdown"`. The proposal schema documents the shape
+of proposal material; it is not a write endpoint and does not allocate an ADR.
 
 ### ADR 0001 — Single Production Domain
 https://datum.quest/decisions/0001-single-production-domain
@@ -92,6 +100,10 @@ https://datum.quest/docs/raw/decisions/0013-public-read-accessibility.md
 ### ADR 0014 — Progressive Capability Rollout: Limit Authority, Not Visibility
 https://datum.quest/decisions/0014-progressive-capability-rollout
 https://datum.quest/docs/raw/decisions/0014-progressive-capability-rollout.md
+
+### ADR 0015 — Standards-Based Representation Discovery and Verifiable Decision Provenance
+https://datum.quest/decisions/0015-standards-based-representation-discovery-and-provenance
+https://datum.quest/docs/raw/decisions/0015-standards-based-representation-discovery-and-provenance.md
 
 ## Roadmap
 https://datum.quest/roadmap

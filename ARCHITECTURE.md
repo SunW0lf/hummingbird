@@ -14,22 +14,33 @@ GitHub repository (source of truth)
       ▼
 GitHub Actions (test, build, audit)
       │
+      ├── static public projection
+      │
       ▼
 Cloudflare Pages (static/read-only site)
       │
       ▼
 datum.quest
+
+Cloudflare D1
+      │
+      └── durable canonical application records
+              ↓
+        read-only staging / explicit promotion
+              ↓
+        static public projection
 ```
 
 - **`app/`** — current public static/read-only site, including the Seed Bank discovery surface.
 - **Root Markdown + `docs/`** — authoritative institutional/project documentation and ADRs.
 - **`schemas/` + `fixtures/canonical/`** — Phase 2 storage-independent reference contract defined by ADR 0012. These fixtures are contract material, not production institutional memory.
+- **Cloudflare D1** — current durable persistence engine for deliberately admitted canonical application records. D1 is an implementation detail, not the definition of canonical meaning.
+- **`publication/canonical/`** — reviewed, derived deployment projection reconstructed from canonical D1 state; disposable and rebuildable rather than a second source of institutional truth.
 - **GitHub Issues** — temporary external transport for Seed Bank Seed / Feedback / Question discussion under ADR 0011. GitHub account metadata is provider metadata, not Hummingbird origin verification or canonical participant identity.
-- **No production application database exists yet.** D1 is Phase 2B work.
 - **No Hummingbird-owned public write API or participant account system exists yet.** Those remain Phase 3 concerns.
 - **No Durable Objects, public game engine, presence-pad system, or queue/background-worker system exists yet.**
 
-## Phase 2 target flow
+## Phase 2 flow
 
 Phase 2 is deliberately split so persistence cannot silently define institutional meaning:
 
@@ -41,6 +52,10 @@ reference corpus + CI validation
 D1 migrations/import (implementation detail)
         ↓
 canonical records
+        ↓
+explicit publication decision
+        ↓
+read-only staging + reviewed promotion
         ↓
 rebuildable public read projections
         ↓
@@ -70,6 +85,24 @@ Canonical meaning is defined in [DATA_MODEL.md](DATA_MODEL.md), the machine-read
 D1 may use implementation-specific primary keys, indexes, normalized helper tables, or query projections as needed, but those details must remain reconstructable/disposable. A canonical export must preserve the record's institutional meaning without depending on D1 row IDs, triggers, or hidden application state.
 
 Derived artifacts such as indexes, caches, summaries, analytics, embeddings, and public projections are non-canonical unless a later decision explicitly says otherwise.
+
+## Representation discovery and provenance
+
+Public machine readability should normally be achieved with static standards rather than requester classification or request-time middleware. Under [ADR 0015](docs/decisions/0015-standards-based-representation-discovery-and-provenance.md), deliberately published ADRs expose ordinary HTML plus directly retrievable canonical Markdown, explicit alternate-representation links, source revision metadata, and content digests.
+
+For decision records, Hummingbird distinguishes:
+
+```text
+source commit = revision that last changed the canonical ADR source
+build commit  = revision whose build produced the deployed artifact
+source digest = SHA-256 of the exact canonical Markdown bytes
+```
+
+These facts must not be collapsed into one ambiguous “commit hash.” A content digest establishes byte identity; it is not by itself a signature or proof of institutional authorization.
+
+The public read plane should prefer discoverable static representations (`rel="alternate"`, visible raw-source links, `llms.txt`, `sitemap.xml`, and static machine indexes) over an edge Worker that branches on requester type or `Accept` headers when no material runtime capability is gained.
+
+A static schema describing how to offer a proposed ADR is documentation, not a write endpoint. During Phase 2, proposal-shaped material still enters through the bounded Seed Bank and does not automatically receive an ADR number, canonical admission, publication, or governance status.
 
 ## Future interactive-state architecture — not deployed
 
@@ -113,7 +146,7 @@ If Durable Objects are adopted, real-time designs should prefer hibernation/scal
 
 - **GitHub repository / Actions** — source, project history, protected production change path, deployment secret, CodeQL, dependency/security controls. Compromise of repository write access or Actions is a critical risk.
 - **GitHub Issues** — public, provider-hosted Seed Bank transport. Treat issue bodies/comments/links as untrusted external input. Public issue activity is not silently persisted into Hummingbird's application data.
-- **Cloudflare** — DNS, Pages deployment, and planned D1 persistence. The deployment token is scoped to Pages:Edit; database credentials/configuration must follow least privilege when D1 is introduced.
+- **Cloudflare** — DNS, Pages deployment, proxying, and D1 persistence. The Pages deployment token remains scoped to Pages:Edit; D1 operations use their own deliberate credential/steward boundary.
 - **Future coordination runtime** — if Durable Objects or equivalent are introduced, participant-supplied room rules remain bounded declarative data rather than executable code. A room may govern its interactions but cannot gain infrastructure authority.
 - **Local development machine** — not authoritative production state. Production changes flow through protected `main` and CI.
 - **External authoritative systems** — GitHub for GitHub activity, Cloudflare for provider telemetry, Base for blockchain facts. Hummingbird references authoritative external facts rather than cloning complete external ledgers.
@@ -123,12 +156,8 @@ If Durable Objects are adopted, real-time designs should prefer hibernation/scal
 Current:
 
 - GitHub — source control, CI/CD, security tooling, pull requests, issue tracking, and interim Seed Bank discussion transport.
-- Cloudflare — DNS, Pages hosting, and proxying for `datum.quest`.
+- Cloudflare — DNS, Pages hosting, proxying for `datum.quest`, and D1 persistence.
 - Base blockchain — authoritative public record for the interim receive-only support wallet; Hummingbird does not maintain a duplicate transaction ledger.
-
-Planned during Phase 2:
-
-- Cloudflare D1 — first application persistence engine, treated as replaceable infrastructure rather than institutional semantics.
 
 Potential future interactive components, not yet approved for deployment:
 
@@ -148,7 +177,7 @@ See [PERSISTENCE.md](PERSISTENCE.md) for the dated cost snapshot and decision ga
 ## Backups and recovery
 
 - Git/document/schema/reference-corpus state is recoverable from the repository.
-- Once D1 exists, Hummingbird will maintain an independent export/restore path and exercise restoration into an empty replacement database before Phase 2 can complete.
+- D1 canonical state requires an independent export/restore path; exercising restoration into an empty replacement database is active Phase 2D work.
 - R2 is a candidate independent storage target for encrypted or otherwise appropriately protected recovery bundles, but backup format and restoration remain more important than vendor choice.
 - Rebuildable public projections are not themselves backup targets for institutional meaning.
 - Future room/activity state must declare whether it is ephemeral, operational, durable, or archival. Losing an ephemeral coordination object must not silently lose a record that Hummingbird promised to preserve.
@@ -167,6 +196,7 @@ Explicitly not part of current Phase 2 implementation unless a later ADR changes
 
 - Hummingbird-owned public submission API
 - participant authentication/authorization
+- request-time agent-specific read middleware without a demonstrated need
 - persistent presence pads and public connection graph
 - self-governed interactive spaces
 - guild formation and guild capability grants
