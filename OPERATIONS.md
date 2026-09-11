@@ -48,7 +48,7 @@ To reconstruct Hummingbird from scratch, someone needs:
 
 ## Repository protection
 
-Branch protection on `main` is currently unavailable: GitHub disables branch protection rules for private repositories on this account's plan. There is no enforced required-review or required-status-check GitHub rule. The deployment workflow still refuses to deploy until its `verify` job succeeds, but GitHub itself does not prevent a direct push to `main`. The working convention is therefore branch → pull request → green CI → merge. Open question: [OQ-OPS-BRANCH-PROTECTION](docs/governance/OPEN_QUESTIONS.md#oq-ops-branch-protection).
+Branch protection on `main` is currently unavailable while this repository is private on the current GitHub plan. There is no enforced required-review or required-status-check GitHub rule. The deployment workflow still refuses to deploy until its `verify` job succeeds, but GitHub itself does not prevent a direct push to `main`. The working convention is therefore branch → pull request → green CI → merge. Open question: [OQ-OPS-BRANCH-PROTECTION](docs/governance/OPEN_QUESTIONS.md#oq-ops-branch-protection).
 
 ### Phase 1 risk acceptance — branch protection
 
@@ -56,10 +56,23 @@ Branch protection on `main` is currently unavailable: GitHub disables branch pro
 
 Current mitigations are the deliberately small trust boundary and deployment design: the repository is private and single-steward; routine changes use branch → pull request → green CI → merge; production deployment itself is gated by the workflow's successful verification job; and deployment credentials remain outside the repository.
 
-This acceptance **does not resolve** OQ-OPS-BRANCH-PROTECTION and **does not authorize repository publication**. Branch protection or an equivalent enforced control must receive a fresh disposition before public repository visibility, before adding additional maintainers, or whenever the trust model materially changes.
+This acceptance expires when the repository becomes public. Publication has been authorized in principle, but only with the public-mode controls below activated and verified.
+
+## Public repository activation gate
+
+**Publication authorized in principle on 2026-09-10 (Pacific Time).** The repository may become public once the following controls are activated as one coordinated transition rather than treating visibility as an isolated toggle:
+
+1. Change repository visibility from private to public only after the current default branch is green and the repository/history secret review remains clean.
+2. Protect `main`: require changes through pull requests, require the `Checks, test, build` status check before merge, require the branch to be up to date before merge, and disallow force pushes and branch deletion. Apply the rule to the steward/admin as well where GitHub exposes that option. Do not require a separate approving reviewer while there is only one maintainer, because that would deadlock legitimate maintenance.
+3. Restrict GitHub Actions to GitHub-owned/explicitly approved actions; keep workflow actions pinned to immutable commit SHAs.
+4. Enable the public-repository security controls described in `SECURITY.md`, including private vulnerability reporting, secret scanning/push protection, Dependabot alerts/security updates, and CodeQL/default code scanning where available.
+5. Verify the settings after publication, then update the authoritative open-question registry and public documentation to reflect what is actually enabled.
+
+`.github/CODEOWNERS` records the current steward as code owner. `.github/dependabot.yml` monitors both npm and GitHub Actions dependencies so pinned action SHAs and package versions can be reviewed through pull requests.
 
 ## Routine steward tasks
 
 - Review and merge pull requests after CI passes.
+- Review Dependabot pull requests and security alerts; do not auto-merge dependency changes without CI.
 - Rotate the Cloudflare deployment token periodically. Open question: [OQ-OPS-TOKEN-ROTATION-CADENCE](docs/governance/OPEN_QUESTIONS.md#oq-ops-token-rotation-cadence) — exact cadence.
 - Keep `OPEN QUESTION` markers honest — resolve them in the relevant document rather than letting implementation silently answer them. The authoritative list is [docs/governance/OPEN_QUESTIONS.md](docs/governance/OPEN_QUESTIONS.md).
