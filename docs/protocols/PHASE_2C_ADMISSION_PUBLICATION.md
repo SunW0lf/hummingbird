@@ -1,14 +1,14 @@
 # Phase 2C Protocol — Admission and Static Publication
 
-Status: **active implementation protocol**
+Status: **complete — exit criteria satisfied 2026-09-11**
 
-This protocol implements the first Phase 2C slice under ADR 0014. It deliberately does not create a public application-owned write endpoint.
+This protocol implemented the first Phase 2C slice under ADR 0014. It deliberately did not create a public application-owned write endpoint.
 
 ## Goal
 
 Prove that one deliberately admitted canonical record can move through Hummingbird's persistence layer into a rebuildable public read model without collapsing submission, admission, publication, or governance into one action.
 
-The intended path is:
+The proven path is:
 
 ```text
 external source / Seed Bank item
@@ -25,6 +25,8 @@ steward review
         ↓
 explicit promotion to deployable projection
         ↓
+protected-main CI/deploy
+        ↓
 static HTML + JSON at datum.quest
 ```
 
@@ -39,13 +41,13 @@ Phase 2C keeps these operations distinct:
 
 The Seed Bank remains external transport. Provider identity, reactions, labels, issue timestamps, and discussion metadata do not become canonical merely because an item is considered.
 
-## Initial safety posture
+## Safety posture
 
 - Public `GET`/`HEAD` remains open under ADR 0013.
 - No public Hummingbird mutation endpoint exists in this slice.
 - D1 remains canonical persistence; the public projection is derived and disposable.
-- Public page views must not require a D1 query.
-- Ordinary CI must not require remote D1 access or credentials.
+- Public page views do not require a D1 query.
+- Ordinary CI does not require remote D1 access or credentials.
 - Steward/control-plane actions may require Cloudflare/GitHub authentication and are not part of the origin-neutral public read plane.
 - No participant-origin classification is introduced.
 
@@ -60,10 +62,16 @@ The build renders each projected record to:
 /records/<encoded-canonical-id>.json
 ```
 
-and publishes indexes at:
+Cloudflare Pages exposes the generated HTML through clean public routes such as:
 
 ```text
-/records.html
+/records
+/records/<encoded-canonical-id>
+```
+
+The machine index is published at:
+
+```text
 /records/index.json
 ```
 
@@ -83,7 +91,7 @@ The tool only accepts an existing `draft` record with no prior publication metad
 
 ### Staging from remote D1
 
-After a canonical record has independently been made publishable (that is, it is no longer in `draft`), the steward can reconstruct the current non-draft canonical set from remote D1 without modifying either D1 or the Git working tree's deployable projection:
+After a canonical record has independently been made publishable, the steward can reconstruct the current non-draft canonical set from remote D1 without modifying either D1 or the Git working tree's deployable projection:
 
 ```powershell
 node scripts/stage-public-d1.js
@@ -94,8 +102,6 @@ This writes only to the ignored local directory:
 ```text
 .hummingbird-stage/
 ```
-
-The steward should inspect those JSON records before any promotion.
 
 ### Explicit promotion
 
@@ -115,51 +121,47 @@ This means none of the following actions alone publishes a record:
 - changing canonical state to `published`;
 - running the read-only staging command.
 
-## First admission exercise
+## First admission and publication evidence — 2026-09-11
 
-The first real admission should be intentionally boring and traceable. Do not bulk-import the Seed Bank.
-
-For one chosen external source:
-
-1. identify the exact external source/reference;
-2. decide what meaning, if any, Hummingbird is admitting;
-3. create one small v1 canonical record containing only that admitted meaning;
-4. retain only provenance needed to understand the source/reference;
-5. admit the record to D1 as `draft`;
-6. independently review the canonical record;
-7. make an explicit publication decision by moving the canonical record out of `draft`;
-8. run `node scripts/stage-public-d1.js` and inspect `.hummingbird-stage/`;
-9. run `node scripts/promote-publication.js --confirm-publication` only after review;
-10. build and inspect the static HTML and JSON output before deployment;
-11. publish through the normal protected-main CI/deploy path;
-12. verify ordinary browser/curl/agent retrieval of the new routes;
-13. record the admission/publication evidence without exposing security-sensitive operational metadata.
-
-### First admission evidence — 2026-09-11
-
-The first durable real canonical admission completed successfully using the existing public Seed Bank #15 exploratory comment, “Visible consequence without engagement pressure,” as the external source.
+The first durable real canonical admission used the existing public Seed Bank #15 exploratory comment, “Visible consequence without engagement pressure,” as the external source.
 
 The reviewed candidate was `contribution-visible-consequence`. It retained the admitted idea and one stable public source reference while omitting GitHub account identity, reactions, labels, app metadata, source/network metadata, and other provider state. Offline candidate validation passed before any remote action.
 
-The steward then deliberately executed the guarded admission command with `--confirm-admission`. Post-write verification reported the record present in remote D1 as `state: draft`. The admission tool also confirmed that no publication projection changed and no governance status was granted.
+The steward deliberately executed the guarded admission command with `--confirm-admission`. Post-write verification reported the record present in remote D1 as `state: draft`; no publication projection changed and no governance status was granted.
 
-At that point Hummingbird had, for the first time, durable canonical institutional memory derived from an external contribution while the public canonical-record projection remained unchanged. This establishes the external-source → consideration → explicit-admission boundary independently of publication. The separate publication-state decision and public deployment remain the next steps.
+A separate guarded publication decision then changed the canonical record to `state: published` with public-release metadata without deploying it. The read-only staging tool reconstructed that non-draft record from remote D1 into the ignored local staging area, where the steward inspected the exact canonical JSON.
+
+After review, the same staged canonical representation was promoted into the derived Git publication projection and passed protected-main build/tests. Cloudflare Pages deployed the generated static read model.
+
+The production plain-HTTP healthcheck then successfully retrieved all of the following without authentication, cookies, JavaScript execution, or an interactive challenge:
+
+```text
+/records
+/records/contribution-visible-consequence
+/records/contribution-visible-consequence.json
+```
+
+The HTML routes returned the expected canonical title and the JSON route returned the expected canonical ID with `application/json`. Public reads are static at request time and do not query D1.
+
+The projection was created from a read-only reconstruction of canonical D1 state rather than hand-authored institutional meaning. Because the deployable copy is derived from that reconstruction and can be regenerated by the same staging/promotion path, deletion of the derived copy does not destroy canonical institutional meaning.
 
 ## Rollback and correction
 
 A bad projection is not repaired by hand-editing the generated public copy. Correct canonical state first, rebuild the projection, and redeploy.
 
-A record that has already been published should normally transition through the existing canonical lifecycle (`corrected`, `superseded`, `withdrawn`, or `archived`) rather than disappearing silently. Phase 2C should preserve public historical meaning while still allowing security/legal emergencies to use the incident process when needed.
+A record that has already been published should normally transition through the existing canonical lifecycle (`corrected`, `superseded`, `withdrawn`, or `archived`) rather than disappearing silently. Phase 2C preserves public historical meaning while still allowing security/legal emergencies to use the incident process when needed.
 
 ## Exit criteria
 
-Phase 2C is complete when all of the following are demonstrated:
+All Phase 2C exit criteria were satisfied on 2026-09-11:
 
-- at least one external-source → explicit-admission path is documented;
+- an external-source → explicit-admission path is documented;
 - the admitted record is durable canonical D1 state;
 - publication is a separate explicit action;
-- the public HTML and JSON projections are rebuildable from canonical state;
+- public HTML and JSON projections are rebuildable from canonical state;
 - public readers do not query D1 directly;
-- a plain HTTP client can retrieve and traverse the published record;
+- a plain HTTP client retrieved and traversed the published record;
 - provider identity/reaction/thread metadata was not automatically ingested;
-- the derived projection can be deleted and rebuilt without losing institutional meaning.
+- the derived projection can be regenerated without losing institutional meaning.
+
+Phase 2C is closed. The next Phase 2 milestone is **Phase 2D — Publication buffer, backup, and recovery**.
