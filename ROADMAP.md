@@ -72,50 +72,43 @@ The broader persistence architecture and dated cost envelope are documented in [
 
 ### Phase 2C — Public read model and admission boundary
 
-Status: **in progress**
+Status: **complete**
 
-Phase 2C follows [ADR 0014](docs/decisions/0014-progressive-capability-rollout.md): Hummingbird limits authority rather than visibility. Public reading stays open; admission/publication/control remain explicit and narrow.
+Completed on 2026-09-11 under [ADR 0014](docs/decisions/0014-progressive-capability-rollout.md) and the [Phase 2C protocol](docs/protocols/PHASE_2C_ADMISSION_PUBLICATION.md).
 
-Current implementation slice:
+Phase 2C proved the complete boundary rather than merely implementing static pages:
 
-- a static `records.html` public canonical-record index is generated at build time;
-- each deliberately projected canonical record receives stable static HTML and JSON detail routes;
-- the machine index lives at `records/index.json`;
-- public page views do not query D1;
-- CI validates the derived publication projection without remote credentials;
-- draft records are rejected from the public projection;
-- the public projection can exist cleanly in an empty state before the first real admission;
-- the Seed Bank remains external ingress rather than automatic canonical ingestion.
+- public reading remains open while admission/publication/control remain explicit and narrow;
+- the Seed Bank remains external ingress rather than automatic canonical ingestion;
+- `contribution-visible-consequence` was synthesized from a public Seed Bank contribution with only minimal provenance and without provider account identity, reactions, labels, app metadata, or network/device metadata;
+- the record was deliberately admitted to remote D1 as `draft` without publication or governance status;
+- a separate guarded action changed canonical state to `published` without deploying it;
+- the read-only staging tool reconstructed the record from canonical D1 state into ignored local staging;
+- the steward inspected the staged record before promotion;
+- the derived Git projection was promoted through protected `main`, CI, and Cloudflare Pages deployment;
+- `/records`, the clean record-detail route, and the canonical JSON route are now tested by the production plain-HTTP healthcheck;
+- public page views are static at request time and do not query D1;
+- the derived projection is disposable and can be regenerated from canonical state.
 
-See [docs/protocols/PHASE_2C_ADMISSION_PUBLICATION.md](docs/protocols/PHASE_2C_ADMISSION_PUBLICATION.md).
-
-Immediate next steps:
-
-- choose one intentionally boring, traceable external source for the first real admission exercise;
-- synthesize only the meaning Hummingbird intends to admit, with minimal provenance;
-- admit one canonical record as `draft` through a steward-controlled path;
-- review it independently, then make a separate publication decision;
-- rebuild the static projection from canonical state and inspect the HTML/JSON before deployment;
-- publish through protected `main` and verify the record with an ordinary plain-HTTP client;
-- record evidence that provider identity/reactions/thread metadata were not automatically copied into canonical memory.
-
-- Publish rebuildable read-only projections and stable object/detail routes.
-- Provide machine-readable public representations alongside human-readable views where useful.
-- Demonstrate at least one explicit external-source → consideration → canonical-admission path without automatically ingesting provider identity, reactions, or thread metadata.
-- Preserve external authoritative references rather than cloning provider-owned history.
-
-**Exit:** public projections can be rebuilt from canonical records and a deliberate admission can be traced without treating submission as publication.
+**Exit satisfied:** public projections are rebuildable from canonical records and the deliberate admission/publication path is traceable without treating submission as publication or governance approval.
 
 ### Phase 2D — Publication buffer, backup, and recovery
 
-Status: **planned**
+Status: **in progress**
 
-- Implement publication-buffer boundaries for delayed/coarsened public operational records.
-- Add D1 backup/export procedures to a storage location independent of the live database.
-- Restore into an empty replacement database and verify canonical/read-model equivalence.
-- Add appropriate health checks and operational documentation.
+Phase 2D now focuses on durability and safe operational transparency rather than adding new participation features.
 
-**Exit:** backup and restore have been exercised successfully and public transparency does not expose security-sensitive or unnecessary correlation metadata.
+Immediate work:
+
+- define and exercise publication-buffer boundaries for delayed/coarsened public operational records;
+- add a D1 backup/export procedure to storage independent of the live database;
+- keep backup artifacts outside the public web root and avoid unnecessary security/correlation metadata;
+- restore canonical state into an empty replacement database and verify semantic equivalence;
+- rebuild the public read projection from restored canonical state and compare it with the expected publication output;
+- document failure behavior, recovery order, and the smallest acceptable recovery point;
+- extend health/operational checks only where they prove real recovery properties rather than accumulating telemetry.
+
+**Exit:** backup and restore have been exercised successfully, canonical/read-model equivalence is demonstrated after recovery, and public transparency does not expose security-sensitive or unnecessary correlation metadata.
 
 ### Phase 2E — Phase review and Phase 3 gate
 
