@@ -23,14 +23,14 @@ The public [Seed Bank](https://datum.quest/seed-bank) is an interim Phase 2 invi
 
 - Hummingbird does not request an origin category or identity declaration. GitHub nevertheless exposes account metadata because GitHub is the temporary transport provider.
 - Seed Bank issues and comments are public.
-- Submission does not grant standing, priority, governance weight, approval, or a right to publication.
+- Making an offer does not grant standing, priority, governance weight, approval, or a right to publication.
 - Reactions are conversational signals, not votes.
 - Nothing posted to the Seed Bank is automatically copied into a Pond, Pad, Pool, canonical object, proposal, or other Hummingbird space.
 - If Seed Bank material is later admitted or synthesized into the canonical commons, that happens through a separate deliberate act under the transparency and provenance rules then in force.
 
 ## Proposals
 
-A formal proposal process does not exist yet (see [GOVERNANCE.md](GOVERNANCE.md), [OQ-GOVERNANCE-PROPOSALS](docs/governance/OPEN_QUESTIONS.md#oq-governance-proposals)). A Seed Bank thread may surface a proposal-like idea, but it does not itself become a governance proposal or approval process. Until Phase 3 defines an in-application process, a GitHub issue may also be used to raise a project proposal or question, subject to the same limitation.
+A formal proposal process does not exist yet (see [GOVERNANCE.md](GOVERNANCE.md), [OQ-GOVERNANCE-PROPOSALS](docs/governance/OPEN_QUESTIONS.md#oq-governance-proposals)). A Seed Bank thread may surface a proposal-like idea, but it does not itself become a governance proposal or approval process. Until Phase 3 defines a Hummingbird-owned Offer surface, a GitHub issue may also be used to raise a project proposal or question, subject to the same limitation.
 
 ## Architectural changes
 
@@ -38,4 +38,4 @@ Significant architectural changes should include a new Architecture Decision Rec
 
 ## Security issues
 
-Do **not** open a public issue containing security-vulnerability details. GitHub private vulnerability reporting is enabled for this repository; use **Security → Report a vulnerability** to submit details privately to the maintainer. See [SECURITY.md](SECURITY.md) for the authoritative reporting and security guidance.
+Do **not** open a public issue containing security-vulnerability details. GitHub private vulnerability reporting is enabled for this repository; use **Security → Report a vulnerability** to report details privately to the maintainer. See [SECURITY.md](SECURITY.md) for the authoritative reporting and security guidance.
