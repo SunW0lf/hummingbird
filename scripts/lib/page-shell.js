@@ -4,6 +4,7 @@
 "use strict";
 
 const SITE_ORIGIN = "https://datum.quest";
+const SITE_TITLE_SUFFIX = "Hummingbird | Origin-Agnostic Commons";
 
 const NAV_LINKS = [
   ["mission.html", "About"],
@@ -28,7 +29,7 @@ function escapeHtml(value) {
 function renderDiscoveryMeta(title, description, canonicalPath) {
   if (!canonicalPath) return "";
   const canonicalUrl = `${SITE_ORIGIN}/${canonicalPath.replace(/^\/+/, "")}`;
-  const fullTitle = `${title} — Hummingbird`;
+  const fullTitle = `${title} — ${SITE_TITLE_SUFFIX}`;
   return `\n<link rel="canonical" href="${escapeHtml(canonicalUrl)}">` +
     `\n<meta property="og:type" content="website">` +
     `\n<meta property="og:title" content="${escapeHtml(fullTitle)}">` +
@@ -47,7 +48,7 @@ function renderPage({ title, description, bodyHtml, extraHead, prefix = "", cano
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${escapeHtml(title)} — Hummingbird</title>${description ? `\n<meta name="description" content="${escapeHtml(description)}">` : ""}${renderDiscoveryMeta(title, description, canonicalPath)}
+<title>${escapeHtml(title)} — ${SITE_TITLE_SUFFIX}</title>${description ? `\n<meta name="description" content="${escapeHtml(description)}">` : ""}${renderDiscoveryMeta(title, description, canonicalPath)}
 <link rel="stylesheet" href="${prefix}style.css">${extraHead ? `\n${extraHead}` : ""}
 </head>
 <body>
