@@ -4,6 +4,7 @@ dist/
 .env.*
 !.env.example
 .wrangler/
+.tmp/
 *.log
 .DS_Store
 Thumbs.db

@@ -4,6 +4,7 @@ This records meaningful releases and changes, not a raw Git log.
 
 ## Unreleased — Phase 2: Read-Only Commons
 
+- Began Phase 2B with a local-only D1 persistence slice: added the first canonical-object/relationship migration, deterministic reference-corpus import SQL generation, and a Wrangler local-D1 CI round-trip proving all four reference records can be reconstructed with deep equality and no semantic loss. No remote D1 database or credentials were used.
 - Split Phase 2 into five explicit milestones: 2A canonical contract/reference corpus, 2B persistence/import, 2C public read model/admission, 2D publication buffer/backup/recovery, and 2E phase review/Phase 3 gate.
 - Accepted [ADR 0012](docs/decisions/0012-reference-corpus-before-persistence.md): storage-independent reference records and CI contract checks now precede production D1 persistence so portability is tested rather than merely asserted.
 - Added `schemas/canonical-object-v1.schema.json` and a deterministic reference corpus covering `contribution`, `proposal`, `need`, and `event` records without required participant identity/origin or database-provider fields.
