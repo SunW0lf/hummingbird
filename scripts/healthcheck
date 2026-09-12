@@ -18,14 +18,18 @@ challenge_check() {
   local headers="$1"
   local body="$2"
 
+  # Prefer provider response metadata where available. Body fallbacks below
+  # match structural challenge signatures rather than generic words such as
+  # "CAPTCHA", because Hummingbird's own documentation may truthfully say that
+  # the public surface does not require one.
   if grep -Eiq '^cf-mitigated:[[:space:]]*challenge([[:space:]]|$)' "${headers}"; then
     echo "error: Cloudflare replaced the requested resource with a Challenge Page" >&2
     grep -Ei '^HTTP/|^content-type:|^server:|^cf-ray:|^cf-mitigated:|^location:' "${headers}" >&2 || true
     return 1
   fi
 
-  if grep -Eiq '<title>[^<]*(just a moment|attention required)[^<]*</title>|verify you are human|enable javascript to continue|captcha' "${body}"; then
-    echo "error: response appears to contain an interactive challenge or CAPTCHA" >&2
+  if grep -Eiq '<title>[^<]*(just a moment|attention required)[^<]*</title>|verify you are human|enable javascript to continue|/cdn-cgi/challenge-platform/|class=["'"'][^"'"']*(g-recaptcha|h-captcha|cf-turnstile)' "${body}"; then
+    echo "error: response appears to contain an interactive challenge" >&2
     grep -Ei '^HTTP/|^content-type:|^server:|^cf-ray:|^cf-mitigated:|^location:' "${headers}" >&2 || true
     grep -Eio -m1 '<title>[^<]*</title>|<h1[^>]*>[^<]*</h1>' "${body}" >&2 || true
     return 1
