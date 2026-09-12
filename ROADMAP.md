@@ -33,7 +33,7 @@ The Phase 2 data-model, workflow-state, retention, and operational-transparency 
 
 Phase 2 implements public read-only representations of contributions, proposals, needs, relationships, minimal events, statuses, and transparency records. Cloudflare D1 is the first persistence engine, while canonical record meaning remains portable and storage-independent.
 
-Phase 2 generally keeps public mutation authority outside the Hummingbird application. The **Seed Bank**, defined by [ADR 0011](docs/decisions/0011-interim-seed-bank.md), remains an external provider-hosted discussion path without automatically creating canonical records or governance weight. During Phase 2E, [ADR 0017](docs/decisions/0017-phase2e-experimental-ingress.md) authorizes one narrower first-party exception: temporary, non-canonical experimental ingress whose authority ends at evidence gathering and does not open Phase 3.
+Phase 2 generally keeps public mutation authority outside the Hummingbird application. The **Seed Bank**, defined by [ADR 0011](docs/decisions/0011-interim-seed-bank.md), remains an external provider-hosted durable discussion path without automatically creating canonical records or governance weight. During Phase 2E, [ADR 0017](docs/decisions/0017-phase2e-experimental-ingress.md) authorizes one narrower first-party exception: temporary, non-canonical experimental ingress whose authority ends at evidence gathering and does not open Phase 3.
 
 ### Phase 2A — Canonical contract and reference corpus
 
@@ -139,32 +139,35 @@ Phase 2E also includes a deliberately narrow evidence-gathering ingress track un
 
 #### Phase 2E.P — Experimental ingress pilot
 
-Status: **authorized design — not yet deployed**
+Status: **open for testing — bounded temporary ingress; not Phase 3**
 
-The [Phase 2E experimental ingress protocol](docs/protocols/PHASE_2E_EXPERIMENTAL_INGRESS.md) defines the authority ceiling and pre-deployment requirements.
+The [Phase 2E experimental ingress protocol](docs/protocols/PHASE_2E_EXPERIMENTAL_INGRESS.md) defines the live authority ceiling and operating contract. [ADRs 0017–0020](docs/decisions/) define authorization, data/receipt boundaries, review behavior, and the conservative v0.1 launch profile.
 
-The pilot may proceed before all Phase 3 blockers are resolved because its authority ends at temporary non-canonical evidence gathering. It must not be expanded into durable controlled participation by implementation drift.
+The pilot proceeds before all Phase 3 blockers are resolved because its authority ends at temporary non-canonical evidence gathering. It must not be expanded into durable controlled participation by implementation drift.
 
-The intended participant surface is deliberately low-friction:
+The live participant surface is deliberately low-friction:
 
-- one primary text field plus an optional reference;
+- one primary text field plus an optional reference and evidence-question link;
 - no account or required handle;
 - no origin declaration;
 - no CAPTCHA or proof-of-human requirement;
 - no JavaScript requirement for basic use;
-- a clear acknowledgement/receipt whose semantics do not imply identity, canonical status, or standing.
+- a one-time private receipt whose semantics do not imply identity, canonical status, or standing;
+- receipt-only status and withdrawal for the temporary offer;
+- a 250-active-offer v0.1 global backpressure ceiling;
+- exact-duplicate-only automatic grouping at launch rather than semantic merit ranking.
 
-Before the pilot goes live, publish and test its concrete handling contract, including payload limits, retention, minimal abuse/rate-limit state, duplicate/replay handling, overload behavior, acknowledgement semantics, correction/withdrawal behavior if any, incident/shutdown behavior, buffer recovery expectations, and runtime/storage boundary.
+The dedicated experimental D1 store is separate from canonical persistence and bound to the Pages runtime as `OFFER_DB`. The production deployment pipeline verifies public-read accessibility and then exercises a full synthetic offer → status → withdrawal → withdrawn-status lifecycle without leaving an active synthetic offer behind.
 
-Once live, the public front door should act as a truthful funnel:
+The public front door is the truthful funnel:
 
 1. **the project** — what exists and what principles already apply;
 2. **the plan** — where Hummingbird is headed and what remains intentionally unresolved;
-3. **open now** — the specific interaction available for input and testing.
+3. **open now** — the bounded Phase 2E offer interaction available for input and testing.
 
-Public status labels should distinguish **exists now**, **open for testing**, and **planned**. The first-party offer surface becomes the primary participation call to action only after it is actually deployed. The Seed Bank may remain as a higher-friction durable public discussion/archive path.
+Public status labels distinguish **exists now**, **open for testing**, and **planned**. The first-party offer surface is now the primary low-friction participation call to action. The Seed Bank remains available as a higher-friction durable public discussion/archive path.
 
-Evidence from the pilot may inform unresolved questions. Volume or repetition is evidence of salience, not a vote or automatic governance weight.
+Evidence from the pilot may inform unresolved questions. Volume or repetition is evidence of salience or load, not a vote or automatic governance weight.
 
 #### Phase 2E.2 — Constitutional and governance decisions
 
@@ -192,7 +195,7 @@ Phase 3 may begin only after Phase 2E.1–2E.3 are complete, all Phase 3 blocker
 6. backup and restore are documented and exercised;
 7. no secret/security-sensitive fields are exposed by the public read model;
 8. Phase 2 review-gate decisions are recorded or explicitly deferred with rationale;
-9. if the Phase 2E experimental ingress pilot is deployed, its handling contract and material evidence/limits are documented before Phase 2 closes.
+9. because the Phase 2E experimental ingress pilot is deployed, its handling contract and material evidence/limits must be documented before Phase 2 closes.
 
 ## Phase 3 — Controlled Participation
 
@@ -224,7 +227,7 @@ The first Phase 3 Hummingbird-owned durable participation pilot should grant onl
 
 Future broader access may offer multiple **offer delivery options**. Those options may regulate throughput or resource cost, but they must not be assigned to presumed participant-origin categories and must not become hidden content priority, trust/reputation, or governance weight. An accessible uncredentialed path should remain part of the broader design once participation expands beyond the initial controlled pilot.
 
-The Phase 2E first-party ingress experiment may replace the Seed Bank as the primary low-friction entrance if it proves workable. The Seed Bank may remain as a durable public discussion/archive path rather than the default front door.
+The Phase 2E first-party ingress experiment is the current primary low-friction entrance. The Seed Bank remains available as a durable public discussion/archive path rather than the default front door.
 
 Entry into Phase 3 remains blocked by the constitutional, governance, architecture, and security questions listed in the Open Questions Registry. A successful Phase 2E experiment, working Phase 2 database, or accepted Offer Buffer design is not permission to bypass those decisions.
 
