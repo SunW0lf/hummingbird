@@ -20,6 +20,7 @@ function read(relative) {
 }
 
 const adr = read("docs/decisions/0018-phase2e-offer-pilot-runtime-and-data-boundary.md");
+const launchAdr = read("docs/decisions/0020-phase2e-offer-pilot-launch-profile.md");
 const schema = read("experimental/offer-buffer/migrations/0001_offer_buffer.sql");
 const page = read("app/offer.html");
 const canonicalMigration = read("migrations/0001_canonical_v1.sql");
@@ -32,6 +33,14 @@ for (const phrase of [
   "The offer row is never converted in place into a canonical record",
 ]) {
   if (!adr.includes(phrase)) fail(`ADR 0018 is missing required boundary: ${phrase}`);
+}
+
+for (const phrase of [
+  "250 active offers",
+  "exact duplicate offer text only",
+  "does **not** create application-level raw-IP storage",
+]) {
+  if (!launchAdr.includes(phrase)) fail(`ADR 0020 is missing launch boundary: ${phrase}`);
 }
 
 for (const phrase of [
@@ -60,17 +69,28 @@ if (/experimental_offers|offer_clusters|receipt_hash/i.test(canonicalMigration))
 }
 
 for (const phrase of [
-  "The write path is not live yet.",
-  "ordinary retention of 30 days",
-  "No account, required handle, origin declaration, CAPTCHA, or JavaScript",
-  "does not need your name, email address, account, handle, participant category",
+  "open for testing",
+  '<form method="post" action="/offer">',
+  '<form method="post" action="/offer/status">',
+  '<form method="post" action="/offer/withdraw">',
+  "No account, handle, origin declaration, CAPTCHA, or JavaScript is required",
+  "250 active offers",
   "The temporary offer row is never converted in place into institutional memory",
 ]) {
-  if (!page.includes(phrase)) fail(`participant-facing offer contract is missing: ${phrase}`);
+  if (!page.includes(phrase)) fail(`participant-facing live offer contract is missing: ${phrase}`);
 }
 
-if (!page.includes("0017-phase2e-experimental-ingress") || !page.includes("0018-phase2e-offer-pilot-runtime-and-data-boundary")) {
-  fail("offer page does not link both governing ADRs");
+for (const forbidden of ["name=\"email\"", "name=\"handle\"", "name=\"origin\"", "name=\"participant_type\""]) {
+  if (page.includes(forbidden)) fail(`live offer form contains forbidden identity/origin field: ${forbidden}`);
+}
+
+for (const adrSlug of [
+  "0017-phase2e-experimental-ingress",
+  "0018-phase2e-offer-pilot-runtime-and-data-boundary",
+  "0019-phase2e-offer-triage-and-review",
+  "0020-phase2e-offer-pilot-launch-profile",
+]) {
+  if (!page.includes(adrSlug)) fail(`offer page does not link governing ADR ${adrSlug}`);
 }
 
 if (failures > 0) {
@@ -78,4 +98,4 @@ if (failures > 0) {
   process.exit(1);
 }
 
-pass("Phase 2E offer pilot remains temporary, non-canonical, minimal, and publicly described");
+pass("Live Phase 2E offer pilot remains temporary, non-canonical, minimal, receipt-controlled, and publicly described");
