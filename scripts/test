@@ -19,6 +19,7 @@ node --check scripts/restore-canonical-backup.js
 node --check scripts/phase2d-remote-recovery-drill.js
 node --check scripts/provision-offer-pilot.mjs
 node --check scripts/cleanup-offer-buffer.mjs
+node --check scripts/offer-healthcheck.mjs
 
 echo "Compiling Pages Functions without deploying..."
 rm -f .tmp-offer-worker.mjs
