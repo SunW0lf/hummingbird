@@ -99,7 +99,7 @@ for (const marker of [
 for (const marker of [
   "Completed the first guarded remote production-state recovery drill for Phase 2D",
   "separate account-owned D1 recovery credential",
-  "Phase 2D remains open for publication-buffer/transparency closure",
+  "the public release while preserving the ordinary-backup checkpoint",
 ]) {
   if (!changelog.includes(marker)) fail(`CHANGELOG.md is missing remote recovery outcome marker: ${marker}`);
 }
@@ -114,5 +114,5 @@ pass("Recovery trigger is YAML-safe and cannot regress to the invalid unquoted c
 pass("Remote D1 access uses the account-token-compatible REST API rather than Wrangler authentication");
 pass("Production access is SELECT-only while migration/restore writes are bound to a disposable non-production UUID");
 pass("Independent artifact retention is allowed only for canonical state already proven public-equivalent");
-pass("Documentation records successful recovery without treating it as Phase 2D completion");
+pass("Documentation records successful recovery and public release without treating the special artifact as the ordinary backup path");
 console.log("\nAll remote recovery drill safety checks passed.");

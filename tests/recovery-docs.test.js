@@ -35,7 +35,9 @@ for (const [name, content, markers] of [
   ["Transparency", transparency, [
     "Cloudflare D1 now holds deliberately admitted canonical application state",
     "Phase 2D has now exercised the portable production backup/recovery path end-to-end",
-    "Phase 2D recovery event awaiting buffered publication",
+    "Public operational record — 2026-09 production-state recovery exercise",
+    "Publication-buffer handling",
+    "The live production store was not used as a restore target or modified by the exercise",
     "Canonical backup transparency",
     "That exception does not authorize public artifact storage for future backups containing drafts or other non-public canonical state",
   ]],
@@ -43,7 +45,8 @@ for (const [name, content, markers] of [
     "replaced the original Phase 0 backup/restore no-ops",
     "remote backup/recovery proof complete; publication-buffer/transparency closure remains",
     "Remaining work:",
-    "publish a compact material operational record of the successful recovery exercise",
+    "the compact material operational record of the successful recovery exercise has been prepared for release",
+    "ordinary independent-backup checkpoint is steward-confirmed",
     "disposable replacement D1 database",
   ]],
   ["Recovery protocol", protocol, [
@@ -57,8 +60,9 @@ for (const [name, content, markers] of [
     "Only after the publication-buffer/transparency work is exercised and recorded should Phase 2D be marked complete",
   ]],
   ["Changelog", changelog, [
+    "Published the smallest material public operational record of the successful Phase 2D recovery exercise",
     "Completed the first guarded remote production-state recovery drill for Phase 2D",
-    "Phase 2D remains open for publication-buffer/transparency closure",
+    "the public release while preserving the ordinary-backup checkpoint",
     "Accepted [ADR 0016]",
     "Accepted [ADR 0015]",
   ]],
@@ -89,4 +93,5 @@ if (failures > 0) {
 }
 
 console.log("PASS: Phase 2D recovery proof and remaining transparency boundary are internally consistent");
-console.log("PASS: successful recovery is not confused with Phase 2D completion or a general public-backup policy");
+console.log("PASS: the minimized public record does not turn the public-equivalent artifact into a general backup policy");
+console.log("PASS: Phase 2D remains open for ordinary independent private-backup confirmation");

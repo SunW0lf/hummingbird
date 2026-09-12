@@ -44,6 +44,9 @@ node tests/consistency.test.js
 echo "Running Phase 2D recovery documentation/changelog checks..."
 node tests/recovery-docs.test.js
 
+echo "Running Phase 2 evidence/gate review checks..."
+node tests/phase2-review.test.js
+
 echo "Running remote Phase 2D drill safety checks without remote access..."
 node tests/remote-recovery-drill.test.js
 
