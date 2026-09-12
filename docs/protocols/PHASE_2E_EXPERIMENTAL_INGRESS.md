@@ -200,7 +200,7 @@ Routine experimental handling should remain below the steward whenever possible.
 
 The pilot does not invent a durable appeal/identity system merely to support low-consequence temporary ingress. ADR 0018 supplies the pilot-scoped continuity mechanism: a private receipt controls status and withdrawal for one accepted offer. Corrections use withdraw-and-reoffer rather than permanent edit history.
 
-## Remaining pre-deployment implementation checks
+## Pre-deployment decisions still required / implementation checks
 
 The pilot-scoped semantic choices are now published in ADRs 0017–0019. The write path must still remain closed until the implementation proves those choices rather than merely describing them.
 
