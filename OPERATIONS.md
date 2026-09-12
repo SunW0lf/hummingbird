@@ -60,6 +60,15 @@ The exporter is read-only against D1. It reconstructs canonical objects and rela
 
 Production backup bundles must remain outside the public repository, outside the public web root, and outside the live D1 service as an independently retrievable copy. `.hummingbird-backups/` is ignored only as a local convenience; an ignored directory on the same machine is not sufficient disaster recovery.
 
+The prepared ordinary retention path is the manually dispatched **Phase 2D
+Private Canonical Backup** workflow. It validates and public-key encrypts the
+portable bundle before committing only ciphertext and its checksum to the
+dedicated private `SunW0lf/hummingbird-backups` repository. The `age` private
+identity remains steward-held outside GitHub and Cloudflare. A successful push
+does not close Phase 2D by itself: retrieve, decrypt, and validate the retained
+bundle independently according to
+[the recovery protocol](docs/protocols/PHASE_2D_RECOVERY.md#ordinary-private-retention-checkpoint).
+
 During the current low-write steward-controlled phase, create and independently retain a verified portable backup after each deliberate durable canonical mutation, and before/after maintenance or migration activity that could materially affect canonical state. Add scheduled backup cadence only when mutation frequency makes it useful.
 
 A provider-native D1 export may supplement this bundle but does not replace the storage-independent canonical backup requirement.
