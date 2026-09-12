@@ -115,7 +115,21 @@ ADR 0016 defines offer terminology and the non-canonical Offer Buffer boundary. 
 https://datum.quest/decisions/0017-phase2e-experimental-ingress
 https://datum.quest/docs/raw/decisions/0017-phase2e-experimental-ingress.md
 
-ADR 0017 authorizes a narrow future Phase 2E first-party offer experiment whose authority ends at temporary non-canonical evidence gathering. The endpoint is not live until its pilot-specific handling contract, retention, abuse/resource, incident, and recovery rules are published and tested. A successful experiment does not open Phase 3.
+ADR 0017 authorizes a narrow Phase 2E first-party offer experiment whose authority ends at temporary non-canonical evidence gathering. A successful experiment does not open Phase 3.
+
+### ADR 0018 — Phase 2E Offer Pilot Runtime and Data Boundary
+https://datum.quest/decisions/0018-phase2e-offer-pilot-runtime-and-data-boundary
+https://datum.quest/docs/raw/decisions/0018-phase2e-offer-pilot-runtime-and-data-boundary.md
+
+ADR 0018 defines the dedicated non-canonical OFFER_DB, 4,000-character payload bound, 30-day ordinary retention, one-time private receipt continuity, withdrawal semantics, fail-closed acceptance, and the rule that the temporary offer row is never converted in place into canonical memory.
+
+### ADR 0019 — Phase 2E Offer Triage and Review
+https://datum.quest/decisions/0019-phase2e-offer-triage-and-review
+https://datum.quest/docs/raw/decisions/0019-phase2e-offer-triage-and-review.md
+
+ADR 0019 defines the scale-aware review contract: compress exact repetition, preserve corrections/new themes/singletons/outliers, allow advisory machine-assisted grouping and synthesis, advance remaining review primarily by oldest unresolved material after duplicate compression, and surface material because of institutional consequence rather than popularity. Offer volume is not governance weight.
+
+The Phase 2E write endpoint remains non-live until the implementation proves the published contract, including storage, receipt, withdrawal, cleanup, overload/backpressure, triage, and production acceptance behavior.
 
 ## Roadmap
 https://datum.quest/roadmap
