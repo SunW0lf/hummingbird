@@ -72,6 +72,9 @@ node tests/phase2-review.test.js
 echo "Running remote Phase 2D drill safety checks without remote access..."
 node tests/remote-recovery-drill.test.js
 
+echo "Running ordinary private-backup workflow safety checks..."
+node tests/private-backup-workflow.test.js
+
 echo "Running canonical corpus contract checks..."
 node tests/canonical.test.js
 
