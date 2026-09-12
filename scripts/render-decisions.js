@@ -42,6 +42,7 @@ const PUBLIC_DECISIONS = [
   "0018-phase2e-offer-pilot-runtime-and-data-boundary.md",
   "0019-phase2e-offer-triage-and-review.md",
   "0020-phase2e-offer-pilot-launch-profile.md",
+  "0021-offer-review-visibility.md",
 ];
 
 const ROOT_PUBLIC_ROUTES = new Map([
