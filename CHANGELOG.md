@@ -57,7 +57,7 @@ This records meaningful releases and changes, not a raw Git log.
 
 ## Phase 0 — Foundation (complete)
 
-- Bootstrapped the repository: documentation skeleton (README, PROJECT, MISSION, CHARTER working draft, GOVERNANCE, ARCHITECTURE, DATA_MODEL, SECURITY, OPERATIONS, GOVERNANCE, DATA_MODEL, TRANSPARENCY, CONTRIBUTING, ROADMAP).
+- Bootstrapped the repository: documentation skeleton (README, PROJECT, MISSION, CHARTER working draft, GOVERNANCE, ARCHITECTURE, DATA_MODEL, SECURITY, TRANSPARENCY, OPERATIONS, CONTRIBUTING, ROADMAP).
 - Added initial Architecture Decision Records (0001–0005).
 - Added minimal static Phase 1 site skeleton under `app/`.
 - Added GitHub Actions CI workflow for automated checks, tests, and build.
