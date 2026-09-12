@@ -17,6 +17,13 @@ node --check scripts/mark-published-d1.js
 node --check scripts/export-canonical-backup.js
 node --check scripts/restore-canonical-backup.js
 node --check scripts/phase2d-remote-recovery-drill.js
+node --check scripts/provision-offer-pilot.mjs
+node --check scripts/cleanup-offer-buffer.mjs
+
+echo "Compiling Pages Functions without deploying..."
+rm -f .tmp-offer-worker.mjs
+npx wrangler pages functions build functions --outfile=.tmp-offer-worker.mjs >/dev/null
+rm -f .tmp-offer-worker.mjs
 
 echo "Validating first Phase 2C draft-admission candidate without remote access..."
 node scripts/admit-draft-d1.js admissions/candidates/seed15-visible-consequence.json --validate-only
@@ -38,6 +45,10 @@ node tests/offer-pilot-contract.test.js
 
 echo "Running Phase 2E offer triage/review contract guards..."
 node tests/offer-triage-contract.test.js
+
+echo "Running Phase 2E offer runtime guards..."
+node tests/offer-runtime.test.mjs
+node tests/offer-launch-contract.test.js
 
 echo "Running Phase 2C public-record projection checks..."
 node tests/public-records.test.js
