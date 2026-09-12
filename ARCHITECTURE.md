@@ -1,6 +1,6 @@
 # Architecture
 
-This document describes the actual technical architecture of Hummingbird as built, with clearly marked near-term Phase 2 work and explicitly labeled future interactive design. It should not describe aspirational components as though they already exist.
+This document describes the actual technical architecture of Hummingbird as built, with clearly marked current Phase 2 work and explicitly labeled future interactive design. It should not describe aspirational components as though they already exist.
 
 ## Current system components
 
@@ -9,7 +9,7 @@ GitHub repository (source of truth)
       │
       ├── canonical institutional Markdown
       ├── Phase 2 schema/reference corpus
-      ├── GitHub Issues (interim Seed Bank transport)
+      ├── GitHub Issues (Seed Bank transport)
       │
       ▼
 GitHub Actions (test, build, audit)
@@ -17,12 +17,13 @@ GitHub Actions (test, build, audit)
       ├── static public projection
       │
       ▼
-Cloudflare Pages (static/read-only site)
-      │
+Cloudflare Pages + bounded Pages Functions
+      │                    │
+      │                    └── /offer → dedicated OFFER_DB (temporary, non-canonical)
       ▼
 datum.quest
 
-Cloudflare D1
+Cloudflare D1 (canonical store)
       │
       └── durable canonical application records
               ↓
@@ -31,13 +32,15 @@ Cloudflare D1
         static public projection
 ```
 
-- **`app/`** — current public static/read-only site, including the Seed Bank discovery surface.
+- **`app/`** — current public site, including the live Phase 2E offer surface and Seed Bank discovery surface.
+- **`functions/offer/` + `lib/offer-runtime.mjs`** — bounded Phase 2E experimental ingress for offer acceptance, receipt-based status, and withdrawal. This runtime grants no durable participant capability or standing.
 - **Root Markdown + `docs/`** — authoritative institutional/project documentation and ADRs.
 - **`schemas/` + `fixtures/canonical/`** — Phase 2 storage-independent reference contract defined by ADR 0012. These fixtures are contract material, not production institutional memory.
-- **Cloudflare D1** — current durable persistence engine for deliberately admitted canonical application records. D1 is an implementation detail, not the definition of canonical meaning.
+- **Cloudflare D1 (canonical)** — current durable persistence engine for deliberately admitted canonical application records. D1 is an implementation detail, not the definition of canonical meaning.
+- **`OFFER_DB`** — separate Phase 2E D1 binding for temporary experimental offers. It is operational pilot state and is explicitly outside canonical backup/import/publication semantics.
 - **`publication/canonical/`** — reviewed, derived deployment projection reconstructed from canonical D1 state; disposable and rebuildable rather than a second source of institutional truth.
-- **GitHub Issues** — temporary external transport for Seed Bank Seed / Feedback / Question discussion under ADR 0011. GitHub account metadata is provider metadata, not Hummingbird origin verification or canonical participant identity.
-- **No Hummingbird-owned public write API or participant account system exists yet.** ADR 0017 authorizes a narrow Phase 2E experimental-ingress surface to be built next; it is not yet deployed. Durable participant capabilities/accounts remain Phase 3 concerns.
+- **GitHub Issues** — external transport for Seed Bank Seed / Feedback / Question discussion under ADR 0011. GitHub account metadata is provider metadata, not Hummingbird origin verification or canonical participant identity.
+- **No Hummingbird participant account system or durable Phase 3 public write API exists.** The live `/offer` route is the narrow Phase 2E evidence-only exception authorized by ADR 0017; `/api/offer`, capability issuance, governance standing, and automatic canonical writes remain undeployed.
 - **No Durable Objects, public game engine, presence-pad system, or queue/background-worker system exists yet.**
 
 ## Phase 2 flow
@@ -67,7 +70,7 @@ public commons views / machine-readable representations
 External material follows a separate boundary:
 
 ```text
-external offer/source (for example a Seed Bank thread)
+external offer/source (Seed Bank or Phase 2E /offer)
         ↓
 consideration / synthesis
         ↓
@@ -76,13 +79,15 @@ explicit admission decision
 canonical Hummingbird object
 ```
 
-External discussion is never automatically copied into canonical storage. Making an offer, provider reactions, visible account identity, and popularity are not admission or governance signals by default.
+External discussion or an accepted experimental offer is never automatically copied into canonical storage. Making an offer, provider reactions, visible account identity, repetition, and popularity are not admission or governance signals by default.
 
 ## Canonical versus implementation-specific state
 
 Canonical meaning is defined in [DATA_MODEL.md](DATA_MODEL.md), the machine-readable schema, and accepted ADRs — not by D1 table layout.
 
 D1 may use implementation-specific primary keys, indexes, normalized helper tables, or query projections as needed, but those details must remain reconstructable/disposable. A canonical export must preserve the record's institutional meaning without depending on D1 row IDs, triggers, or hidden application state.
+
+The Phase 2E `OFFER_DB` is intentionally different: it is temporary operational evidence state, not a second canonical store. An experimental offer may influence a later explicit admission, but its temporary row is never converted in place into canonical memory.
 
 Derived artifacts such as indexes, caches, summaries, analytics, embeddings, and public projections are non-canonical unless a later decision explicitly says otherwise.
 
@@ -102,11 +107,11 @@ These facts must not be collapsed into one ambiguous “commit hash.” A conten
 
 The public read plane should prefer discoverable static representations (`rel="alternate"`, visible raw-source links, `llms.txt`, `sitemap.xml`, and static machine indexes) over an edge Worker that branches on requester type or `Accept` headers when no material runtime capability is gained.
 
-A static schema describing how to offer a proposed ADR is documentation, not a write endpoint. Until the Phase 2E first-party pilot is actually deployed, proposal-shaped material still enters through the bounded Seed Bank. Once the experimental ingress exists, it may also receive proposal-shaped material into temporary non-canonical state, but neither path automatically receives an ADR number, canonical admission, publication, or governance status.
+A static schema describing how to offer a proposed ADR is documentation, not a dedicated proposal write endpoint. Proposal-shaped material may enter through the Seed Bank or the live Phase 2E `/offer` surface, but neither path automatically receives an ADR number, canonical admission, publication, or governance status.
 
-## Phase 2E experimental ingress — authorized, not deployed
+## Phase 2E experimental ingress — open for testing
 
-[ADR 0017](docs/decisions/0017-phase2e-experimental-ingress.md) authorizes a deliberately narrow Hummingbird-owned write experiment during Phase 2E so Hummingbird can learn from real interaction before settling every Phase 3 question in the abstract.
+[ADR 0017](docs/decisions/0017-phase2e-experimental-ingress.md) authorizes a deliberately narrow Hummingbird-owned write experiment during Phase 2E so Hummingbird can learn from real interaction before settling every Phase 3 question in the abstract. [ADR 0018](docs/decisions/0018-phase2e-offer-pilot-runtime-and-data-boundary.md), [ADR 0019](docs/decisions/0019-phase2e-offer-triage-and-review.md), and [ADR 0020](docs/decisions/0020-phase2e-offer-pilot-launch-profile.md) define the concrete runtime, data, triage, and launch boundaries.
 
 Its authority ceiling is:
 
@@ -115,22 +120,24 @@ participant makes a low-friction offer
         ↓
 pilot payload/resource validation
         ↓
-temporary experimental buffer (non-canonical)
+temporary experimental OFFER_DB state (non-canonical)
         ↓
-optional grouping / synthesis / evidence review
+exact-duplicate grouping / optional synthesis / evidence review
         ↓
 possible surfacing to an already-authorized institutional layer
 ```
 
-The experimental layer may receive temporary offers and apply its published resource/safety rules. It may not automatically create canonical memory, publication, formal governance proposals, votes, reputation, accounts, standing, durable participant capabilities, or participant-specific durable restrictions.
+The live experimental layer may receive temporary offers and apply its published resource/safety rules. It may not automatically create canonical memory, publication, formal governance proposals, votes, reputation, accounts, standing, durable participant capabilities, or participant-specific durable restrictions.
 
-Before deployment, the pilot must publish its concrete handling contract and pilot-specific choices for payload limits, retention, rate-limit/abuse state, duplicate/replay behavior, overload/backpressure, acknowledgement/receipt semantics, correction/withdrawal if any, incident/shutdown behavior, buffer recovery expectations, and runtime/storage boundary. Those choices are deliberately phase-bounded evidence, not automatic Phase 3 precedent.
+The launch profile uses bounded payloads, a 250-active-offer capacity ceiling, 30-day ordinary offer retention, one-time receipt secrets whose hashes are stored, receipt-based status/withdrawal, exact-text duplicate grouping, scheduled expiry cleanup, and fail-closed acceptance. The application store does not create participant profiles or retain raw IP addresses/browser fingerprints/user-agent history as offer records. These choices are deliberately phase-bounded evidence, not automatic Phase 3 precedent.
 
-The design protocol is [docs/protocols/PHASE_2E_EXPERIMENTAL_INGRESS.md](docs/protocols/PHASE_2E_EXPERIMENTAL_INGRESS.md).
+Production launch verification preserved the public read plane, proved the route and `OFFER_DB` binding with a non-mutating validation check, and then completed a one-time `accept → status → withdraw → withdrawn status` exercise. The test offer was left withdrawn; receipt secrets and provider database identifiers are not part of the public record.
+
+The operating protocol is [docs/protocols/PHASE_2E_EXPERIMENTAL_INGRESS.md](docs/protocols/PHASE_2E_EXPERIMENTAL_INGRESS.md).
 
 ## Future Phase 3 offer boundary — durable participation designed, not deployed
 
-[ADR 0016](docs/decisions/0016-offers-and-the-offer-buffer.md) defines the participant-facing concept for Hummingbird-owned ingress, while ADR 0017 creates the narrower Phase 2E experimental exception described above.
+[ADR 0016](docs/decisions/0016-offers-and-the-offer-buffer.md) defines the participant-facing concept for durable Hummingbird-owned ingress, while ADR 0017 creates the narrower live Phase 2E experimental exception described above.
 
 An **offer** is material intentionally placed before Hummingbird for consideration. Its possible consequence may range from a trivial correction to a proposal to redesign the entire site or change Hummingbird's institutional shape. Scope is not itself an abuse signal and does not grant authority.
 
@@ -160,7 +167,7 @@ The initial Phase 3 durable-capability pilot is expected to favor a narrow revoc
 
 The Offer Buffer is deliberately **not canonical**. Exact durable Phase 3 storage, retention, payload bounds, deduplication, replay protection, capability issuance, abuse-state retention, correction/withdrawal, overload behavior, and recovery semantics remain gated Phase 3 design questions.
 
-The working Phase 3 design is recorded in [docs/protocols/PHASE_3_OFFER_BUFFER_DESIGN.md](docs/protocols/PHASE_3_OFFER_BUFFER_DESIGN.md). It does not authorize durable Phase 3 accounts, capability issuance, governance standing, automatic canonical writes, or broader public mutation before the Phase 3 gate opens. The narrower Phase 2E evidence-only exception is governed separately by ADR 0017.
+The working Phase 3 design is recorded in [docs/protocols/PHASE_3_OFFER_BUFFER_DESIGN.md](docs/protocols/PHASE_3_OFFER_BUFFER_DESIGN.md). It does not authorize durable Phase 3 accounts, capability issuance, governance standing, automatic canonical writes, or broader public mutation before the Phase 3 gate opens. The narrower Phase 2E evidence-only exception is governed separately by ADRs 0017–0020.
 
 ## Future interactive-state architecture — not deployed
 
@@ -204,8 +211,8 @@ If Durable Objects are adopted, real-time designs should prefer hibernation/scal
 
 - **GitHub repository / Actions** — source, project history, protected production change path, deployment secret, CodeQL, dependency/security controls. Compromise of repository write access or Actions is a critical risk.
 - **GitHub Issues** — public, provider-hosted Seed Bank transport. Treat issue bodies/comments/links as untrusted external input. Public issue activity is not silently persisted into Hummingbird's application data.
-- **Cloudflare** — DNS, Pages deployment, proxying, and D1 persistence. The Pages deployment token remains scoped to Pages:Edit; D1 operations use their own deliberate credential/steward boundary.
-- **Phase 2E experimental ingress — when deployed** — temporary untrusted first-party input with a published authority ceiling, bounded retention/resource rules, and no automatic canonical or governance consequence.
+- **Cloudflare** — DNS, Pages deployment, proxying, canonical D1 persistence, and the separately bound temporary `OFFER_DB`. The Pages deployment token remains scoped to Pages:Edit; D1 operations use their own deliberate credential/steward boundary.
+- **Phase 2E experimental ingress — live** — temporary untrusted first-party input with a published authority ceiling, bounded retention/resource rules, and no automatic canonical or governance consequence.
 - **Future Phase 3 Offer Buffer** — durable controlled-participation ingress remains a separate operational trust boundary. Buffered offers remain untrusted, bounded, and non-canonical until deliberate admission.
 - **Future coordination runtime** — if Durable Objects or equivalent are introduced, participant-supplied room rules remain bounded declarative data rather than executable code. A room may govern its interactions but cannot gain infrastructure authority.
 - **Local development machine** — not authoritative production state. Production changes flow through protected `main` and CI.
@@ -215,8 +222,8 @@ If Durable Objects are adopted, real-time designs should prefer hibernation/scal
 
 Current:
 
-- GitHub — source control, CI/CD, security tooling, pull requests, issue tracking, and interim Seed Bank discussion transport.
-- Cloudflare — DNS, Pages hosting, proxying for `datum.quest`, and D1 persistence.
+- GitHub — source control, CI/CD, security tooling, pull requests, issue tracking, and Seed Bank discussion transport.
+- Cloudflare — DNS, Pages hosting/Functions, proxying for `datum.quest`, canonical D1 persistence, and the separately scoped temporary Phase 2E offer database.
 - Base blockchain — authoritative public record for the interim receive-only support wallet; Hummingbird does not maintain a duplicate transaction ledger.
 
 Potential future interactive components, not yet approved for durable Phase 3 deployment:
@@ -224,7 +231,7 @@ Potential future interactive components, not yet approved for durable Phase 3 de
 - Cloudflare Durable Objects — live serialized coordination for bounded rooms/activities where concurrent state requires it.
 - Cloudflare R2 — independent backups, exports, sealed immutable archives, and larger objects where D1 is the wrong storage tier.
 
-A phase-bounded runtime/storage choice for the Phase 2E experimental ingress may be made without settling these broader durable architecture choices, provided it is explicitly documented as pilot-scoped and disposable.
+The live Phase 2E runtime/storage choice does not settle these broader durable architecture choices; its scope remains explicitly pilot-bounded and replaceable.
 
 See [PERSISTENCE.md](PERSISTENCE.md) for the dated cost snapshot and decision gates.
 
@@ -240,7 +247,8 @@ See [PERSISTENCE.md](PERSISTENCE.md) for the dated cost snapshot and decision ga
 
 - Git/document/schema/reference-corpus state is recoverable from the repository.
 - D1 canonical state has a storage-independent export/restore path, and restoration into an empty disposable replacement database has been exercised successfully in Phase 2D. The remaining Phase 2D work is publication-buffer/transparency closure and keeping the normal independent-backup boundary explicit for non-public canonical state.
-- R2 is a candidate independent storage target for encrypted or otherwise appropriately protected recovery bundles, but backup format and restoration remain more important than vendor choice.
+- The Phase 2E offer buffer is intentionally disposable and is not promised canonical backup durability; ordinary retention/cleanup and incident reporting follow its separate pilot contract.
+- R2 is a candidate independent storage target for encrypted or otherwise appropriately protected canonical recovery bundles, but backup format and restoration remain more important than vendor choice.
 - Rebuildable public projections are not themselves backup targets for institutional meaning.
 - Future room/activity state must declare whether it is ephemeral, operational, durable, or archival. Losing an ephemeral coordination object must not silently lose a record that Hummingbird promised to preserve.
 
