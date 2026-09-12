@@ -36,6 +36,9 @@ node tests/offer-buffer-design.test.js
 echo "Running Phase 2E offer pilot contract guards..."
 node tests/offer-pilot-contract.test.js
 
+echo "Running Phase 2E offer triage/review contract guards..."
+node tests/offer-triage-contract.test.js
+
 echo "Running Phase 2C public-record projection checks..."
 node tests/public-records.test.js
 

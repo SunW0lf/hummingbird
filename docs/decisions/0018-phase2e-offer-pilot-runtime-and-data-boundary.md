@@ -89,6 +89,8 @@ The ingress layer does not silently reject a valid offer merely because its text
 
 Volume and repetition are evidence of salience at most; they do not become votes, reputation, priority, or governance weight.
 
+[ADR 0019](0019-phase2e-offer-triage-and-review.md) defines the pilot's scale-aware review behavior: exact repetition is compressed before review coverage, meaningful differences and singleton/outlier material retain representation, machine-assisted synthesis remains advisory, and institutional surfacing is based on consequence rather than popularity.
+
 ## Resource and abuse boundary
 
 The application does not persist raw network identifiers for rate limiting.
@@ -153,3 +155,4 @@ The offer row is never converted in place into a canonical record.
 - Thirty-day offer retention is a pilot rule, not a universal future retention policy.
 - The temporary store may be lost without corrupting canonical institutional history.
 - Runtime and storage choices remain replaceable because the semantic boundary is explicit.
+- Review scale is handled separately by ADR 0019 without turning repetition into authority or making the steward the default inbox.
