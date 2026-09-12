@@ -25,7 +25,7 @@ The review does not infer participant intent or origin from GitHub account attri
 | Phase 2A — canonical contract and reference corpus | PR #26; canonical-object v1 schema; four-record fixture corpus; portable relationships; CI contract checks | Complete. The roadmap and changelog agree with the implemented contract. |
 | Phase 2B — persistence and deterministic import | versioned D1 migration; local round-trip test; recorded remote migration/import/reconstruction/cleanup protocol | Complete. D1 is an implementation of the portable meaning rather than a required part of it. |
 | Phase 2C — public read model and admission boundary | PRs #38–#44; Seed Bank comment source; review candidate; guarded draft admission; separate publication transition; static public projection and health checks | Complete. One offer/source moved through synthesis, admission, and publication as separate acts. |
-| Phase 2D — publication buffer, backup, and recovery | portable backup/restore tooling; local recovery test; successful isolated production-state recovery drill; minimized public operational record in `TRANSPARENCY.md` | Recovery proof complete and the public record prepared for release by this change. Phase 2D should remain open until the steward confirms an ordinary independently retrievable private backup path for any canonical set containing non-public records. |
+| Phase 2D — publication buffer, backup, and recovery | portable backup/restore tooling; local recovery test; successful isolated production-state recovery drill; minimized public operational record in `TRANSPARENCY.md` | Recovery proof complete and the minimized public operational record has been released. Phase 2D remains open until the steward confirms an ordinary independently retrievable private backup path for any canonical set containing non-public records. |
 
 `DATA_MODEL.md` contained one stale Phase 2C status paragraph after the completed admission/publication exercise. This review corrects that factual status without changing the data model.
 
@@ -143,7 +143,7 @@ Required outputs:
 
 Required work, without presupposing outcomes:
 
-- decide the Phase 3 participant-rights, exclusion, and participant-responsibility questions;
+- decide the Phase 3 participant-rights, exclusion, and participation-conditions questions;
 - decide the scope and limits of any emergency authority, including the possibility that none is created;
 - decide the governance-proposal process and the authority to consider, decline, admit, publish, or otherwise act on offers;
 - reconcile steward scope, non-technical decision process, and succession with those Phase 3 decisions;
@@ -174,7 +174,7 @@ This review does not select who makes that final decision or what approval mecha
 
 ## Open-question inventory and dependencies
 
-“Later phase” means legitimately deferred under the current registry. It does not mean unimportant or implicitly answered.
+“Later phase” is a compact table label for questions deferred to a later roadmap phase or another named governance/publication gate. It does not mean unimportant or implicitly answered.
 
 | Open question | Classification for this review | Dependency / ordering note |
 | --- | --- | --- |
@@ -204,13 +204,13 @@ This review does not select who makes that final decision or what approval mecha
 | `OQ-OPS-TOKEN-ROTATION-CADENCE` | Phase 2 review gate | Consider with credential lifecycle and incident response; do not infer a cadence from current temporary credentials. |
 | `OQ-LEGAL-CONTENT-LICENSE` | Later phase | Review before C1 Charter Candidate publication; separate from software licensing and Phase 3 authorization. |
 
-Count: **8 block Phase 3; 6 are Phase 2 review gates; 11 are legitimately deferred to a later named gate. Total: 25.**
+Count: **8 block Phase 3; 6 are Phase 2 review gates; 11 are deferred to later or separate named gates. Total: 25.**
 
 ### Recommended steward consideration order
 
 1. Finish Phase 2 evidence: confirm the ordinary independent-backup checkpoint and accept or revise this review's factual record.
 2. Choose and record the non-technical decision process to use for the remaining work (`OQ-GOVERNANCE-DECISION-PROCESS`) without treating that procedural choice as an answer to the merits.
-3. Consider participant rights, exclusion, and responsibilities together.
+3. Consider participant rights, exclusion, and participation conditions together.
 4. Consider steward scope and succession in light of those constitutional constraints.
 5. Consider emergency authority and the proposal process; both depend on the preceding rights and authority boundaries.
 6. Decide authentication/authorization, abuse-state collection/retention, and ingress behavior.

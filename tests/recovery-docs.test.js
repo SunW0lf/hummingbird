@@ -43,9 +43,9 @@ for (const [name, content, markers] of [
   ]],
   ["Roadmap", roadmap, [
     "replaced the original Phase 0 backup/restore no-ops",
-    "remote backup/recovery proof complete; publication-buffer/transparency closure remains",
+    "recovery and publication-buffer proof complete; ordinary independent-backup checkpoint remains",
     "Remaining work:",
-    "the compact material operational record of the successful recovery exercise has been prepared for release",
+    "released the compact material operational record of the recovery exercise",
     "ordinary independent-backup checkpoint is steward-confirmed",
     "disposable replacement D1 database",
   ]],
@@ -76,6 +76,7 @@ for (const [name, content, stale] of [
   ["OPERATIONS.md", operations, "No production application database exists yet"],
   ["TRANSPARENCY.md", transparency, "There is not yet a production application database"],
   ["ROADMAP.md", roadmap, "run the read-only portable backup exporter against current production D1"],
+  ["ROADMAP.md", roadmap, "the compact material operational record of the successful recovery exercise has been prepared for release"],
   ["docs/protocols/PHASE_2D_RECOVERY.md", protocol, "guarded remote recovery drill in progress, not yet complete"],
   ["CHANGELOG.md", changelog, "This entry records preparation only — remote success is not claimed until the post-merge drill actually runs"],
   ["scripts/backup", backup, "No database exists yet"],
@@ -94,4 +95,4 @@ if (failures > 0) {
 
 console.log("PASS: Phase 2D recovery proof and remaining transparency boundary are internally consistent");
 console.log("PASS: the minimized public record does not turn the public-equivalent artifact into a general backup policy");
-console.log("PASS: Phase 2D remains open for ordinary independent private-backup confirmation");
+console.log("PASS: Phase 2D remains open only for ordinary independent private-backup confirmation");
