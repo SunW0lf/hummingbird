@@ -161,6 +161,9 @@ if (!securityPage.includes("repository is public")) {
 if (!securityPage.includes("Phase 2")) {
   fail("dist/security.html does not state the current Phase 2 condition");
 }
+if (!securityPage.includes("/offer pilot") || securityPage.includes("no public participant accounts or Hummingbird-owned submission forms")) {
+  fail("dist/security.html does not describe the live Phase 2E offer pilot accurately");
+}
 if (!securityPage.includes("private vulnerability reporting is enabled")) {
   fail("dist/security.html does not state that private vulnerability reporting is enabled");
 } else {

@@ -1,6 +1,6 @@
 # Phase 2D — Canonical Backup and Recovery Protocol
 
-Status: **remote production-state recovery exercise completed successfully; publication-buffer/transparency closure remains**
+Status: **remote production-state recovery and minimized public record complete; ordinary independent private-backup confirmation remains**
 
 This protocol defines how Hummingbird backs up and recovers canonical application state without making Cloudflare D1 table layout, provider database identifiers, or public read projections the institution's only recovery source.
 
@@ -150,7 +150,7 @@ Failure behavior remains part of the recovery contract, so the pre-success obser
 3. The guarded REST-based retry completed successfully on 2026-09-11. The production-state recovery job performed the read-only canonical export, verified the portable bundle, created and migrated a disposable replacement D1 database, restored the canonical records, deep-compared recovered meaning, rebuilt and byte-compared the public canonical projection, and completed cleanup. The workflow's `Production-state recovery drill` check concluded `success`.
 4. Because the production canonical set at exercise time was proven exactly equivalent to already-public `publication/canonical` state, the workflow emitted the explicitly allowed public-equivalent backup artifact with 30-day retention. This exception does not convert GitHub Actions artifacts into the normal backup location for future private/draft canonical state.
 
-The successful drill satisfies the remote backup/restore/rebuild proof. It does not by itself complete the publication-buffer/transparency work required to close Phase 2D.
+The successful drill satisfied the remote backup/restore/rebuild proof. The material outcome has since been published through the publication-buffer boundary in [TRANSPARENCY.md](../../TRANSPARENCY.md#public-operational-record--2026-09-production-state-recovery-exercise).
 
 ## Recovery order
 
@@ -191,10 +191,4 @@ The first real recovery exercise using current production canonical data succeed
 - safe cleanup of the disposable recovery database;
 - documented pre-success failure observations without mutation of production canonical state.
 
-The remaining Phase 2D closure work is institutional rather than another recovery proof:
-
-- publish a compact operational record of the recovery exercise through the publication-buffer rules without leaking credentials, exact sensitive timing, provider database identifiers, or unnecessary correlation metadata;
-- ensure the normal independent-storage rule for future production backups is explicit and operational when canonical state is not wholly public;
-- update the roadmap, changelog, transparency, security, and public surfaces so the documented project state matches the successfully exercised capability.
-
-Only after the publication-buffer/transparency work is exercised and recorded should Phase 2D be marked complete.
+The recovery exercise and its compact public operational record are complete. The remaining Phase 2D checkpoint is steward confirmation that a verified portable backup of canonical state containing drafts or other non-public records can be retained and retrieved independently outside the public repository, public Actions artifacts, public web root, and live D1 service. The public-equivalent artifact from this exercise does not satisfy that ordinary private-backup requirement. Phase 2D remains open until the ordinary path is confirmed; recovery success does not authorize Phase 3.
