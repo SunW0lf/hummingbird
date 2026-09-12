@@ -18,15 +18,22 @@ const registryIds = [...registry.matchAll(/^### (OQ-[A-Z0-9-]+)$/gm)].map((match
 const rows = [...review.matchAll(/^\| `(OQ-[A-Z0-9-]+)` \| (Blocks Phase 3|Phase 2 review gate|Later phase) \|/gm)]
   .map((match) => ({ id: match[1], classification: match[2] }));
 
-if (registryIds.length !== 25) fail(`expected 25 open questions in registry, found ${registryIds.length}`);
-if (rows.length !== registryIds.length) fail(`review classifies ${rows.length} questions; registry contains ${registryIds.length}`);
+// The evidence review is a dated Phase 2E snapshot. Resolved questions remain in that
+// historical table even after they are removed from the live open-question registry.
+if (registryIds.length !== 23) fail(`expected 23 currently open questions in registry, found ${registryIds.length}`);
+if (rows.length !== 25) fail(`expected the dated evidence review to preserve its 25-question snapshot, found ${rows.length}`);
 
 const rowIds = new Set(rows.map((row) => row.id));
 for (const id of registryIds) {
-  if (!rowIds.has(id)) fail(`review inventory is missing ${id}`);
+  if (!rowIds.has(id)) fail(`review snapshot is missing currently open question ${id}`);
 }
-for (const id of rowIds) {
-  if (!registryIds.includes(id)) fail(`review inventory contains non-open question ${id}`);
+
+for (const resolvedId of [
+  "OQ-GOVERNANCE-STEWARD-SCOPE",
+  "OQ-GOVERNANCE-DECISION-PROCESS",
+]) {
+  if (registryIds.includes(resolvedId)) fail(`${resolvedId} should have been removed from the live registry after resolution`);
+  if (!rowIds.has(resolvedId)) fail(`dated review snapshot should preserve resolved question ${resolvedId}`);
 }
 
 for (const [classification, expected] of [
@@ -35,7 +42,7 @@ for (const [classification, expected] of [
   ["Later phase", 11],
 ]) {
   const actual = rows.filter((row) => row.classification === classification).length;
-  if (actual !== expected) fail(`${classification} count is ${actual}; expected ${expected}`);
+  if (actual !== expected) fail(`historical ${classification} count is ${actual}; expected ${expected}`);
 }
 
 for (const marker of [
@@ -56,5 +63,6 @@ if (failures > 0) {
   process.exit(1);
 }
 
-console.log("PASS: every open question is inventoried once with the expected gate classification");
+console.log("PASS: all currently open questions remain represented in the dated Phase 2 review snapshot");
+console.log("PASS: resolved C0 steward-scope and decision-process questions are absent from the live registry but preserved historically");
 console.log("PASS: Seed Bank and Phase 2D findings state evidence limits and preserve Phase 3 authorization boundaries");
