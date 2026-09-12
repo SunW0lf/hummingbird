@@ -94,7 +94,7 @@ Phase 2C proved the complete boundary rather than merely implementing static pag
 
 ### Phase 2D — Publication buffer, backup, and recovery
 
-Status: **in progress — remote backup/recovery proof complete; publication-buffer/transparency closure remains**
+Status: **in progress — recovery and publication-buffer proof complete; ordinary independent-backup checkpoint remains**
 
 Phase 2D focuses on durability and safe operational transparency rather than adding new participation features.
 
@@ -111,20 +111,20 @@ Completed evidence:
 - rebuilt the public canonical projection from recovered state and byte-compared the machine-readable projection with the expected publication output;
 - cleaned up the disposable recovery database after the exercise;
 - retained the pre-success failure observations because they demonstrate fail-closed behavior before production mutation;
-- emitted the narrowly permitted 30-day public-equivalent backup artifact only after proving the production canonical set exactly matched already-public `publication/canonical` state.
+- emitted the narrowly permitted 30-day public-equivalent backup artifact only after proving the production canonical set exactly matched already-public `publication/canonical` state;
+- released the compact material operational record of the recovery exercise in [TRANSPARENCY.md](TRANSPARENCY.md), preserving the consequential outcome while omitting credentials, provider database identifiers, exact request timing, source/network metadata, raw telemetry, and unnecessary infrastructure detail.
 
 Remaining work:
 
-- the compact material operational record of the successful recovery exercise has been prepared for release in [TRANSPARENCY.md](TRANSPARENCY.md), with credentials, provider database identifiers, exact request timing, raw telemetry, and unnecessary infrastructure detail omitted;
 - confirm the ordinary independent-storage path for future backups when canonical state includes drafts or otherwise non-public records, since public GitHub artifacts are only allowed for the bounded public-equivalent exercise;
 - mark the milestone complete only after that ordinary independent-backup checkpoint is steward-confirmed;
 - hand off cleanly to Phase 2E review rather than using recovery success as an implicit Phase 3 authorization.
 
-**Exit:** backup and restore have been exercised successfully against current production canonical state through an isolated replacement database, and canonical/read-model equivalence has been demonstrated after recovery. Phase 2D remains open until the material recovery outcome is released through the publication-buffer/transparency boundary and the normal independent-backup rule is operationally clear.
+**Exit:** backup and restore have been exercised successfully against current production canonical state through an isolated replacement database, canonical/read-model equivalence has been demonstrated after recovery, and the minimized recovery outcome has crossed the publication-buffer/transparency boundary. Phase 2D remains open only until the normal independent-backup rule is operationally clear.
 
 ### Phase 2E — Phase review and Phase 3 gate
 
-Status: **planned**
+Status: **in progress — review/gate only; Phase 3 remains blocked**
 
 The evidence review, complete open-question inventory, recommended decision order, and Offer Buffer assumption audit are prepared in [docs/reviews/PHASE_2_EVIDENCE_AND_GATE_REVIEW.md](docs/reviews/PHASE_2_EVIDENCE_AND_GATE_REVIEW.md). That review records evidence and dependencies; it does not answer an open question or authorize Phase 3.
 
@@ -137,7 +137,7 @@ The evidence review, complete open-question inventory, recommended decision orde
 
 #### Phase 2E.2 — Constitutional and governance decisions
 
-- Resolve the participant-rights, exclusion, participant-responsibility, emergency-authority, and governance-proposal questions that block Phase 3.
+- Resolve the participant-rights, exclusion, participation-conditions, emergency-authority, and governance-proposal questions that block Phase 3.
 - Reconcile those decisions with steward scope, decision process, and the authority to consider, decline, admit, or publish offers.
 - Record each substantive decision in its authoritative Charter/Governance source and preserve ADR discipline where architectural consequences follow.
 
