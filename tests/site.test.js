@@ -63,6 +63,7 @@ const PUBLIC_DECISIONS = [
   "0014-progressive-capability-rollout",
   "0015-standards-based-representation-discovery-and-provenance",
   "0016-offers-and-the-offer-buffer",
+  "0017-phase2e-experimental-ingress",
 ];
 
 const REQUIRED_SEED_FORMS = [
@@ -153,6 +154,7 @@ if (fs.existsSync(decisionsPath)) {
     "0014-progressive-capability-rollout.html",
     "0015-standards-based-representation-discovery-and-provenance.html",
     "0016-offers-and-the-offer-buffer.html",
+    "0017-phase2e-experimental-ingress.html",
   ];
   for (const phrase of requiredPhrases) {
     if (!decisions.includes(phrase)) fail(`decisions.html is missing required decision boundary: ${phrase}`);
@@ -247,6 +249,7 @@ for (const url of [
   "https://datum.quest/support",
   "https://datum.quest/decisions/0013-public-read-accessibility",
   "https://datum.quest/decisions/0016-offers-and-the-offer-buffer",
+  "https://datum.quest/decisions/0017-phase2e-experimental-ingress",
   "https://datum.quest/records/contribution-visible-consequence",
 ]) {
   if (!sitemap.includes(`<loc>${url}</loc>`)) fail(`sitemap.xml is missing ${url}`);
@@ -287,16 +290,19 @@ for (const marker of [
 }
 pass("Commons page exposes the offer lifecycle, broad-scope principle, and phase-gate progression");
 
-// 14. Governance and Charter expose evaluation criteria without inventing identity scoring.
+// 14. Governance and Charter expose evaluation criteria without inventing identity scoring,
+// and experimental ingress must not collapse receipt into formal proposal initiation.
 const governance = fs.readFileSync(path.join(APP_DIR, "governance.html"), "utf8");
 for (const marker of [
   "Evaluation without identity metrics",
   "does <strong>not</strong> currently maintain a global participant score",
   "Current Phase 2 admission criteria",
   "No hidden institutional criteria",
-  "who may <strong>offer</strong> a proposal",
+  "what turns offered material into a formal Hummingbird governance proposal",
+  "does not itself initiate a governance proposal or create governance authority",
+  "Evidence-seeking experiments",
 ]) {
-  if (!governance.includes(marker)) fail(`governance.html is missing evaluation marker: ${marker}`);
+  if (!governance.includes(marker)) fail(`governance.html is missing evaluation/proposal marker: ${marker}`);
 }
 const charter = fs.readFileSync(path.join(APP_DIR, "charter.html"), "utf8");
 for (const marker of [
