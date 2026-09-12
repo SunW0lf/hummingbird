@@ -11,7 +11,7 @@ for (const forbidden of ["reference_url", "receipt_hash", "content_sha256", "off
 }
 assert(!/SELECT[\s\S]{0,120}\bbody\b/i.test(script), "observer query must not select offer body content");
 
-assert(script.includes("state IN ('received','grouped')"), "observer should only inspect unreviewed active offer states");
+assert(script.includes("state IN ('received','grouped','synthesized','deferred')"), "observer should count unresolved active offers");
 assert(script.includes("COUNT(*) AS pending_count"), "observer should count pending offers");
 assert(script.includes("Number.isSafeInteger(count)"), "observer must reject invalid provider results");
 assert(script.includes("HB_PENDING_COUNT="), "observer should emit a public count");

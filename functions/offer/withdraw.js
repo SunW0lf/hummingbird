@@ -73,8 +73,8 @@ export async function onRequestPost(context) {
           WHERE id = ? AND receipt_hash = ?`
       ).bind(nowIso, row.id, receiptHash),
     ]);
-  } catch (error) {
-    console.error("offer withdrawal failed", error?.message || error);
+  } catch {
+    console.error("offer withdrawal failed; request and provider details were intentionally not logged");
     return resultResponse(request, 503, "Withdrawal unconfirmed", "<h1>Withdrawal unconfirmed</h1><p>The buffer could not confirm the withdrawal. Please retry; do not assume the offer was removed.</p>", { ok: false, code: "withdrawal_unconfirmed", retryable: true });
   }
 

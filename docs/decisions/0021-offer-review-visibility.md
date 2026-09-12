@@ -15,7 +15,9 @@ connected assistant.
 ## Decision
 
 The existing hourly public GitHub observer reports the count of unexpired
-offers in `received` or `grouped` state and whether that count exceeds zero.
+offers in `received`, `grouped`, `synthesized`, or `deferred` state and whether
+that count exceeds zero. These are the pilot's unresolved review states;
+`surfaced`, `withdrawn`, and `expired` are not in this queue count.
 No text, offer IDs, references, receipt data, or granular timestamps appear in
 public workflow output. Invalid database responses fail the run rather than
 being reported as an empty buffer. The old RSA signal is retired.
@@ -28,11 +30,16 @@ repository contains only the exporter and a workflow template, not a running
 content-export workflow. The private repository must be created and granted
 access separately before content review through GitHub works.
 
-The private packet selects only current active offers and expires as a GitHub
+The private packet selects only current unresolved offers and expires as a GitHub
 Actions artifact after one day. A withdrawn offer can still appear in an
 earlier packet until that artifact expires; reviewers must consult the newest
 packet and verify live state before consequential action. The packet does not
 grant authority to surface, publish, or change an offer's handling state.
+
+The packet compresses **identical text only**, retaining each offer's separate
+ID, reference, question, state, and timestamps. Related ideas, disagreement,
+corrections, and outliers require review under ADR 0019; no semantic grouping
+or automated D1 state transition is claimed by this exporter.
 
 ## Consequences
 

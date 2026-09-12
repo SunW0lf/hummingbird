@@ -1,6 +1,5 @@
 import {
   MAX_ACTIVE_OFFERS,
-  effectiveState,
   escapeHtml,
   expiryIso,
   isoNow,
@@ -59,14 +58,25 @@ export async function onRequestPost(context) {
   const expiresAt = expiryIso(now);
 
   try {
-    const active = await db.prepare(
-      `SELECT COUNT(*) AS count
-         FROM experimental_offers
-        WHERE expires_at > ?
-          AND state NOT IN ('withdrawn','expired')`
-    ).bind(nowIso).first();
+    const { body, referenceUrl, questionId } = normalized.value;
+    const contentHash = await sha256Hex(body);
+    const receipt = newReceiptSecret();
+    const receiptHash = await sha256Hex(receipt);
+    const id = newOfferId();
 
-    if (Number(active?.count || 0) >= MAX_ACTIVE_OFFERS) {
+    // The capacity predicate and write are one SQL statement. A separate
+    // count-before-insert can admit concurrent requests past the pilot cap.
+    const inserted = await db.prepare(
+      `INSERT INTO experimental_offers
+        (id, body, reference_url, question_id, receipt_hash, state, content_sha256, received_at, expires_at)
+       SELECT ?, ?, ?, ?, ?, 'received', ?, ?, ?
+        WHERE (SELECT COUNT(*) FROM experimental_offers
+                WHERE expires_at > ? AND state NOT IN ('withdrawn','expired')) < ?`
+    ).bind(id, body, referenceUrl, questionId, receiptHash, contentHash, nowIso, expiresAt, nowIso, MAX_ACTIVE_OFFERS).run();
+    if (inserted?.success !== true || !Number.isSafeInteger(inserted.meta?.changes)) {
+      throw new Error("unconfirmed offer insertion");
+    }
+    if (inserted.meta.changes === 0) {
       return resultResponse(
         request,
         503,
@@ -76,53 +86,46 @@ export async function onRequestPost(context) {
         { "Retry-After": "3600" }
       );
     }
-
-    const { body, referenceUrl, questionId } = normalized.value;
-    const contentHash = await sha256Hex(body);
-    const receipt = newReceiptSecret();
-    const receiptHash = await sha256Hex(receipt);
-    const id = newOfferId();
-
-    const duplicate = await db.prepare(
-      `SELECT id, cluster_id
-         FROM experimental_offers
-        WHERE content_sha256 = ?
-          AND expires_at > ?
-          AND state NOT IN ('withdrawn','expired')
-        ORDER BY received_at ASC
-        LIMIT 1`
-    ).bind(contentHash, nowIso).first();
+    if (inserted.meta.changes !== 1) throw new Error("unexpected offer insertion count");
 
     let state = "received";
-    let clusterId = null;
-
-    if (duplicate) {
-      state = "grouped";
-      clusterId = duplicate.cluster_id || `exact:${contentHash}`;
-      await db.batch([
-        db.prepare(
-          `INSERT OR IGNORE INTO offer_clusters (id, working_summary, state, created_at, updated_at, expires_at)
-           VALUES (?, NULL, 'active', ?, ?, ?)`
-        ).bind(clusterId, nowIso, nowIso, expiresAt),
-        db.prepare(
-          `UPDATE experimental_offers
-              SET state = 'grouped', cluster_id = ?
-            WHERE content_sha256 = ?
-              AND expires_at > ?
-              AND state NOT IN ('withdrawn','expired','surfaced')`
-        ).bind(clusterId, contentHash, nowIso),
-        db.prepare(
-          `INSERT INTO experimental_offers
-            (id, body, reference_url, question_id, receipt_hash, state, cluster_id, content_sha256, received_at, expires_at)
-           VALUES (?, ?, ?, ?, ?, 'grouped', ?, ?, ?, ?)`
-        ).bind(id, body, referenceUrl, questionId, receiptHash, clusterId, contentHash, nowIso, expiresAt),
-      ]);
-    } else {
-      await db.prepare(
-        `INSERT INTO experimental_offers
-          (id, body, reference_url, question_id, receipt_hash, state, content_sha256, received_at, expires_at)
-         VALUES (?, ?, ?, ?, ?, 'received', ?, ?, ?)`
-      ).bind(id, body, referenceUrl, questionId, receiptHash, contentHash, nowIso, expiresAt).run();
+    try {
+      const clusterId = `exact:${contentHash}`;
+      const duplicate = await db.prepare(
+        `SELECT id
+           FROM experimental_offers
+          WHERE content_sha256 = ? AND id != ? AND expires_at > ?
+            AND state IN ('received','grouped')
+            AND (cluster_id IS NULL OR cluster_id = ?)
+          ORDER BY received_at, id LIMIT 1`
+      ).bind(contentHash, id, nowIso, clusterId).first();
+      if (duplicate) {
+        await db.batch([
+          db.prepare(
+            `INSERT OR IGNORE INTO offer_clusters (id, working_summary, state, created_at, updated_at, expires_at)
+             VALUES (?, NULL, 'active', ?, ?, ?)`
+          ).bind(clusterId, nowIso, nowIso, expiresAt),
+          db.prepare(
+            `UPDATE offer_clusters SET updated_at = ?, expires_at = MAX(expires_at, ?)
+              WHERE id = ?`
+          ).bind(nowIso, expiresAt, clusterId),
+          db.prepare(
+            `UPDATE experimental_offers SET state = 'grouped', cluster_id = ?
+              WHERE content_sha256 = ? AND expires_at > ? AND state IN ('received','grouped')
+                AND (cluster_id IS NULL OR cluster_id = ?)`
+          ).bind(clusterId, contentHash, nowIso, clusterId),
+          db.prepare(
+            `INSERT OR IGNORE INTO offer_cluster_members (cluster_id, offer_id, added_at)
+             SELECT ?, id, ? FROM experimental_offers
+              WHERE cluster_id = ? AND expires_at > ? AND state IN ('received','grouped')`
+          ).bind(clusterId, nowIso, clusterId, nowIso),
+        ]);
+        state = "grouped";
+      }
+    } catch {
+      // The accepted row remains valid. Grouping is a derived convenience,
+      // and the private reviewer can still compress by matching offer text.
+      console.error("offer exact-grouping failed; accepted offer remains in buffer");
     }
 
     return resultResponse(
@@ -137,8 +140,8 @@ export async function onRequestPost(context) {
        <p>Receipt does not imply endorsement, publication, governance standing, or an individualized response.</p>`,
       { accepted: true, offer_id: id, receipt, state, expires_at: expiresAt }
     );
-  } catch (error) {
-    console.error("offer acceptance failed", error?.message || error);
+  } catch {
+    console.error("offer acceptance failed; request and provider details were intentionally not logged");
     return resultResponse(
       request,
       503,

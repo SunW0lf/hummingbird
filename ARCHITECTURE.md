@@ -131,6 +131,14 @@ The live experimental layer may receive temporary offers and apply its published
 
 The launch profile uses bounded payloads, a 250-active-offer capacity ceiling, 30-day ordinary offer retention, one-time receipt secrets whose hashes are stored, receipt-based status/withdrawal, exact-text duplicate grouping, scheduled expiry cleanup, and fail-closed acceptance. The application store does not create participant profiles or retain raw IP addresses/browser fingerprints/user-agent history as offer records. These choices are deliberately phase-bounded evidence, not automatic Phase 3 precedent.
 
+The current operational read path is `OFFER_DB` → hourly public pending-count
+observer. An optional private companion workflow can export a short-lived review
+packet from the same D1 state once the separate private repository, D1 secret,
+and GitHub app access are configured. Its packet compresses identical offer
+text and preserves separate member references and states; it does not yet
+perform thematic synthesis or change D1 handling states. The private channel
+is prepared in source but is not yet an active, verified review interface.
+
 Production launch verification preserved the public read plane, proved the route and `OFFER_DB` binding with a non-mutating validation check, and then completed a one-time `accept → status → withdraw → withdrawn status` exercise. The test offer was left withdrawn; receipt secrets and provider database identifiers are not part of the public record.
 
 The operating protocol is [docs/protocols/PHASE_2E_EXPERIMENTAL_INGRESS.md](docs/protocols/PHASE_2E_EXPERIMENTAL_INGRESS.md).
@@ -172,6 +180,11 @@ The working Phase 3 design is recorded in [docs/protocols/PHASE_3_OFFER_BUFFER_D
 ## Future interactive-state architecture — not deployed
 
 The working direction for pads, rooms, guilds, walls, games, and other persistent activities is documented in [SPACES.md](SPACES.md). The proposed storage split is documented in [PERSISTENCE.md](PERSISTENCE.md).
+
+The [future surface data inventory](PERSISTENCE.md#document-first-data-planning-for-future-surfaces)
+keeps each proposed surface's meaning portable and document-shaped, with D1
+indexes/constraints only where a real query or invariant needs them. It is a
+planning inventory, not a schema migration or Phase 3 authorization.
 
 The current candidate shape is:
 
