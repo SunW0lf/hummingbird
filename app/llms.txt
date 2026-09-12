@@ -116,6 +116,7 @@ https://datum.quest/decisions/0017-phase2e-experimental-ingress
 https://datum.quest/docs/raw/decisions/0017-phase2e-experimental-ingress.md
 
 ADR 0017 authorizes a narrow Phase 2E first-party offer experiment whose authority ends at temporary non-canonical evidence gathering. A successful experiment does not open Phase 3.
+The endpoint is not live.
 
 ### ADR 0018 — Phase 2E Offer Pilot Runtime and Data Boundary
 https://datum.quest/decisions/0018-phase2e-offer-pilot-runtime-and-data-boundary
