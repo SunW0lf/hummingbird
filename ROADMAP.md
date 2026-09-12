@@ -115,9 +115,9 @@ Completed evidence:
 
 Remaining work:
 
-- publish a compact material operational record of the successful recovery exercise through the publication-buffer rules, with delayed/coarsened detail where appropriate and without credentials, provider database identifiers, or unnecessary correlation metadata;
+- the compact material operational record of the successful recovery exercise has been prepared for release in [TRANSPARENCY.md](TRANSPARENCY.md), with credentials, provider database identifiers, exact request timing, raw telemetry, and unnecessary infrastructure detail omitted;
 - confirm the ordinary independent-storage path for future backups when canonical state includes drafts or otherwise non-public records, since public GitHub artifacts are only allowed for the bounded public-equivalent exercise;
-- document the final Phase 2D observations and mark the milestone complete only after the publication-buffer/transparency exercise is real rather than merely described;
+- mark the milestone complete only after that ordinary independent-backup checkpoint is steward-confirmed;
 - hand off cleanly to Phase 2E review rather than using recovery success as an implicit Phase 3 authorization.
 
 **Exit:** backup and restore have been exercised successfully against current production canonical state through an isolated replacement database, and canonical/read-model equivalence has been demonstrated after recovery. Phase 2D remains open until the material recovery outcome is released through the publication-buffer/transparency boundary and the normal independent-backup rule is operationally clear.
@@ -126,10 +126,30 @@ Remaining work:
 
 Status: **planned**
 
-- Review the Seed Bank experiment and document what it taught about participation, moderation, provider dependence, and abuse controls.
-- Resolve or deliberately defer the Phase 2 review-gate questions for steward scope, non-technical decision process, steward succession, incident response, monitoring cadence, and deployment-token rotation.
-- Confirm every Phase 3 blocking question has a substantive decision rather than an implementation accident.
-- Review [ADR 0016](docs/decisions/0016-offers-and-the-offer-buffer.md) and the [Phase 3 Offer Buffer working design](docs/protocols/PHASE_3_OFFER_BUFFER_DESIGN.md) against the resolved Phase 3 rights, governance, security, and runtime decisions before implementation begins.
+The evidence review, complete open-question inventory, recommended decision order, and Offer Buffer assumption audit are prepared in [docs/reviews/PHASE_2_EVIDENCE_AND_GATE_REVIEW.md](docs/reviews/PHASE_2_EVIDENCE_AND_GATE_REVIEW.md). That review records evidence and dependencies; it does not answer an open question or authorize Phase 3.
+
+#### Phase 2E.1 — Evidence and Phase 2 review
+
+- Verify Phase 2A–2D evidence and close factual documentation gaps.
+- Complete the Phase 2D ordinary independent-backup checkpoint.
+- Review the Seed Bank experiment and document what it taught—and did not establish—about participation, moderation, provider dependence, abuse, metadata, and friction.
+- Resolve or deliberately defer with rationale the Phase 2 review-gate questions for steward scope, non-technical decision process, steward succession, incident response, monitoring cadence, and deployment-token rotation.
+
+#### Phase 2E.2 — Constitutional and governance decisions
+
+- Resolve the participant-rights, exclusion, participant-responsibility, emergency-authority, and governance-proposal questions that block Phase 3.
+- Reconcile those decisions with steward scope, decision process, and the authority to consider, decline, admit, or publish offers.
+- Record each substantive decision in its authoritative Charter/Governance source and preserve ADR discipline where architectural consequences follow.
+
+#### Phase 2E.3 — Security, ingress, and runtime decisions
+
+- Resolve the Phase 3 authentication/authorization, abuse-state retention, and application framework/runtime blockers after the relevant rights and governance constraints are known.
+- Define ingress, overload, receipt, correction/withdrawal, incident, shutdown, and recovery behavior without letting implementation defaults answer policy.
+- Review [ADR 0016](docs/decisions/0016-offers-and-the-offer-buffer.md) and the [Phase 3 Offer Buffer working design](docs/protocols/PHASE_3_OFFER_BUFFER_DESIGN.md) against all resolved Phase 3 rights, governance, security, and runtime decisions.
+
+#### Explicit Phase 3 authorization
+
+Phase 3 may begin only after Phase 2E.1–2E.3 are complete, all Phase 3 blockers are substantively resolved, the Offer Buffer design is reconciled with those decisions, and the then-authorized governance process records an explicit Phase 3 entry decision. This gate structure does not decide who holds that authority or what approval method applies.
 
 **Phase 2 completion requires all of the following:**
 

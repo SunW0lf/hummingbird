@@ -6,7 +6,7 @@
 
 Cloudflare D1 now holds deliberately admitted canonical application state. The first real canonical contribution has moved through draft admission, a separate publication decision, and rebuildable static publication. Public page views remain static at request time and do not query D1.
 
-Phase 2D has now exercised the portable production backup/recovery path end-to-end against an isolated disposable replacement database. The remaining durability/transparency work is to release a compact public operational record of that material recovery exercise through the publication buffer, with unnecessary security-sensitive and correlation-rich detail removed or coarsened.
+Phase 2D has now exercised the portable production backup/recovery path end-to-end against an isolated disposable replacement database. The material outcome is released below as the first compact public operational record prepared through the publication buffer. Phase 2D remains open only for confirmation of the ordinary independent private-backup path used when canonical state includes non-public records.
 
 ## Phase 2 model
 
@@ -53,11 +53,13 @@ A public operational event should identify what changed, the affected project ob
 
 Non-urgent operational events may be released in batches and with coarsened timing. The publication buffer exists specifically so transparency does not become an accidental surveillance or exploit-assistance mechanism.
 
-### Phase 2D recovery event awaiting buffered publication
+### Public operational record — 2026-09 production-state recovery exercise
 
-The first remote production-state recovery drill succeeded on 2026-09-11. At an institutional level, the event demonstrated that Hummingbird could read current canonical state from production, verify a portable storage-independent backup, reconstruct an empty replacement database from repository-controlled migrations, restore canonical records without semantic loss, rebuild the public canonical projection, compare the recovered projection with the expected public output, and clean up the disposable recovery database without treating the live production database as the restore target.
+**Outcome: succeeded.** Hummingbird read current canonical state from production, verified a portable storage-independent backup, reconstructed an empty isolated replacement from repository-controlled migrations, restored canonical records without semantic loss, rebuilt the public canonical projection, and verified that the recovered machine-readable projection matched the expected public output. The isolated replacement was removed after verification. The live production store was not used as a restore target or modified by the exercise.
 
-The raw provider execution history remains externally authoritative. The public Hummingbird record should publish the consequence — successful recovery equivalence and the relevant fail-closed observations — rather than copying credential names, provider database identifiers, exact infrastructure timing, or verbose job telemetry into canonical institutional memory.
+Pre-success attempts stopped before production mutation or public artifact release. A time-bounded public-equivalent recovery artifact was retained only after the complete backup was proven to match canonical material already public. That exception is not the ordinary backup path for drafts or other non-public canonical state.
+
+**Publication-buffer handling:** the public record retains the material outcome and safety boundary while omitting credentials, provider database identifiers, exact request timing, source/network metadata, raw telemetry, and unnecessary infrastructure detail. Provider execution history remains authoritative for its own operational detail.
 
 ## Canonical backup transparency
 
