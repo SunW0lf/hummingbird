@@ -6,7 +6,7 @@ Detailed governance protocol documents, once written, live in [docs/governance/]
 
 ## Proposals
 
-Open question: [OQ-GOVERNANCE-PROPOSALS](docs/governance/OPEN_QUESTIONS.md#oq-governance-proposals) — who may **offer** a proposal, in what form, and where (GitHub issue/PR today; a Hummingbird-owned Offer surface only after the Phase 3 gate opens)?
+Open question: [OQ-GOVERNANCE-PROPOSALS](docs/governance/OPEN_QUESTIONS.md#oq-governance-proposals) — what turns offered material into a formal Hummingbird governance proposal, who may initiate that transition, in what form, and through what process? The Phase 2E experimental offer surface authorized by ADR 0017 may receive proposal-shaped material, but receipt, synthesis, or surfacing does not itself initiate a governance proposal or create governance authority.
 
 ## Charter publication lifecycle
 
@@ -40,6 +40,25 @@ Input may be synthesized, grouped, deferred, or declined rather than receiving i
 A C0 decision may guide current development once adopted, but it cannot bootstrap permanent authority. It cannot be used to represent the Charter as ratified, bypass a named phase or publication gate, silently create hidden participant standing, or make the steward's present residual authority self-perpetuating.
 
 Later Charter/governance stages supersede or constrain this C0 process as their own authorized mechanisms come into force.
+
+### Evidence-seeking experiments
+
+Hummingbird does not need to settle every unresolved question before it can gather evidence relevant to that question. During C0, a question may remain **open by design — evidence seeking** when observed bounded interaction is more informative than further hypothetical debate.
+
+A C0 evidence-seeking experiment is legitimate only when:
+
+- its authority ceiling is explicit and materially lower than the unresolved authority it is intended to inform;
+- participant-facing needs, limits, possible outcomes, and escalation/review paths are published before consequential operation;
+- the experiment does not silently exercise an authority that an unresolved constitutional or governance-legitimacy question exists to control;
+- data collection, retention, and operational burden are proportionate to the experiment rather than justified by speculative future use;
+- the experiment can be paused, revised, or removed without converting temporary behavior into permanent standing or precedent;
+- results are recorded as evidence with stated limits rather than represented as ratification, a vote, or proof of consensus.
+
+Pilot-scoped rules may answer what is necessary to run the experiment safely without resolving a broader future question universally. Those rules are evidence for later design, not automatic precedent.
+
+Access to an experiment does not imply a right to individualized consideration or response unless the experiment's published handling contract explicitly creates one. Repetition and volume may help reveal salience, load, or recurring friction, but they do not by themselves create governance weight.
+
+[ADR 0017](docs/decisions/0017-phase2e-experimental-ingress.md) applies this rule to the Phase 2E low-friction ingress pilot while leaving Phase 3 authorization separately gated.
 
 ### Minimum necessary authority
 

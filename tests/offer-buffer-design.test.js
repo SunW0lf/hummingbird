@@ -1,5 +1,5 @@
-// Guards the accepted Phase 3 Offer Buffer design without creating a Phase 3
-// runtime during the current Phase 2 gate.
+// Guards the accepted offer architecture and the bounded Phase 2E experimental
+// ingress exception without creating a durable Phase 3 runtime.
 "use strict";
 
 const fs = require("fs");
@@ -28,6 +28,8 @@ function read(rel) {
 }
 
 const adr = read("docs/decisions/0016-offers-and-the-offer-buffer.md");
+const experimentalAdr = read("docs/decisions/0017-phase2e-experimental-ingress.md");
+const experimentalProtocol = read("docs/protocols/PHASE_2E_EXPERIMENTAL_INGRESS.md");
 const design = read("docs/protocols/PHASE_3_OFFER_BUFFER_DESIGN.md");
 const roadmap = read("ROADMAP.md");
 const architecture = read("ARCHITECTURE.md");
@@ -40,9 +42,27 @@ for (const [name, content, markers] of [
     "possible consequence of an offer may be broad",
     "Offer Buffer",
     "delivery friction may regulate resource use",
-    "This ADR defines terminology and architecture only",
+    "ADR 0017",
+    "Phase 3 remains gated",
     "proof of thought",
     "proof of cognition",
+  ]],
+  ["ADR 0017", experimentalAdr, [
+    "experimental ingress pilot",
+    "temporary, non-canonical experimental state only",
+    "no account requirement",
+    "open by design — evidence seeking",
+    "exists now",
+    "open for testing",
+    "planned",
+    "Phase 3 still requires its own explicit authorization",
+  ]],
+  ["Phase 2E experimental ingress protocol", experimentalProtocol, [
+    "authorized design; not yet deployed",
+    "Published handling contract",
+    "Pre-deployment decisions still required",
+    "Volume is not a vote",
+    "Exit / expansion rule",
   ]],
   ["Offer Buffer working design", design, [
     "design only — not deployed; Phase 3 remains gated",
@@ -53,17 +73,24 @@ for (const [name, content, markers] of [
     "no hidden proof-of-thought, proof-of-cognition",
   ]],
   ["Roadmap", roadmap, [
+    "Phase 2E.P — Experimental ingress pilot",
+    "authorized design — not yet deployed",
     "offer architecture documented, gate not yet open",
     "make an offer",
     "Offer Buffer (bounded, operational, non-canonical)",
     "offer delivery options",
   ]],
   ["Architecture", architecture, [
-    "Future Phase 3 offer boundary — designed, not deployed",
+    "Phase 2E experimental ingress — authorized, not deployed",
+    "Future Phase 3 offer boundary — durable participation designed, not deployed",
     "Offer Buffer (bounded operational state, non-canonical)",
     "Scope is not itself an abuse signal",
   ]],
-  ["Governance", governance, ["who may **offer** a proposal"]],
+  ["Governance", governance, [
+    "Evidence-seeking experiments",
+    "open by design — evidence seeking",
+    "Published handling contracts",
+  ]],
   ["Agent instructions", agents, [
     "prefer **offer**, **make an offer**, **offer delivery options**, **Offer Buffer**, and **consideration**",
     "Broad scope is not an abuse signal and does not grant authority",
@@ -86,8 +113,11 @@ for (const phrase of forbiddenDesignPhrases) {
   }
 }
 
+// ADR 0017 authorizes a future Phase 2E write experiment, but this decision PR
+// intentionally does not deploy it yet. A live route belongs in a later build PR
+// with the pilot-specific handling contract and safety decisions implemented.
 if (fs.existsSync(path.join(DIST, "offer.html")) || fs.existsSync(path.join(DIST, "offer"))) {
-  fail("Phase 2 build unexpectedly exposes a live /offer surface");
+  fail("decision-only Phase 2E build unexpectedly exposes a live /offer surface");
 }
 
 function htmlFiles(dir) {
@@ -103,29 +133,36 @@ function htmlFiles(dir) {
 for (const file of htmlFiles(DIST)) {
   const html = fs.readFileSync(file, "utf8");
   if (/action=["']\/api\/offer/i.test(html)) {
-    fail(`${path.relative(DIST, file)} advertises a live /api/offer action before Phase 3`);
+    fail(`${path.relative(DIST, file)} advertises a live /api/offer action before the pilot implementation exists`);
   }
 }
 
-const publicAdr = path.join(DIST, "decisions", "0016-offers-and-the-offer-buffer.html");
-const rawAdr = path.join(DIST, "docs", "raw", "decisions", "0016-offers-and-the-offer-buffer.md");
-if (!fs.existsSync(publicAdr)) fail("ADR 0016 is not rendered on the public Decisions surface");
-if (!fs.existsSync(rawAdr)) fail("ADR 0016 raw Markdown is not published");
+for (const slug of [
+  "0016-offers-and-the-offer-buffer",
+  "0017-phase2e-experimental-ingress",
+]) {
+  const publicAdr = path.join(DIST, "decisions", `${slug}.html`);
+  const rawAdr = path.join(DIST, "docs", "raw", "decisions", `${slug}.md`);
+  if (!fs.existsSync(publicAdr)) fail(`${slug} is not rendered on the public Decisions surface`);
+  if (!fs.existsSync(rawAdr)) fail(`${slug} raw Markdown is not published`);
+}
 
 const llms = read("app/llms.txt");
 for (const marker of [
   "0016-offers-and-the-offer-buffer",
+  "0017-phase2e-experimental-ingress",
   "An offer is not canonical admission",
-  "does not mean that `/offer`",
+  "The endpoint is not live",
 ]) {
-  if (!llms.includes(marker)) fail(`llms.txt is missing Offer Buffer marker: ${marker}`);
+  if (!llms.includes(marker)) fail(`llms.txt is missing Offer/experimental-ingress marker: ${marker}`);
 }
 
 if (failures > 0) {
-  console.error(`\n${failures} Offer Buffer design check(s) failed.`);
+  console.error(`\n${failures} Offer Buffer / experimental-ingress check(s) failed.`);
   process.exit(1);
 }
 
 pass("Offer terminology, broad-scope principle, non-canonical buffer, and delivery/authority separation are documented");
-pass("Phase 3 runtime remains undeployed while ADR 0016 is publicly inspectable");
-console.log("\nAll Offer Buffer design checks passed.");
+pass("Phase 2E evidence-only ingress is authorized with a published authority ceiling and pre-deployment gate");
+pass("Durable Phase 3 participation remains undeployed and separately gated");
+console.log("\nAll Offer Buffer / experimental-ingress checks passed.");

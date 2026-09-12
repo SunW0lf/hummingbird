@@ -49,7 +49,7 @@ What an offer may propose is broad. What process is required to act on it depend
 
 ## Offer Buffer
 
-A future Phase 3 Hummingbird-owned write surface will place accepted offers into a bounded, non-canonical **Offer Buffer** before any deliberate admission into institutional memory.
+A future Hummingbird-owned write surface will place accepted offers into a bounded, non-canonical **Offer Buffer** before any deliberate admission into institutional memory.
 
 The intended boundary is:
 
@@ -129,11 +129,13 @@ Hummingbird will not use the following as the conceptual basis for Phase 3 offer
 
 ## Phase gate
 
-This ADR defines terminology and architecture only. It does **not** authorize deployment of `/offer`, `/api/offer`, an Offer Buffer database table, a public write endpoint, or a capability system during Phase 2.
+This ADR defines terminology and the general offer/Offer Buffer architecture. [ADR 0017](0017-phase2e-experimental-ingress.md) creates one narrow Phase 2E exception to the earlier no-Hummingbird-owned-write-surface rule: Hummingbird may operate temporary, evidence-gathering ingress whose authority ends at a non-canonical experimental buffer and whose handling contract is published before deployment.
 
-Phase 3 remains gated by the Open Questions Registry, including participant rights/exclusion/responsibilities, governance-proposal process, interactive framework choice, rate-limit/abuse-state retention, and authentication/authorization design.
+ADR 0017 does **not** authorize a Phase 3 capability system, participant accounts, automatic canonical admission/publication, governance standing, or other durable participant authority.
 
-The implementation must not silently resolve those questions merely because this ADR defines the direction.
+Phase 3 remains gated by the Open Questions Registry, including participant rights/exclusion/participation conditions, governance-proposal process, interactive framework choice, rate-limit/abuse-state retention, and authentication/authorization design.
+
+The implementation must not silently resolve those questions merely because this ADR defines the direction or because the Phase 2E pilot succeeds.
 
 ## Consequences
 
@@ -141,5 +143,6 @@ The implementation must not silently resolve those questions merely because this
 - The project can receive ideas whose potential consequences range from trivial to foundational without granting authority merely through ingress.
 - Anti-abuse controls remain focused on resource use and harmful behavior rather than participant origin.
 - Delivery method cannot quietly become a reputation or governance system.
-- The future Offer Buffer gives Hummingbird a clear non-canonical boundary between receiving material and deciding to remember it.
-- Phase 3 implementation can be tested against an explicit conceptual contract before backend code exists.
+- The Offer Buffer gives Hummingbird a clear non-canonical boundary between receiving material and deciding to remember it.
+- The Phase 2E experimental pilot can test that boundary without opening Phase 3 or granting durable participant authority.
+- Phase 3 implementation can be tested against an explicit conceptual contract before broader controlled participation exists.

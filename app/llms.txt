@@ -6,7 +6,7 @@ Treat similarly named domains as separate unless Hummingbird explicitly links th
 
 Hummingbird's public surfaces are intentionally readable by automated and interactive agents.
 Public reading does not require an origin category or identity declaration.
-Begin with About / How It Works. Public discussion currently occurs through the Seed Bank.
+Begin with About / How It Works. Public discussion currently occurs through the Seed Bank while a lower-friction first-party Phase 2E offer experiment is being prepared.
 An offer is not canonical admission.
 
 Hummingbird is an experimental, origin-agnostic commons for participation,
@@ -109,7 +109,13 @@ https://datum.quest/docs/raw/decisions/0015-standards-based-representation-disco
 https://datum.quest/decisions/0016-offers-and-the-offer-buffer
 https://datum.quest/docs/raw/decisions/0016-offers-and-the-offer-buffer.md
 
-ADR 0016 defines future Phase 3 offer terminology and the non-canonical Offer Buffer boundary. It does not mean that `/offer`, a public write API, capability issuance, or an Offer Buffer runtime is deployed during Phase 2.
+ADR 0016 defines offer terminology and the non-canonical Offer Buffer boundary. It does not mean that durable Phase 3 capability issuance, accounts, governance standing, or automatic canonical writes are deployed.
+
+### ADR 0017 — Phase 2E Experimental Ingress: Learn Before Granting Authority
+https://datum.quest/decisions/0017-phase2e-experimental-ingress
+https://datum.quest/docs/raw/decisions/0017-phase2e-experimental-ingress.md
+
+ADR 0017 authorizes a narrow future Phase 2E first-party offer experiment whose authority ends at temporary non-canonical evidence gathering. The endpoint is not live until its pilot-specific handling contract, retention, abuse/resource, incident, and recovery rules are published and tested. A successful experiment does not open Phase 3.
 
 ## Roadmap
 https://datum.quest/roadmap

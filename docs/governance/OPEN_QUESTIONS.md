@@ -20,6 +20,8 @@ Constitutional questions (Charter) and governance-legitimacy questions (who may 
 
 Operational and security-hardening questions may permit explicitly documented, phase-bounded risk acceptance where their substantive document says so. A risk acceptance never silently resolves the underlying question.
 
+A bounded C0 evidence-seeking experiment may define narrower temporary operating rules without resolving a broader future question, but only where the experiment's authority ceiling does not exercise the unresolved constitutional or governance authority itself. [ADR 0017](../decisions/0017-phase2e-experimental-ingress.md) applies that distinction to temporary Phase 2E ingress; it does not reduce the Phase 3 blockers below.
+
 ## Charter (constitutional)
 
 ### OQ-CHARTER-RIGHTS
@@ -51,7 +53,7 @@ Blocks: entry into Phase 3.
 Status: OPEN.
 
 ### OQ-GOVERNANCE-PROPOSALS
-**Who may offer a proposal, in what form, and where** (GitHub issue/PR now; Hummingbird-owned Offer surface once Phase 3 exists)?
+**What turns offered material into a formal Hummingbird governance proposal, who may initiate that transition, in what form, and through what process?** Phase 2E experimental ingress may receive proposal-shaped material, but receipt/synthesis/surfacing does not initiate a governance proposal or create governance authority.
 Raised in: [GOVERNANCE.md](../../GOVERNANCE.md), [CONTRIBUTING.md](../../CONTRIBUTING.md).
 Blocks: entry into Phase 3.
 Status: OPEN.
@@ -101,7 +103,7 @@ Status: OPEN.
 ## Architecture / project
 
 ### OQ-ARCH-FRAMEWORK
-**Final application framework/runtime for interactive phases** (Phase 3+), deferred until a read-only commons exists.
+**Final application framework/runtime for durable Phase 3+ interactive capabilities.** A phase-bounded runtime may be selected for the Phase 2E experimental-ingress pilot without resolving the durable framework choice or creating Phase 3 precedent.
 Raised in: [PROJECT.md](../../PROJECT.md).
 Blocks: entry into Phase 3.
 Status: OPEN.
@@ -123,13 +125,13 @@ Status: OPEN.
 ## Security
 
 ### OQ-SECURITY-ACCESS-CONTROL-RETENTION
-**Bounded retention for rate-limit/abuse state**, kept separate from the identity/participant model.
+**Durable Phase 3 bounded retention for rate-limit/abuse state**, kept separate from the identity/participant model. The Phase 2E ingress experiment must publish a narrow pilot-specific abuse-state/retention rule, but that rule is evidence rather than automatic resolution of the Phase 3 model.
 Raised in: [DATA_MODEL.md](../../DATA_MODEL.md), [SECURITY.md](../../SECURITY.md).
 Blocks: entry into Phase 3.
 Status: OPEN.
 
 ### OQ-SECURITY-AUTHN-MODEL
-**Authentication/authorization model** once contribution/proposal forms are introduced.
+**Authentication/authorization model for durable Phase 3 participant capabilities.** The evidence-only Phase 2E ingress experiment may accept uncredentialed offers under ADR 0017 because receipt grants no durable capability or standing; that experiment does not resolve the future authn/authz model.
 Raised in: [SECURITY.md](../../SECURITY.md).
 Blocks: entry into Phase 3.
 Status: OPEN.

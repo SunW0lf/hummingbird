@@ -33,7 +33,7 @@ The Phase 2 data-model, workflow-state, retention, and operational-transparency 
 
 Phase 2 implements public read-only representations of contributions, proposals, needs, relationships, minimal events, statuses, and transparency records. Cloudflare D1 is the first persistence engine, while canonical record meaning remains portable and storage-independent.
 
-Phase 2 does **not** accept Hummingbird-owned public offers through an application write surface. A narrow interim exception is the **Seed Bank**, defined by [ADR 0011](docs/decisions/0011-interim-seed-bank.md), using GitHub as external provider-hosted discussion transport without automatically creating canonical records or governance weight.
+Phase 2 generally keeps public mutation authority outside the Hummingbird application. The **Seed Bank**, defined by [ADR 0011](docs/decisions/0011-interim-seed-bank.md), remains an external provider-hosted discussion path without automatically creating canonical records or governance weight. During Phase 2E, [ADR 0017](docs/decisions/0017-phase2e-experimental-ingress.md) authorizes one narrower first-party exception: temporary, non-canonical experimental ingress whose authority ends at evidence gathering and does not open Phase 3.
 
 ### Phase 2A — Canonical contract and reference corpus
 
@@ -124,32 +124,63 @@ Remaining work:
 
 ### Phase 2E — Phase review and Phase 3 gate
 
-Status: **in progress — review/gate only; Phase 3 remains blocked**
+Status: **in progress — review/gate plus bounded experimental ingress; Phase 3 remains blocked**
 
-The evidence review, complete open-question inventory, recommended decision order, and Offer Buffer assumption audit are prepared in [docs/reviews/PHASE_2_EVIDENCE_AND_GATE_REVIEW.md](docs/reviews/PHASE_2_EVIDENCE_AND_GATE_REVIEW.md). That review records evidence and dependencies; it does not answer an open question or authorize Phase 3.
+The evidence review, complete open-question inventory, recommended decision order, and Offer Buffer assumption audit are prepared in [docs/reviews/PHASE_2_EVIDENCE_AND_GATE_REVIEW.md](docs/reviews/PHASE_2_EVIDENCE_AND_GATE_REVIEW.md). That review records evidence and dependencies; it does not itself answer an open question or authorize Phase 3.
+
+Phase 2E also includes a deliberately narrow evidence-gathering ingress track under [ADR 0017](docs/decisions/0017-phase2e-experimental-ingress.md). The purpose is to learn from real participation before attempting to settle every unresolved question in the abstract. This track does not create durable participant authority and is not Phase 3.
 
 #### Phase 2E.1 — Evidence and Phase 2 review
 
 - Verify Phase 2A–2D evidence and close factual documentation gaps.
 - Complete the Phase 2D ordinary independent-backup checkpoint.
 - Review the Seed Bank experiment and document what it taught—and did not establish—about participation, moderation, provider dependence, abuse, metadata, and friction.
-- Resolve or deliberately defer with rationale the Phase 2 review-gate questions for steward scope, non-technical decision process, steward succession, incident response, monitoring cadence, and deployment-token rotation.
+- Resolve or deliberately defer with rationale the remaining Phase 2 review-gate questions for steward succession, incident response, monitoring cadence, and deployment-token rotation. The C0 non-technical decision process and steward scope are already resolved in [GOVERNANCE.md](GOVERNANCE.md).
+
+#### Phase 2E.P — Experimental ingress pilot
+
+Status: **authorized design — not yet deployed**
+
+The [Phase 2E experimental ingress protocol](docs/protocols/PHASE_2E_EXPERIMENTAL_INGRESS.md) defines the authority ceiling and pre-deployment requirements.
+
+The pilot may proceed before all Phase 3 blockers are resolved because its authority ends at temporary non-canonical evidence gathering. It must not be expanded into durable controlled participation by implementation drift.
+
+The intended participant surface is deliberately low-friction:
+
+- one primary text field plus an optional reference;
+- no account or required handle;
+- no origin declaration;
+- no CAPTCHA or proof-of-human requirement;
+- no JavaScript requirement for basic use;
+- a clear acknowledgement/receipt whose semantics do not imply identity, canonical status, or standing.
+
+Before the pilot goes live, publish and test its concrete handling contract, including payload limits, retention, minimal abuse/rate-limit state, duplicate/replay handling, overload behavior, acknowledgement semantics, correction/withdrawal behavior if any, incident/shutdown behavior, buffer recovery expectations, and runtime/storage boundary.
+
+Once live, the public front door should act as a truthful funnel:
+
+1. **the project** — what exists and what principles already apply;
+2. **the plan** — where Hummingbird is headed and what remains intentionally unresolved;
+3. **open now** — the specific interaction available for input and testing.
+
+Public status labels should distinguish **exists now**, **open for testing**, and **planned**. The first-party offer surface becomes the primary participation call to action only after it is actually deployed. The Seed Bank may remain as a higher-friction durable public discussion/archive path.
+
+Evidence from the pilot may inform unresolved questions. Volume or repetition is evidence of salience, not a vote or automatic governance weight.
 
 #### Phase 2E.2 — Constitutional and governance decisions
 
-- Resolve the participant-rights, exclusion, participation-conditions, emergency-authority, and governance-proposal questions that block Phase 3.
+- Resolve only the participant-rights, exclusion, participation-conditions, emergency-authority, and governance-proposal questions necessary to authorize Phase 3; bounded Phase 2E experiments may gather evidence relevant to those questions without silently resolving them.
 - Reconcile those decisions with steward scope, decision process, and the authority to consider, decline, admit, or publish offers.
 - Record each substantive decision in its authoritative Charter/Governance source and preserve ADR discipline where architectural consequences follow.
 
 #### Phase 2E.3 — Security, ingress, and runtime decisions
 
-- Resolve the Phase 3 authentication/authorization, abuse-state retention, and application framework/runtime blockers after the relevant rights and governance constraints are known.
-- Define ingress, overload, receipt, correction/withdrawal, incident, shutdown, and recovery behavior without letting implementation defaults answer policy.
+- Resolve the Phase 3 authentication/authorization, abuse-state retention, and application framework/runtime blockers after the relevant rights and governance constraints are known, using Phase 2E pilot evidence where useful.
+- Define Phase 3 ingress, overload, receipt, correction/withdrawal, incident, shutdown, and recovery behavior without treating pilot-scoped rules as automatic precedent.
 - Review [ADR 0016](docs/decisions/0016-offers-and-the-offer-buffer.md) and the [Phase 3 Offer Buffer working design](docs/protocols/PHASE_3_OFFER_BUFFER_DESIGN.md) against all resolved Phase 3 rights, governance, security, and runtime decisions.
 
 #### Explicit Phase 3 authorization
 
-Phase 3 may begin only after Phase 2E.1–2E.3 are complete, all Phase 3 blockers are substantively resolved, the Offer Buffer design is reconciled with those decisions, and the then-authorized governance process records an explicit Phase 3 entry decision. This gate structure does not decide who holds that authority or what approval method applies.
+Phase 3 may begin only after Phase 2E.1–2E.3 are complete, all Phase 3 blockers are substantively resolved, the Offer Buffer design is reconciled with those decisions, and the then-authorized governance process records an explicit Phase 3 entry decision. A successful Phase 2E experimental-ingress pilot does not itself satisfy or bypass that gate.
 
 **Phase 2 completion requires all of the following:**
 
@@ -160,13 +191,14 @@ Phase 3 may begin only after Phase 2E.1–2E.3 are complete, all Phase 3 blocker
 5. publication-buffer behavior is tested;
 6. backup and restore are documented and exercised;
 7. no secret/security-sensitive fields are exposed by the public read model;
-8. Phase 2 review-gate decisions are recorded or explicitly deferred with rationale.
+8. Phase 2 review-gate decisions are recorded or explicitly deferred with rationale;
+9. if the Phase 2E experimental ingress pilot is deployed, its handling contract and material evidence/limits are documented before Phase 2 closes.
 
 ## Phase 3 — Controlled Participation
 
 Status: **planned — offer architecture documented, gate not yet open**
 
-Phase 3 begins with a narrow capability pilot rather than a private read beta or broad account registration. Public reading remains open.
+Phase 3 begins with a narrow **durable capability** pilot rather than a private read beta or broad account registration. Public reading remains open. The temporary evidence-only Phase 2E ingress pilot does not count as entry into Phase 3.
 
 The participant-facing concept is an **offer**, defined by [ADR 0016](docs/decisions/0016-offers-and-the-offer-buffer.md). An offer may be small or foundational: it may correct a sentence, add evidence, challenge an ADR, propose a space, recommend a governance change through the appropriate process, or argue that Hummingbird itself should substantially change. Broad possible consequence does not grant authority merely because the offer was made.
 
@@ -188,13 +220,13 @@ canonical memory
 optional publication
 ```
 
-The first Hummingbird-owned write pilot should grant only a bounded, revocable **offer-making capability** with payload bounds, rate/resource limits, schema validation, replay/duplicate controls, and no implied publication, canonical admission, moderation, treasury, or governance authority. See [ADR 0014](docs/decisions/0014-progressive-capability-rollout.md) and the [Offer Buffer working design](docs/protocols/PHASE_3_OFFER_BUFFER_DESIGN.md).
+The first Phase 3 Hummingbird-owned durable participation pilot should grant only a bounded, revocable **offer-making capability** with payload bounds, rate/resource limits, schema validation, replay/duplicate controls, and no implied publication, canonical admission, moderation, treasury, or governance authority. See [ADR 0014](docs/decisions/0014-progressive-capability-rollout.md) and the [Offer Buffer working design](docs/protocols/PHASE_3_OFFER_BUFFER_DESIGN.md).
 
 Future broader access may offer multiple **offer delivery options**. Those options may regulate throughput or resource cost, but they must not be assigned to presumed participant-origin categories and must not become hidden content priority, trust/reputation, or governance weight. An accessible uncredentialed path should remain part of the broader design once participation expands beyond the initial controlled pilot.
 
-The Seed Bank concept will be reviewed and may be replaced or supplemented by Hummingbird-owned offer-making once the controlled write path is ready.
+The Phase 2E first-party ingress experiment may replace the Seed Bank as the primary low-friction entrance if it proves workable. The Seed Bank may remain as a durable public discussion/archive path rather than the default front door.
 
-Entry into Phase 3 remains blocked by the constitutional, governance, architecture, and security questions listed in the Open Questions Registry. A working Phase 2 database or accepted Offer Buffer design is not permission to bypass those decisions.
+Entry into Phase 3 remains blocked by the constitutional, governance, architecture, and security questions listed in the Open Questions Registry. A successful Phase 2E experiment, working Phase 2 database, or accepted Offer Buffer design is not permission to bypass those decisions.
 
 ### Future participatory-space track — after basic controlled participation
 
