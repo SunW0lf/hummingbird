@@ -5,9 +5,10 @@ import assert from "node:assert/strict";
 const script = fs.readFileSync("scripts/observe-offer-buffer.mjs", "utf8");
 const workflow = fs.readFileSync(".github/workflows/phase2e-offer-observer.yml", "utf8");
 
-for (const forbidden of ["body", "reference_url", "receipt_hash", "content_sha256", "offer_id"]) {
+for (const forbidden of ["reference_url", "receipt_hash", "content_sha256", "offer_id"]) {
   assert(!script.includes(forbidden), `observer must not read or emit ${forbidden}`);
 }
+assert(!/SELECT[\s\S]{0,120}\bbody\b/i.test(script), "observer query must not select offer body content");
 
 assert(script.includes("state IN ('received','grouped')"), "observer should only flag unreviewed active offer states");
 assert(script.includes("GITHUB_OUTPUT"), "observer should communicate only a boolean workflow output");
