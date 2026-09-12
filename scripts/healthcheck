@@ -28,7 +28,8 @@ challenge_check() {
     return 1
   fi
 
-  if grep -Eiq '<title>[^<]*(just a moment|attention required)[^<]*</title>|verify you are human|enable javascript to continue|/cdn-cgi/challenge-platform/|class=["'"'][^"'"']*(g-recaptcha|h-captcha|cf-turnstile)' "${body}"; then
+  if grep -Eiq '<title>[^<]*(just a moment|attention required)[^<]*</title>|verify you are human|enable javascript to continue|/cdn-cgi/challenge-platform/' "${body}" \
+    || grep -Eiq 'class="[^"]*(g-recaptcha|h-captcha|cf-turnstile)' "${body}"; then
     echo "error: response appears to contain an interactive challenge" >&2
     grep -Ei '^HTTP/|^content-type:|^server:|^cf-ray:|^cf-mitigated:|^location:' "${headers}" >&2 || true
     grep -Eio -m1 '<title>[^<]*</title>|<h1[^>]*>[^<]*</h1>' "${body}" >&2 || true

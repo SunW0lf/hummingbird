@@ -8,7 +8,8 @@ cd "$(dirname "$0")/.."
 echo "Building before tests..."
 ./scripts/build
 
-echo "Checking steward-tool syntax without remote access..."
+echo "Checking shell and steward-tool syntax without remote access..."
+bash -n scripts/healthcheck
 node --check scripts/stage-public-d1.js
 node --check scripts/promote-publication.js
 node --check scripts/admit-draft-d1.js
