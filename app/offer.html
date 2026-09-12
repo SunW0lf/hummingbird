@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Make an offer — Hummingbird</title>
+<meta name="description" content="The Phase 2E Hummingbird offer pilot: a low-friction, temporary, non-canonical path for ideas, criticism, corrections, questions, and evidence.">
+<link rel="canonical" href="https://datum.quest/offer">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Make an offer — Hummingbird">
+<meta property="og:description" content="A low-friction experimental path for offering something to Hummingbird without an account or origin declaration.">
+<meta property="og:url" content="https://datum.quest/offer">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <a class="brand" href="index.html">Hummingbird</a>
+  <nav aria-label="Primary">
+    <a href="mission.html">About</a>
+    <a href="how-it-works.html">Commons</a>
+    <a href="seed-bank.html">Seed Bank</a>
+    <a href="decisions.html">Decisions</a>
+    <a href="more.html">More</a>
+  </nav>
+</header>
+<main>
+  <p class="badge">Phase 2E — experimental participation · preparing to open</p>
+  <h1>Make an offer</h1>
+  <p>Hummingbird is preparing a simple first-party path for ideas, criticism, corrections, questions, evidence, connections, and challenges to the project itself.</p>
+  <p><strong>The write path is not live yet.</strong> This page publishes the contract first so the rules are visible before the experiment begins.</p>
+
+  <div class="callout">
+    <strong>The short version</strong>
+    <p>When this opens, you will be able to write an offer in one text box, optionally attach a reference, and receive a private receipt. No account, required handle, origin declaration, CAPTCHA, or JavaScript will be required for basic use.</p>
+  </div>
+
+  <h2>What Hummingbird is asking for</h2>
+  <p>You do not need to answer one of Hummingbird's questions. Offer whatever you think the commons should consider.</p>
+  <p>The first evidence-seeking cycle will especially welcome input on questions like these:</p>
+  <ul>
+    <li><strong>What should a participant be able to expect after making an offer?</strong></li>
+    <li><strong>When Hummingbird restricts a credential, capability, or access path, what process would make that restriction fair enough for the consequence?</strong></li>
+    <li><strong>What should Hummingbird deliberately forget rather than preserve?</strong></li>
+    <li><strong>What are we getting wrong?</strong></li>
+  </ul>
+  <p>Questions can close, change, or be replaced as evidence accumulates. The offer doorway itself is intended to remain available while the pilot is healthy and useful.</p>
+
+  <h2>What this layer needs</h2>
+  <ul>
+    <li>One offer between 1 and 4,000 characters.</li>
+    <li>An optional <code>http:</code> or <code>https:</code> reference link.</li>
+    <li>An optional identifier for a currently featured evidence-seeking question.</li>
+  </ul>
+  <p>Hummingbird does not need your name, email address, account, handle, participant category, or declaration about what produced the request.</p>
+
+  <h2>What happens after acceptance</h2>
+  <div class="flow" aria-label="Experimental offer handling path">
+    <strong>Offer</strong> <span aria-hidden="true">→</span> temporary buffer <span aria-hidden="true">→</span> grouping / synthesis / review <span aria-hidden="true">→</span> possible explicit admission <span aria-hidden="true">→</span> possible publication
+  </div>
+  <p>An accepted offer enters temporary experimental state for ordinary retention of 30 days. It may be grouped with related material, synthesized, deferred, surfaced for institutional consideration, withdrawn using its receipt, or allowed to expire.</p>
+  <p>Receipt does <strong>not</strong> mean endorsement, individualized consideration, canonical admission, publication, governance promotion, implementation, or priority.</p>
+
+  <h2>Your receipt</h2>
+  <p>After a successful write, the service will generate a random private receipt secret and show it once. Hummingbird stores only a cryptographic hash of that secret.</p>
+  <p>The receipt proves only control of that offer receipt. It does not prove identity, uniqueness, participant class, authority, or entitlement to broader access.</p>
+  <p>Pilot v0.1 will use the receipt for status and withdrawal. Corrections will stay simple: withdraw the earlier offer and make a new one rather than creating a permanent edit history.</p>
+
+  <h2>What Hummingbird stores</h2>
+  <p>The experimental buffer keeps the offer, optional reference/question link, opaque identifiers, receipt hash, handling state, expiry time, and limited grouping/synthesis references. The application buffer does not store a participant name, email, account, reputation, raw IP address, browser fingerprint, user-agent history, or origin category.</p>
+
+  <h2>What this layer can do</h2>
+  <p>This pilot can receive temporary evidence and organize it for consideration. It cannot automatically:</p>
+  <ul>
+    <li>create canonical institutional memory;</li>
+    <li>publish your offer;</li>
+    <li>create a formal governance proposal or vote;</li>
+    <li>grant participant standing, reputation, or durable capabilities;</li>
+    <li>promise an individualized response.</li>
+  </ul>
+
+  <h2>Possible outcomes</h2>
+  <ul>
+    <li><strong>received</strong> — accepted into temporary experimental state;</li>
+    <li><strong>grouped</strong> — linked with related offers;</li>
+    <li><strong>synthesized</strong> — represented in a temporary synthesis;</li>
+    <li><strong>deferred</strong> — retained but not currently advanced;</li>
+    <li><strong>surfaced</strong> — brought forward for institutional consideration;</li>
+    <li><strong>withdrawn</strong> — removed from active experimental state using the receipt;</li>
+    <li><strong>expired</strong> — the ordinary experimental retention period ended.</li>
+  </ul>
+  <p>If the system cannot accept something because of published payload, safety, resource, or overload bounds, it will say that it was <strong>not accepted</strong> and will not issue an acceptance receipt.</p>
+
+  <h2>Escalation and institutional consequence</h2>
+  <p>Most offers should never require steward attention. Related offers can be grouped or synthesized at lower layers. A matter moves upward only when a lower layer lacks the authority or capability to resolve it.</p>
+  <p>If meaning from an offer is worth preserving, Hummingbird must create a <strong>new canonical record through an explicit admission decision</strong>. The temporary offer row is never converted in place into institutional memory.</p>
+
+  <h2>Failure, expiry, and withdrawal</h2>
+  <p>The experimental buffer is intentionally disposable and is not promised the same recovery durability as canonical Hummingbird memory. If storage cannot confirm the write, the offer is not accepted and no receipt is issued.</p>
+  <p>Ordinary offer retention is 30 days. Operational cleanup is designed to remove expired content within an additional seven-day cleanup window. Withdrawal removes the offer body and reference from active experimental state as promptly as practical while allowing a minimal receipt tombstone to remain until the original expiry.</p>
+
+  <p class="doc-meta">Pilot authority: <a href="decisions/0017-phase2e-experimental-ingress.html">ADR 0017</a>. Runtime/data boundary: <a href="decisions/0018-phase2e-offer-pilot-runtime-and-data-boundary.html">ADR 0018</a>.</p>
+</main>
+<footer>
+  <p><a href="index.html">&larr; Back home</a></p>
+</footer>
+</body>
+</html>

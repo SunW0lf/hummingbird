@@ -113,11 +113,29 @@ for (const phrase of forbiddenDesignPhrases) {
   }
 }
 
-// ADR 0017 authorizes a future Phase 2E write experiment, but this decision PR
-// intentionally does not deploy it yet. A live route belongs in a later build PR
-// with the pilot-specific handling contract and safety decisions implemented.
-if (fs.existsSync(path.join(DIST, "offer.html")) || fs.existsSync(path.join(DIST, "offer"))) {
-  fail("decision-only Phase 2E build unexpectedly exposes a live /offer surface");
+// ADR 0017 permits a public contract page before mutation is deployed. The
+// static page must remain visibly non-live until a later implementation PR
+// adds the provider binding, handler, and write-path acceptance checks.
+const offerPage = path.join(DIST, "offer.html");
+if (fs.existsSync(offerPage)) {
+  const html = fs.readFileSync(offerPage, "utf8");
+  if (!html.includes("The write path is not live yet.")) {
+    fail("static /offer contract page does not clearly say the write path is not live");
+  }
+  if (/<form\b/i.test(html) || /method=["']post["']/i.test(html) || /action=["'][^"']*offer/i.test(html)) {
+    fail("static /offer contract page unexpectedly exposes a live mutation form");
+  }
+}
+
+for (const candidate of [
+  "functions/offer.js",
+  "functions/offer.ts",
+  "functions/offer/index.js",
+  "functions/offer/index.ts",
+]) {
+  if (fs.existsSync(path.join(ROOT, candidate))) {
+    fail(`${candidate} exists before the pilot write implementation is authorized for deployment`);
+  }
 }
 
 function htmlFiles(dir) {
@@ -140,6 +158,7 @@ for (const file of htmlFiles(DIST)) {
 for (const slug of [
   "0016-offers-and-the-offer-buffer",
   "0017-phase2e-experimental-ingress",
+  "0018-phase2e-offer-pilot-runtime-and-data-boundary",
 ]) {
   const publicAdr = path.join(DIST, "decisions", `${slug}.html`);
   const rawAdr = path.join(DIST, "docs", "raw", "decisions", `${slug}.md`);
@@ -163,6 +182,6 @@ if (failures > 0) {
 }
 
 pass("Offer terminology, broad-scope principle, non-canonical buffer, and delivery/authority separation are documented");
-pass("Phase 2E evidence-only ingress is authorized with a published authority ceiling and pre-deployment gate");
+pass("Phase 2E evidence-only ingress has a public static contract without a live mutation route");
 pass("Durable Phase 3 participation remains undeployed and separately gated");
 console.log("\nAll Offer Buffer / experimental-ingress checks passed.");
