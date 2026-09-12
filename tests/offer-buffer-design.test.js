@@ -67,9 +67,9 @@ for (const [name, content, markers] of [
     "The offer row is never converted in place into a canonical record",
   ]],
   ["ADR 0019", triageAdr, [
-    "Compress repetition",
-    "Preserve meaningful difference",
-    "Escalate consequence, not volume",
+    "compress repetition",
+    "preserve meaningful difference",
+    "escalate consequence, not volume",
   ]],
   ["ADR 0020", launchAdr, [
     "250 active offers",
@@ -148,16 +148,21 @@ if (fs.existsSync(offerPage)) {
 }
 
 // Source for the explicitly authorized Phase 2E route may now exist, but the
-// one-shot provisioning merge must not deploy it. The provisioning workflow
-// may only prepare/bind storage; the normal deployment workflow must skip that
-// specially named commit. This preserves implementation != deployment.
-const phase2eHandler = path.join(ROOT, "functions", "offer", "index.js");
-if (!fs.existsSync(phase2eHandler)) {
-  fail("authorized Phase 2E offer handler source is missing");
+// one-shot provisioning merge must not deploy it. The binding is centralized
+// in the shared runtime helper, while the handler carries the bounded outcome
+// semantics. This preserves implementation != deployment.
+const phase2eHandlerPath = path.join(ROOT, "functions", "offer", "index.js");
+const phase2eRuntimePath = path.join(ROOT, "lib", "offer-runtime.mjs");
+if (!fs.existsSync(phase2eHandlerPath) || !fs.existsSync(phase2eRuntimePath)) {
+  fail("authorized Phase 2E offer handler/runtime source is missing");
 } else {
-  const handler = fs.readFileSync(phase2eHandler, "utf8");
-  for (const marker of ["OFFER_DB", "pilot_capacity_reached", "write_unconfirmed"]) {
+  const handler = fs.readFileSync(phase2eHandlerPath, "utf8");
+  const runtime = fs.readFileSync(phase2eRuntimePath, "utf8");
+  for (const marker of ["pilot_capacity_reached", "write_unconfirmed"]) {
     if (!handler.includes(marker)) fail(`Phase 2E offer handler is missing bounded-launch marker: ${marker}`);
+  }
+  for (const marker of ["OFFER_DB", "MAX_ACTIVE_OFFERS = 250", "MAX_REQUEST_BYTES = 16 * 1024"]) {
+    if (!runtime.includes(marker)) fail(`Phase 2E shared runtime is missing bounded-launch marker: ${marker}`);
   }
 }
 
