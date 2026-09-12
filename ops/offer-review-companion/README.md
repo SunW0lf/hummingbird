@@ -1,9 +1,11 @@
 # Private offer review companion setup
 
 The public observer reports only the number of unexpired `received`, `grouped`,
-`synthesized`, or `deferred` offers. To inspect their contents through the GitHub connection, create a
-**private** repository accessible to the steward and the connected GitHub app,
-for example `SunW0lf/hummingbird-offer-review`.
+`synthesized`, or `deferred` offers. The companion repository used to inspect
+their contents through GitHub is **private**, accessible to the steward and the
+connected GitHub app. It is already configured and has produced a verified
+one-day artifact; the following instructions are for recreation or replacement,
+not unfinished setup.
 
 1. Copy `review.yml` into that private repository at `.github/workflows/review.yml`.
    Do not put the workflow under the public repository's `.github/workflows/`.

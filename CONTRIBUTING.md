@@ -17,6 +17,10 @@ The repository is public. Outside participants can inspect, fork, propose change
 - Do not resolve an `OPEN QUESTION` by quietly implementing a decision — update the relevant substantive document explicitly with the decision and rationale.
 - Resolved stable `OQ-*` IDs are preserved in [docs/governance/RESOLVED_QUESTIONS.md](docs/governance/RESOLVED_QUESTIONS.md) so historical ADRs and discussion remain intelligible.
 
+## Make an experimental offer
+
+The first-party [offer pilot](https://datum.quest/offer) is open for testing under [ADR 0017](docs/decisions/0017-phase2e-experimental-ingress.md). It accepts bounded temporary ideas, criticism, corrections, questions, evidence, and challenges without an account, required handle, origin declaration, CAPTCHA, or JavaScript for the basic path. Save the one-time private receipt to check status or withdraw; do not post the receipt publicly. Receipt is not canonical admission, publication, a vote, governance standing, or an individualized response. The handling terms and plain-HTTP form contract are on the offer page.
+
 ## Seed Bank
 
 The public [Seed Bank](https://datum.quest/seed-bank) is an interim Phase 2 invitation defined by [ADR 0011](docs/decisions/0011-interim-seed-bank.md). It uses GitHub issue forms for three lightweight interaction types: **Seed**, **Feedback**, and **Question**.
@@ -28,17 +32,11 @@ The public [Seed Bank](https://datum.quest/seed-bank) is an interim Phase 2 invi
 - Nothing posted to the Seed Bank is automatically copied into a Pond, Pad, Pool, canonical object, proposal, or other Hummingbird space.
 - If Seed Bank material is later admitted or synthesized into the canonical commons, that happens through a separate deliberate act under the transparency and provenance rules then in force.
 
-The Seed Bank remains available while the lower-friction first-party Phase 2E experimental ingress authorized by [ADR 0017](docs/decisions/0017-phase2e-experimental-ingress.md) is being prepared. Once that surface is genuinely live, the Seed Bank may remain as a higher-friction durable public discussion/archive path rather than the default front door.
-
-## Experimental offers
-
-ADR 0017 authorizes a future Phase 2E evidence-gathering offer surface on `datum.quest`. It is not live until its published handling contract and pilot-specific retention, resource/abuse, incident, and recovery rules are implemented and tested.
-
-When live, that pilot may receive temporary non-canonical material without requiring an account, handle, origin declaration, CAPTCHA, or JavaScript for the basic path. Receipt will not create canonical memory, publication, governance standing, a vote, reputation, or a durable participant capability.
+The Seed Bank remains as a higher-friction durable public discussion/archive path rather than the default first-party offer doorway.
 
 ## Proposals
 
-A formal proposal process does not exist yet (see [GOVERNANCE.md](GOVERNANCE.md), [OQ-GOVERNANCE-PROPOSALS](docs/governance/OPEN_QUESTIONS.md#oq-governance-proposals)). Seed Bank material or a future Phase 2E experimental offer may contain a proposal-like idea, but receipt, synthesis, or surfacing does not itself turn that material into a Hummingbird governance proposal or approval process.
+A formal proposal process does not exist yet (see [GOVERNANCE.md](GOVERNANCE.md), [OQ-GOVERNANCE-PROPOSALS](docs/governance/OPEN_QUESTIONS.md#oq-governance-proposals)). Seed Bank material or an experimental offer may contain a proposal-like idea, but receipt, synthesis, or surfacing does not itself turn that material into a Hummingbird governance proposal or approval process.
 
 ## Architectural changes
 
