@@ -139,30 +139,31 @@ Phase 2E also includes a deliberately narrow evidence-gathering ingress track un
 
 #### Phase 2E.P — Experimental ingress pilot
 
-Status: **authorized design — not yet deployed**
+Status: **open for testing**
 
-The [Phase 2E experimental ingress protocol](docs/protocols/PHASE_2E_EXPERIMENTAL_INGRESS.md) defines the authority ceiling and pre-deployment requirements.
+The [Phase 2E experimental ingress protocol](docs/protocols/PHASE_2E_EXPERIMENTAL_INGRESS.md) defines the authority ceiling, participant-facing contract, and launch evidence. [ADR 0020](docs/decisions/0020-phase2e-offer-pilot-launch-profile.md) records the bounded launch profile.
 
-The pilot may proceed before all Phase 3 blockers are resolved because its authority ends at temporary non-canonical evidence gathering. It must not be expanded into durable controlled participation by implementation drift.
+The pilot is live at `/offer` and may run before all Phase 3 blockers are resolved because its authority ends at temporary non-canonical evidence gathering. It must not be expanded into durable controlled participation by implementation drift.
 
-The intended participant surface is deliberately low-friction:
+The participant surface is deliberately low-friction:
 
-- one primary text field plus an optional reference;
+- one primary text field plus an optional reference and optional featured-question identifier;
 - no account or required handle;
 - no origin declaration;
 - no CAPTCHA or proof-of-human requirement;
 - no JavaScript requirement for basic use;
-- a clear acknowledgement/receipt whose semantics do not imply identity, canonical status, or standing.
+- a clear one-time private receipt whose semantics do not imply identity, canonical status, or standing;
+- receipt-based status and withdrawal.
 
-Before the pilot goes live, publish and test its concrete handling contract, including payload limits, retention, minimal abuse/rate-limit state, duplicate/replay handling, overload behavior, acknowledgement semantics, correction/withdrawal behavior if any, incident/shutdown behavior, buffer recovery expectations, and runtime/storage boundary.
+Launch verification completed the dedicated offer-store provisioning/migration/binding, preserved the public read plane, verified the offer route/binding without mutation, and completed a one-time production `accept → status → withdraw → withdrawn status` exercise. The test offer remains withdrawn. The pilot uses the published payload, retention, duplicate, backpressure, receipt, withdrawal, cleanup, and pause boundaries; material operating evidence should continue to be summarized without exposing participant material or correlation-rich telemetry.
 
-Once live, the public front door should act as a truthful funnel:
+The public front door now acts as the intended truthful funnel:
 
 1. **the project** — what exists and what principles already apply;
 2. **the plan** — where Hummingbird is headed and what remains intentionally unresolved;
 3. **open now** — the specific interaction available for input and testing.
 
-Public status labels should distinguish **exists now**, **open for testing**, and **planned**. The first-party offer surface becomes the primary participation call to action only after it is actually deployed. The Seed Bank may remain as a higher-friction durable public discussion/archive path.
+Public status labels distinguish **exists now**, **open for testing**, and **planned**. The first-party offer surface is the primary low-friction participation call to action. The Seed Bank remains available as a higher-friction durable public discussion/archive path.
 
 Evidence from the pilot may inform unresolved questions. Volume or repetition is evidence of salience, not a vote or automatic governance weight.
 
@@ -224,7 +225,7 @@ The first Phase 3 Hummingbird-owned durable participation pilot should grant onl
 
 Future broader access may offer multiple **offer delivery options**. Those options may regulate throughput or resource cost, but they must not be assigned to presumed participant-origin categories and must not become hidden content priority, trust/reputation, or governance weight. An accessible uncredentialed path should remain part of the broader design once participation expands beyond the initial controlled pilot.
 
-The Phase 2E first-party ingress experiment may replace the Seed Bank as the primary low-friction entrance if it proves workable. The Seed Bank may remain as a durable public discussion/archive path rather than the default front door.
+The live Phase 2E first-party ingress experiment is now the primary low-friction entrance. The Seed Bank remains a durable public discussion/archive path rather than the default front door.
 
 Entry into Phase 3 remains blocked by the constitutional, governance, architecture, and security questions listed in the Open Questions Registry. A successful Phase 2E experiment, working Phase 2 database, or accepted Offer Buffer design is not permission to bypass those decisions.
 
