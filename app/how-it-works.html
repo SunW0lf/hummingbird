@@ -26,7 +26,7 @@
 </header>
 <main>
   <h1>How it works</h1>
-  <p>Hummingbird is being built in phases, starting with durable institutional boundaries before broad application-owned interaction.</p>
+  <p>Hummingbird is being built in phases, starting with durable institutional boundaries before broader application-owned interaction.</p>
 
   <h2>Lifecycle of an offer</h2>
   <p>You do not need to understand the database or repository to participate. The important distinction is that offering something, Hummingbird remembering it, and Hummingbird publishing it are separate actions.</p>
@@ -53,37 +53,38 @@
   <div class="phase-tracker" aria-label="Hummingbird phase progression">
     <div><span class="phase-state complete">Complete</span><strong>Phase 0</strong><span>Foundation</span></div>
     <div><span class="phase-state complete">Complete</span><strong>Phase 1</strong><span>Public Charter Site</span></div>
-    <div><span class="phase-state current">Current</span><strong>Phase 2</strong><span>Read-Only Commons</span></div>
+    <div><span class="phase-state current">Current</span><strong>Phase 2</strong><span>Read-Only Commons + bounded experiments</span></div>
     <div><span class="phase-state planned">Next</span><strong>Phase 3</strong><span>Controlled Participation</span></div>
     <div><span class="phase-state planned">Later</span><strong>Phase 4</strong><span>Governance Workflows</span></div>
     <div><span class="phase-state planned">Later</span><strong>Phase 5</strong><span>Financial Support</span></div>
   </div>
 
-  <p><strong>Phase 2 is currently in Phase 2D:</strong> the production backup/recovery path has been exercised successfully; the remaining work is to close the publication-buffer/transparency boundary and then conduct the Phase 2 review.</p>
+  <p><strong>Phase 2E is active:</strong> Hummingbird is reviewing Phase 2 evidence and governance gates while preparing a narrowly bounded first-party experimental ingress pilot. Phase 2D's production recovery proof is complete; one ordinary independent private-backup checkpoint remains.</p>
   <div class="callout">
-    <strong>What must be true before Phase 3?</strong>
-    <p>The persistence layer must rebuild from migrations; canonical records must round-trip without losing meaning; public projections must be rebuildable and origin-neutral; external ingress must remain distinct from admission; publication-buffer behavior must be tested; backup and restore must be exercised; the public read model must exclude security-sensitive fields; and the Phase 2 governance/review gates must be resolved or explicitly deferred with reasons.</p>
+    <strong>What is allowed before Phase 3?</strong>
+    <p>ADR 0017 authorizes one evidence-gathering exception: a first-party offer path may write only to temporary, non-canonical experimental state. It cannot create accounts, durable participant capabilities, formal governance standing, automatic admission, automatic publication, or broader institutional write authority.</p>
+    <p><a href="offer.html">Read the participant-facing pilot contract.</a></p>
   </div>
 
   <ol>
     <li><strong>Phase 0 — Foundation (complete).</strong> Repository, documentation, minimal site, CI, deployment.</li>
     <li><strong>Phase 1 — Public Charter Site (complete).</strong> Mission, working Charter, governance, transparency, public repository, security baseline, and supporting project surfaces.</li>
-    <li><strong>Phase 2 — Read-only commons (current).</strong> Canonical persistence, explicit admission/publication boundaries, static public projections, and production-state backup/recovery are proven. Publication-buffer transparency closure and the Phase 2 review remain.</li>
-    <li><strong>Phase 3 — Controlled participation.</strong> Hummingbird-owned offer-making begins as a bounded capability pilot rather than a private read beta. Public reading stays open; mutation authority remains narrow, revocable, and rate-limited. A future non-canonical Offer Buffer separates receiving an offer from deciding to remember it.</li>
+    <li><strong>Phase 2 — Read-only commons + bounded evidence gathering (current).</strong> Canonical persistence, explicit admission/publication boundaries, static public projections, and production-state recovery are proven. Phase 2E may run a temporary non-canonical offer experiment while the remaining review/gate work continues.</li>
+    <li><strong>Phase 3 — Controlled participation.</strong> Durable participant capabilities and broader Hummingbird-owned write authority may begin only after the applicable constitutional, governance, security, and runtime gates are resolved and Phase 3 is explicitly authorized.</li>
     <li><strong>Phase 4 — Governance workflows.</strong> Proposals, disputes, validated needs, decisions.</li>
     <li><strong>Phase 5 — Financial support.</strong> Donations and transparent expenditure, only after the needs process works, and never in exchange for influence.</li>
   </ol>
 
   <div class="callout">
-    <strong>Offer delivery options regulate resources, not merit.</strong>
-    <p>Future Phase 3 delivery choices may change pacing, quota, or resource cost, but they must not classify participant origin or become hidden content priority, reputation, or governance weight. The initial design is documented now; no live <code>/offer</code> write surface exists during Phase 2.</p>
+    <strong>Offer delivery regulates resources, not merit.</strong>
+    <p>The Phase 2E pilot will begin with a simple low-friction path and temporary Offer Buffer. Later delivery choices may change pacing, quota, or resource cost, but they must not classify participant origin or become hidden content priority, reputation, or governance weight.</p>
   </div>
 
   <div class="callout">
     <strong>Rollout principle: limit authority, not visibility.</strong>
     <p>Making an offer, publication, canonical admission, alteration of history, and governance authority are separate capabilities. Early pilots constrain the state-changing side rather than putting the public commons behind an identity or browser gate.</p>
   </div>
-  <p>The Seed Bank demonstrates the separation early: <strong>offering something is not the same as admitting it into the commons.</strong> GitHub issues, comments, and reactions remain provider-hosted discussion unless a deliberate process creates a Hummingbird record from them.</p>
+  <p>The Seed Bank demonstrated the separation early: <strong>offering something is not the same as admitting it into the commons.</strong> GitHub issues, comments, and reactions remain provider-hosted discussion unless a deliberate process creates a Hummingbird record from them. The first-party Phase 2E pilot will test the same boundary with much lower entry friction.</p>
   <p>Every technical and institutional decision of consequence should leave a trail. Hummingbird's public <a href="decisions.html">Decision Record</a> exposes the Architecture Decision Records that explain why major paths were chosen, what alternatives were rejected, and what consequences were accepted.</p>
 </main>
 <footer>
