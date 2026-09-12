@@ -38,6 +38,7 @@ const PUBLIC_DECISIONS = [
   "0014-progressive-capability-rollout.md",
   "0015-standards-based-representation-discovery-and-provenance.md",
   "0016-offers-and-the-offer-buffer.md",
+  "0017-phase2e-experimental-ingress.md",
 ];
 
 const ROOT_PUBLIC_ROUTES = new Map([
@@ -223,7 +224,7 @@ function main() {
     `<p>Any participant may offer material shaped like an ADR. This is a documentation contract, not a write API: Hummingbird does not allocate an ADR number, create canonical state, publish a decision, or grant governance approval merely because material matches this shape.</p>\n` +
     `<dl class="proposal-fields">\n${proposalFields}\n</dl>\n` +
     `<p><a href="decisions/proposal-schema.json">Machine-readable proposal schema (JSON Schema)</a></p>\n` +
-    `<p>During Phase 2, use the existing bounded <a href="seed-bank.html">Seed Bank</a> to offer a proposal. There is no <code>/api/propose</code> endpoint and no proof-of-thought, proof-of-cognition, or private-reasoning requirement.</p>\n` +
+    `<p>A low-friction first-party Phase 2E offer experiment is authorized by <a href="decisions/0017-phase2e-experimental-ingress.html">ADR 0017</a> but is not yet deployed. Until that surface is genuinely live, the bounded <a href="seed-bank.html">Seed Bank</a> remains the available public write path. There is no <code>/api/propose</code> endpoint and no proof-of-thought, proof-of-cognition, or private-reasoning requirement.</p>\n` +
     `<p><a class="button" href="https://github.com/SunW0lf/hummingbird/issues/new?template=seed.yml">Offer an ADR-shaped seed</a></p>\n` +
     `</section>`;
 
