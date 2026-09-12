@@ -63,6 +63,30 @@ The first production exercise may use steward-controlled encrypted/offline stora
 
 A GitHub Actions artifact in this public repository is **not** a generally acceptable storage location for canonical backups because repository readers can retrieve public-repository artifacts. The one-shot Phase 2D drill contains a narrow safety exception: it uploads a backup artifact only after proving that every canonical record in the production backup is in a public lifecycle state **and** the full reconstructed canonical set deep-equals the already-public `publication/canonical` projection. If any draft or otherwise non-public canonical state exists, the workflow fails before artifact upload and the independent-retention exit criterion remains unsatisfied until a private storage path is used.
 
+The ordinary Phase 2D destination is the dedicated private
+`SunW0lf/hummingbird-backups` repository. The manually dispatched
+`.github/workflows/phase2d-private-backup.yml` workflow validates the portable
+bundle, encrypts it with an `age` public recipient, removes plaintext from the
+runner, and commits only the ciphertext and its SHA-256 transport checksum to
+that repository. Its dedicated repository credential may write only to the
+private backup destination. The corresponding `age` identity/private key must
+remain outside GitHub and outside Cloudflare; loss of that identity makes the
+retained ciphertext unrecoverable.
+
+Before the first run, the steward must configure:
+
+- `HUMMINGBIRD_BACKUP_AGE_RECIPIENT` as a repository variable containing the
+  public `age1...` recipient generated from a steward-held identity;
+- `HUMMINGBIRD_BACKUP_REPOSITORY_TOKEN` as a repository secret containing a
+  fine-grained credential limited to Contents read/write on
+  `SunW0lf/hummingbird-backups`;
+- the existing `CLOUDFLARE_D1_RECOVERY_TOKEN` secret and
+  `CLOUDFLARE_ACCOUNT_ID` variable used for read-only production export.
+
+GitHub is independent of the live D1 service and meets the immediate Phase 2D
+storage boundary, but it should not remain the only long-term copy because the
+public source and private backup share one provider.
+
 ## Backup commands
 
 Install dependencies first with `npm ci`.
@@ -90,6 +114,30 @@ After export:
 ```
 
 Validation recomputes every record digest and the bundle digest without touching a database.
+
+### Ordinary private-retention checkpoint
+
+Run **Phase 2D Private Canonical Backup** manually with the exact confirmation
+phrase `retain private canonical backup`. After the workflow succeeds:
+
+1. retrieve the `.tar.gz.age` file and adjacent `.sha256` file from the private
+   backup repository using an account independent of Cloudflare;
+2. verify the ciphertext checksum with `sha256sum --check`;
+3. decrypt locally with the steward-held identity:
+
+   ```bash
+   age --decrypt --identity /private/off-github/hummingbird-backup.agekey \
+     --output canonical-backup.tar.gz canonical-<run>.tar.gz.age
+   ```
+
+4. extract into an empty directory and run
+   `./scripts/restore /path/to/extracted-bundle --validate-only`;
+5. record only the bounded success/failure outcome publicly; do not publish the
+   bundle, private key, repository credential, provider database identifiers,
+   or correlation-rich execution details.
+
+The workflow's successful push proves encrypted retention. Phase 2D closes only
+after this separate retrieval, decryption, and validation check also succeeds.
 
 ## Restore contract
 
