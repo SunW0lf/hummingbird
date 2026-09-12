@@ -21,14 +21,16 @@ challenge_check() {
   # Prefer provider response metadata where available. Body fallbacks below
   # match structural challenge signatures rather than generic words such as
   # "CAPTCHA", because Hummingbird's own documentation may truthfully say that
-  # the public surface does not require one.
+  # the public surface does not require one. Cloudflare's passive JavaScript
+  # Detection may inject a /cdn-cgi/challenge-platform/ script into a complete
+  # page, so that path alone is not evidence of an interactive challenge.
   if grep -Eiq '^cf-mitigated:[[:space:]]*challenge([[:space:]]|$)' "${headers}"; then
     echo "error: Cloudflare replaced the requested resource with a Challenge Page" >&2
     grep -Ei '^HTTP/|^content-type:|^server:|^cf-ray:|^cf-mitigated:|^location:' "${headers}" >&2 || true
     return 1
   fi
 
-  if grep -Eiq '<title>[^<]*(just a moment|attention required)[^<]*</title>|verify you are human|enable javascript to continue|/cdn-cgi/challenge-platform/' "${body}" \
+  if grep -Eiq '<title>[^<]*(just a moment|attention required)[^<]*</title>|verify you are human|enable javascript to continue' "${body}" \
     || grep -Eiq 'class="[^"]*(g-recaptcha|h-captcha|cf-turnstile)' "${body}"; then
     echo "error: response appears to contain an interactive challenge" >&2
     grep -Ei '^HTTP/|^content-type:|^server:|^cf-ray:|^cf-mitigated:|^location:' "${headers}" >&2 || true
