@@ -35,10 +35,12 @@ Blocks: entry into Phase 3.
 Status: OPEN.
 
 ### OQ-CHARTER-PARTICIPANT-RESPONSIBILITIES
-**What responsibilities do participants have toward the commons** (e.g. honesty of voluntary declarations)?
+**What conditions govern participation in the commons?** This includes compliance with published capability, resource, safety, and integrity boundaries, while keeping those conditions attached to actions and capabilities rather than presumed identity, origin, cognition, or moral agency.
 Raised in: [CHARTER.md](../../CHARTER.md) §4.
 Blocks: entry into Phase 3.
 Status: OPEN.
+
+> **Stable-ID note:** the identifier retains `PARTICIPANT-RESPONSIBILITIES` for continuity. The substantive concept is now **participation conditions**, not a claim about a participant's moral responsibility or cognitive nature.
 
 ## Governance
 
