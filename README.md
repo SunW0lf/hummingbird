@@ -8,11 +8,18 @@ This is currently a passion project, not a conventional startup or commercial pr
 
 ## Project status
 
-**Phase 2 — Read-Only Commons is in progress; Phases 2A, 2B, and 2C are complete, and Phase 2D durability/transparency work is active.** Phase 0 — Foundation and Phase 1 — Public Charter Site are complete. See [ROADMAP.md](ROADMAP.md).
+**Phase 2 — Read-Only Commons is in progress; Phases 2A–2C are complete, Phase 2D awaits the ordinary independent-backup checkpoint, and Phase 2E includes a bounded experimental offer pilot.** Phase 3 remains gated. See [ROADMAP.md](ROADMAP.md).
 
-The production Hummingbird application remains read-only. An interim public [Seed Bank](https://datum.quest/seed-bank), defined by [ADR 0011](docs/decisions/0011-interim-seed-bank.md), uses constrained GitHub issues for Seed, Feedback, and Question discussions without treating those provider-hosted threads as canonical Hummingbird records or governance votes.
+The canonical public read model remains static, while the first-party [Make an offer](https://datum.quest/offer) pilot accepts temporary, non-canonical ideas, criticism, corrections, questions, evidence, and challenges without an account, origin declaration, or JavaScript. A one-time private receipt permits status checks and withdrawal. Acceptance is not admission, publication, a vote, or governance standing. The [Seed Bank](https://datum.quest/seed-bank) remains available as a durable public GitHub-hosted discussion path, not the default offer doorway.
 
-Phase 2A established the machine-readable, storage-independent canonical contract. Phase 2B proved deterministic local and remote Cloudflare D1 persistence/import/export. Phase 2C demonstrated the external-source → deliberate admission → separate publication → rebuildable public-read path with the first published canonical record. Phase 2D has now exercised portable production backup and isolated remote recovery against a disposable D1 replacement; the remaining milestone work centers on publication-buffer/transparency closure and the Phase 2 durability record. See [ROADMAP.md](ROADMAP.md) and [docs/protocols/PHASE_2D_RECOVERY.md](docs/protocols/PHASE_2D_RECOVERY.md).
+Phase 2A established the machine-readable, storage-independent canonical contract. Phase 2B proved deterministic local and remote D1 import/export. Phase 2C demonstrated deliberate admission, separate publication, and a rebuildable public read model. Phase 2D exercised portable production backup and isolated recovery; ordinary independent storage for backups containing non-public records remains to be confirmed. Phase 2E's offer pilot is evidence gathering, not Phase 3 entry. See [ROADMAP.md](ROADMAP.md) and [docs/protocols/PHASE_2D_RECOVERY.md](docs/protocols/PHASE_2D_RECOVERY.md).
+
+## Start here
+
+- [Make an offer](https://datum.quest/offer) — current first-party pilot, handling terms, receipt-based status, and withdrawal.
+- [How the commons works](https://datum.quest/how-it-works) — what exists now and what remains planned.
+- [Machine-readable entry](https://datum.quest/llms.txt) — public documents, canonical JSON, and the existing plain-HTTP offer form contract.
+- [Public decisions](https://datum.quest/decisions) — source-linked architectural and institutional reasoning.
 
 ## Quick start (development)
 

@@ -23,6 +23,15 @@ https://datum.quest/offer
 
 The Phase 2E offer route accepts bounded temporary, non-canonical offers. Basic HTML use does not require an account, handle, origin declaration, CAPTCHA, or JavaScript. Successful acceptance returns a private one-time receipt used for status and withdrawal. Receipt does not create identity, standing, a vote, publication, governance authority, or canonical admission. Durable Phase 3 capabilities remain gated.
 
+Plain HTTP offer contract (the same form route for every participant):
+POST https://datum.quest/offer with Content-Type: application/x-www-form-urlencoded.
+Required field: offer (1–4,000 characters after trimming).
+Optional fields: reference (http/https URL), question_id (featured-question ID).
+Accept: application/json requests a JSON result; the request body itself is not JSON.
+Only a 201 response with accepted: true confirms a write and returns the one-time private receipt.
+POST https://datum.quest/offer/status or https://datum.quest/offer/withdraw with a URL-encoded receipt field to act on that receipt; never send it in a URL.
+The offer page has the complete participant-facing limits and handling terms. No general Phase 3 API or automated admission is implied.
+
 ## Mission
 https://datum.quest/mission
 https://datum.quest/docs/raw/MISSION.md

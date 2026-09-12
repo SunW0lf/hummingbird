@@ -30,8 +30,11 @@ prints `HB_PENDING_COUNT` and `HB_OFFERS_PENDING` for unexpired `received`,
 an observer failure means unknown, not zero. Its public log never contains
 offer text or identifiers. A private, short-lived content review companion is
 described in [ADR 0021](docs/decisions/0021-offer-review-visibility.md) and
-[its setup guide](ops/offer-review-companion/README.md). It is not active until
-a private repository, credentials, and GitHub app access are configured.
+[its setup guide](ops/offer-review-companion/README.md). The companion is now
+configured in a separate private repository. A manual run succeeded, read D1,
+and produced the one-day `offer-review` artifact; later runs must still be
+checked individually for success and freshness. The workflow is scheduled
+hourly and never prints offer bodies or receipts in its logs.
 
 An accepted `/offer` write starts as `received`. A conditional D1 insert enforces
 the published capacity; exact duplicate grouping can then mark `received` rows
@@ -120,6 +123,19 @@ Database rollback is not equivalent to code rollback. Destructive reverse migrat
 `./scripts/healthcheck` is the plain-HTTP production smoke test for the public read plane. It checks the root with `GET` and `HEAD`, verifies the machine-facing entry points and raw Markdown with their expected media types, requires useful Hummingbird marker content, and rejects obvious challenge/CAPTCHA/browser-interstitial responses. The CI deployment job runs this check after production deployment.
 
 The healthcheck deliberately does not persist cookies, authenticate, execute JavaScript, impersonate a verified crawler, or collect participant identity/fingerprinting data. Cloudflare zone-level bot, WAF, Browser Integrity Check, crawler, rate-limit, and managed-`robots.txt` settings remain steward-managed operational configuration. Settings that cannot be read back using the intentionally narrow Pages deployment credential must be recorded as steward-verified rather than falsely described as independently verified. See [ADR 0013](docs/decisions/0013-public-read-accessibility.md).
+
+### Public discovery and source identity
+
+`https://datum.quest/` is the only canonical web origin. Built HTML advertises clean self-canonical URLs; the repository-owned `robots.txt` links the generated `sitemap.xml`; `llms.txt` and the existing `/offer` page describe the ordinary public read and bounded offer paths. Keep the GitHub repository README and About/homepage metadata pointed at the live first-party pilot, not an obsolete read-only-only description. Avoid confusing Hummingbird with similarly named organizations or implying affiliation.
+
+After a material public-entry change:
+
+1. Run `./scripts/healthcheck` against production and inspect `/`, `/offer`, `/robots.txt`, `/sitemap.xml`, `/llms.txt`, and a public canonical JSON/Markdown route using ordinary HTTP. Check clean canonical targets, useful initial HTML, status and content type, and no challenge/interstitial. Do not test participation by posting unsolicited offers.
+2. In a **verified** Google Search Console property for `datum.quest`, inspect the live homepage and `/offer`, submit the existing sitemap, and request recrawling of a few materially changed pages. In a verified Bing Webmaster Tools property, inspect the same routes and submit the sitemap. These account-owned indexing and performance views cannot be inferred from a generic search result or a successful curl response; recrawl and inclusion are not guaranteed.
+3. The optional `www.datum.quest` alias returned an origin error in a 2026-09-12 external check. If it is retained, configure it at the provider as a TLS-valid, single-hop permanent redirect to `https://datum.quest` preserving path and query, then verify both `GET` and `HEAD` externally. Do not treat a repository-only Pages redirect as proof that an unbound host works. Until provider confirmation, keep all project links on the apex.
+4. Track indexed canonical pages, relevant query impressions/clicks, substantive citations or referrals where available, successful offer receipts, public observer health, private review freshness, and unresolved backlog using aggregated provider measurements. Do not add participant identity, fingerprinting, raw request telemetry, or offer content to public analytics. A burst of crawler requests is not participation.
+
+Only after the intake/review path remains healthy under observed demand should external distribution or changed-URL notifications such as IndexNow be considered. A deployment ping should announce genuinely added, changed, or deleted **public** URLs, not private offers or every routine build. This is an operational discovery checklist, not an expansion of the Phase 2E pilot or a decision about training/reuse rights.
 
 ### Cloudflare public-read configuration review
 

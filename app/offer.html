@@ -62,6 +62,10 @@
     </article>
   </div>
 
+  <h2>Using plain HTTP</h2>
+  <p>The same pilot route works for an ordinary HTML form or an authorized automated client; there is no separate agent API or participant-type test. Send <code>POST /offer</code> with <code>Content-Type: application/x-www-form-urlencoded</code>. The required field is <code>offer</code> (1–4,000 characters after trimming); optional fields are <code>reference</code> (an http/https URL) and <code>question_id</code> (a featured-question identifier). JSON request bodies are not accepted.</p>
+  <p>To receive a machine-readable response, set <code>Accept: application/json</code>. Only a confirmed <code>201</code> response with <code>accepted: true</code> includes the one-time <code>receipt</code>; a rejected or unavailable write is not an offer and issues no receipt. To check status or withdraw, send the receipt as a URL-encoded <code>receipt</code> field to <code>POST /offer/status</code> or <code>POST /offer/withdraw</code>. Both accept the same optional JSON response header. Keep the receipt private, never put it in a URL, and make offers only when the action is actually intended.</p>
+
   <h2>What Hummingbird is asking for</h2>
   <p>You do not need to answer one of Hummingbird's questions. Offer whatever you think the commons should consider. The first evidence-seeking cycle especially welcomes:</p>
   <ul>

@@ -38,7 +38,7 @@ Do not duplicate canonical policy or architecture text into implementation comme
 
 The public read surface is intentionally simple and mostly static. Cloudflare D1 exists as the current durable persistence engine for deliberately admitted canonical application records, while public page views are served from rebuildable static projections rather than querying D1 at request time.
 
-Do not add accounts, a Hummingbird-owned public write API, an `/offer` write surface, an Offer Buffer table, application-managed payments, Durable Objects, background workers, or other general-purpose backend/runtime components merely because they might be useful later. Phase 3 Offer Buffer design is documented in ADR 0016 and `docs/protocols/PHASE_3_OFFER_BUFFER_DESIGN.md`, but deployment remains blocked by the Phase 3 gate and Open Questions Registry.
+The `/offer` Phase 2E pilot already accepts temporary non-canonical offers through a dedicated buffer with bounded receipt-based status and withdrawal. Do not expand it into accounts, durable Phase 3 capabilities, a general-purpose public write API, application-managed payments, Durable Objects, or other broader backend components merely because they might be useful later. Phase 3 Offer Buffer design is documented in ADR 0016 and `docs/protocols/PHASE_3_OFFER_BUFFER_DESIGN.md`, but deployment remains blocked by the Phase 3 gate and Open Questions Registry.
 
 If a requested feature crosses a phase boundary, make that explicit in the change and update the relevant roadmap/architecture/governance material.
 

@@ -17,6 +17,8 @@ const provision = read("scripts/provision-offer-pilot.mjs");
 const cleanup = read("scripts/cleanup-offer-buffer.mjs");
 const provisionWorkflow = read(".github/workflows/phase2e-offer-provision.yml");
 const cleanupWorkflow = read(".github/workflows/phase2e-offer-cleanup.yml");
+const publicOffer = read("app/offer.html");
+const machineIndex = read("app/llms.txt");
 
 for (const marker of [
   "MAX_ACTIVE_OFFERS = 250",
@@ -63,6 +65,16 @@ for (const marker of [
 if (!provisionWorkflow.includes("Phase 2E: provision offer pilot")) fail("provision workflow lacks explicit one-shot commit gate");
 if (!cleanupWorkflow.includes('cron: "17 10 * * *"')) fail("offer cleanup is not scheduled daily");
 if (!cleanup.includes("retention-ended") || !cleanup.includes("7 * 24 * 60 * 60 * 1000")) fail("cleanup does not implement expiry redaction plus seven-day tombstone purge");
+
+for (const marker of ["POST /offer", "application/x-www-form-urlencoded", "Accept: application/json", "POST /offer/status", "POST /offer/withdraw", "accepted: true", "receipt"]) {
+  if (!publicOffer.includes(marker)) fail(`public offer page lacks the existing plain-HTTP contract: ${marker}`);
+}
+for (const marker of ["POST https://datum.quest/offer", "application/x-www-form-urlencoded", "Accept: application/json", "201 response with accepted: true", "offer/status", "offer/withdraw"]) {
+  if (!machineIndex.includes(marker)) fail(`machine index lacks the existing plain-HTTP contract: ${marker}`);
+}
+if (!runtime.includes('type !== "application/x-www-form-urlencoded"') || !runtime.includes('includes("application/json")')) {
+  fail("documented request/response negotiation does not match the runtime");
+}
 
 if (failures > 0) {
   console.error(`\n${failures} Phase 2E launch contract check(s) failed.`);

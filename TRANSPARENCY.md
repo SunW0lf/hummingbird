@@ -8,10 +8,12 @@ Cloudflare D1 now holds deliberately admitted canonical application state. The f
 
 The separate Phase 2E Offer Buffer is temporary operational state. Its hourly
 public observer exposes a pending count for unexpired unresolved offers and no
-offer text or identifiers. A private review packet is prepared in source but
-requires a separate private repository and access setup before it can operate;
-its contents are not a public record. Exact-text compression in that packet
-does not itself decide which ideas are related, admitted, or published. See
+offer text or identifiers. The separate private review companion has completed
+a successful D1 read and produced a short-lived review artifact accessible to
+authorized reviewers; its contents are not a public record. This proves the
+review path works, not that every future run will succeed. Exact-text
+compression in that packet does not itself decide which ideas are related,
+admitted, or published. See
 [ADR 0021](docs/decisions/0021-offer-review-visibility.md) and
 [OPERATIONS.md](OPERATIONS.md#phase-2e-offer-review).
 

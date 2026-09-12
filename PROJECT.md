@@ -22,7 +22,7 @@ Hummingbird is a public commons for participation, deliberation, contribution, a
 
 ## Current phase
 
-**Phase 2 — Read-Only Commons is in progress; Phases 2A, 2B, and 2C are complete, and Phase 2D durability/transparency work is active.** Phase 0 — Foundation and Phase 1 — Public Charter Site are complete. See [ROADMAP.md](ROADMAP.md).
+**Phase 2 — Read-Only Commons is in progress.** Phases 2A–2C are complete. Phase 2D awaits the ordinary independent-backup checkpoint. Phase 2E includes a bounded, temporary first-party offer pilot; Phase 3 remains gated. See [ROADMAP.md](ROADMAP.md).
 
 Future interactive-space ideas are preserved in [SPACES.md](SPACES.md) as a working design, not as implemented capability or settled governance policy.
 
@@ -48,7 +48,7 @@ Future interactive-space ideas are preserved in [SPACES.md](SPACES.md) as a work
 
 Phase 2 uses small canonical documents, minimal events, typed relationships, rebuildable derived projections, and explicit retention limits. The authoritative retention periods are in [SECURITY.md](SECURITY.md).
 
-Phase 2 is deliberately read-only from the Hummingbird application perspective. The interim Seed Bank uses GitHub as external provider-hosted ingress under ADR 0011; GitHub issues, comments, account metadata, and reactions are not automatically canonical Hummingbird records.
+The public canonical read model remains read-only. Phase 2E makes a narrow exception for the live `/offer` pilot: temporary non-canonical ingress with a private receipt, status, and withdrawal. It does not admit, publish, or grant governance standing. The Seed Bank uses GitHub as a separate provider-hosted public discussion path under ADR 0011; GitHub issues, comments, account metadata, and reactions are not automatically canonical Hummingbird records.
 
 The storage-independent reference corpus under `fixtures/canonical/` is contract/test material rather than production institutional memory. Deliberate admission into the commons remains a separate action.
 
