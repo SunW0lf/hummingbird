@@ -1,0 +1,98 @@
+name: Phase 2D Private Canonical Backup
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: Type "retain private canonical backup"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: phase2d-private-canonical-backup
+  cancel-in-progress: false
+
+jobs:
+  retain:
+    name: Encrypt and retain canonical backup
+    if: "${{ inputs.confirmation == 'retain private canonical backup' }}"
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout Hummingbird
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          path: source
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: source/package-lock.json
+
+      - name: Install source dependencies and age
+        working-directory: source
+        run: |
+          set -euo pipefail
+          npm ci
+          sudo apt-get update
+          sudo apt-get install --yes age
+
+      - name: Export, validate, and encrypt production canonical state
+        working-directory: source
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_D1_RECOVERY_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          BACKUP_AGE_RECIPIENT: ${{ vars.HUMMINGBIRD_BACKUP_AGE_RECIPIENT }}
+          DESTINATION: ../destination
+          RUN_IDENTIFIER: ${{ github.run_id }}-${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          case "$BACKUP_AGE_RECIPIENT" in
+            age1*) ;;
+            *) echo "HUMMINGBIRD_BACKUP_AGE_RECIPIENT must be an age public recipient" >&2; exit 1 ;;
+          esac
+
+          plain_dir="$(mktemp -d "$RUNNER_TEMP/hummingbird-canonical.XXXXXX")"
+          cleanup() { rm -rf "$plain_dir"; }
+          trap cleanup EXIT
+
+          ./scripts/backup --remote --output "$plain_dir/bundle"
+          ./scripts/restore "$plain_dir/bundle" --validate-only
+
+          mkdir -p "$DESTINATION/backups"
+          encrypted="$DESTINATION/backups/canonical-$RUN_IDENTIFIER.tar.gz.age"
+          tar -C "$plain_dir/bundle" -czf - . \
+            | age --recipient "$BACKUP_AGE_RECIPIENT" --output "$encrypted"
+          test -s "$encrypted"
+          encrypted_name="$(basename "$encrypted")"
+          (cd "$(dirname "$encrypted")" && sha256sum "$encrypted_name" > "$encrypted_name.sha256")
+
+          cleanup
+          trap - EXIT
+          test ! -e "$plain_dir"
+
+      - name: Commit encrypted backup to the private repository
+        working-directory: destination
+        env:
+          RUN_IDENTIFIER: ${{ github.run_id }}-${{ github.run_attempt }}
+          BACKUP_REPOSITORY_TOKEN: ${{ secrets.HUMMINGBIRD_BACKUP_REPOSITORY_TOKEN }}
+        run: |
+          set -euo pipefail
+          auth_header="$(printf 'x-access-token:%s' "$BACKUP_REPOSITORY_TOKEN" | base64 --wrap=0)"
+          git init --initial-branch=main
+          git remote add origin https://github.com/SunW0lf/hummingbird-backups.git
+          if git -c http.extraheader="AUTHORIZATION: basic $auth_header" fetch origin main; then
+            git checkout -B main FETCH_HEAD
+          fi
+          git config user.name "hummingbird-backup"
+          git config user.email "hummingbird-backup@users.noreply.github.com"
+          git add backups/
+          git diff --cached --check
+          git commit -m "Retain canonical backup $RUN_IDENTIFIER"
+          git -c http.extraheader="AUTHORIZATION: basic $auth_header" push origin HEAD:main
