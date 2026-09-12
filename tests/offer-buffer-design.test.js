@@ -29,6 +29,9 @@ function read(rel) {
 
 const adr = read("docs/decisions/0016-offers-and-the-offer-buffer.md");
 const experimentalAdr = read("docs/decisions/0017-phase2e-experimental-ingress.md");
+const runtimeAdr = read("docs/decisions/0018-phase2e-offer-pilot-runtime-and-data-boundary.md");
+const triageAdr = read("docs/decisions/0019-phase2e-offer-triage-and-review.md");
+const launchAdr = read("docs/decisions/0020-phase2e-offer-pilot-launch-profile.md");
 const experimentalProtocol = read("docs/protocols/PHASE_2E_EXPERIMENTAL_INGRESS.md");
 const design = read("docs/protocols/PHASE_3_OFFER_BUFFER_DESIGN.md");
 const roadmap = read("ROADMAP.md");
@@ -56,6 +59,23 @@ for (const [name, content, markers] of [
     "open for testing",
     "planned",
     "Phase 3 still requires its own explicit authorization",
+  ]],
+  ["ADR 0018", runtimeAdr, [
+    "dedicated D1 database bound as `OFFER_DB`",
+    "30-day ordinary retention period",
+    "256-bit receipt secret",
+    "The offer row is never converted in place into a canonical record",
+  ]],
+  ["ADR 0019", triageAdr, [
+    "compress repetition",
+    "preserve meaningful difference",
+    "escalate consequence, not volume",
+  ]],
+  ["ADR 0020", launchAdr, [
+    "250 active offers",
+    "exact duplicate offer text only",
+    "does **not** create application-level raw-IP storage",
+    "Provisioning the database or merging runtime code is not by itself public launch",
   ]],
   ["Phase 2E experimental ingress protocol", experimentalProtocol, [
     "authorized design; not yet deployed",
@@ -113,9 +133,9 @@ for (const phrase of forbiddenDesignPhrases) {
   }
 }
 
-// ADR 0017 permits a public contract page before mutation is deployed. The
-// static page must remain visibly non-live until a later implementation PR
-// adds the provider binding, handler, and write-path acceptance checks.
+// ADRs 0017-0020 now authorize implementation of the bounded Phase 2E pilot,
+// but public launch remains a separate deployment event. Until that event the
+// static contract page and machine guidance must still truthfully say non-live.
 const offerPage = path.join(DIST, "offer.html");
 if (fs.existsSync(offerPage)) {
   const html = fs.readFileSync(offerPage, "utf8");
@@ -123,18 +143,51 @@ if (fs.existsSync(offerPage)) {
     fail("static /offer contract page does not clearly say the write path is not live");
   }
   if (/<form\b/i.test(html) || /method=["']post["']/i.test(html) || /action=["'][^"']*offer/i.test(html)) {
-    fail("static /offer contract page unexpectedly exposes a live mutation form");
+    fail("static /offer contract page unexpectedly exposes a live mutation form before launch");
   }
 }
 
+// Source for the explicitly authorized Phase 2E route may now exist, but the
+// one-shot provisioning merge must not deploy it. The binding is centralized
+// in the shared runtime helper, while the handler carries the bounded outcome
+// semantics. This preserves implementation != deployment.
+const phase2eHandlerPath = path.join(ROOT, "functions", "offer", "index.js");
+const phase2eRuntimePath = path.join(ROOT, "lib", "offer-runtime.mjs");
+if (!fs.existsSync(phase2eHandlerPath) || !fs.existsSync(phase2eRuntimePath)) {
+  fail("authorized Phase 2E offer handler/runtime source is missing");
+} else {
+  const handler = fs.readFileSync(phase2eHandlerPath, "utf8");
+  const runtime = fs.readFileSync(phase2eRuntimePath, "utf8");
+  for (const marker of ["pilot_capacity_reached", "write_unconfirmed"]) {
+    if (!handler.includes(marker)) fail(`Phase 2E offer handler is missing bounded-launch marker: ${marker}`);
+  }
+  for (const marker of ["OFFER_DB", "MAX_ACTIVE_OFFERS = 250", "MAX_REQUEST_BYTES = 16 * 1024"]) {
+    if (!runtime.includes(marker)) fail(`Phase 2E shared runtime is missing bounded-launch marker: ${marker}`);
+  }
+}
+
+const ci = read(".github/workflows/ci.yml");
+const provisionWorkflow = read(".github/workflows/phase2e-offer-provision.yml");
+if (!ci.includes("!startsWith(github.event.head_commit.message, 'Phase 2E: provision offer pilot')")) {
+  fail("normal Pages deployment is not explicitly skipped for the storage-provisioning merge");
+}
+if (!provisionWorkflow.includes("Phase 2E: provision offer pilot") || /pages deploy/i.test(provisionWorkflow)) {
+  fail("offer provisioning workflow does not remain a storage-only, explicitly gated operation");
+}
+
+// Durable Phase 3 ingress remains undeployed. In particular there is still no
+// generic /api/offer route, capability issuance, participant-account runtime,
+// or formal proposal endpoint hiding behind the Phase 2E exception.
 for (const candidate of [
-  "functions/offer.js",
-  "functions/offer.ts",
-  "functions/offer/index.js",
-  "functions/offer/index.ts",
+  "functions/api/offer.js",
+  "functions/api/offer/index.js",
+  "functions/api/propose.js",
+  "functions/api/propose/index.js",
+  "functions/account.js",
+  "functions/capability.js",
 ]) {
   if (fs.existsSync(path.join(ROOT, candidate))) {
-    fail(`${candidate} exists before the pilot write implementation is authorized for deployment`);
+    fail(`${candidate} exists even though durable Phase 3 participation remains gated`);
   }
 }
 
@@ -151,7 +204,7 @@ function htmlFiles(dir) {
 for (const file of htmlFiles(DIST)) {
   const html = fs.readFileSync(file, "utf8");
   if (/action=["']\/api\/offer/i.test(html)) {
-    fail(`${path.relative(DIST, file)} advertises a live /api/offer action before the pilot implementation exists`);
+    fail(`${path.relative(DIST, file)} advertises a durable /api/offer action while Phase 3 remains gated`);
   }
 }
 
@@ -159,6 +212,7 @@ for (const slug of [
   "0016-offers-and-the-offer-buffer",
   "0017-phase2e-experimental-ingress",
   "0018-phase2e-offer-pilot-runtime-and-data-boundary",
+  "0019-phase2e-offer-triage-and-review",
 ]) {
   const publicAdr = path.join(DIST, "decisions", `${slug}.html`);
   const rawAdr = path.join(DIST, "docs", "raw", "decisions", `${slug}.md`);
@@ -170,6 +224,7 @@ const llms = read("app/llms.txt");
 for (const marker of [
   "0016-offers-and-the-offer-buffer",
   "0017-phase2e-experimental-ingress",
+  "0019-phase2e-offer-triage-and-review",
   "An offer is not canonical admission",
   "The endpoint is not live",
 ]) {
@@ -182,6 +237,6 @@ if (failures > 0) {
 }
 
 pass("Offer terminology, broad-scope principle, non-canonical buffer, and delivery/authority separation are documented");
-pass("Phase 2E evidence-only ingress has a public static contract without a live mutation route");
+pass("Authorized Phase 2E implementation source remains separated from public launch and durable Phase 3 participation");
 pass("Durable Phase 3 participation remains undeployed and separately gated");
 console.log("\nAll Offer Buffer / experimental-ingress checks passed.");
