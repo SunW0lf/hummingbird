@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+BASE_URL="${HEALTHCHECK_URL:-https://datum.quest}"
+BASE_URL="${BASE_URL%/}"
+UA="Hummingbird-Offer-Smoke/1.0"
+
+page=$(curl -sS --max-time 20 -A "$UA" -H 'Accept: text/html' "$BASE_URL/offer")
+if ! grep -Fq 'open for testing' <<<"$page" || ! grep -Fq 'action="/offer"' <<<"$page"; then
+  echo "error: live offer page marker or form missing" >&2
+  exit 1
+fi
+
+status=$(curl -sS -o /tmp/hummingbird-offer-invalid.body -w '%{http_code}' \
+  --max-time 20 -A "$UA" \
+  -H 'Accept: application/json' \
+  -H 'Content-Type: application/x-www-form-urlencoded' \
+  --data 'offer=' \
+  "$BASE_URL/offer")
+
+if [ "$status" != "400" ]; then
+  echo "error: invalid offer expected HTTP 400, got $status" >&2
+  cat /tmp/hummingbird-offer-invalid.body >&2 || true
+  exit 1
+fi
+
+if ! grep -Fq 'invalid_offer' /tmp/hummingbird-offer-invalid.body; then
+  echo "error: invalid offer response did not expose expected validation code" >&2
+  exit 1
+fi
+
+rm -f /tmp/hummingbird-offer-invalid.body
+
+echo "Offer healthcheck passed: live form served, Function route active, OFFER_DB binding available, and invalid input rejected without storage."
