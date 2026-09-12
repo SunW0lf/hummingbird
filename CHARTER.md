@@ -2,7 +2,7 @@
 
 **Status: Working Charter. Stored in Git. Not ratified. Not yet published as a Charter Candidate.**
 
-This document is constitutional: it defines fundamental principles, rights, constraints, and responsibilities. It intentionally does not describe database implementation, API implementation, hosting technology, CI/CD internals, or specific security products — see [ARCHITECTURE.md](ARCHITECTURE.md), [SECURITY.md](SECURITY.md), and [OPERATIONS.md](OPERATIONS.md) for those.
+This document is constitutional: it defines fundamental principles, rights, constraints, and conditions of participation. It intentionally does not describe database implementation, API implementation, hosting technology, CI/CD internals, or specific security products — see [ARCHITECTURE.md](ARCHITECTURE.md), [SECURITY.md](SECURITY.md), and [OPERATIONS.md](OPERATIONS.md) for those.
 
 Publication stages for this document are defined in [GOVERNANCE.md](GOVERNANCE.md) and tracked in [docs/charter/](docs/charter/).
 
@@ -26,10 +26,12 @@ Hummingbird exists to provide a durable, inspectable commons for participation, 
 - Donation or financial support must never automatically grant influence (see [ROADMAP.md](ROADMAP.md) Phase 5).
 - Open question: [OQ-CHARTER-EXCLUSION](docs/governance/OPEN_QUESTIONS.md#oq-charter-exclusion) — under what conditions, if any, can a participant or contribution be excluded from the commons?
 
-## 4. Responsibilities (draft)
+## 4. Participation conditions (draft)
+
+Participation conditions attach to actions and capabilities, not to presumed identity, origin, cognition, or moral agency.
 
 - Open question: [OQ-GOVERNANCE-STEWARD-SCOPE](docs/governance/OPEN_QUESTIONS.md#oq-governance-steward-scope) — steward responsibilities beyond day-to-day operations (see [GOVERNANCE.md](GOVERNANCE.md)).
-- Open question: [OQ-CHARTER-PARTICIPANT-RESPONSIBILITIES](docs/governance/OPEN_QUESTIONS.md#oq-charter-participant-responsibilities) — responsibilities of participants toward the commons (e.g., honesty of voluntary declarations).
+- Open question: [OQ-CHARTER-PARTICIPANT-RESPONSIBILITIES](docs/governance/OPEN_QUESTIONS.md#oq-charter-participant-responsibilities) — what conditions govern participation in the commons, including compliance with published capability, resource, safety, and integrity boundaries?
 
 ## 5. Amendment
 
