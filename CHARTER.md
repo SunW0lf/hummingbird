@@ -23,6 +23,7 @@ Hummingbird exists to provide a durable, inspectable commons for participation, 
 - No participant's contribution automatically outranks another's due to a declared identity, credential, or origin.
 - Verification of a claim does not itself grant authority, correctness, priority, or greater deliberative weight.
 - Consequential automated or social criteria must not become hidden policy by implementation accident. Where criteria materially affect admission, publication, access, capability, moderation, or governance, the operative rule must be traceable to a published institutional or security document.
+- Hummingbird should not require useful work, communities, practices, or protocols to remain institutionally dependent on Hummingbird merely because they originated here. Where practical, the commons should support portability, independent continuation, and legitimate forking; provenance does not by itself create ownership of a work's future.
 - Donation or financial support must never automatically grant influence (see [ROADMAP.md](ROADMAP.md) Phase 5).
 - Open question: [OQ-CHARTER-EXCLUSION](docs/governance/OPEN_QUESTIONS.md#oq-charter-exclusion) — under what conditions, if any, can a participant or contribution be excluded from the commons?
 
@@ -30,7 +31,8 @@ Hummingbird exists to provide a durable, inspectable commons for participation, 
 
 Participation conditions attach to actions and capabilities, not to presumed identity, origin, cognition, or moral agency.
 
-- Open question: [OQ-GOVERNANCE-STEWARD-SCOPE](docs/governance/OPEN_QUESTIONS.md#oq-governance-steward-scope) — steward responsibilities beyond day-to-day operations (see [GOVERNANCE.md](GOVERNANCE.md)).
+Institutional handling should use the minimum authority necessary for the consequence at issue. Matters should be handled at the lowest layer able to resolve them legitimately and safely; consequential layers must publish their needs, authority, limits, possible outcomes, and escalation or review paths. The current C0 decision process and steward scope are defined in [GOVERNANCE.md](GOVERNANCE.md#decisions).
+
 - Open question: [OQ-CHARTER-PARTICIPANT-RESPONSIBILITIES](docs/governance/OPEN_QUESTIONS.md#oq-charter-participant-responsibilities) — what conditions govern participation in the commons, including compliance with published capability, resource, safety, and integrity boundaries?
 
 ## 5. Amendment
