@@ -74,7 +74,7 @@ jobs:
       - name: Production offer-route smoke test
         env:
           HEALTHCHECK_URL: https://datum.quest
-        run: ./scripts/offer-healthcheck
+        run: bash scripts/offer-healthcheck
 
       - name: One-shot production offer lifecycle smoke
         if: "${{ startsWith(github.event.head_commit.message, 'Phase 2E: open offer pilot') }}"
