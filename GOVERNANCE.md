@@ -6,7 +6,7 @@ Detailed governance protocol documents, once written, live in [docs/governance/]
 
 ## Proposals
 
-Open question: [OQ-GOVERNANCE-PROPOSALS](docs/governance/OPEN_QUESTIONS.md#oq-governance-proposals) — who may **offer** a proposal, in what form, and where (GitHub issue/PR now; a Hummingbird-owned Offer surface only after the Phase 3 gate opens)?
+Open question: [OQ-GOVERNANCE-PROPOSALS](docs/governance/OPEN_QUESTIONS.md#oq-governance-proposals) — what turns offered material into a formal Hummingbird governance proposal, who may initiate that transition, in what form, and through what process? The Phase 2E experimental offer surface authorized by ADR 0017 may receive proposal-shaped material, but receipt, synthesis, or surfacing does not itself initiate a governance proposal or create governance authority.
 
 ## Charter publication lifecycle
 
