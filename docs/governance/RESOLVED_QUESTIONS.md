@@ -4,6 +4,14 @@ This archive preserves stable `OQ-*` identifiers after their questions leave the
 
 IDs are never reused.
 
+## Resolved 2026-09-11
+
+### OQ-GOVERNANCE-DECISION-PROCESS
+Resolved by [GOVERNANCE.md](../../GOVERNANCE.md): while the Charter remains at C0, non-technical and governance decisions may be adopted as explicit public, traceable, versioned, revisable working-draft institutional decisions. Input may be synthesized at scale; volume does not itself create authority; and C0 decisions cannot claim ratification or bypass named gates.
+
+### OQ-GOVERNANCE-STEWARD-SCOPE
+Resolved by [GOVERNANCE.md](../../GOVERNANCE.md) and reflected in [CHARTER.md](../../CHARTER.md): Hummingbird uses minimum necessary authority and escalation by necessity. Consequential layers publish their needs, authority, limits, possible outcomes, and escalation/review paths. The steward is a residual authority layer rather than the normal decision engine and cannot bootstrap present stewardship into permanent constitutional authority.
+
 ## Resolved 2026-09-10
 
 ### OQ-DATA-CONTRIBUTION-MODEL

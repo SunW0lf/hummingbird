@@ -44,12 +44,6 @@ Status: OPEN.
 
 ## Governance
 
-### OQ-GOVERNANCE-STEWARD-SCOPE
-**What are steward responsibilities beyond day-to-day operations?**
-Raised in: [CHARTER.md](../../CHARTER.md) §4, [GOVERNANCE.md](../../GOVERNANCE.md).
-Review gate: during Phase 2.
-Status: OPEN.
-
 ### OQ-GOVERNANCE-EMERGENCY-AUTHORITY
 **Scope, triggers, and limits of any emergency authority**, if the project decides one is needed at all. Governance-legitimacy question — no risk acceptance.
 Raised in: [CHARTER.md](../../CHARTER.md) §6, [GOVERNANCE.md](../../GOVERNANCE.md).
@@ -66,12 +60,6 @@ Status: OPEN.
 **Amendment approval threshold, constituency, and process** for Charter changes at C2/C3.
 Raised in: [GOVERNANCE.md](../../GOVERNANCE.md).
 Blocks: any C2 → C3 ratification.
-Status: OPEN.
-
-### OQ-GOVERNANCE-DECISION-PROCESS
-**Process for non-technical/governance decisions** (technical decisions already use ADRs).
-Raised in: [GOVERNANCE.md](../../GOVERNANCE.md).
-Review gate: during Phase 2.
 Status: OPEN.
 
 ### OQ-GOVERNANCE-FACILITATION
@@ -196,6 +184,6 @@ Status: OPEN — reviewed at the repository-publication gate; no distinct conten
 - **Blocks entry into Phase 4:** OQ-GOVERNANCE-DISPUTES, OQ-GOVERNANCE-VALIDATED-NEEDS.
 - **Blocks entry into Phase 5:** OQ-PROJECT-LEGAL-STRUCTURE.
 - **Blocks C2 → C3 ratification:** OQ-GOVERNANCE-AMENDMENT-THRESHOLD.
-- **Review gates (non-blocking):** OQ-GOVERNANCE-STEWARD-SCOPE, OQ-GOVERNANCE-DECISION-PROCESS, OQ-GOVERNANCE-FACILITATION, OQ-GOVERNANCE-STEWARD-SUCCESSION, OQ-SECURITY-INCIDENT-RESPONSE, OQ-OPS-MONITORING-CADENCE, OQ-OPS-TOKEN-ROTATION-CADENCE, OQ-LEGAL-CONTENT-LICENSE.
+- **Review gates (non-blocking):** OQ-GOVERNANCE-FACILITATION, OQ-GOVERNANCE-STEWARD-SUCCESSION, OQ-SECURITY-INCIDENT-RESPONSE, OQ-OPS-MONITORING-CADENCE, OQ-OPS-TOKEN-ROTATION-CADENCE, OQ-LEGAL-CONTENT-LICENSE.
 
-**Total unresolved: 25.**
+**Total unresolved: 23.**
