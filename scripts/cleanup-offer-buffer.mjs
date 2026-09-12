@@ -17,8 +17,9 @@ async function cf(method, endpoint, body) {
   });
   const payload = await response.json().catch(() => null);
   if (!response.ok || !payload?.success) {
-    const message = (payload?.errors || []).map((item) => item?.message).filter(Boolean).join("; ");
-    throw new Error(`Cloudflare API request failed (${response.status})${message ? `: ${message}` : ""}`);
+    const error = new Error("Cloudflare API operation failed");
+    error.status = response.status;
+    throw error;
   }
   return payload;
 }
@@ -26,13 +27,13 @@ async function cf(method, endpoint, body) {
 async function databaseId() {
   const listed = await cf("GET", `/accounts/${ACCOUNT_ID}/d1/database?per_page=100`, undefined);
   const matches = (listed.result || []).filter((db) => db.name === DB_NAME);
-  if (matches.length !== 1) throw new Error(`expected exactly one D1 database named ${DB_NAME}; found ${matches.length}`);
+  if (matches.length !== 1) throw new Error("unexpected offer database count");
   return matches[0].uuid || matches[0].id;
 }
 
 async function main() {
-  if (!ACCOUNT_ID) throw new Error("CLOUDFLARE_ACCOUNT_ID is required");
-  if (!D1_TOKEN) throw new Error("CLOUDFLARE_D1_RECOVERY_TOKEN is required");
+  if (!ACCOUNT_ID) throw new Error("missing account configuration");
+  if (!D1_TOKEN) throw new Error("missing D1 cleanup credential");
 
   const id = await databaseId();
   const now = new Date();
@@ -63,7 +64,7 @@ async function main() {
   console.log("Offer-buffer expiry cleanup completed without emitting participant material or provider identifiers.");
 }
 
-main().catch((error) => {
-  console.error(`offer-buffer cleanup failed: ${error.message}`);
+main().catch(() => {
+  console.error("offer-buffer cleanup failed; provider response details were intentionally not logged");
   process.exit(1);
 });
