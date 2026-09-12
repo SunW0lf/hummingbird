@@ -27,11 +27,9 @@ async function cf(token, method, endpoint, body) {
   });
   const payload = await response.json().catch(() => null);
   if (!response.ok || !payload?.success) {
-    const messages = [...(payload?.errors || []), ...(payload?.messages || [])]
-      .map((item) => item?.message)
-      .filter(Boolean)
-      .join("; ");
-    throw new Error(`Cloudflare API ${method} ${endpoint} failed (${response.status})${messages ? `: ${messages}` : ""}`);
+    const error = new Error("Cloudflare API operation failed");
+    error.status = response.status;
+    throw error;
   }
   return payload;
 }
@@ -39,9 +37,9 @@ async function cf(token, method, endpoint, body) {
 async function findOrCreateDatabase() {
   const listed = await cf(D1_TOKEN, "GET", `/accounts/${ACCOUNT_ID}/d1/database?per_page=100`, undefined);
   const matches = (listed.result || []).filter((db) => db.name === DB_NAME);
-  if (matches.length > 1) throw new Error(`multiple D1 databases named ${DB_NAME}; refusing ambiguous provisioning`);
+  if (matches.length > 1) throw new Error("ambiguous offer database state");
   if (matches.length === 1) {
-    console.log(`Offer D1 resource already exists by expected name; reusing it.`);
+    console.log("Offer D1 resource already exists by expected name; reusing it.");
     return matches[0].uuid || matches[0].id;
   }
 
@@ -50,7 +48,7 @@ async function findOrCreateDatabase() {
     read_replication: { mode: "disabled" },
   });
   const id = created.result?.uuid || created.result?.id;
-  if (!id) throw new Error("Cloudflare created the offer database but returned no database identifier");
+  if (!id) throw new Error("offer database creation returned no resource identifier");
   console.log("Created dedicated offer D1 resource.");
   return id;
 }
@@ -78,7 +76,7 @@ async function ensureSchema(databaseId) {
   });
   const names = (verify.result?.[0]?.results || []).map((row) => row.name);
   for (const required of ["experimental_offers", "offer_clusters", "offer_cluster_members"]) {
-    if (!names.includes(required)) throw new Error(`offer database schema verification failed: missing ${required}`);
+    if (!names.includes(required)) throw new Error("offer database schema verification failed");
   }
 }
 
@@ -112,7 +110,7 @@ async function main() {
   console.log("Phase 2E offer storage is provisioned, migrated, and bound. No participant write surface was deployed by this script.");
 }
 
-main().catch((error) => {
-  console.error(`offer-pilot provisioning failed: ${error.message}`);
+main().catch(() => {
+  console.error("offer-pilot provisioning failed; provider response details were intentionally not logged");
   process.exit(1);
 });
