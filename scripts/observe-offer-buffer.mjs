@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 import fs from "node:fs";
 import process from "node:process";
+import { constants, publicEncrypt } from "node:crypto";
 
 const ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID;
 const D1_TOKEN = process.env.CLOUDFLARE_D1_RECOVERY_TOKEN;
 const DB_NAME = process.env.HUMMINGBIRD_OFFER_DB_NAME || "hummingbird-offer-buffer";
 const API = "https://api.cloudflare.com/client/v4";
+const SIGNAL_PUBLIC_KEY = new URL("../ops/offer-signal-public.pem", import.meta.url);
 
 async function cf(method, endpoint, body) {
   const response = await fetch(`${API}${endpoint}`, {
@@ -28,9 +30,17 @@ async function databaseId() {
   return matches[0].uuid || matches[0].id;
 }
 
-function writeOutput(name, value) {
-  if (!process.env.GITHUB_OUTPUT) return;
-  fs.appendFileSync(process.env.GITHUB_OUTPUT, `${name}=${value}\n`, "utf8");
+function encryptedSignal(reviewNeeded) {
+  const publicKey = fs.readFileSync(SIGNAL_PUBLIC_KEY, "utf8");
+  const payload = Buffer.from(JSON.stringify({ v: 1, review_needed: reviewNeeded }), "utf8");
+  return publicEncrypt(
+    {
+      key: publicKey,
+      padding: constants.RSA_PKCS1_OAEP_PADDING,
+      oaepHash: "sha256",
+    },
+    payload,
+  ).toString("base64");
 }
 
 async function main() {
@@ -50,8 +60,8 @@ async function main() {
   });
 
   const reviewNeeded = Number(result.result?.[0]?.results?.[0]?.review_needed || 0) === 1;
-  writeOutput("review_needed", reviewNeeded ? "true" : "false");
-  console.log("Offer observer completed without emitting participant material, counts, identifiers, or timestamps.");
+  console.log(`HB_OFFER_SIGNAL=${encryptedSignal(reviewNeeded)}`);
+  console.log("Offer observer completed successfully. Pending-review state is emitted only as an opaque encrypted signal.");
 }
 
 main().catch(() => {
