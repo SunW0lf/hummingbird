@@ -62,7 +62,7 @@ if (/experimental_offers|offer_clusters|receipt_hash/i.test(canonicalMigration))
 for (const phrase of [
   "The write path is not live yet.",
   "ordinary retention of 30 days",
-  "no account, required handle, origin declaration, CAPTCHA, or JavaScript",
+  "No account, required handle, origin declaration, CAPTCHA, or JavaScript",
   "does not need your name, email address, account, handle, participant category",
   "The temporary offer row is never converted in place into institutional memory",
 ]) {
