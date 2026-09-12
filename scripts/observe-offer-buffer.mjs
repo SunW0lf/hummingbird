@@ -1,13 +1,10 @@
 #!/usr/bin/env node
-import fs from "node:fs";
 import process from "node:process";
-import { constants, publicEncrypt } from "node:crypto";
 
 const ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID;
 const D1_TOKEN = process.env.CLOUDFLARE_D1_RECOVERY_TOKEN;
 const DB_NAME = process.env.HUMMINGBIRD_OFFER_DB_NAME || "hummingbird-offer-buffer";
 const API = "https://api.cloudflare.com/client/v4";
-const SIGNAL_PUBLIC_KEY = new URL("../ops/offer-signal-public.pem", import.meta.url);
 
 async function cf(method, endpoint, body) {
   const response = await fetch(`${API}${endpoint}`, {
@@ -30,19 +27,6 @@ async function databaseId() {
   return matches[0].uuid || matches[0].id;
 }
 
-function encryptedSignal(reviewNeeded) {
-  const publicKey = fs.readFileSync(SIGNAL_PUBLIC_KEY, "utf8");
-  const payload = Buffer.from(JSON.stringify({ v: 1, review_needed: reviewNeeded }), "utf8");
-  return publicEncrypt(
-    {
-      key: publicKey,
-      padding: constants.RSA_PKCS1_OAEP_PADDING,
-      oaepHash: "sha256",
-    },
-    payload,
-  ).toString("base64");
-}
-
 async function main() {
   if (!ACCOUNT_ID) throw new Error("missing account configuration");
   if (!D1_TOKEN) throw new Error("missing D1 observer credential");
@@ -50,18 +34,20 @@ async function main() {
   const id = await databaseId();
   const nowIso = new Date().toISOString();
   const result = await cf("POST", `/accounts/${ACCOUNT_ID}/d1/database/${id}/query`, {
-    sql: `SELECT CASE WHEN EXISTS (
-            SELECT 1
-              FROM experimental_offers
-             WHERE expires_at > ?
-               AND state IN ('received','grouped')
-          ) THEN 1 ELSE 0 END AS review_needed`,
+    sql: `SELECT COUNT(*) AS pending_count
+            FROM experimental_offers
+           WHERE expires_at > ?
+             AND state IN ('received','grouped')`,
     params: [nowIso],
   });
 
-  const reviewNeeded = Number(result.result?.[0]?.results?.[0]?.review_needed || 0) === 1;
-  console.log(`HB_OFFER_SIGNAL=${encryptedSignal(reviewNeeded)}`);
-  console.log("Offer observer completed successfully. Pending-review state is emitted only as an opaque encrypted signal.");
+  const query = result.result?.[0];
+  if (query?.success !== true || query.results?.length !== 1) throw new Error("invalid pending count query result");
+  const count = query.results[0]?.pending_count;
+  if (!Number.isSafeInteger(count) || count < 0) throw new Error("invalid pending count");
+  console.log(`HB_PENDING_COUNT=${count}`);
+  console.log(`HB_OFFERS_PENDING=${count > 0}`);
+  console.log("Offer observer completed without selecting offer content or identifiers.");
 }
 
 main().catch(() => {

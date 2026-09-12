@@ -22,6 +22,17 @@ Phase 2 is intentionally staged:
 
 See [ROADMAP.md](ROADMAP.md).
 
+## Phase 2E offer review
+
+The public hourly [offer observer](.github/workflows/phase2e-offer-observer.yml)
+prints `HB_PENDING_COUNT` and `HB_OFFERS_PENDING` for unexpired `received` and
+`grouped` offers. A successful run is required before treating zero as clear;
+an observer failure means unknown, not zero. Its public log never contains
+offer text or identifiers. A private, short-lived content review companion is
+described in [ADR 0021](docs/decisions/0021-offer-review-visibility.md) and
+[its setup guide](ops/offer-review-companion/README.md). It is not active until
+a private repository, credentials, and GitHub app access are configured.
+
 ## Backup
 
 Current durable production state includes the Git repository, deliberately admitted canonical records in Cloudflare D1, and provider-authoritative external records that Hummingbird references rather than clones. The Phase 2 reference corpus under `fixtures/canonical/` is version-controlled contract material, not a backup of production application state.

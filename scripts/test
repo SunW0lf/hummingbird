@@ -51,6 +51,7 @@ echo "Running Phase 2E offer runtime guards..."
 node tests/offer-runtime.test.mjs
 node tests/offer-launch-contract.test.js
 node tests/offer-observer-contract.test.js
+node tests/offer-review-export.test.js
 
 echo "Running Phase 2C public-record projection checks..."
 node tests/public-records.test.js
