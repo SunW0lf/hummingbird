@@ -259,7 +259,7 @@ See [PERSISTENCE.md](PERSISTENCE.md) for the dated cost snapshot and decision ga
 ## Backups and recovery
 
 - Git/document/schema/reference-corpus state is recoverable from the repository.
-- D1 canonical state has a storage-independent export/restore path, and restoration into an empty disposable replacement database has been exercised successfully in Phase 2D. The remaining Phase 2D work is publication-buffer/transparency closure and keeping the normal independent-backup boundary explicit for non-public canonical state.
+- D1 canonical state has a storage-independent export/restore path, and restoration into an empty disposable replacement database has been exercised successfully in Phase 2D. The minimized recovery outcome has been published through the transparency buffer. Phase 2D remains open for steward confirmation of the ordinary independently retrievable private-backup path for canonical state that is not wholly public.
 - The Phase 2E offer buffer is intentionally disposable and is not promised canonical backup durability; ordinary retention/cleanup and incident reporting follow its separate pilot contract.
 - R2 is a candidate independent storage target for encrypted or otherwise appropriately protected canonical recovery bundles, but backup format and restoration remain more important than vendor choice.
 - Rebuildable public projections are not themselves backup targets for institutional meaning.

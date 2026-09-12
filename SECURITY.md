@@ -4,7 +4,7 @@ Security protects the commons without depending on proving participant origin.
 
 ## Current attack surface
 
-Phase 2 is now in progress. The deployed Hummingbird application surface remains read-only while Cloudflare D1 holds deliberately admitted canonical application state behind a separate operational boundary. There are no Hummingbird-owned public submission forms or participant accounts yet.
+Phase 2 is in progress. Public `GET`/`HEAD` reading remains open and largely static. The bounded first-party `/offer` pilot now accepts temporary, non-canonical offers through a Pages Function and a dedicated `OFFER_DB` separate from canonical D1. It accepts ordinary HTML form posts without an account, origin declaration, CAPTCHA, or JavaScript for basic use. Receipt-based status and withdrawal are pilot-scoped; no durable participant account or Phase 3 public write API exists. See [ADR 0017](docs/decisions/0017-phase2e-experimental-ingress.md) and [ADR 0018](docs/decisions/0018-phase2e-offer-pilot-runtime-and-data-boundary.md).
 
 The interim Seed Bank defined by [ADR 0011](docs/decisions/0011-interim-seed-bank.md) introduces a bounded external write surface through public GitHub issue forms and discussion threads. That surface inherits GitHub's account, spam, abuse, and moderation mechanisms; it does not create Hummingbird application credentials or a direct write path into Hummingbird persistence.
 
@@ -12,9 +12,10 @@ The realistic attack surface is concentrated in:
 
 - public GitHub repository and Actions (source and CI compromise)
 - public Seed Bank issue intake (spam, harassment, malicious links, social engineering, accidental disclosure, and attempts to smuggle vulnerability details into public threads)
+- first-party `/offer` intake and receipt-based status/withdrawal (untrusted content, resource exhaustion, receipt exposure, and availability of the temporary review path)
 - Cloudflare account, Pages deployment credential, and separate D1 operational/recovery credentials (deployment or persistence compromise)
 - dependency compromise (npm devDependencies used for CI tooling)
-- production D1 persistence, migrations, backup, recovery, and future mutation boundaries
+- canonical D1 persistence, migrations, backup, and recovery, alongside the separate disposable offer-store boundary
 
 ## Interim Seed Bank safety boundary
 
@@ -29,7 +30,7 @@ The realistic attack surface is concentrated in:
 
 ## Authentication / authorization
 
-Not applicable to Hummingbird-owned public participation yet — no participant accounts exist. GitHub handles authentication for the interim Seed Bank as an external provider. Open question: [OQ-SECURITY-AUTHN-MODEL](docs/governance/OPEN_QUESTIONS.md#oq-security-authn-model) for Phase 3+ when Hummingbird-owned contribution/proposal forms are introduced.
+The first-party `/offer` pilot accepts an uncredentialed offer. A one-time random receipt, stored only as a hash, controls that offer's temporary status and withdrawal; it does not authenticate a participant, establish identity, or grant standing. GitHub separately handles accounts for the interim Seed Bank. The durable Phase 3 authentication/authorization model remains open: [OQ-SECURITY-AUTHN-MODEL](docs/governance/OPEN_QUESTIONS.md#oq-security-authn-model).
 
 ## Secrets
 
@@ -46,14 +47,18 @@ Not applicable to Hummingbird-owned public participation yet — no participant 
 - GitHub Actions workflows request only the permissions they need (see `.github/workflows/`).
 - Repository workflow-token default permissions are configured read-only; the workflow also declares read-only repository-content permission explicitly.
 
-## Planned defenses (Phase 3+ application-owned participation)
+## Phase 2E pilot controls and future defenses
+
+The live pilot bounds offer text and request size, validates the form and optional reference, enforces a 250-active-offer ceiling at insertion, groups exact duplicate text without rejecting a valid offer, and fails closed when persistence cannot confirm acceptance. Accepted content has 30-day ordinary retention, with scheduled cleanup; receipt-bearing responses are `no-store` and `noindex`. The application offer store does not retain raw network identifiers, user-agent history, or a cross-offer identity profile. The public observer releases counts only; restricted short-lived review packets are a separate projection. See [ADR 0018](docs/decisions/0018-phase2e-offer-pilot-runtime-and-data-boundary.md), [ADR 0021](docs/decisions/0021-offer-review-visibility.md), and [OPERATIONS.md](OPERATIONS.md#phase-2e-offer-review).
+
+Additional durable Phase 3 defenses remain design work, subject to the open rights, governance, security, and runtime decisions:
 
 - Rate limiting
 - Spam / automated flooding controls
 - DDoS (partially mitigated by Cloudflare's proxy by default)
 - Sybil behavior detection
 - Replay protection
-- Injection prevention (input validation once forms/APIs exist)
+- Input validation across any later forms/APIs
 - Malicious upload handling (once uploads exist)
 - CAPTCHA avoided as a primary defense; prefer layered, behavior-based defenses over visual challenge-response
 

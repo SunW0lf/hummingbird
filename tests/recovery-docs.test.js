@@ -53,11 +53,11 @@ for (const [name, content, markers] of [
     "Hummingbird must be able to lose its live database without losing institutional meaning",
     "Storage boundary",
     "Recovery point rule",
-    "remote production-state recovery exercise completed successfully; publication-buffer/transparency closure remains",
+    "remote production-state recovery and minimized public record complete; ordinary independent private-backup confirmation remains",
     "Execution observations and successful exercise",
     "The guarded REST-based retry completed successfully on 2026-09-11",
     "D1 REST API",
-    "Only after the publication-buffer/transparency work is exercised and recorded should Phase 2D be marked complete",
+    "Phase 2D remains open until the ordinary path is confirmed; recovery success does not authorize Phase 3",
   ]],
   ["Changelog", changelog, [
     "Published the smallest material public operational record of the successful Phase 2D recovery exercise",
