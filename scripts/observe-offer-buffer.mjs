@@ -37,7 +37,7 @@ async function main() {
     sql: `SELECT COUNT(*) AS pending_count
             FROM experimental_offers
            WHERE expires_at > ?
-             AND state IN ('received','grouped')`,
+             AND state IN ('received','grouped','synthesized','deferred')`,
     params: [nowIso],
   });
 

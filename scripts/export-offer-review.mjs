@@ -8,8 +8,7 @@ const D1_TOKEN = process.env.CLOUDFLARE_D1_RECOVERY_TOKEN;
 const DB_NAME = process.env.HUMMINGBIRD_OFFER_DB_NAME || "hummingbird-offer-buffer";
 const OUTPUT = process.argv[2];
 const API = "https://api.cloudflare.com/client/v4";
-const PAGE_SIZE = 100;
-const MAX_OFFERS = 1000;
+const MAX_OFFERS = 250;
 
 async function cf(method, endpoint, body) {
   const response = await fetch(`${API}${endpoint}`, {
@@ -32,29 +31,40 @@ async function main() {
   if (matches.length !== 1) throw new Error("unexpected offer database count");
   const id = matches[0].uuid || matches[0].id;
   const now = new Date().toISOString();
-  const offers = [];
-  for (let offset = 0; offset <= MAX_OFFERS; offset += PAGE_SIZE) {
-    const response = await cf("POST", `/accounts/${ACCOUNT_ID}/d1/database/${id}/query`, {
-      sql: `SELECT id, body, reference_url, question_id, state, received_at, expires_at
-              FROM experimental_offers
-             WHERE expires_at > ? AND state IN ('received','grouped')
-             ORDER BY received_at, id LIMIT ? OFFSET ?`,
-      params: [now, PAGE_SIZE, offset],
-    });
-    const query = response.result?.[0];
-    if (query?.success !== true || !Array.isArray(query.results)) throw new Error("invalid review query result");
-    if (offers.length + query.results.length > MAX_OFFERS) throw new Error("review packet limit exceeded");
-    for (const row of query.results) {
-      if (typeof row.id !== "string" || typeof row.body !== "string" || typeof row.state !== "string") {
-        throw new Error("invalid review row");
-      }
-      offers.push(row);
+  // The pilot admits at most 250 active rows. One bounded query avoids OFFSET
+  // gaps or duplicates if a withdrawal occurs during a paginated export.
+  const response = await cf("POST", `/accounts/${ACCOUNT_ID}/d1/database/${id}/query`, {
+    sql: `SELECT id, body, reference_url, question_id, state, received_at, expires_at
+            FROM experimental_offers
+           WHERE expires_at > ? AND state IN ('received','grouped','synthesized','deferred')
+           ORDER BY received_at, id LIMIT ?`,
+    params: [now, MAX_OFFERS + 1],
+  });
+  const query = response.result?.[0];
+  if (query?.success !== true || !Array.isArray(query.results) || query.results.length > MAX_OFFERS) {
+    throw new Error("invalid or oversized review query result");
+  }
+  const groups = [];
+  const byText = new Map();
+  for (const row of query.results) {
+    if (typeof row.id !== "string" || typeof row.body !== "string" || typeof row.state !== "string") {
+      throw new Error("invalid review row");
     }
-    if (query.results.length < PAGE_SIZE) break;
+    let group = byText.get(row.body);
+    if (!group) {
+      group = { body: row.body, count: 0, members: [] };
+      byText.set(row.body, group);
+      groups.push(group);
+    }
+    group.count += 1;
+    group.members.push({
+      id: row.id, state: row.state, reference_url: row.reference_url,
+      question_id: row.question_id, received_at: row.received_at, expires_at: row.expires_at,
+    });
   }
   // Exclusive creation prevents accidentally replacing an earlier packet. The
   // private workflow uploads this file with a one-day artifact lifetime.
-  fs.writeFileSync(OUTPUT, JSON.stringify({ version: 1, observed_at: now, offers }), { flag: "wx", mode: 0o600 });
+  fs.writeFileSync(OUTPUT, JSON.stringify({ version: 2, observed_at: now, unresolved_count: query.results.length, groups }), { flag: "wx", mode: 0o600 });
   console.log("Private offer review packet prepared.");
 }
 

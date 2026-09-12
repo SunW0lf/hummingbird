@@ -6,6 +6,15 @@
 
 Cloudflare D1 now holds deliberately admitted canonical application state. The first real canonical contribution has moved through draft admission, a separate publication decision, and rebuildable static publication. Public page views remain static at request time and do not query D1.
 
+The separate Phase 2E Offer Buffer is temporary operational state. Its hourly
+public observer exposes a pending count for unexpired unresolved offers and no
+offer text or identifiers. A private review packet is prepared in source but
+requires a separate private repository and access setup before it can operate;
+its contents are not a public record. Exact-text compression in that packet
+does not itself decide which ideas are related, admitted, or published. See
+[ADR 0021](docs/decisions/0021-offer-review-visibility.md) and
+[OPERATIONS.md](OPERATIONS.md#phase-2e-offer-review).
+
 Phase 2D has now exercised the portable production backup/recovery path end-to-end against an isolated disposable replacement database. The material outcome is released below as the first compact public operational record prepared through the publication buffer. Phase 2D remains open only for confirmation of the ordinary independent private-backup path used when canonical state includes non-public records.
 
 ## Phase 2 model

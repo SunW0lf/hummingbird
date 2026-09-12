@@ -50,6 +50,7 @@ node tests/offer-triage-contract.test.js
 echo "Running Phase 2E offer runtime guards..."
 node tests/offer-runtime.test.mjs
 node tests/offer-launch-contract.test.js
+python3 tests/offer-ingress-storage.py
 node tests/offer-observer-contract.test.js
 node tests/offer-review-export.test.js
 

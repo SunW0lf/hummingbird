@@ -25,13 +25,23 @@ See [ROADMAP.md](ROADMAP.md).
 ## Phase 2E offer review
 
 The public hourly [offer observer](.github/workflows/phase2e-offer-observer.yml)
-prints `HB_PENDING_COUNT` and `HB_OFFERS_PENDING` for unexpired `received` and
-`grouped` offers. A successful run is required before treating zero as clear;
+prints `HB_PENDING_COUNT` and `HB_OFFERS_PENDING` for unexpired `received`,
+`grouped`, `synthesized`, and `deferred` offers. A successful run is required before treating zero as clear;
 an observer failure means unknown, not zero. Its public log never contains
 offer text or identifiers. A private, short-lived content review companion is
 described in [ADR 0021](docs/decisions/0021-offer-review-visibility.md) and
 [its setup guide](ops/offer-review-companion/README.md). It is not active until
 a private repository, credentials, and GitHub app access are configured.
+
+An accepted `/offer` write starts as `received`. A conditional D1 insert enforces
+the published capacity; exact duplicate grouping can then mark `received` rows
+as `grouped` and populate temporary cluster membership. Failed grouping leaves
+the accepted offer `received`, still visible to the observer and review exporter.
+Receipt-based withdrawal clears the body and cluster link; scheduled cleanup
+expires remaining temporary content. The public signal and private packet are
+derived from D1 and do not initiate admission or publication. The private
+packet's `observed_at` and `unresolved_count` must be checked against the latest
+successful public run before declaring the inbox clear or taking action.
 
 ## Backup
 

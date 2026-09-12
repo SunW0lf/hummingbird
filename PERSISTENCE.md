@@ -27,6 +27,18 @@ Git / canonical documentation
 
 The important rule is that these provider products are implementation details. Institutional meaning remains portable and versioned.
 
+### Document-first, not database-first
+
+Hummingbird prefers a **NoSQL-friendly semantic model**: versioned, portable
+documents define what an offer, pad, space, activity, or institutional record
+means. D1 is currently SQLite storage for those concepts and for the small
+indexes, constraints, and atomic updates the live pilot needs. It is not a
+requirement that future concepts become permanently normalized SQL tables.
+Conversely, a schemaless document store would not itself solve consent,
+retention, cross-document invariants, or concurrent writes. Keep database
+engine choice reversible by exporting complete document meaning and testing
+reconstruction without provider-specific row IDs.
+
 ### Cheap, light, and real
 
 Hummingbird should optimize for three properties at the same time:
@@ -100,6 +112,73 @@ Proposals already exist as a v1 canonical family. Later proposal review, amendme
 Pads should begin as the smallest useful continuity/public-state contract, without requiring an origin category. Connections should be explicit relationship state, not inferred follower graphs. Guilds should be bounded associations with explicit membership and scoped/expiring capabilities rather than a higher participant class or global reputation system.
 
 Durable definitions, memberships, commitments, grants, and meaningful outcomes may belong in D1. High-frequency live coordination should not.
+
+### Phase 2E offer buffer audit
+
+The live `OFFER_DB` is separate from canonical D1. A bounded offer row holds
+temporary body, optional reference/question, receipt hash, state, content hash,
+and expiry. The only currently implemented compression in D1 is exact-text
+grouping: matching active `received`/`grouped` rows are linked to a temporary
+cluster with membership rows. Each offer keeps its own receipt and withdrawal
+path. A D1 conditional insert enforces the 250-active-offer ceiling even when
+requests arrive concurrently. The cluster expiry is extended to the latest
+member expiry; withdrawal and expiry remove content and membership. If derived
+grouping fails after a confirmed insert, the offer remains `received` and
+reviewable. The private export repeats exact-text compression from a bounded
+D1 snapshot, so review does not depend on the cluster helper tables being
+perfectly current.
+
+This is sufficient for the present 250-row pilot, not a semantic synthesis
+engine. The current schema already has temporary `working_summary` and
+membership fields, but no job classifies related ideas or writes summaries.
+Future thematic review should first produce a **private, explainable working
+packet** preserving corrections, disagreements, and singletons under ADR 0019.
+Only a separately authorized, documented process should change D1 handling
+state or admit anything to canonical memory. Keep the raw temporary offer
+available by its opaque ID until withdrawal/expiry; never replace it with only
+a cluster summary. Do not turn duplicate count into a vote or priority score.
+
+The current access indexes cover state/order, expiry cleanup, question
+lookups, and cluster membership. At a 250-row ceiling an exact-content scan is
+bounded; add a content-hash or `(state, expires_at)` index only after query
+plans and observed volume justify it. D1's SQLite-backed transactions and
+bounded single-database throughput fit this pilot; those are storage facts,
+not arguments that the portable document model should become SQL-specific.
+Cloudflare documents [D1 batch transaction behavior](https://developers.cloudflare.com/d1/worker-api/d1-database/#batch),
+[prepared statement write metadata](https://developers.cloudflare.com/d1/worker-api/prepared-statements/#run),
+and [database/query limits](https://developers.cloudflare.com/d1/platform/limits/);
+recheck these provider contracts before increasing the pilot ceiling.
+
+## Document-first data planning for future surfaces
+
+The following is a **working inventory**, not a deployment decision. Each
+surface needs a portable semantic contract and reference examples before a
+schema, retention rule, or write endpoint is approved. A single surface may
+use several physical stores while exporting one coherent document family.
+
+| Proposed surface | Portable meaning to define first | Candidate operational home | Public read form / unresolved gate |
+| --- | --- | --- | --- |
+| Offers and evidence questions | Offer/receipt lifecycle, optional reference, question association, temporary working synthesis | Separate bounded operational D1 for the current pilot | Public aggregate evidence only; private offer text and Phase 3 ingress decisions remain gated |
+| Pads and connections | Pad declaration, continuity proof, explicit connection transitions | Versioned documents with D1 query keys if authorized; short-lived capability state elsewhere | Public pad projection only by chosen visibility; continuity and multiplicity questions remain open |
+| Spaces and guilds | Constitution versions, membership consent, scoped grant and revocation records | D1 for durable transitions; live coordinator only if concurrency requires it | Public rules and authorized summaries; local constitutions and grant powers are unresolved |
+| Proposals and institutional decisions | Proposal versions, provenance, rationale, decision transition | Canonical versioned records with portable export and rebuildable static publication | Published records only after explicit admission/publication; governance proposal initiation remains unresolved |
+| Walls, rooms, games, activities | Activity definition, meaningful outcome, optional bounded history | Durable Object candidate for ordered live actions; D1 for approved durable outcomes; R2 candidate for sealed large history | Static/derived public summaries where approved; activity-history retention remains unresolved |
+| Commitments and shared resources | Obligation, consent, evidence of completion, scoped resource authority | D1 for approved durable meaning, not a general event firehose | Only authorized public projections; no automatic treasury, grant, or governance authority |
+
+Common fields should be few: stable opaque ID, type, schema version, lifecycle
+state, timestamps needed for that lifecycle, and content/relationships whose
+meaning is defined by the contract. Store optional visibility, provenance,
+retention, and consent attributes only when the surface needs them. Keep
+indexes and materialized read models disposable; avoid global participant
+profiles, origin categories, page-view records, and speculative joins.
+
+Revisit D1 versus a document database when a *specific approved surface*
+demonstrates that flexible document queries, cross-entity updates, read/write
+volume, or portability cannot be handled cleanly within the current model.
+Compare a document store using an executable import/export fixture, query
+plan, retention/withdrawal exercise, and expected operating cost. Changing
+providers should not by itself change participant rights or institutional
+meaning.
 
 ### What should not be written to D1 by default
 
