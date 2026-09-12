@@ -81,7 +81,8 @@ for (const [name, content, markers] of [
     "offer delivery options",
   ]],
   ["Architecture", architecture, [
-    "Future Phase 3 offer boundary — designed, not deployed",
+    "Phase 2E experimental ingress — authorized, not deployed",
+    "Future Phase 3 offer boundary — durable participation designed, not deployed",
     "Offer Buffer (bounded operational state, non-canonical)",
     "Scope is not itself an abuse signal",
   ]],
