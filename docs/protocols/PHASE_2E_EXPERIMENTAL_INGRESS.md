@@ -2,7 +2,7 @@
 
 Status: **authorized design; not yet deployed**
 
-Authoritative decision: [ADR 0017](../decisions/0017-phase2e-experimental-ingress.md)
+Authoritative decisions: [ADR 0017](../decisions/0017-phase2e-experimental-ingress.md), [ADR 0018](../decisions/0018-phase2e-offer-pilot-runtime-and-data-boundary.md), and [ADR 0019](../decisions/0019-phase2e-offer-triage-and-review.md)
 
 This protocol defines the evidence-gathering pilot that may run during Phase 2E without opening Phase 3.
 
@@ -73,7 +73,7 @@ The basic path must not require:
 - CAPTCHA;
 - proof of humanness, cognition, or participant type.
 
-A successful accept must return a clear acknowledgement. The exact receipt mechanism remains a pre-deployment implementation decision and must not imply identity, canonical status, or durable standing.
+A successful accept must return a clear acknowledgement and the receipt behavior defined by ADR 0018. A receipt does not imply identity, canonical status, governance standing, or a promise of individualized review.
 
 ## Published handling contract
 
@@ -89,7 +89,7 @@ An offer must satisfy the published payload, safety, and resource bounds selecte
 
 ### Required information
 
-Only the offer text, optional reference, and the minimum operational information justified by the pilot's published abuse/resource design may be collected.
+Only the offer text, optional reference, optional featured-question identifier, and the minimum operational information justified by the pilot's published abuse/resource design may be collected.
 
 No identity or origin declaration is required.
 
@@ -99,8 +99,9 @@ The experimental ingress layer may:
 
 - accept an offer into temporary non-canonical state;
 - apply published resource/safety bounds;
-- identify obvious duplicates or related material;
+- identify exact duplicates or related material;
 - group or synthesize related offers for evidence review;
+- create bounded review packets that preserve disagreement and outliers;
 - surface material to an authorized institutional layer for further consideration.
 
 It may not automatically:
@@ -111,60 +112,129 @@ It may not automatically:
 - grant a capability or participant standing;
 - create a reputation record;
 - require a steward to provide an individualized response;
-- infer or rank participant origin or identity.
+- infer or rank participant origin or identity;
+- turn repetition, cluster size, delivery method, or a hidden machine score into substantive priority.
 
 ### Potential outcomes
 
 The participant-facing vocabulary should support at least:
 
 - `received` — accepted into the experimental buffer;
-- `related` — grouped or linked with materially related offers;
+- `grouped` — linked with materially related offers;
 - `synthesized` — represented within a synthesis for institutional learning;
 - `deferred` — retained for later handling within the published retention window;
 - `expired` — removed from the experimental buffer without further promised processing;
 - `not accepted` — rejected at the ingress boundary under a published resource/safety rule;
-- `surfaced` — passed onward for further institutional consideration.
+- `surfaced` — passed onward for further institutional consideration;
+- `withdrawn` — removed from active experimental state using the offer receipt.
 
 These states do not imply that the offer is true, false, good, bad, endorsed, canonical, published, or granted governance weight unless a separate authorized process explicitly creates such a consequence.
 
-### Escalation and review
+## Triage and review at zero, ordinary, and flood volume
+
+The pilot does not treat the Offer Buffer as a popularity-ranked inbox or as a first-come-first-served governance queue.
+
+The review rule from ADR 0019 is:
+
+```text
+compress repetition
+preserve meaningful difference
+escalate consequence, not volume
+```
+
+### Intake and grouping
+
+Acceptance checks format, safety, resource bounds, and overload only. It is not a merit decision.
+
+After acceptance:
+
+- a featured evidence-question identifier routes an offer into that question's review context but does not increase priority;
+- exact duplicate text may be detected from the content hash and grouped while each offer retains its own receipt and withdrawal path;
+- related material may be grouped into temporary thematic clusters;
+- automated or machine-assisted clustering/summarization may help compress volume, but remains advisory and below institutional authority.
+
+No grouping or review rule may use presumed participant identity/origin, account history, financial support, delivery method, credential strength, or hidden reputation.
+
+### Review coverage
+
+Unresolved material is organized into four categories:
+
+1. current evidence questions;
+2. corrections and challenges to Hummingbird's existing record or assumptions;
+3. new or unclassified themes;
+4. singletons and outliers.
+
+Every non-empty category should receive representation in a review packet before additional capacity is repeatedly spent on one category. Exact duplicates are compressed before this coverage step so repetition cannot occupy the queue by sheer volume.
+
+If capacity remains bounded after category coverage, remaining material is advanced primarily by oldest waiting material after duplicate compression, not by largest cluster size. When singleton/outlier material still exceeds capacity, a documented deterministic rotating sample may be used so rare material remains visible without pretending every item received bespoke review.
+
+A review packet should preserve the core claim, material disagreement or uncertainty, and enough internal linkage to inspect the underlying temporary offers if necessary. Machine summaries are working compression, not institutional truth.
+
+### What gets surfaced
+
+Material becomes eligible for `surfaced` status because of consequence, not popularity. Examples include a plausible correction to Hummingbird's public record, material evidence for a named open question or gate, a change affecting rights/authority/security/privacy/canonical memory/shared resources, an operational problem a lower layer cannot resolve, or a materially distinct counterexample that would be lost by a cluster summary.
+
+Frequency alone is not a surfacing criterion. A large cluster may demonstrate salience or load; it does not outrank a consequential singleton by being louder.
+
+### Steward involvement
+
+Routine receipt, duplicate detection, grouping, synthesis, and review-packet construction stay below the steward where possible. The steward receives a bounded packet, an individual offer whose meaning cannot safely be compressed, or a matter that genuinely requires present residual authority.
+
+Escalation records why the lower layer could not resolve the matter. Reaching the steward creates no additional deliberative weight.
+
+### If almost nothing arrives
+
+Low volume is a valid experimental result. Hummingbird does not manufacture activity or infer consensus from silence. A small number of offers may be represented directly without elaborate clustering. If nothing meaningful arrives, the evidence record should say so.
+
+### If the pilot is flooded
+
+Accepted offers are not silently dropped merely because the queue becomes large. They may remain `received`, `grouped`, or `deferred` until processed, withdrawn, surfaced, or expired under the ordinary retention rule.
+
+If the buffer or review pipeline cannot safely absorb more accepted material, Hummingbird should use published backpressure or temporarily pause new acceptance before the queue becomes unsafe or misleading. A request that cannot be durably accepted receives no receipt and is reported as `not accepted`.
+
+The pilot does not promise a fixed review deadline or individualized response. An accepted offer may expire after the ordinary 30-day retention period without further institutional consequence, and that possibility must be visible before acceptance.
+
+## Escalation and review
 
 Routine experimental handling should remain below the steward whenever possible. A matter should escalate only where the lower layer lacks authority or capability to handle it under the published contract.
 
-The pilot must not invent a durable appeal/identity system merely to support low-consequence temporary ingress. Before deployment, the handling contract must nevertheless state whether any correction, withdrawal, or reconsideration path exists and what continuity evidence, if any, is required to use it.
+The pilot does not invent a durable appeal/identity system merely to support low-consequence temporary ingress. ADR 0018 supplies the pilot-scoped continuity mechanism: a private receipt controls status and withdrawal for one accepted offer. Corrections use withdraw-and-reoffer rather than permanent edit history.
 
-## Pre-deployment decisions still required
+## Remaining pre-deployment implementation checks
 
-The pilot may be built before all Phase 3 blockers are resolved, but it must not go live until these pilot-scoped decisions are explicit and tested:
+The pilot-scoped semantic choices are now published in ADRs 0017–0019. The write path must still remain closed until the implementation proves those choices rather than merely describing them.
 
-1. runtime and deployment boundary;
-2. storage boundary separate from canonical admission semantics;
-3. payload size/format bounds;
-4. retention duration for offers;
-5. minimal rate-limit/abuse state and retention;
-6. duplicate/replay handling;
-7. overload/backpressure behavior;
-8. acknowledgement/receipt semantics;
-9. correction/withdrawal behavior, if any;
-10. incident/shutdown behavior;
-11. buffer-loss/recovery expectation;
-12. production health/acceptance tests for the write path and unchanged public-read plane.
+Before opening the pilot, Hummingbird must complete and test at least:
 
-These are minimum safe-pilot choices, not universal answers to the corresponding Phase 3 questions.
+1. the dedicated `OFFER_DB` provider binding and experimental migration;
+2. the basic no-JavaScript GET/POST offer path with the published payload limits;
+3. edge resource/backpressure controls that fail before unnecessary application writes where practical;
+4. transactional acceptance and one-time receipt generation;
+5. receipt-based status and withdrawal behavior;
+6. reliable expiry cleanup within the published post-expiry cleanup target;
+7. duplicate grouping and a review-packet path consistent with ADR 0019, including outlier/singleton coverage;
+8. an operational pause/shutdown path that does not damage the public read plane;
+9. production acceptance tests for success, validation failure, storage failure, overload/not-accepted behavior, withdrawal, expiry, and unchanged public-read accessibility.
+
+These are minimum safe-pilot implementation checks, not universal answers to the corresponding Phase 3 questions.
 
 ## Evidence review
 
 The project should periodically publish a compact evidence summary rather than raw participant telemetry. Useful observations include:
 
-- number/range of accepted offers at a coarse level appropriate to privacy and correlation risk;
-- duplication/relatedness patterns;
-- synthesis usefulness;
-- capacity or abuse failures;
+- whether participation was zero, low, moderate, or overload-inducing;
+- coarse accepted/withdrawn/expired/surfaced ranges appropriate to privacy and correlation risk;
+- exact-duplicate and relatedness patterns;
+- the number or coarse size bands of working clusters;
+- whether singleton/outlier coverage changed what the synthesis noticed;
+- synthesis usefulness and preserved disagreement;
+- capacity, backpressure, or abuse failures;
 - unexpected participant expectations;
 - friction or accessibility problems;
+- where routine handling still depended unnecessarily on the steward;
 - which open questions gained meaningful evidence and which did not.
 
-Volume is not a vote. The evidence summary should not turn offer count into governance weight.
+Volume is not a vote. The evidence summary must not turn offer count, cluster size, or repetition into governance weight.
 
 ## Exit / expansion rule
 
