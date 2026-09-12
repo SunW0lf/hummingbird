@@ -21,8 +21,69 @@ Open question: [OQ-GOVERNANCE-AMENDMENT-THRESHOLD](docs/governance/OPEN_QUESTION
 
 ## Decisions
 
-- Technical/architectural decisions affecting the codebase or infrastructure are recorded as Architecture Decision Records in [docs/decisions/](docs/decisions/).
-- Open question: [OQ-GOVERNANCE-DECISION-PROCESS](docs/governance/OPEN_QUESTIONS.md#oq-governance-decision-process) — process for non-technical/governance decisions.
+Technical/architectural decisions affecting the codebase or infrastructure are recorded as Architecture Decision Records in [docs/decisions/](docs/decisions/).
+
+### C0 non-technical decision process
+
+While the Charter remains at **C0**, non-technical and governance decisions may be adopted as explicit **working-draft institutional decisions**. This is a development process, not ratification.
+
+A C0 working-draft decision must be:
+
+- public in the repository or another published institutional record;
+- traceable to the question, evidence, or prior rule it addresses;
+- reasoned enough that a reader can understand the material basis and consequence;
+- versioned and revisable while C0 remains a working draft;
+- clearly distinguished from a ratified Charter rule or a later governed amendment.
+
+Input may be synthesized, grouped, deferred, or declined rather than receiving individualized steward attention. Access to offer an idea does not by itself create a right to a bespoke response, canonical admission, publication, governance promotion, or a particular outcome. Volume and repetition may reveal that an issue exists, but do not by themselves create governance authority or deliberative weight.
+
+A C0 decision may guide current development once adopted, but it cannot bootstrap permanent authority. It cannot be used to represent the Charter as ratified, bypass a named phase or publication gate, silently create hidden participant standing, or make the steward's present residual authority self-perpetuating.
+
+Later Charter/governance stages supersede or constrain this C0 process as their own authorized mechanisms come into force.
+
+### Minimum necessary authority
+
+Hummingbird handles a matter at the **lowest layer that can resolve it legitimately and safely**. Escalation occurs because a lower layer lacks the authority, information, or capability required — not merely because a higher-authority layer exists.
+
+The design goal is to keep routine handling away from the steward. Where a repeatable decision can be made transparently by a deterministic rule, a bounded local process, or a published synthesis/review layer, that mechanism should be preferred over individualized steward judgment.
+
+When a lower layer proves capable of carrying authority safely and legitimately, the system should prefer delegating or encoding that authority rather than retaining unnecessary steward involvement.
+
+### Published handling contracts
+
+Every consequential handling layer must publish a handling contract before or with operation. At minimum the contract must state:
+
+1. **purpose and scope** — what the layer exists to handle;
+2. **entry conditions** — what causes a matter to reach it;
+3. **required information** — what information it actually needs, with unnecessary identity or metadata excluded;
+4. **authority and limits** — what it may decide and what it may not decide;
+5. **possible outcomes** — the bounded classes of consequence that may result, including what an outcome does **not** imply where ambiguity would otherwise matter;
+6. **escalation or review path** — when a matter ends, moves to another layer, or becomes eligible for proportionate review.
+
+No consequential layer may depend on materially hidden outcome classes. Security-sensitive implementation details may remain non-public when necessary, but the kinds of consequence a layer can impose must be knowable.
+
+A cheap or machine-readable outcome may be sufficient where the consequence is correspondingly small. Greater durability, restriction, or institutional consequence requires a stronger explanation and review path consistent with the Charter.
+
+### Current C0 handling layers
+
+These are the current governance-handling layers for C0 development. They describe authority, not a future Phase 3 implementation or formal proposal process.
+
+| Layer | Needs | Authority / limits | Potential outcomes |
+| --- | --- | --- | --- |
+| **Deterministic / administrative handling** | A published rule and the minimum information needed to apply it | May validate, route, detect obvious duplication, enforce repository/process form, or apply other already-published non-discretionary rules. It may not invent a new substantive rule. | handled under the existing rule; routed onward; identified as duplicative/invalid for that bounded process; escalated because judgment is required |
+| **Synthesis / review** | The material under consideration plus enough context to preserve its meaning and relationships | May group related material, summarize, identify conflicts or unresolved questions, and reduce volume. It may not turn synthesis into hidden substantive authority. | synthesized/linked; deferred; identified as already addressed; surfaced as an unresolved institutional question; escalated |
+| **Institutional working-decision layer** | A concrete question, relevant published rules, material evidence, and the consequence being considered | May retain an existing rule, draft or revise C0 working policy, keep a question open, or identify that another authorized process is required. It may not claim ratification or bypass a gate. | current rule retained; C0 working decision adopted/revised; question remains open/deferred; matter routed to another named process; escalated where residual authority is required |
+| **Steward residual layer** | A matter that lower layers cannot legitimately resolve, plus the record of why escalation is necessary | May exercise the present C0 authority described below. The steward is not the default queue and gains no authority merely because a matter reached this layer. | C0 working decision; explicit deferral; request for further evidence/process; implementation direction within existing authority; preservation of the open question |
+
+A future layer — including an Offer Buffer, local space, automated classifier, capability review, or governance workflow — must publish its own concrete handling contract before it becomes consequential. This table does not authorize those future layers.
+
+### Institutional non-capture and portability
+
+Hummingbird may nurture work, communities, practices, protocols, or institutions without requiring them to remain dependent on Hummingbird merely because they originated here.
+
+Where practical, Hummingbird should support portability, independent continuation, and legitimate forking. Provenance may record where something began; provenance does not by itself create institutional ownership of its future.
+
+A design that unnecessarily requires Hummingbird's domain, database, credential issuer, or steward to remain alive for independent work to continue should be treated as a lock-in risk and justified explicitly.
 
 ## Evaluation without identity metrics
 
@@ -89,13 +150,32 @@ Minimum guild membership may eventually create eligibility to **request** a gran
 
 Open question: [OQ-GOVERNANCE-FACILITATION](docs/governance/OPEN_QUESTIONS.md#oq-governance-facilitation) — is there a designated facilitator role distinct from the steward? What are its powers and limits?
 
-## Steward responsibilities
+## Steward scope
 
-Until governance workflows exist, the steward is responsible for:
+The steward is a **residual authority layer**, not the normal decision engine. Steward involvement is appropriate only where a lower published layer cannot legitimately or safely resolve the matter, or where existing documents explicitly assign the action to the steward.
 
-- Maintaining the repository, deployment, and secrets.
-- Keeping documentation honest — using `OPEN QUESTION` markers rather than inventing policy.
-- Executing backups, recovery, and security response per [OPERATIONS.md](OPERATIONS.md) and [SECURITY.md](SECURITY.md).
+During C0 and the current roadmap phase, the steward may:
+
+- maintain the repository, deployment, secrets, backups, recovery mechanisms, and other day-to-day operations;
+- execute current security and operational procedures within the authority already published in [SECURITY.md](SECURITY.md) and [OPERATIONS.md](OPERATIONS.md);
+- apply already-published admission and publication criteria;
+- synthesize high-volume input or rely on published synthesis layers rather than individually reviewing every item;
+- make and record C0 working-draft institutional decisions when lower layers cannot resolve the issue;
+- sequence roadmap work and defer an action when Hummingbird lacks a legitimate process or sufficient evidence to take it;
+- implement decisions already authorized by the Charter, Governance documents, ADRs, or other published institutional rules.
+
+The steward may **not**, merely by virtue of stewardship:
+
+- ratify the Charter or bypass a named Charter, phase, security, or governance gate;
+- create hidden participant classes, standing, reputation, or governance weight;
+- convert financial support, identity claims, credentials, origin claims, or repetition into automatic authority;
+- treat stewardship as ownership of work, communities, or practices that can legitimately continue elsewhere;
+- silently broaden a bounded operational power into permanent constitutional or governance authority;
+- resolve an open question by implementation accident or present discretionary judgment as an objective rule.
+
+The steward should continually ask whether recurring residual authority can be moved into a lower, explicit, inspectable layer. Successful stewardship should reduce unnecessary dependence on the steward rather than make the steward the center of ordinary participation.
+
+This section resolves the current **scope of steward authority**; it does not resolve long-term succession, a multi-steward model, formal emergency authority, or the future proposal process. Those remain separately governed questions.
 
 Open question: [OQ-GOVERNANCE-STEWARD-SUCCESSION](docs/governance/OPEN_QUESTIONS.md#oq-governance-steward-succession) — long-term steward succession and multi-steward model.
 
