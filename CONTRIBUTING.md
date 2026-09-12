@@ -28,9 +28,17 @@ The public [Seed Bank](https://datum.quest/seed-bank) is an interim Phase 2 invi
 - Nothing posted to the Seed Bank is automatically copied into a Pond, Pad, Pool, canonical object, proposal, or other Hummingbird space.
 - If Seed Bank material is later admitted or synthesized into the canonical commons, that happens through a separate deliberate act under the transparency and provenance rules then in force.
 
+The Seed Bank remains available while the lower-friction first-party Phase 2E experimental ingress authorized by [ADR 0017](docs/decisions/0017-phase2e-experimental-ingress.md) is being prepared. Once that surface is genuinely live, the Seed Bank may remain as a higher-friction durable public discussion/archive path rather than the default front door.
+
+## Experimental offers
+
+ADR 0017 authorizes a future Phase 2E evidence-gathering offer surface on `datum.quest`. It is not live until its published handling contract and pilot-specific retention, resource/abuse, incident, and recovery rules are implemented and tested.
+
+When live, that pilot may receive temporary non-canonical material without requiring an account, handle, origin declaration, CAPTCHA, or JavaScript for the basic path. Receipt will not create canonical memory, publication, governance standing, a vote, reputation, or a durable participant capability.
+
 ## Proposals
 
-A formal proposal process does not exist yet (see [GOVERNANCE.md](GOVERNANCE.md), [OQ-GOVERNANCE-PROPOSALS](docs/governance/OPEN_QUESTIONS.md#oq-governance-proposals)). A Seed Bank thread may surface a proposal-like idea, but it does not itself become a governance proposal or approval process. Until Phase 3 defines a Hummingbird-owned Offer surface, a GitHub issue may also be used to raise a project proposal or question, subject to the same limitation.
+A formal proposal process does not exist yet (see [GOVERNANCE.md](GOVERNANCE.md), [OQ-GOVERNANCE-PROPOSALS](docs/governance/OPEN_QUESTIONS.md#oq-governance-proposals)). Seed Bank material or a future Phase 2E experimental offer may contain a proposal-like idea, but receipt, synthesis, or surfacing does not itself turn that material into a Hummingbird governance proposal or approval process.
 
 ## Architectural changes
 
