@@ -64,6 +64,9 @@ const PUBLIC_DECISIONS = [
   "0015-standards-based-representation-discovery-and-provenance",
   "0016-offers-and-the-offer-buffer",
   "0017-phase2e-experimental-ingress",
+  "0018-phase2e-offer-pilot-runtime-and-data-boundary",
+  "0019-phase2e-offer-triage-and-review",
+  "0020-phase2e-offer-pilot-launch-profile",
 ];
 
 const REQUIRED_SEED_FORMS = [
@@ -155,6 +158,9 @@ if (fs.existsSync(decisionsPath)) {
     "0015-standards-based-representation-discovery-and-provenance.html",
     "0016-offers-and-the-offer-buffer.html",
     "0017-phase2e-experimental-ingress.html",
+    "0018-phase2e-offer-pilot-runtime-and-data-boundary.html",
+    "0019-phase2e-offer-triage-and-review.html",
+    "0020-phase2e-offer-pilot-launch-profile.html",
   ];
   for (const phrase of requiredPhrases) {
     if (!decisions.includes(phrase)) fail(`decisions.html is missing required decision boundary: ${phrase}`);
@@ -250,6 +256,7 @@ for (const url of [
   "https://datum.quest/decisions/0013-public-read-accessibility",
   "https://datum.quest/decisions/0016-offers-and-the-offer-buffer",
   "https://datum.quest/decisions/0017-phase2e-experimental-ingress",
+  "https://datum.quest/decisions/0020-phase2e-offer-pilot-launch-profile",
   "https://datum.quest/records/contribution-visible-consequence",
 ]) {
   if (!sitemap.includes(`<loc>${url}</loc>`)) fail(`sitemap.xml is missing ${url}`);

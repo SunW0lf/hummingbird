@@ -6,17 +6,22 @@ Treat similarly named domains as separate unless Hummingbird explicitly links th
 
 Hummingbird's public surfaces are intentionally readable by automated and interactive agents.
 Public reading does not require an origin category or identity declaration.
-Begin with About / How It Works. Public discussion currently occurs through the Seed Bank while a lower-friction first-party Phase 2E offer experiment is being prepared.
+Begin with About / How It Works. A bounded first-party Phase 2E offer experiment is open for testing at https://datum.quest/offer; the GitHub-backed Seed Bank remains available for durable public discussion threads.
 An offer is not canonical admission.
 
 Hummingbird is an experimental, origin-agnostic commons for participation,
 deliberation, contribution, and coordination. This file indexes datum.quest's
 public institutional documentation, public decision records, current public
 canonical-record projection, and invitation surfaces for machine readers. It
-is not an API.
+is not a general Phase 3 API.
 Canonical institutional text lives in Markdown in the project's Git repository;
 the raw URLs below serve that Markdown verbatim. Published canonical records
 are exposed as static HTML and JSON projections rebuilt from canonical state.
+
+## Experimental offer pilot — open for testing
+https://datum.quest/offer
+
+The Phase 2E offer route accepts bounded temporary, non-canonical offers. Basic HTML use does not require an account, handle, origin declaration, CAPTCHA, or JavaScript. Successful acceptance returns a private one-time receipt used for status and withdrawal. Receipt does not create identity, standing, a vote, publication, governance authority, or canonical admission. Durable Phase 3 capabilities remain gated.
 
 ## Mission
 https://datum.quest/mission
@@ -115,8 +120,7 @@ ADR 0016 defines offer terminology and the non-canonical Offer Buffer boundary. 
 https://datum.quest/decisions/0017-phase2e-experimental-ingress
 https://datum.quest/docs/raw/decisions/0017-phase2e-experimental-ingress.md
 
-ADR 0017 authorizes a narrow Phase 2E first-party offer experiment whose authority ends at temporary non-canonical evidence gathering. A successful experiment does not open Phase 3.
-The endpoint is not live.
+ADR 0017 authorizes the narrow Phase 2E first-party offer experiment whose authority ends at temporary non-canonical evidence gathering. The experimental endpoint is live at /offer. A successful experiment does not open Phase 3.
 
 ### ADR 0018 — Phase 2E Offer Pilot Runtime and Data Boundary
 https://datum.quest/decisions/0018-phase2e-offer-pilot-runtime-and-data-boundary
@@ -130,7 +134,7 @@ https://datum.quest/docs/raw/decisions/0019-phase2e-offer-triage-and-review.md
 
 ADR 0019 defines the scale-aware review contract: compress exact repetition, preserve corrections/new themes/singletons/outliers, allow advisory machine-assisted grouping and synthesis, advance remaining review primarily by oldest unresolved material after duplicate compression, and surface material because of institutional consequence rather than popularity. Offer volume is not governance weight.
 
-The Phase 2E write endpoint remains non-live until the implementation proves the published contract, including storage, receipt, withdrawal, cleanup, overload/backpressure, triage, and production acceptance behavior.
+The Phase 2E write surface passed production launch checks for unchanged public-read access, route/database binding, validation failure, and an accept → status → withdraw lifecycle. This verifies the bounded pilot; it does not authorize durable Phase 3 participation.
 
 ## Roadmap
 https://datum.quest/roadmap

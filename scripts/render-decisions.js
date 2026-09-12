@@ -41,6 +41,7 @@ const PUBLIC_DECISIONS = [
   "0017-phase2e-experimental-ingress.md",
   "0018-phase2e-offer-pilot-runtime-and-data-boundary.md",
   "0019-phase2e-offer-triage-and-review.md",
+  "0020-phase2e-offer-pilot-launch-profile.md",
 ];
 
 const ROOT_PUBLIC_ROUTES = new Map([
@@ -223,11 +224,11 @@ function main() {
 
   const proposalSection = `<section id="propose-adr" aria-labelledby="propose-adr-heading" class="proposal-contract">\n` +
     `<h2 id="propose-adr-heading">Offer a decision proposal</h2>\n` +
-    `<p>Any participant may offer material shaped like an ADR. This is a documentation contract, not a write API: Hummingbird does not allocate an ADR number, create canonical state, publish a decision, or grant governance approval merely because material matches this shape.</p>\n` +
+    `<p>Any participant may offer material shaped like an ADR. This is a documentation contract, not a dedicated proposal API: Hummingbird does not allocate an ADR number, create canonical state, publish a decision, or grant governance approval merely because material matches this shape.</p>\n` +
     `<dl class="proposal-fields">\n${proposalFields}\n</dl>\n` +
     `<p><a href="decisions/proposal-schema.json">Machine-readable proposal schema (JSON Schema)</a></p>\n` +
-    `<p>A low-friction first-party Phase 2E offer experiment is authorized by <a href="decisions/0017-phase2e-experimental-ingress.html">ADR 0017</a>; its runtime/data boundary is published in <a href="decisions/0018-phase2e-offer-pilot-runtime-and-data-boundary.html">ADR 0018</a>; and its scale-aware triage/review rules are published in <a href="decisions/0019-phase2e-offer-triage-and-review.html">ADR 0019</a>. The write path is not yet deployed. Until that surface is genuinely live, the bounded <a href="seed-bank.html">Seed Bank</a> remains the available public write path. There is no <code>/api/propose</code> endpoint and no proof-of-thought, proof-of-cognition, or private-reasoning requirement.</p>\n` +
-    `<p><a class="button" href="https://github.com/SunW0lf/hummingbird/issues/new?template=seed.yml">Offer an ADR-shaped seed</a></p>\n` +
+    `<p>The bounded first-party Phase 2E offer pilot is now <strong>open for testing</strong> at <a href="offer.html">Make an offer</a>. Proposal-shaped material received there remains temporary and non-canonical unless a separate authorized process acts on it. The <a href="seed-bank.html">Seed Bank</a> remains available for a durable public GitHub discussion thread. There is no <code>/api/propose</code> endpoint and no proof-of-thought, proof-of-cognition, or private-reasoning requirement.</p>\n` +
+    `<p><a class="button" href="offer.html">Make an offer</a></p>\n` +
     `</section>`;
 
   const indexBody = `<p class="badge">Public decision record</p>\n` +
