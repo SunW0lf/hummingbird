@@ -70,3 +70,8 @@ jobs:
         env:
           HEALTHCHECK_URL: https://datum.quest
         run: ./scripts/healthcheck
+
+      - name: Production Phase 2E offer lifecycle smoke test
+        env:
+          HEALTHCHECK_URL: https://datum.quest
+        run: node scripts/offer-healthcheck.mjs
