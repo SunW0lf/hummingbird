@@ -94,9 +94,9 @@ Phase 2C proved the complete boundary rather than merely implementing static pag
 
 ### Phase 2D — Publication buffer, backup, and recovery
 
-Status: **in progress — recovery and publication-buffer proof complete; ordinary independent-backup checkpoint remains**
+Status: **complete**
 
-Phase 2D focuses on durability and safe operational transparency rather than adding new participation features.
+Phase 2D focused on durability and safe operational transparency rather than adding new participation features.
 
 Completed evidence:
 
@@ -112,15 +112,12 @@ Completed evidence:
 - cleaned up the disposable recovery database after the exercise;
 - retained the pre-success failure observations because they demonstrate fail-closed behavior before production mutation;
 - emitted the narrowly permitted 30-day public-equivalent backup artifact only after proving the production canonical set exactly matched already-public `publication/canonical` state;
-- released the compact material operational record of the recovery exercise in [TRANSPARENCY.md](TRANSPARENCY.md), preserving the consequential outcome while omitting credentials, provider database identifiers, exact request timing, source/network metadata, raw telemetry, and unnecessary infrastructure detail.
+- released the compact material operational record of the recovery exercise in [TRANSPARENCY.md](TRANSPARENCY.md), preserving the consequential outcome while omitting credentials, provider database identifiers, exact request timing, source/network metadata, raw telemetry, and unnecessary infrastructure detail;
+- established the ordinary independent private-backup path: production canonical state is exported read-only, validated, encrypted to a steward-held `age` recipient, and retained as ciphertext plus checksum in the dedicated private backup repository;
+- independently retrieved a retained encrypted bundle, decrypted it with the off-platform steward-held identity, and validated the recovered portable bundle with repository tooling;
+- moved the same validated private-backup path to a daily repository-controlled schedule while preserving the explicit manual trigger and keeping the decryption identity outside GitHub and Cloudflare.
 
-Remaining work:
-
-- confirm the ordinary independent-storage path for future backups when canonical state includes drafts or otherwise non-public records, since public GitHub artifacts are only allowed for the bounded public-equivalent exercise;
-- mark the milestone complete only after that ordinary independent-backup checkpoint is steward-confirmed;
-- hand off cleanly to Phase 2E review rather than using recovery success as an implicit Phase 3 authorization.
-
-**Exit:** backup and restore have been exercised successfully against current production canonical state through an isolated replacement database, canonical/read-model equivalence has been demonstrated after recovery, and the minimized recovery outcome has crossed the publication-buffer/transparency boundary. Phase 2D remains open only until the normal independent-backup rule is operationally clear.
+**Exit satisfied:** backup and restore have been exercised successfully against current production canonical state through an isolated replacement database, canonical/read-model equivalence has been demonstrated after recovery, the minimized recovery outcome has crossed the publication-buffer/transparency boundary, and the ordinary independently retained encrypted backup has been retrieved, decrypted, and validated outside the hosting/provider boundary. This completes Phase 2D without authorizing Phase 3.
 
 ### Phase 2E — Phase review and Phase 3 gate
 
@@ -132,10 +129,10 @@ Phase 2E also includes a deliberately narrow evidence-gathering ingress track un
 
 #### Phase 2E.1 — Evidence and Phase 2 review
 
-- Verify Phase 2A–2D evidence and close factual documentation gaps.
-- Complete the Phase 2D ordinary independent-backup checkpoint.
+- Verify Phase 2A–2D evidence and close factual documentation gaps. Phase 2D is now complete, including the ordinary independent-backup checkpoint.
 - Review the Seed Bank experiment and document what it taught—and did not establish—about participation, moderation, provider dependence, abuse, metadata, and friction.
 - Resolve or deliberately defer with rationale the remaining Phase 2 review-gate questions for steward succession, incident response, monitoring cadence, and deployment-token rotation. The C0 non-technical decision process and steward scope are already resolved in [GOVERNANCE.md](GOVERNANCE.md).
+- Continue reducing operational friction where doing so does not decide gated policy. The `canonical-candidate-v1` envelope is the first such layer: machines may prepare and validate candidate draft records from bounded source material, but the envelope is explicitly non-canonical and cannot admit, publish, or grant governance status to itself.
 
 #### Phase 2E.P — Experimental ingress pilot
 
