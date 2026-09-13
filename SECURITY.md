@@ -88,7 +88,24 @@ Public source, history, forks, repository Actions logs, and public Seed Bank thr
 
 ## Incident response
 
-Open question: [OQ-SECURITY-INCIDENT-RESPONSE](docs/governance/OPEN_QUESTIONS.md#oq-security-incident-response) — formal incident response process. Until defined, the steward is the operational point of contact.
+Phase 2 uses a small operational incident lifecycle while the mature participant-facing Phase 3 process remains open under [OQ-SECURITY-INCIDENT-RESPONSE](docs/governance/OPEN_QUESTIONS.md#oq-security-incident-response). The full Phase 2E.1 disposition is recorded in [ADR 0022](docs/decisions/0022-phase2e1-review-gate-dispositions.md).
+
+An incident is a credible event involving plausible compromise, unauthorized mutation, exposure of secrets or non-public material, loss/corruption of canonical state, material loss of recoverability, sustained attack/resource exhaustion, or material violation of a published security/privacy boundary. Loss of a key or recovery capability may qualify even without an attacker.
+
+The Phase 2 lifecycle is:
+
+1. **Recognize / declare.** The steward may treat a credible material threat as an incident before proof is complete.
+2. **Contain reversibly where practicable.** Existing operational authority may be used to pause a bounded experimental surface, revoke/rotate credentials, stop a workflow or deployment, isolate suspect state, preserve a snapshot, roll back code, fail closed, or use an already-authorized recovery path.
+3. **Preserve minimum necessary evidence.** Keep only the evidence needed to understand and remediate the event when preservation does not prolong harm. Security-sensitive evidence follows the retention rules below rather than becoming permanent by default.
+4. **Recover and verify.** Recovery is not complete merely because a page responds. Re-establish trust in the affected capability: code/provenance, credentials, canonical state, backup/recovery state, and production health as applicable.
+5. **Record and disclose proportionately.** Restricted exploit/security detail may remain private while necessary; a later public institutional record should preserve material consequence, response, recovery status, and durable corrective action while minimizing secrets, participant material, provider identifiers, and correlation-rich telemetry.
+6. **Close and learn.** Record residual risk and corrective action, and verify temporary containment measures were removed or separately authorized rather than becoming permanent policy by inertia.
+
+Hummingbird distinguishes ordinary observations from incidents and critical incidents. A critical incident includes loss of trust in canonical integrity, material secret/control-plane compromise, material private-data exposure, or inability to trust or recover production state. A more detailed mature severity model remains Phase 2E.3 work.
+
+**Containment authority derives from authority published before the incident, not from the existence or severity of the incident itself.** An incident does not grant new constitutional, governance, exclusion, canonical-deletion, participant-restriction, or emergency authority. Permanent participant exclusion, suspension of governance rights, secret constitutional change, or other exceptional authority remains governed by the still-open participant-rights/exclusion/emergency questions.
+
+The steward remains the current Phase 2 operational point of contact. Single-contact unavailability is an acknowledged residual continuity risk and is handled by the succession/continuity design rather than by inventing unauthorized emergency governance.
 
 ## Vulnerability reporting
 
