@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Check out public review exporter
+      - name: Check out public review and candidate tooling
         uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           repository: SunW0lf/hummingbird
@@ -37,13 +37,21 @@ jobs:
           CLOUDFLARE_D1_RECOVERY_TOKEN: ${{ secrets.CLOUDFLARE_D1_RECOVERY_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
         run: |
+          set -euo pipefail
           mkdir -m 700 review
           node source/scripts/export-offer-review.mjs review/packet.json
 
-      - name: Retain private review packet for one day
+      - name: Prepare validated non-canonical candidates
+        run: |
+          set -euo pipefail
+          node source/scripts/prepare-offer-candidates.mjs \
+            review/packet.json \
+            --output-dir review/candidates
+
+      - name: Retain private review packet and candidates for one day
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: offer-review
-          path: review/packet.json
+          path: review/
           retention-days: 1
           if-no-files-found: error
