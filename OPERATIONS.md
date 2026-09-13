@@ -17,7 +17,7 @@ Phase 2 is intentionally staged:
 1. **2A — Canonical contract/reference corpus.** No production database required. Schema and fixture contract must pass CI.
 2. **2B — Persistence/import.** Provision D1, apply versioned migrations, ingest storage-independent records deterministically, and prove export equivalence.
 3. **2C — Public read model/admission.** Build rebuildable projections and demonstrate explicit external-source → canonical-admission behavior.
-4. **2D — Publication buffer/backup/recovery.** Implement delayed/coarsened publication where required, export D1 independently, and restore into empty state.
+4. **2D — Publication buffer/backup/recovery — complete.** Independent encrypted retention, restore, semantic equivalence, and publication-buffer behavior have been exercised.
 5. **2E — Phase review.** Review the Seed Bank experiment and Phase 2 operational/governance review gates before considering Phase 3.
 
 See [ROADMAP.md](ROADMAP.md).
@@ -46,6 +46,23 @@ derived from D1 and do not initiate admission or publication. The private
 packet's `observed_at` and `unresolved_count` must be checked against the latest
 successful public run before declaring the inbox clear or taking action.
 
+The review packet can now be processed locally/private-side with
+`scripts/prepare-offer-candidates.mjs`. The tool deterministically turns each
+exact-text review group into a `canonical-candidate-v1` envelope, preserves each
+offer as a source reference, validates the proposed draft record against the
+existing guarded admission contract, and writes only candidate files plus a
+manifest. This step performs no network access and no canonical mutation.
+Repeated identical offers remain multiple source references, not votes or
+priority weight. Semantic grouping/synthesis beyond exact text remains a later
+advisory step and must preserve corrections, disagreement, and singletons.
+
+A candidate envelope is deliberately weaker than admission. It must remain
+`candidate_only`, require explicit admission, and cannot carry receipt secrets,
+provider database identifiers, participant profiles, source IPs, fingerprints,
+or similar request metadata. A reviewed candidate may later be passed through
+the existing steward-only admission path, but candidate generation itself never
+changes D1, publication state, or governance status.
+
 ## Backup
 
 Current durable production state includes the Git repository, deliberately admitted canonical records in Cloudflare D1, and provider-authoritative external records that Hummingbird references rather than clones. The Phase 2 reference corpus under `fixtures/canonical/` is version-controlled contract material, not a backup of production application state.
@@ -60,18 +77,11 @@ The exporter is read-only against D1. It reconstructs canonical objects and rela
 
 Production backup bundles must remain outside the public repository, outside the public web root, and outside the live D1 service as an independently retrievable copy. `.hummingbird-backups/` is ignored only as a local convenience; an ignored directory on the same machine is not sufficient disaster recovery.
 
-The prepared ordinary retention path is the manually dispatched **Phase 2D
-Private Canonical Backup** workflow. It validates and public-key encrypts the
-portable bundle before committing only ciphertext and its checksum to the
-dedicated private `SunW0lf/hummingbird-backups` repository. The `age` private
-identity remains steward-held outside GitHub and Cloudflare. A successful push
-does not close Phase 2D by itself: retrieve, decrypt, and validate the retained
-bundle independently according to
-[the recovery protocol](docs/protocols/PHASE_2D_RECOVERY.md#ordinary-private-retention-checkpoint).
+The ordinary retention path is the **Phase 2D Private Canonical Backup** workflow. It runs daily on a repository-controlled schedule and retains the manually confirmed trigger for deliberate extra checkpoints. Each run exports canonical production state read-only, validates the portable bundle, public-key encrypts it to the configured `age` recipient, removes runner plaintext, and commits only ciphertext plus its transport checksum to the dedicated private `SunW0lf/hummingbird-backups` repository using a destination-scoped credential. The `age` private identity remains steward-held outside GitHub and Cloudflare.
 
-During the current low-write steward-controlled phase, create and independently retain a verified portable backup after each deliberate durable canonical mutation, and before/after maintenance or migration activity that could materially affect canonical state. Add scheduled backup cadence only when mutation frequency makes it useful.
+The ordinary independent-retention checkpoint has been completed: a retained ciphertext bundle was retrieved from the private repository, decrypted with the off-platform steward-held identity, and the recovered portable bundle passed `./scripts/restore ... --validate-only`. This closes Phase 2D's independent-backup requirement while keeping decryption capability outside the hosting and source-control providers.
 
-A provider-native D1 export may supplement this bundle but does not replace the storage-independent canonical backup requirement.
+The daily schedule is the baseline recovery-point cadence during the current low-write phase. Use the retained manual trigger before and after maintenance, migration, or deliberate canonical mutation when a tighter recovery point is materially useful. A provider-native D1 export may supplement this bundle but does not replace the storage-independent canonical backup requirement.
 
 The first remote recovery drill used a narrow exception because the workflow first proved that the complete production canonical set exactly matched already-public `publication/canonical` state. Only then was a short-lived public GitHub Actions artifact permitted. That exception does not authorize public artifact storage for future backups containing drafts or other non-public canonical state.
 
@@ -285,7 +295,7 @@ The public-repository security activation is complete. Repository Actions are re
 - Review and merge pull requests only after required CI passes.
 - Review Dependabot pull requests and security alerts; do not auto-merge dependency changes without CI.
 - Keep canonical schema, reference corpus, migrations, and data-model documentation aligned.
-- Create/retain a verified portable canonical backup after deliberate durable canonical mutation during the current low-write phase.
+- Check that scheduled encrypted canonical backups remain successful; use the manual backup trigger before/after maintenance, migration, or deliberate canonical mutation when a tighter recovery point is useful.
 - Review public Seed Bank activity for abuse/safety issues without treating popularity as governance weight.
 - Review Cloudflare public-read settings after material provider-policy changes so benign `GET`/`HEAD` access remains consistent with ADR 0013 without weakening network/DDoS or mutation-path protections.
 - Revisit the broad public-read Skip expression before any non-public, authenticated, expensive, or abuse-sensitive `GET` endpoint is added.
