@@ -15,6 +15,7 @@ node --check scripts/promote-publication.js
 node --check scripts/admit-draft-d1.js
 node --check scripts/mark-published-d1.js
 node --check scripts/validate-canonical-candidate.js
+node --check scripts/prepare-offer-candidates.mjs
 node --check scripts/export-canonical-backup.js
 node --check scripts/restore-canonical-backup.js
 node --check scripts/phase2d-remote-recovery-drill.js
@@ -32,6 +33,7 @@ node scripts/admit-draft-d1.js admissions/candidates/seed15-visible-consequence.
 
 echo "Validating non-canonical candidate-envelope boundary..."
 node tests/canonical-candidate.test.js
+node tests/offer-candidate-preparation.test.js
 
 echo "Running site smoke tests..."
 node tests/site.test.js
