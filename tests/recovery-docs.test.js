@@ -16,6 +16,7 @@ function fail(message) {
   console.error(`FAIL: ${message}`);
 }
 
+const architecture = read("ARCHITECTURE.md");
 const operations = read("OPERATIONS.md");
 const transparency = read("TRANSPARENCY.md");
 const roadmap = read("ROADMAP.md");
@@ -25,6 +26,12 @@ const backup = read("scripts/backup");
 const restore = read("scripts/restore");
 
 for (const [name, content, markers] of [
+  ["Architecture", architecture, [
+    "Candidate preparation layer — live tooling",
+    "Phase 2D is complete",
+    "ordinary canonical backup workflow now runs daily",
+    "automatic canonical writes remain undeployed",
+  ]],
   ["Operations", operations, [
     "Cloudflare D1 is now the production persistence engine",
     "portable canonical exporter",
@@ -78,6 +85,8 @@ for (const [name, content, markers] of [
 }
 
 for (const [name, content, stale] of [
+  ["ARCHITECTURE.md", architecture, "Phase 2D remains open for steward confirmation"],
+  ["ARCHITECTURE.md", architecture, "private channel is prepared in source but is not yet an active, verified review interface"],
   ["OPERATIONS.md", operations, "No production application database exists yet"],
   ["TRANSPARENCY.md", transparency, "There is not yet a production application database"],
   ["TRANSPARENCY.md", transparency, "Phase 2D remains open only for confirmation"],
