@@ -1,6 +1,6 @@
 # Phase 2E.1 Closeout Record
 
-Status: **closeout in progress — evidence before authority**
+Status: **closeout waiting on review-gate dispositions — evidence before authority**
 
 Review date: 2026-09-12
 
@@ -43,13 +43,20 @@ The first-party `/offer` pilot remains a bounded temporary, non-canonical eviden
 
 The private companion workflow in `SunW0lf/Sunbird-Offers` has been updated so its hourly review run prepares the validated candidate envelopes locally before retaining the one-day private review artifact. The public repository contains the corresponding template, operating guidance, and CI contract.
 
-At the time of this closeout record, the first **scheduled** private review run on the upgraded companion commit has not yet been observed. The newest observed scheduled private run succeeded on the pre-upgrade commit. Therefore this record distinguishes:
+The upgraded private workflow has now been operationally exercised on its own `main` commit through a narrowly scoped self-verification push trigger. The run completed the same review job used by the hourly schedule: public candidate tooling checkout, active-offer export, candidate preparation, and one-day private artifact retention all succeeded.
 
-- **implemented and CI-tested:** review-packet -> candidate-envelope preparation;
-- **deployed in the private companion:** upgraded hourly workflow;
-- **still awaiting operational observation:** the first scheduled post-upgrade private run and its retained candidate manifest/artifact structure.
+The retained artifact was inspected for structure only, without exposing offer bodies. It contained:
 
-No inference is made from that pending observation about offer quality, participant intent, demand, or future governance authority.
+- `packet.json` using review-packet version 2;
+- `candidates/manifest.json` using manifest version 1;
+- `authority: "candidate_only"`;
+- `unresolved_count: 0`;
+- `candidate_count: 0`;
+- an empty candidate list for the empty inbox.
+
+This is useful operational evidence: an empty review set passes through the upgraded pipeline without fabricating candidate material, and the candidate manifest preserves its non-authorizing boundary. The self-verification trigger is limited to changes to the private workflow file on `main`; the normal hourly schedule and manual dispatch remain available.
+
+No inference is made from the empty inbox about offer quality, participant intent, demand, or future governance authority.
 
 ## Phase 2E.1 review-gate questions
 
@@ -69,9 +76,9 @@ Recommended disposition: **retain the current Phase 2 steward-contact baseline a
 
 ### OQ-OPS-MONITORING-CADENCE
 
-Current evidence: production deployment includes CI/build/health checks; the Phase 2E offer pilot has a scheduled public pending-count observer and an hourly private review path; canonical backups are scheduled daily. These are real scheduled checks, so the old framing of “scheduled monitoring versus manual healthcheck only” is no longer an accurate description of the operating system.
+Current evidence: production deployment includes CI/build/health checks; the Phase 2E offer pilot has a scheduled public pending-count observer and an hourly private review path; canonical backups are scheduled daily. The private review workflow also self-verifies changes to its own workflow definition after merge to the private companion's `main`. These are real scheduled/event-driven checks, so the old framing of “scheduled monitoring versus manual healthcheck only” is no longer an accurate description of the operating system.
 
-Recommended disposition: **re-scope rather than prematurely choose a universal cadence**. Record the existing per-surface scheduled checks as the Phase 2 baseline and decide the durable Phase 3 monitoring/alerting cadence against the Phase 3 threat and runtime model in Phase 2E.3.
+Recommended disposition: **re-scope rather than prematurely choose a universal cadence**. Record the existing per-surface scheduled/event-driven checks as the Phase 2 baseline and decide the durable Phase 3 monitoring/alerting cadence against the Phase 3 threat and runtime model in Phase 2E.3.
 
 ### OQ-OPS-TOKEN-ROTATION-CADENCE
 
@@ -103,13 +110,13 @@ The existence of a working offer pilot, automated candidate preparation, complet
 - [x] Record Seed Bank evidence limits.
 - [x] Verify every unresolved question has a named gate classification in the authoritative registry.
 - [x] Reduce operational friction without changing canonical-admission authority: candidate-envelope validation and preparation are implemented and deployed.
-- [ ] Observe one successful scheduled private review run on the upgraded candidate-preparation workflow and verify only the private artifact structure/manifest needed for operational evidence.
+- [x] Observe one successful private review run on the upgraded candidate-preparation workflow and verify only the private artifact structure/manifest needed for operational evidence.
 - [ ] Steward records a disposition for the four remaining Phase 2 review-gate questions above: resolve now or explicitly defer with rationale in their substantive documents.
-- [ ] Update the main Phase 2 evidence review/roadmap/changelog as needed after those two closeout checkpoints are complete.
+- [ ] Update the main Phase 2 evidence review/roadmap/changelog as needed after that final closeout checkpoint is complete.
 
 ## Next work after Phase 2E.1
 
-Once the two unchecked closeout items are complete, Phase 2E.2 should begin with the constitutional cluster rather than with implementation:
+Once the remaining review-gate dispositions are recorded, Phase 2E.2 should begin with the constitutional cluster rather than with implementation:
 
 1. minimum participant rights;
 2. exclusion conditions and protections;
@@ -122,4 +129,4 @@ Only after those constraints are known should Phase 2E.3 decide durable authenti
 
 ## Non-authorizing conclusion
 
-Phase 2E.1 is very close to factual closeout, but it is not yet complete. The remaining work is deliberately small: observe the upgraded scheduled private-review run and record the steward's disposition of the four review-gate questions. Neither task authorizes Phase 3 or automatic canonical mutation.
+Phase 2E.1 is factually ready for closeout except for the steward's disposition of the four remaining Phase 2 review-gate questions. Recording those dispositions does not itself authorize Phase 3 or automatic canonical mutation; it only completes the Phase 2 review-gate bookkeeping needed before the constitutional and security/runtime work proceeds.
