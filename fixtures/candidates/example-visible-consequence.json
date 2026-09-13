@@ -1,0 +1,35 @@
+{
+  "candidate_version": 1,
+  "candidate_id": "candidate-visible-consequence-v1",
+  "generated_at": "2026-09-12T00:00:00Z",
+  "record": {
+    "id": "contribution-visible-consequence-candidate-example",
+    "type": "contribution",
+    "schema_version": 1,
+    "created_at": "2026-09-12T00:00:00Z",
+    "state": "draft",
+    "content": {
+      "title": "Visible consequence without engagement pressure",
+      "body": "A candidate can preserve the meaning of incoming material while remaining explicitly outside canonical memory until a separate admission decision occurs.",
+      "format": "text/plain"
+    },
+    "relationships": []
+  },
+  "sources": [
+    {
+      "source_ref": "example:noncanonical-source",
+      "kind": "other",
+      "note": "Reference fixture only; not production institutional memory."
+    }
+  ],
+  "derivation": {
+    "method": "machine_assisted_synthesis",
+    "source_count": 1,
+    "machine_assisted": true,
+    "note": "Demonstrates candidate preparation without canonical admission."
+  },
+  "admission": {
+    "status": "candidate_only",
+    "requires_explicit_admission": true
+  }
+}

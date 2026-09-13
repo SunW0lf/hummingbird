@@ -1,6 +1,6 @@
 # Phase 2D — Canonical Backup and Recovery Protocol
 
-Status: **remote production-state recovery and minimized public record complete; ordinary independent private-backup confirmation remains**
+Status: **complete — remote recovery, publication-buffer record, and ordinary independent private-backup validation exercised**
 
 This protocol defines how Hummingbird backs up and recovers canonical application state without making Cloudflare D1 table layout, provider database identifiers, or public read projections the institution's only recovery source.
 
@@ -64,16 +64,17 @@ The first production exercise may use steward-controlled encrypted/offline stora
 A GitHub Actions artifact in this public repository is **not** a generally acceptable storage location for canonical backups because repository readers can retrieve public-repository artifacts. The one-shot Phase 2D drill contains a narrow safety exception: it uploads a backup artifact only after proving that every canonical record in the production backup is in a public lifecycle state **and** the full reconstructed canonical set deep-equals the already-public `publication/canonical` projection. If any draft or otherwise non-public canonical state exists, the workflow fails before artifact upload and the independent-retention exit criterion remains unsatisfied until a private storage path is used.
 
 The ordinary Phase 2D destination is the dedicated private
-`SunW0lf/hummingbird-backups` repository. The manually dispatched
-`.github/workflows/phase2d-private-backup.yml` workflow validates the portable
-bundle, encrypts it with an `age` public recipient, removes plaintext from the
-runner, and commits only the ciphertext and its SHA-256 transport checksum to
-that repository. Its dedicated repository credential may write only to the
-private backup destination. The corresponding `age` identity/private key must
-remain outside GitHub and outside Cloudflare; loss of that identity makes the
-retained ciphertext unrecoverable.
+`SunW0lf/hummingbird-backups` repository. The
+`.github/workflows/phase2d-private-backup.yml` workflow runs daily on a
+repository-controlled schedule and retains a manually confirmed trigger for
+extra checkpoints. It validates the portable bundle, encrypts it with an `age`
+public recipient, removes plaintext from the runner, and commits only the
+ciphertext and its SHA-256 transport checksum to that repository. Its dedicated
+repository credential may write only to the private backup destination. The
+corresponding `age` identity/private key remains outside GitHub and outside
+Cloudflare; loss of that identity makes the retained ciphertext unrecoverable.
 
-Before the first run, the steward must configure:
+The steward configured:
 
 - `HUMMINGBIRD_BACKUP_AGE_RECIPIENT` as a repository variable containing the
   public `age1...` recipient generated from a steward-held identity;
@@ -117,8 +118,10 @@ Validation recomputes every record digest and the bundle digest without touching
 
 ### Ordinary private-retention checkpoint
 
-Run **Phase 2D Private Canonical Backup** manually with the exact confirmation
-phrase `retain private canonical backup`. After the workflow succeeds:
+The **Phase 2D Private Canonical Backup** workflow may be run manually with the
+exact confirmation phrase `retain private canonical backup` when a deliberate
+checkpoint is needed in addition to the daily schedule. To verify independent
+recoverability:
 
 1. retrieve the `.tar.gz.age` file and adjacent `.sha256` file from the private
    backup repository using an account independent of Cloudflare;
@@ -136,8 +139,11 @@ phrase `retain private canonical backup`. After the workflow succeeds:
    bundle, private key, repository credential, provider database identifiers,
    or correlation-rich execution details.
 
-The workflow's successful push proves encrypted retention. Phase 2D closes only
-after this separate retrieval, decryption, and validation check also succeeds.
+This checkpoint has been completed successfully once against an ordinary
+retained private backup. The successful push proved encrypted retention; the
+separate retrieval, decryption, and validate-only check proved that the
+retention path is independently usable. Future periodic exercises should repeat
+that proof without publishing private backup contents.
 
 ## Restore contract
 
@@ -221,11 +227,11 @@ Provider logs, public projections, caches, or GitHub issue history are not subst
 
 ## Recovery point rule
 
-During the low-write steward-controlled phase, the minimum practical recovery rule is:
+During the low-write steward-controlled phase, the baseline practical recovery rule is:
 
-> Create and independently retain a verified portable backup after each deliberate durable canonical mutation, or before/after any migration or maintenance action that could materially affect canonical state.
+> Retain a validated encrypted portable backup on the daily schedule, and use the manual checkpoint before/after any migration, maintenance action, or deliberate canonical mutation when losing the interval since the last scheduled backup would be materially consequential.
 
-A later scheduled cadence may supplement this rule when mutation frequency grows. Hummingbird should not add high-frequency backup automation merely to appear mature.
+The daily schedule is intentionally modest. Hummingbird should increase backup frequency only when observed mutation volume or recovery-point requirements justify it, rather than adding high-frequency automation merely to appear mature.
 
 ## Phase 2D recovery evidence
 
@@ -239,4 +245,12 @@ The first real recovery exercise using current production canonical data succeed
 - safe cleanup of the disposable recovery database;
 - documented pre-success failure observations without mutation of production canonical state.
 
-The recovery exercise and its compact public operational record are complete. The remaining Phase 2D checkpoint is steward confirmation that a verified portable backup of canonical state containing drafts or other non-public records can be retained and retrieved independently outside the public repository, public Actions artifacts, public web root, and live D1 service. The public-equivalent artifact from this exercise does not satisfy that ordinary private-backup requirement. Phase 2D remains open until the ordinary path is confirmed; recovery success does not authorize Phase 3.
+The ordinary private-retention checkpoint also succeeded and demonstrated:
+
+- encrypted retention outside the live D1 service and public repository;
+- independent retrieval of retained ciphertext;
+- decryption using the steward-held identity outside GitHub and Cloudflare;
+- validate-only verification of the recovered portable bundle;
+- a sustainable daily encrypted-retention path with an explicit manual checkpoint option.
+
+The recovery exercise, compact public operational records, and ordinary independent private-backup confirmation are complete. **Phase 2D is closed.** This durability result does not authorize Phase 3, automatic canonical admission, or any expansion of participant authority.

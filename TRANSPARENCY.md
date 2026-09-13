@@ -17,7 +17,9 @@ admitted, or published. See
 [ADR 0021](docs/decisions/0021-offer-review-visibility.md) and
 [OPERATIONS.md](OPERATIONS.md#phase-2e-offer-review).
 
-Phase 2D has now exercised the portable production backup/recovery path end-to-end against an isolated disposable replacement database. The material outcome is released below as the first compact public operational record prepared through the publication buffer. Phase 2D remains open only for confirmation of the ordinary independent private-backup path used when canonical state includes non-public records.
+Phase 2D is complete. Hummingbird exercised the portable production backup/recovery path end-to-end against an isolated disposable replacement database, published the material recovery outcome through the publication buffer, then completed the ordinary independent-retention checkpoint by retrieving an encrypted private backup, decrypting it with the steward-held identity outside GitHub/Cloudflare, and validating the recovered portable bundle. The same encrypted private-backup path now runs daily while retaining a deliberate manual trigger for tighter checkpoints.
+
+A new `canonical-candidate-v1` preparation layer can turn bounded review material into machine-validatable candidate draft records without touching canonical D1. Candidate preparation is explicitly non-canonical: it cannot admit, publish, grant governance status, or convert offer repetition into voting weight.
 
 ## Phase 2 model
 
@@ -72,6 +74,12 @@ Pre-success attempts stopped before production mutation or public artifact relea
 
 **Publication-buffer handling:** the public record retains the material outcome and safety boundary while omitting credentials, provider database identifiers, exact request timing, source/network metadata, raw telemetry, and unnecessary infrastructure detail. Provider execution history remains authoritative for its own operational detail.
 
+### Public operational record — 2026-09 ordinary private-backup closeout
+
+**Outcome: succeeded.** The ordinary backup workflow produced an encrypted canonical recovery bundle in the dedicated private backup repository. A retained ciphertext bundle was independently retrieved, decrypted using the steward-held identity outside GitHub and Cloudflare, and the recovered portable bundle passed the repository's validate-only restore checks. The encrypted retention workflow now runs daily and still supports an explicit manual checkpoint.
+
+**Publication-buffer handling:** this record reports the durability outcome and separation of custody without publishing the backup contents, decryption identity, repository credential, provider database identifiers, exact execution timing, or other correlation-rich operational detail. Completing this checkpoint closes Phase 2D; it does not authorize Phase 3 or automatic canonical admission.
+
 ## Canonical backup transparency
 
 Canonical recovery bundles are operational recovery artifacts, not public datasets by default. They may contain durable canonical records that are not currently published, including drafts. Therefore:
@@ -82,6 +90,8 @@ Canonical recovery bundles are operational recovery artifacts, not public datase
 - public read projections remain rebuildable outputs and are not substitutes for canonical backups.
 
 The first remote recovery drill used a narrow exception because the workflow first proved that the complete production canonical set was exactly equivalent to already-public `publication/canonical` state. Only then was a short-lived public Actions artifact permitted. That exception does not authorize public artifact storage for future backups containing drafts or other non-public canonical state.
+
+The ordinary path is separate: portable canonical state is validated, encrypted to a steward-held `age` recipient, and only ciphertext plus a transport checksum is retained in the private backup repository. The decryption identity remains outside GitHub and Cloudflare. Independent retrieval/decryption/validation has been exercised successfully; scheduled retention does not make the private repository canonical and does not remove the need for periodic recovery testing.
 
 ## Repository publication
 

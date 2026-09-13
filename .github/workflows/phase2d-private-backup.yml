@@ -7,6 +7,10 @@ on:
         description: Type "retain private canonical backup"
         required: true
         type: string
+  schedule:
+    # Daily, off the top of the hour. Scheduled runs use the same validated,
+    # encrypted private-repository path as the manually confirmed workflow.
+    - cron: "17 11 * * *"
 
 permissions:
   contents: read
@@ -18,7 +22,7 @@ concurrency:
 jobs:
   retain:
     name: Encrypt and retain canonical backup
-    if: "${{ inputs.confirmation == 'retain private canonical backup' }}"
+    if: "${{ github.event_name == 'schedule' || inputs.confirmation == 'retain private canonical backup' }}"
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
