@@ -1,4 +1,4 @@
-// Guards the Phase 2D recovery truth sweep and changelog record.
+// Guards the Phase 2D recovery truth sweep and closeout record.
 "use strict";
 
 const fs = require("fs");
@@ -42,27 +42,26 @@ for (const [name, content, markers] of [
     "That exception does not authorize public artifact storage for future backups containing drafts or other non-public canonical state",
   ]],
   ["Roadmap", roadmap, [
-    "replaced the original Phase 0 backup/restore no-ops",
-    "recovery and publication-buffer proof complete; ordinary independent-backup checkpoint remains",
-    "Remaining work:",
-    "released the compact material operational record of the recovery exercise",
-    "ordinary independent-backup checkpoint is steward-confirmed",
+    "### Phase 2D — Publication buffer, backup, and recovery",
+    "Status: **complete**",
+    "independently retrieved a retained encrypted bundle",
+    "moved the same validated private-backup path to a daily repository-controlled schedule",
+    "This completes Phase 2D without authorizing Phase 3",
     "disposable replacement D1 database",
   ]],
   ["Recovery protocol", protocol, [
     "Hummingbird must be able to lose its live database without losing institutional meaning",
     "Storage boundary",
     "Recovery point rule",
-    "remote production-state recovery and minimized public record complete; ordinary independent private-backup confirmation remains",
     "Execution observations and successful exercise",
     "The guarded REST-based retry completed successfully on 2026-09-11",
     "D1 REST API",
-    "Phase 2D remains open until the ordinary path is confirmed; recovery success does not authorize Phase 3",
   ]],
   ["Changelog", changelog, [
-    "Published the smallest material public operational record of the successful Phase 2D recovery exercise",
+    "Closed Phase 2D after the ordinary independent private-backup checkpoint was completed",
+    "independently retrieved from the private backup repository",
+    "Added the first automation layer between temporary evidence and canonical admission",
     "Completed the first guarded remote production-state recovery drill for Phase 2D",
-    "the public release while preserving the ordinary-backup checkpoint",
     "Accepted [ADR 0016]",
     "Accepted [ADR 0015]",
   ]],
@@ -75,9 +74,8 @@ for (const [name, content, markers] of [
 for (const [name, content, stale] of [
   ["OPERATIONS.md", operations, "No production application database exists yet"],
   ["TRANSPARENCY.md", transparency, "There is not yet a production application database"],
-  ["ROADMAP.md", roadmap, "run the read-only portable backup exporter against current production D1"],
-  ["ROADMAP.md", roadmap, "the compact material operational record of the successful recovery exercise has been prepared for release"],
-  ["docs/protocols/PHASE_2D_RECOVERY.md", protocol, "guarded remote recovery drill in progress, not yet complete"],
+  ["ROADMAP.md", roadmap, "recovery and publication-buffer proof complete; ordinary independent-backup checkpoint remains"],
+  ["ROADMAP.md", roadmap, "Phase 2D remains open only until the normal independent-backup rule is operationally clear"],
   ["CHANGELOG.md", changelog, "This entry records preparation only — remote success is not claimed until the post-merge drill actually runs"],
   ["scripts/backup", backup, "No database exists yet"],
   ["scripts/restore", restore, "No database exists yet"],
@@ -93,6 +91,6 @@ if (failures > 0) {
   process.exit(1);
 }
 
-console.log("PASS: Phase 2D recovery proof and remaining transparency boundary are internally consistent");
-console.log("PASS: the minimized public record does not turn the public-equivalent artifact into a general backup policy");
-console.log("PASS: Phase 2D remains open only for ordinary independent private-backup confirmation");
+console.log("PASS: Phase 2D recovery, publication-buffer, and independent-backup closeout evidence are recorded");
+console.log("PASS: ordinary retained backups remain encrypted and separate from the bounded public-equivalent artifact exception");
+console.log("PASS: Phase 2D is complete without implying Phase 3 authorization");
