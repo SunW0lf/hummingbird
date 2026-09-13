@@ -1,0 +1,27 @@
+name: Public Read Monitor
+
+on:
+  schedule:
+    - cron: "17 */3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: public-read-monitor
+  cancel-in-progress: true
+
+jobs:
+  healthcheck:
+    name: Plain-HTTP public read health
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+
+      - name: Check public read plane
+        env:
+          HEALTHCHECK_URL: https://datum.quest
+        run: ./scripts/healthcheck
