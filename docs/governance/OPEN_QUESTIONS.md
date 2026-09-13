@@ -73,7 +73,8 @@ Status: OPEN.
 ### OQ-GOVERNANCE-STEWARD-SUCCESSION
 **Long-term steward succession and multi-steward model.**
 Raised in: [GOVERNANCE.md](../../GOVERNANCE.md).
-Review gate: during Phase 2.
+Phase 2 review disposition: deliberately deferred under [ADR 0022](../decisions/0022-phase2e1-review-gate-dispositions.md). Future design must distinguish operational custody, institutional stewardship, and governing authority; reduce material single-person continuity dependencies without treating custody as sovereignty; permit continued useful steward participation without founder/incumbent veto or permanent authority; and distinguish different succession/unavailability events rather than forcing one mechanism onto all of them.
+Review gate: Phase 2 review completed 2026-09-12; next substantive review during Phase 2E.2 after participant-rights, exclusion, emergency-authority, and proposal-governance constraints are clearer.
 Status: OPEN.
 
 ### OQ-GOVERNANCE-DISPUTES
@@ -149,23 +150,23 @@ Blocks: resource-amplifying pad/group/guild capabilities.
 Status: OPEN.
 
 ### OQ-SECURITY-INCIDENT-RESPONSE
-**Formal incident response process.** Until defined, the steward is the point of contact.
+**Mature Phase 3 incident-response process**, including participant-facing duties, multi-role response, and the boundary with any separately authorized emergency power. Phase 2 uses the smaller operational lifecycle in [ADR 0022](../decisions/0022-phase2e1-review-gate-dispositions.md): recognize/declare, reversible containment under existing authority, minimum necessary evidence preservation, verified recovery, proportionate disclosure, closure/learning, and no incident-created governance authority.
 Raised in: [SECURITY.md](../../SECURITY.md).
-Review gate: during Phase 2.
+Review gate: Phase 2 review completed 2026-09-12; next substantive review during Phase 2E.3 after rights/governance/authentication/runtime constraints are known.
 Status: OPEN.
 
 ## Operations
 
 ### OQ-OPS-MONITORING-CADENCE
-**Continuous/scheduled monitoring** versus manual `./scripts/healthcheck` runs only.
+**Durable Phase 3 monitoring/alerting model by capability**, including freshness semantics, ownership, independent corroboration where consequence warrants it, service expectations, and any explicitly pre-authorized automated mitigation. Phase 2 rejects one universal timer and uses the risk-based observable-capability model in [ADR 0022](../decisions/0022-phase2e1-review-gate-dispositions.md).
 Raised in: [OPERATIONS.md](../../OPERATIONS.md).
-Review gate: during Phase 2.
+Review gate: Phase 2 review completed 2026-09-12; next substantive review during Phase 2E.3.
 Status: OPEN.
 
 ### OQ-OPS-TOKEN-ROTATION-CADENCE
-**Exact cadence for rotating the Cloudflare deployment token.**
+**Durable Phase 3 credential lifecycle**, including secretless/expiring credential preference, inventory/custody, maximum-age policy by credential class, rotation/revocation verification, and continuity. Phase 2 uses the risk-based lifecycle in [ADR 0022](../decisions/0022-phase2e1-review-gate-dispositions.md), with immediate revocation/rotation on compromise or material scope/custody change and a 180-day ordinary review/maximum-lifetime baseline for the current production deployment token rather than a universal institutional cadence.
 Raised in: [OPERATIONS.md](../../OPERATIONS.md).
-Review gate: during Phase 2.
+Review gate: Phase 2 review completed 2026-09-12; next substantive review during Phase 2E.3.
 Status: OPEN.
 
 ## Licensing
