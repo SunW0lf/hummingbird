@@ -9,6 +9,14 @@ const workflow = fs.readFileSync("ops/offer-review-companion/review.yml", "utf8"
 assert(!fs.existsSync(".github/workflows/review.yml"), "private review workflow must not run in the public repository");
 assert.match(workflow, /retention-days: 1/);
 assert.match(workflow, /permissions:\n  contents: read/);
+assert.match(workflow, /prepare-offer-candidates\.mjs/,
+  "private review workflow must automatically prepare candidate envelopes");
+assert.match(workflow, /--output-dir review\/candidates/,
+  "candidate output must remain inside the private one-day review artifact");
+assert.match(workflow, /path: review\//,
+  "private artifact must retain packet plus candidate manifest/envelopes together");
+assert.doesNotMatch(workflow, /confirm-admission|mark-published-d1|CLOUDFLARE_API_TOKEN/,
+  "private review workflow must not gain canonical admission/publication authority");
 
 const directory = fs.mkdtempSync(path.join(os.tmpdir(), "hb-review-test-"));
 try {
@@ -43,8 +51,24 @@ try {
   assert.equal(packet.groups[0].members[1].reference_url, "https://example.org/context");
   assert(!JSON.stringify(packet).includes("receipt_hash"));
   assert.equal(fs.statSync(output).mode & 0o777, 0o600);
+
+  const candidateDir = path.join(directory, "candidates");
+  const prepare = spawnSync(process.execPath, ["scripts/prepare-offer-candidates.mjs", output, "--output-dir", candidateDir], {
+    encoding: "utf8",
+  });
+  assert.equal(prepare.status, 0, prepare.stderr);
+  assert.doesNotMatch(prepare.stdout + prepare.stderr, /private idea|opaque-1/i,
+    "candidate preparation must not echo private contents or offer IDs");
+  const manifest = JSON.parse(fs.readFileSync(path.join(candidateDir, "manifest.json"), "utf8"));
+  assert.equal(manifest.candidate_count, 1);
+  assert.equal(manifest.unresolved_count, 2);
+  assert.equal(manifest.authority, "candidate_only");
+  const candidate = JSON.parse(fs.readFileSync(path.join(candidateDir, manifest.candidates[0]), "utf8"));
+  assert.equal(candidate.sources.length, 2);
+  assert.equal(candidate.admission.status, "candidate_only");
+  assert.equal(candidate.admission.requires_explicit_admission, true);
 } finally {
   fs.rmSync(directory, { recursive: true, force: true });
 }
 
-console.log("offer review export checks passed");
+console.log("offer review export and automatic candidate preparation checks passed");
