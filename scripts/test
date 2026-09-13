@@ -14,6 +14,7 @@ node --check scripts/stage-public-d1.js
 node --check scripts/promote-publication.js
 node --check scripts/admit-draft-d1.js
 node --check scripts/mark-published-d1.js
+node --check scripts/validate-canonical-candidate.js
 node --check scripts/export-canonical-backup.js
 node --check scripts/restore-canonical-backup.js
 node --check scripts/phase2d-remote-recovery-drill.js
@@ -28,6 +29,9 @@ rm -f .tmp-offer-worker.mjs
 
 echo "Validating first Phase 2C draft-admission candidate without remote access..."
 node scripts/admit-draft-d1.js admissions/candidates/seed15-visible-consequence.json --validate-only
+
+echo "Validating non-canonical candidate-envelope boundary..."
+node tests/canonical-candidate.test.js
 
 echo "Running site smoke tests..."
 node tests/site.test.js
