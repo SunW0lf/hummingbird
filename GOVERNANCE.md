@@ -198,6 +198,18 @@ This section resolves the current **scope of steward authority**; it does not re
 
 Open question: [OQ-GOVERNANCE-STEWARD-SUCCESSION](docs/governance/OPEN_QUESTIONS.md#oq-governance-steward-succession) — long-term steward succession and multi-steward model.
 
+### Phase 2 succession review disposition
+
+The Phase 2 review of steward succession is complete under [ADR 0022](docs/decisions/0022-phase2e1-review-gate-dispositions.md), but the long-term succession question remains open for Phase 2E.2.
+
+The current steward may continue serving for as long as that service remains useful to the commons. Continued usefulness, founding history, tenure, expertise, financial support, or operational custody do not independently create permanent authority, a right to preserve the current structure, or an incumbent/founder veto. Successful stewardship reduces unnecessary dependence on the steward; it does not require excluding a steward who continues to contribute under the then-valid published rules.
+
+Future succession design must separate, wherever practicable, **operational custody**, **institutional stewardship**, and **governing authority**. Transfer of credentials, domains, backup/recovery assets, or other control-plane custody is not transfer of sovereignty. Material continuity dependencies should not remain indefinitely recoverable only through one person's availability, but reducing that single-person risk must not silently create governance authority for a custodian.
+
+A future legitimate governance process must be able to divide, narrow, restructure, or replace stewardship without requiring preservation of the founder's present role. Here, "legitimate" means valid under Hummingbird's then-applicable published governance; it does not presume a voting or other mechanism that has not yet been authorized.
+
+Future design should distinguish voluntary retirement, gradual delegation, temporary incapacity, death/unavailability, credential loss, misconduct, governance disagreement, and legitimate institutional forking rather than treating succession as one undifferentiated event.
+
 ## Disputes
 
 Open question: [OQ-GOVERNANCE-DISPUTES](docs/governance/OPEN_QUESTIONS.md#oq-governance-disputes) — dispute resolution process for participants or contributions.
