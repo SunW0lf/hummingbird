@@ -121,18 +121,28 @@ Completed evidence:
 
 ### Phase 2E — Phase review and Phase 3 gate
 
-Status: **in progress — review/gate plus bounded experimental ingress; Phase 3 remains blocked**
+Status: **in progress — Phase 2E.1 complete; Phase 2E.2 is next; bounded experimental ingress remains open; Phase 3 remains blocked**
 
-The evidence review, complete open-question inventory, recommended decision order, and Offer Buffer assumption audit are prepared in [docs/reviews/PHASE_2_EVIDENCE_AND_GATE_REVIEW.md](docs/reviews/PHASE_2_EVIDENCE_AND_GATE_REVIEW.md). That review records evidence and dependencies; it does not itself answer an open question or authorize Phase 3.
+The original evidence review, complete open-question inventory, recommended decision order, and Offer Buffer assumption audit were prepared in [docs/reviews/PHASE_2_EVIDENCE_AND_GATE_REVIEW.md](docs/reviews/PHASE_2_EVIDENCE_AND_GATE_REVIEW.md). It remains the historical evidence snapshot that began the review. The corrected current Phase 2E.1 state and final review-gate dispositions are recorded in [docs/reviews/PHASE_2E1_CLOSEOUT.md](docs/reviews/PHASE_2E1_CLOSEOUT.md) and [ADR 0022](docs/decisions/0022-phase2e1-review-gate-dispositions.md). None of those records authorizes Phase 3.
 
 Phase 2E also includes a deliberately narrow evidence-gathering ingress track under [ADR 0017](docs/decisions/0017-phase2e-experimental-ingress.md). The purpose is to learn from real participation before attempting to settle every unresolved question in the abstract. This track does not create durable participant authority and is not Phase 3.
 
 #### Phase 2E.1 — Evidence and Phase 2 review
 
-- Verify Phase 2A–2D evidence and close factual documentation gaps. Phase 2D is now complete, including the ordinary independent-backup checkpoint.
-- Review the Seed Bank experiment and document what it taught—and did not establish—about participation, moderation, provider dependence, abuse, metadata, and friction.
-- Resolve or deliberately defer with rationale the remaining Phase 2 review-gate questions for steward succession, incident response, monitoring cadence, and deployment-token rotation. The C0 non-technical decision process and steward scope are already resolved in [GOVERNANCE.md](GOVERNANCE.md).
-- Continue reducing operational friction where doing so does not decide gated policy. The `canonical-candidate-v1` envelope is the first such layer: machines may prepare and validate candidate draft records from bounded source material, but the envelope is explicitly non-canonical and cannot admit, publish, or grant governance status to itself.
+Status: **complete**
+
+Completed on 2026-09-12. See [Phase 2E.1 Closeout](docs/reviews/PHASE_2E1_CLOSEOUT.md) and [ADR 0022](docs/decisions/0022-phase2e1-review-gate-dispositions.md).
+
+- Verified Phase 2A–2D evidence and corrected the Phase 2D closeout state, including the ordinary independent encrypted-backup checkpoint.
+- Reviewed the Seed Bank/offer evidence without converting small-sample observations, provider metadata, or repetition into governance weight.
+- Operationally verified the upgraded private offer-review → `canonical-candidate-v1` preparation path; an empty inbox produced an empty `candidate_only` manifest rather than fabricated candidate material.
+- Recorded explicit Phase 2 review dispositions for steward succession, incident response, monitoring, and credential lifecycle. Deferred long-term questions remain `OPEN` with named Phase 2E.2/2E.3 review points rather than being silently removed from the registry.
+- Adopted a small Phase 2 incident lifecycle grounded only in already-published operational authority; incident declaration does not create emergency/governance/exclusion authority.
+- Reframed monitoring around observable capability contracts, freshness, data minimization, and separation of observation from authority; added scheduled public read-plane verification for degradation independent of deploys.
+- Reframed deployment-token rotation as a risk-based credential lifecycle, with immediate revocation/rotation triggers and a Phase 2 180-day ordinary review/maximum-lifetime baseline for the current deployment token rather than a universal institutional cadence.
+- Preserved the core automation boundary: candidate preparation may reduce review friction, but candidate envelopes remain non-canonical and cannot admit, publish, or grant governance status to themselves.
+
+**Exit satisfied:** the Phase 2 evidence/review checkpoint is complete without removing any Phase 3 blocker or authorizing automatic canonical mutation.
 
 #### Phase 2E.P — Experimental ingress pilot
 
@@ -166,14 +176,19 @@ Evidence from the pilot may inform unresolved questions. Volume or repetition is
 
 #### Phase 2E.2 — Constitutional and governance decisions
 
+Status: **next**
+
 - Resolve only the participant-rights, exclusion, participation-conditions, emergency-authority, and governance-proposal questions necessary to authorize Phase 3; bounded Phase 2E experiments may gather evidence relevant to those questions without silently resolving them.
 - Reconcile those decisions with steward scope, decision process, and the authority to consider, decline, admit, or publish offers.
+- Revisit long-term steward succession against the authority, rights, and emergency/proposal rules a future stewardship model would actually inherit.
 - Record each substantive decision in its authoritative Charter/Governance source and preserve ADR discipline where architectural consequences follow.
 
 #### Phase 2E.3 — Security, ingress, and runtime decisions
 
+Status: **pending Phase 2E.2 constraints**
+
 - Resolve the Phase 3 authentication/authorization, abuse-state retention, and application framework/runtime blockers after the relevant rights and governance constraints are known, using Phase 2E pilot evidence where useful.
-- Define Phase 3 ingress, overload, receipt, correction/withdrawal, incident, shutdown, and recovery behavior without treating pilot-scoped rules as automatic precedent.
+- Define the mature Phase 3 incident-response, monitoring/alerting, credential-lifecycle, ingress, overload, receipt, correction/withdrawal, shutdown, and recovery behavior without treating the Phase 2 baselines or pilot-scoped rules as automatic precedent.
 - Review [ADR 0016](docs/decisions/0016-offers-and-the-offer-buffer.md) and the [Phase 3 Offer Buffer working design](docs/protocols/PHASE_3_OFFER_BUFFER_DESIGN.md) against all resolved Phase 3 rights, governance, security, and runtime decisions.
 
 #### Explicit Phase 3 authorization
