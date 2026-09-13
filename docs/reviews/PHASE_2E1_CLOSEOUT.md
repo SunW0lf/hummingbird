@@ -1,10 +1,10 @@
 # Phase 2E.1 Closeout Record
 
-Status: **closeout waiting on review-gate dispositions — evidence before authority**
+Status: **complete — Phase 2 review-gate dispositions recorded; Phase 3 remains blocked**
 
 Review date: 2026-09-12
 
-This record updates the factual Phase 2E.1 state after the original Phase 2 evidence review. It does not resolve constitutional, governance, security-policy, authentication, exclusion, emergency-authority, or Phase 3 authorization questions. Where a review-gate question still requires judgment, this document records the evidence and a recommended disposition only.
+This record updates the factual Phase 2E.1 state after the original Phase 2 evidence review. It does not resolve constitutional, participant-rights, exclusion, emergency-authority, authentication, or Phase 3 authorization questions. The four remaining Phase 2 review gates were reviewed individually with the steward and their phase-bounded dispositions are now recorded in [ADR 0022](../decisions/0022-phase2e1-review-gate-dispositions.md), their substantive source documents, and the Open Questions Registry.
 
 ## What changed since the evidence review
 
@@ -13,7 +13,7 @@ The original Phase 2 evidence review is now stale in two factual respects:
 1. Phase 2D is no longer open. The ordinary independent private-backup checkpoint has been completed: a retained encrypted canonical bundle was independently retrieved from the dedicated private backup repository, decrypted with the steward-held `age` identity outside GitHub and Cloudflare, and validated with repository recovery tooling. The same validated export/encrypt/retain path is now scheduled daily while retaining a manual trigger.
 2. The Open Questions Registry now contains **23 unresolved questions**, not 25. `OQ-GOVERNANCE-DECISION-PROCESS` and `OQ-GOVERNANCE-STEWARD-SCOPE` were resolved in the substantive governance record and removed from the unresolved registry.
 
-The original review remains useful as the evidence snapshot that preceded those changes. This closeout record supersedes only the later factual state described above.
+The original review remains useful as the evidence snapshot that preceded those changes. This closeout record supersedes its later factual state and is the current Phase 2E.1 checkpoint.
 
 ## Phase 2A–2D status
 
@@ -58,39 +58,45 @@ This is useful operational evidence: an empty review set passes through the upgr
 
 No inference is made from the empty inbox about offer quality, participant intent, demand, or future governance authority.
 
-## Phase 2E.1 review-gate questions
+## Phase 2E.1 review-gate dispositions
 
-The remaining Phase 2 review gates are non-blocking questions that must be revisited before Phase 2 closes. This record does not resolve them by implementation drift.
+The four remaining Phase 2 review gates were explicitly reviewed rather than resolved by implementation drift. [ADR 0022](../decisions/0022-phase2e1-review-gate-dispositions.md) is the consolidated C0/Phase 2 decision record; the substantive Governance, Security, and Operations documents carry the corresponding current rules.
 
 ### OQ-GOVERNANCE-STEWARD-SUCCESSION
 
-Current evidence: steward scope and the C0 decision process are now defined, but Hummingbird has not yet established the participant-rights, exclusion, emergency-authority, or proposal-process rules that would constrain a long-term successor or multi-steward institution.
+**Disposition: deliberately deferred to Phase 2E.2 with constraints.** Long-term succession should be designed only after the rights, exclusion, emergency-authority, and proposal-governance constraints that a successor would inherit are clearer.
 
-Recommended disposition: **deliberately defer substantive succession design into Phase 2E.2**, where it can be reconciled with the constitutional and governance rules that a successor would actually inherit. Do not invent a succession mechanism merely to close Phase 2E.1.
+The review establishes continuity without entrenchment: the current steward may remain involved for as long as that service remains useful, but founding status, tenure, expertise, support, custody, or usefulness do not independently create permanent authority or a founder/incumbent veto. Future design must distinguish operational custody, institutional stewardship, and governing authority; reduce material single-person continuity dependencies without treating custody transfer as sovereignty; and distinguish voluntary transition, incapacity, unavailability, credential loss, misconduct, governance disagreement, and legitimate forking rather than assuming one succession mechanism fits all cases.
+
+The underlying question remains `OPEN` with its next substantive review in Phase 2E.2.
 
 ### OQ-SECURITY-INCIDENT-RESPONSE
 
-Current evidence: the repository has private vulnerability reporting, least-privilege deployment/recovery credentials, fail-closed recovery exercises, bounded experimental ingress, withdrawal/retention rules for offers, and a steward contact point. It does not yet have the durable Phase 3 threat model, authn/authz model, participant-rights regime, or emergency-authority decision needed for a complete interactive-system incident process.
+**Disposition: adopt a small Phase 2 incident lifecycle now; defer the mature Phase 3 regime to Phase 2E.3.** Phase 2 now defines recognition/declaration, reversible containment under already-published authority, minimum necessary evidence preservation, verified recovery, proportionate disclosure, closure/learning, and a critical-incident concept for loss of trust in canonical integrity, material secret/control-plane compromise, material private-data exposure, or inability to trust/recover production state.
 
-Recommended disposition: **retain the current Phase 2 steward-contact baseline and defer the full formal incident-response policy to Phase 2E.3**, after the relevant rights/governance constraints are known. Phase 3 must not be authorized without that formal process.
+An incident does not itself create emergency, exclusion, canonical-deletion, governance, or participant-restriction authority. Containment authority comes from authority published before the incident. The steward remains the current operational contact; single-contact unavailability remains an acknowledged continuity risk rather than a reason to invent emergency governance.
+
+The underlying mature incident-response question remains `OPEN` for Phase 2E.3.
 
 ### OQ-OPS-MONITORING-CADENCE
 
-Current evidence: production deployment includes CI/build/health checks; the Phase 2E offer pilot has a scheduled public pending-count observer and an hourly private review path; canonical backups are scheduled daily. The private review workflow also self-verifies changes to its own workflow definition after merge to the private companion's `main`. These are real scheduled/event-driven checks, so the old framing of “scheduled monitoring versus manual healthcheck only” is no longer an accurate description of the operating system.
+**Disposition: re-scope from a universal timer to observable capability contracts.** Monitoring now follows consequence and failure mode through event-driven verification, scheduled checks, and periodic exercises. Stale/failed observation means `unknown`, not healthy; monitoring remains failure-oriented rather than surveillance-oriented; observation does not acquire mutation or governance authority; and consequential claims should eventually gain independent corroboration where warranted.
 
-Recommended disposition: **re-scope rather than prematurely choose a universal cadence**. Record the existing per-surface scheduled/event-driven checks as the Phase 2 baseline and decide the durable Phase 3 monitoring/alerting cadence against the Phase 3 threat and runtime model in Phase 2E.3.
+The Phase 2 baseline includes deployment-triggered verification, the public offer observer, hourly private review/candidate preparation, daily encrypted canonical backup, deliberate recovery exercises/checkpoints, and a lightweight scheduled plain-HTTP public-read monitor for degradation that occurs independently of deployment. Cadences remain phase-specific operational parameters rather than permanent service promises.
+
+The durable Phase 3 monitoring/alerting question remains `OPEN` for Phase 2E.3.
 
 ### OQ-OPS-TOKEN-ROTATION-CADENCE
 
-Current evidence: credentials are separated by purpose and least privilege where practical; sensitive decryption material is kept outside GitHub/Cloudflare; no evidence reviewed establishes that an arbitrary calendar cadence would be safer than rotation on compromise, scope change, personnel/stewardship transition, provider guidance, or a defined maximum age.
+**Disposition: replace a universal calendar interval with a risk-based credential lifecycle.** Credentials should be purpose-specific and least-privileged; secretless/workload or narrowly scoped expiring credentials are preferred where practicable; compromise, unintended exposure, material custody/scope change, storage-boundary compromise, or loss of confidence about credential whereabouts requires immediate rotation/revocation; and a normal rotation is complete only after the replacement works and the predecessor is verified dead.
 
-Recommended disposition: **defer the exact durable cadence to Phase 2E.3 credential-lifecycle design**. Preserve immediate rotation on suspected compromise or material scope change as an operational expectation; do not encode an unsupported exact interval merely to remove an open question.
+For the current Phase 2 Pages deployment token, **180 days is the ordinary review / maximum-lifetime baseline**, not a permanent institutional cadence. Different credential classes may use different lifecycles, and credential custody does not confer governing authority.
 
-These recommendations are not resolutions. Resolving or explicitly deferring each question requires updating its substantive Governance, Security, or Operations source and the Open Questions Registry under the project's existing decision discipline.
+The broader durable Phase 3 credential-lifecycle question remains `OPEN` for Phase 2E.3.
 
 ## Remaining Phase 3 blockers
 
-The authoritative Open Questions Registry currently lists eight blockers for Phase 3 entry:
+The authoritative Open Questions Registry still lists eight blockers for Phase 3 entry:
 
 - `OQ-CHARTER-RIGHTS`
 - `OQ-CHARTER-EXCLUSION`
@@ -111,12 +117,12 @@ The existence of a working offer pilot, automated candidate preparation, complet
 - [x] Verify every unresolved question has a named gate classification in the authoritative registry.
 - [x] Reduce operational friction without changing canonical-admission authority: candidate-envelope validation and preparation are implemented and deployed.
 - [x] Observe one successful private review run on the upgraded candidate-preparation workflow and verify only the private artifact structure/manifest needed for operational evidence.
-- [ ] Steward records a disposition for the four remaining Phase 2 review-gate questions above: resolve now or explicitly defer with rationale in their substantive documents.
-- [ ] Update the main Phase 2 evidence review/roadmap/changelog as needed after that final closeout checkpoint is complete.
+- [x] Steward records explicit Phase 2 dispositions for succession, incident response, monitoring, and credential lifecycle without silently resolving the deferred long-term questions.
+- [x] Update the current roadmap/open-question/changelog record for the completed Phase 2E.1 checkpoint; the original evidence review remains a historical evidence snapshot and this closeout record carries the corrected current state.
 
 ## Next work after Phase 2E.1
 
-Once the remaining review-gate dispositions are recorded, Phase 2E.2 should begin with the constitutional cluster rather than with implementation:
+Phase 2E.2 should begin with the constitutional cluster rather than with implementation:
 
 1. minimum participant rights;
 2. exclusion conditions and protections;
@@ -125,8 +131,8 @@ Once the remaining review-gate dispositions are recorded, Phase 2E.2 should begi
 5. formal governance-proposal initiation and the authority to consider, decline, admit, or publish offers;
 6. succession reconciliation against those decisions.
 
-Only after those constraints are known should Phase 2E.3 decide durable authentication/authorization, abuse-state retention, framework/runtime, incident response, monitoring, token lifecycle, ingress overload, shutdown, and recovery behavior.
+Only after those constraints are known should Phase 2E.3 decide durable authentication/authorization, abuse-state retention, framework/runtime, mature incident response, monitoring/alerting, credential lifecycle, ingress overload, shutdown, and recovery behavior.
 
 ## Non-authorizing conclusion
 
-Phase 2E.1 is factually ready for closeout except for the steward's disposition of the four remaining Phase 2 review-gate questions. Recording those dispositions does not itself authorize Phase 3 or automatic canonical mutation; it only completes the Phase 2 review-gate bookkeeping needed before the constitutional and security/runtime work proceeds.
+**Phase 2E.1 is complete.** Its completion records evidence, closes the Phase 2 review checkpoint, and establishes only the phase-bounded operational rules needed to keep Hummingbird honest and operable while deeper questions remain open. It does not authorize Phase 3, remove any of the eight Phase 3 blockers, create automatic canonical mutation, or convert temporary experimental behavior into permanent governance precedent.
