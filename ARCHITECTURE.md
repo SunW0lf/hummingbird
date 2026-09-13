@@ -36,6 +36,7 @@ Cloudflare D1 (canonical store)
 - **`functions/offer/` + `lib/offer-runtime.mjs`** — bounded Phase 2E experimental ingress for offer acceptance, receipt-based status, and withdrawal. This runtime grants no durable participant capability or standing.
 - **Root Markdown + `docs/`** — authoritative institutional/project documentation and ADRs.
 - **`schemas/` + `fixtures/canonical/`** — Phase 2 storage-independent reference contract defined by ADR 0012. These fixtures are contract material, not production institutional memory.
+- **`schemas/canonical-candidate-v1.schema.json` + candidate preparation tooling** — a non-canonical automation layer that can turn bounded review material into machine-validatable draft candidates without remote access or admission authority. Candidate validity is preparation evidence only; it does not admit, publish, or grant governance status.
 - **Cloudflare D1 (canonical)** — current durable persistence engine for deliberately admitted canonical application records. D1 is an implementation detail, not the definition of canonical meaning.
 - **`OFFER_DB`** — separate Phase 2E D1 binding for temporary experimental offers. It is operational pilot state and is explicitly outside canonical backup/import/publication semantics.
 - **`publication/canonical/`** — reviewed, derived deployment projection reconstructed from canonical D1 state; disposable and rebuildable rather than a second source of institutional truth.
@@ -74,12 +75,14 @@ external offer/source (Seed Bank or Phase 2E /offer)
         ↓
 consideration / synthesis
         ↓
+non-canonical candidate preparation (optional, automatable)
+        ↓
 explicit admission decision
         ↓
 canonical Hummingbird object
 ```
 
-External discussion or an accepted experimental offer is never automatically copied into canonical storage. Making an offer, provider reactions, visible account identity, repetition, and popularity are not admission or governance signals by default.
+External discussion, an accepted experimental offer, or a valid candidate envelope is never automatically copied into canonical storage. Making an offer, provider reactions, visible account identity, repetition, candidate validity, and popularity are not admission or governance signals by default.
 
 ## Canonical versus implementation-specific state
 
@@ -89,7 +92,9 @@ D1 may use implementation-specific primary keys, indexes, normalized helper tabl
 
 The Phase 2E `OFFER_DB` is intentionally different: it is temporary operational evidence state, not a second canonical store. An experimental offer may influence a later explicit admission, but its temporary row is never converted in place into canonical memory.
 
-Derived artifacts such as indexes, caches, summaries, analytics, embeddings, and public projections are non-canonical unless a later decision explicitly says otherwise.
+Candidate envelopes are also intentionally non-canonical. They may preserve source coverage and derivation information useful during consideration, while the proposed draft record is validated against the existing admission contract. Candidate preparation tooling cannot call the guarded admission path with confirmation and cannot mutate D1. This lets Hummingbird automate clerical shaping and validation without moving authority into an implementation detail.
+
+Derived artifacts such as indexes, caches, summaries, analytics, embeddings, candidate envelopes, and public projections are non-canonical unless a later decision explicitly says otherwise.
 
 ## Representation discovery and provenance
 
@@ -124,6 +129,8 @@ temporary experimental OFFER_DB state (non-canonical)
         ↓
 exact-duplicate grouping / optional synthesis / evidence review
         ↓
+optional non-canonical candidate preparation
+        ↓
 possible surfacing to an already-authorized institutional layer
 ```
 
@@ -131,17 +138,11 @@ The live experimental layer may receive temporary offers and apply its published
 
 The launch profile uses bounded payloads, a 250-active-offer capacity ceiling, 30-day ordinary offer retention, one-time receipt secrets whose hashes are stored, receipt-based status/withdrawal, exact-text duplicate grouping, scheduled expiry cleanup, and fail-closed acceptance. The application store does not create participant profiles or retain raw IP addresses/browser fingerprints/user-agent history as offer records. These choices are deliberately phase-bounded evidence, not automatic Phase 3 precedent.
 
-The current operational read path is `OFFER_DB` → hourly public pending-count
-observer. An optional private companion workflow can export a short-lived review
-packet from the same D1 state once the separate private repository, D1 secret,
-and GitHub app access are configured. Its packet compresses identical offer
-text and preserves separate member references and states; it does not yet
-perform thematic synthesis or change D1 handling states. The private channel
-is prepared in source but is not yet an active, verified review interface.
+The current operational read/review path is `OFFER_DB` → hourly public pending-count observer plus a verified private companion workflow that exports a short-lived review packet from the same D1 state. Its packet compresses identical offer text while preserving separate member references and states; it does not perform thematic synthesis or change D1 handling states. The private review packet can now be transformed deterministically into validated `canonical-candidate-v1` envelopes, still without network access or canonical mutation. Semantic synthesis remains advisory rather than an authority-bearing transition.
 
 Production launch verification preserved the public read plane, proved the route and `OFFER_DB` binding with a non-mutating validation check, and then completed a one-time `accept → status → withdraw → withdrawn status` exercise. The test offer was left withdrawn; receipt secrets and provider database identifiers are not part of the public record.
 
-The operating protocol is [docs/protocols/PHASE_2E_EXPERIMENTAL_INGRESS.md](docs/protocols/PHASE_2E_EXPERIMENTAL_INGRESS.md).
+The operating protocol is [docs/protocols/PHASE_2E_EXPERIMENTAL_INGRESS.md](docs/protocols/PHASE_2E_EXPERIMENTAL_INGRESS.md). Candidate preparation is documented separately in [docs/protocols/CANONICAL_CANDIDATE_PREPARATION.md](docs/protocols/CANONICAL_CANDIDATE_PREPARATION.md).
 
 ## Future Phase 3 offer boundary — durable participation designed, not deployed
 
@@ -226,6 +227,7 @@ If Durable Objects are adopted, real-time designs should prefer hibernation/scal
 - **GitHub Issues** — public, provider-hosted Seed Bank transport. Treat issue bodies/comments/links as untrusted external input. Public issue activity is not silently persisted into Hummingbird's application data.
 - **Cloudflare** — DNS, Pages deployment, proxying, canonical D1 persistence, and the separately bound temporary `OFFER_DB`. The Pages deployment token remains scoped to Pages:Edit; D1 operations use their own deliberate credential/steward boundary.
 - **Phase 2E experimental ingress — live** — temporary untrusted first-party input with a published authority ceiling, bounded retention/resource rules, and no automatic canonical or governance consequence.
+- **Candidate preparation layer — live tooling** — deterministic/local shaping and validation of review material into explicitly non-canonical candidate envelopes. This layer has no D1 credential requirement and no authority to admit or publish.
 - **Future Phase 3 Offer Buffer** — durable controlled-participation ingress remains a separate operational trust boundary. Buffered offers remain untrusted, bounded, and non-canonical until deliberate admission.
 - **Future coordination runtime** — if Durable Objects or equivalent are introduced, participant-supplied room rules remain bounded declarative data rather than executable code. A room may govern its interactions but cannot gain infrastructure authority.
 - **Local development machine** — not authoritative production state. Production changes flow through protected `main` and CI.
@@ -254,15 +256,16 @@ See [PERSISTENCE.md](PERSISTENCE.md) for the dated cost snapshot and decision ga
 - Production deployment uses a Cloudflare API Token stored as a GitHub Actions secret and scoped to the minimum deployed capability.
 - D1-related credentials/configuration must be environment-driven and may not be committed as secret values.
 - Any future Durable Object/R2 bindings follow the same least-privilege/environment-driven rule; participant-visible identifiers must not expose provider credentials.
-- Local schema/corpus tests require no production secrets.
+- Local schema/corpus/candidate tests require no production secrets.
 
 ## Backups and recovery
 
 - Git/document/schema/reference-corpus state is recoverable from the repository.
-- D1 canonical state has a storage-independent export/restore path, and restoration into an empty disposable replacement database has been exercised successfully in Phase 2D. The minimized recovery outcome has been published through the transparency buffer. Phase 2D remains open for steward confirmation of the ordinary independently retrievable private-backup path for canonical state that is not wholly public.
+- D1 canonical state has a storage-independent export/restore path, and restoration into an empty disposable replacement database has been exercised successfully in Phase 2D. The minimized recovery outcome was published through the transparency buffer. The ordinary encrypted private-backup path was then independently retrieved, decrypted with the off-platform steward-held identity, and validated; Phase 2D is complete.
+- The ordinary canonical backup workflow now runs daily using the same validated read-only export → encryption → private-repository path, while retaining a manual checkpoint trigger. The decryption identity remains outside GitHub and Cloudflare.
 - The Phase 2E offer buffer is intentionally disposable and is not promised canonical backup durability; ordinary retention/cleanup and incident reporting follow its separate pilot contract.
-- R2 is a candidate independent storage target for encrypted or otherwise appropriately protected canonical recovery bundles, but backup format and restoration remain more important than vendor choice.
+- R2 remains a candidate independent storage target for encrypted or otherwise appropriately protected canonical recovery bundles, but backup format and restoration remain more important than vendor choice. GitHub should not remain the only long-term independent copy simply because the current encrypted path works.
 - Rebuildable public projections are not themselves backup targets for institutional meaning.
 - Future room/activity state must declare whether it is ephemeral, operational, durable, or archival. Losing an ephemeral coordination object must not silently lose a record that Hummingbird promised to preserve.
 
-See [OPERATIONS.md](OPERATIONS.md), [PERSISTENCE.md](PERSISTENCE.md), and the Phase 2D roadmap milestone.
+See [OPERATIONS.md](OPERATIONS.md), [PERSISTENCE.md](PERSISTENCE.md), and the completed Phase 2D roadmap milestone.
