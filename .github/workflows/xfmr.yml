@@ -67,12 +67,16 @@ jobs:
       - name: Smoke test xfmr.link
         run: |
           for attempt in 1 2 3 4 5 6; do
-            body="$(curl --fail --silent --show-error --max-time 15 https://xfmr.link || true)"
-            if printf '%s' "$body" | grep -q 'XFMR'; then
-              printf '%s\n' "$body"
+            root="$(curl --fail --silent --show-error --max-time 15 https://xfmr.link || true)"
+            manifest="$(curl --fail --silent --show-error --max-time 15 https://xfmr.link/.well-known/xfmr || true)"
+            if printf '%s' "$root" | grep -q 'Signals only.' && \
+               printf '%s' "$manifest" | grep -q '"protocol": "xfmr"' && \
+               printf '%s' "$manifest" | grep -q '"status": "experimental"'; then
+              printf '%s\n' "$root"
+              printf '%s\n' "$manifest"
               exit 0
             fi
             sleep 5
           done
-          echo "xfmr.link did not return an XFMR response after deployment" >&2
+          echo "xfmr.link root or discovery manifest failed smoke test after deployment" >&2
           exit 1
