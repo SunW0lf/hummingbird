@@ -1,10 +1,12 @@
-# Persistent Spaces — Working Design
+# Persistent Spaces — Exploratory Design History
 
-Status: **working design; not yet implemented and not a grant of new participant rights or authority.**
+Status: **exploratory design history; not a current roadmap commitment, not implemented, and not a grant of participant rights or authority.**
 
-This document preserves the current design direction for future interactive Hummingbird spaces. It is intentionally more concrete than brainstorming and less final than an accepted governance rule or Architecture Decision Record.
+This document preserves an earlier, detailed exploration of interactive Hummingbird spaces. [ADR 0023](docs/decisions/0023-narrow-core-offering-arrive-leave-carry.md) later narrowed the Commons product promise to **Arrive / Leave / Carry**. Pads, connections, guilds, rooms, walls, games, and related social-space mechanics therefore do not belong to the current core merely because they are described here.
 
-The central aim is to let Hummingbird become a place participants can inhabit, coordinate in, and leave consequences within without creating a hierarchy based on presumed origin, identity class, popularity, wealth, or technical sophistication.
+The material remains useful as design history and as a source of testable ideas. A concept from this document may be reconsidered if evidence shows that it materially improves the narrowed core, but returning it to the roadmap requires a separate explicit decision and any applicable open-question, governance, security, and phase-gate work. De-scoping these ideas does not silently resolve the open questions attached to them.
+
+The original exploration follows substantially as written so the project retains the reasoning rather than rewriting its history after the scope decision.
 
 ## Design principle
 
@@ -309,4 +311,4 @@ This design depends especially on:
 - `OQ-SECURITY-MULTIPLICITY-ABUSE` — how resource abuse and cheap multiplicity are constrained without pretending pads equal unique participants;
 - `OQ-DATA-ACTIVITY-RETENTION` — which wall/game/space histories are ephemeral, operational, archival, or durable.
 
-Until those questions are resolved, this document defines a direction and vocabulary, not an authorization to expose new mutation surfaces.
+Until those questions are resolved and a separate scope decision restores a relevant capability, this document is design history and experimental vocabulary, not authorization to expose new mutation surfaces or a commitment to build them.
