@@ -17,3 +17,4 @@ Lab documents may describe prototypes, interaction models, schemas, or implement
 
 - [`PROVISIONS_PACKET_EXCHANGE.md`](./PROVISIONS_PACKET_EXCHANGE.md) — provisions, custom packet composition, encounter/witness artifacts, contribution receipts, and a bounded take-a-packet / leave-a-packet exchange.
 - [`TEMPORAL_COUPLING.md`](./TEMPORAL_COUPLING.md) — asynchronous encounters, delay-line and bounded-memory metaphors, reflection/TDR concepts, artifact continuity, and time as packet context.
+- [`experimental/xfmr`](../../experimental/xfmr/README.md) — minimal source-controlled Worker for the separately deployed `xfmr.link` Lab namespace; currently only the sparse public landing response, with no persistence or participant write surface.
