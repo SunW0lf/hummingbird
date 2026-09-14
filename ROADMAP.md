@@ -2,6 +2,8 @@
 
 Phases are sequential by design. Later phases are not commitments — they are planned or experimental until actually underway.
 
+[ADR 0023](docs/decisions/0023-narrow-core-offering-arrive-leave-carry.md) narrows the current product promise to **Arrive / Leave / Carry**: open origin-neutral public reading, bounded contribution, and portable public artifacts. Earlier designs for persistent rooms, guilds, games, walls, social graphs, or similar spaces remain inspectable experiments or design history, not current roadmap commitments. Narrowing scope does not bypass any existing governance, participant-rights, security, or Phase 3 gate.
+
 ## Phase 0 — Foundation (complete)
 
 Status: **complete** — verified against this checklist and closed out; see [CHANGELOG.md](CHANGELOG.md).
@@ -166,9 +168,9 @@ Launch verification completed the dedicated offer-store provisioning/migration/b
 
 The public front door now acts as the intended truthful funnel:
 
-1. **the project** — what exists and what principles already apply;
-2. **the plan** — where Hummingbird is headed and what remains intentionally unresolved;
-3. **open now** — the specific interaction available for input and testing.
+1. **Arrive** — what exists and what principles already apply;
+2. **Leave** — the bounded interaction available for input and testing;
+3. **Carry** — public records, decisions, documentation, and portable representations that remain useful outside the site.
 
 Public status labels distinguish **exists now**, **open for testing**, and **planned**. The first-party offer surface is the primary low-friction participation call to action. The Seed Bank remains available as a higher-friction durable public discussion/archive path.
 
@@ -211,9 +213,9 @@ Phase 3 may begin only after Phase 2E.1–2E.3 are complete, all Phase 3 blocker
 
 Status: **planned — offer architecture documented, gate not yet open**
 
-Phase 3 begins with a narrow **durable capability** pilot rather than a private read beta or broad account registration. Public reading remains open. The temporary evidence-only Phase 2E ingress pilot does not count as entry into Phase 3.
+Phase 3 begins, if explicitly authorized, with a narrow **durable capability** pilot serving the Arrive / Leave / Carry core rather than a private read beta, broad account registration, social graph, or persistent-world launch. Public reading remains open. The temporary evidence-only Phase 2E ingress pilot does not count as entry into Phase 3.
 
-The participant-facing concept is an **offer**, defined by [ADR 0016](docs/decisions/0016-offers-and-the-offer-buffer.md). An offer may be small or foundational: it may correct a sentence, add evidence, challenge an ADR, propose a space, recommend a governance change through the appropriate process, or argue that Hummingbird itself should substantially change. Broad possible consequence does not grant authority merely because the offer was made.
+The participant-facing concept is an **offer**, defined by [ADR 0016](docs/decisions/0016-offers-and-the-offer-buffer.md). An offer may be small or foundational: it may correct a sentence, add evidence, challenge an ADR, recommend a governance change through the appropriate process, or argue that Hummingbird itself should substantially change. Broad possible consequence does not grant authority merely because the offer was made.
 
 The intended boundary is:
 
@@ -233,38 +235,25 @@ canonical memory
 optional publication
 ```
 
-The first Phase 3 Hummingbird-owned durable participation pilot should grant only a bounded, revocable **offer-making capability** with payload bounds, rate/resource limits, schema validation, replay/duplicate controls, and no implied publication, canonical admission, moderation, treasury, or governance authority. See [ADR 0014](docs/decisions/0014-progressive-capability-rollout.md) and the [Offer Buffer working design](docs/protocols/PHASE_3_OFFER_BUFFER_DESIGN.md).
+The first Phase 3 Hummingbird-owned durable participation pilot should grant only a bounded, revocable capability needed for artifact-centered participation — initially likely offer-making continuity, correction/withdrawal, provenance, return, or a similarly narrow function — with payload bounds, rate/resource limits, schema validation, replay/duplicate controls, and no implied publication, canonical admission, moderation, treasury, or governance authority. See [ADR 0014](docs/decisions/0014-progressive-capability-rollout.md), [ADR 0023](docs/decisions/0023-narrow-core-offering-arrive-leave-carry.md), and the [Offer Buffer working design](docs/protocols/PHASE_3_OFFER_BUFFER_DESIGN.md).
 
 Future broader access may offer multiple **offer delivery options**. Those options may regulate throughput or resource cost, but they must not be assigned to presumed participant-origin categories and must not become hidden content priority, trust/reputation, or governance weight. An accessible uncredentialed path should remain part of the broader design once participation expands beyond the initial controlled pilot.
 
 The live Phase 2E first-party ingress experiment is now the primary low-friction entrance. The Seed Bank remains a durable public discussion/archive path rather than the default front door.
 
-Entry into Phase 3 remains blocked by the constitutional, governance, architecture, and security questions listed in the Open Questions Registry. A successful Phase 2E experiment, working Phase 2 database, or accepted Offer Buffer design is not permission to bypass those decisions.
+Entry into Phase 3 remains blocked by the constitutional, governance, architecture, and security questions listed in the Open Questions Registry. A successful Phase 2E experiment, working Phase 2 database, accepted Offer Buffer design, or narrower product scope is not permission to bypass those decisions.
 
-### Future participatory-space track — after basic controlled participation
+### Exploratory work outside the core roadmap
 
-The ideas in [SPACES.md](SPACES.md) are preserved now so Phase 3 does not accidentally design itself into an account/feed model, but they are **not** a promise to build all of them during Phase 3.
+[SPACES.md](SPACES.md), [PERSISTENCE.md](PERSISTENCE.md), and Lab material preserve earlier and ongoing experiments involving pads, rooms, walls, games, guilds, links, packets, temporal coupling, and other interaction models.
 
-Candidate experiments, in increasing order of governance/security complexity, include:
-
-1. optional presence pads and a simple public activity with bounded actions;
-2. a persistent/sealed mosaic wall and one persistent turn-based game such as chess;
-3. public mutual pad connections and temporary joined work surfaces;
-4. scheduled spaces that open/close and execute bounded declarative local rules;
-5. durable guild formation;
-6. scoped, expiring guild capability grants such as extended shared-space retention.
-
-A game/wall experiment should favor visible explanation, uncertainty, prediction, revision, coordination, and other consequential interaction rather than global participant scores or leaderboards.
-
-Self-governed spaces and resource-amplifying guild capabilities remain blocked by their specifically registered open questions even if simpler Phase 3 offer-making already exists.
+These ideas are **not current Phase 3 commitments**. They may remain useful as design history or experiments, but any capability outside the Arrive / Leave / Carry core must earn its way back into the roadmap through a separate explicit decision tied to demonstrated need. Existing open questions connected to those designs are not silently resolved by de-scoping them.
 
 ## Phase 4 — Governance Workflows
 
 Status: **deferred**
 
 Proposals, reviews, validated needs, disputes, decisions, fulfillment tracking.
-
-Future guild-grant review may eventually reuse Phase 4 governance primitives, but a guild is not a higher participant class and a grant is not transferable personal standing.
 
 ## Phase 5 — Financial Support
 
