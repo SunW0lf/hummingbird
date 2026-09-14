@@ -30,11 +30,13 @@ The current Worker intentionally has no persistence, participant identity, write
 
 The custom-domain binding is configured in Cloudflare rather than declared in this repository. That is deliberate for the Lab stage so source control cannot silently repoint DNS or alter `datum.quest`.
 
-Deployment is automated as soon as a reviewed XFMR change reaches `main`:
+Deployment is automated at the earliest reviewed boundary:
 
 1. pull requests that change `experimental/xfmr/**` or the XFMR workflow run a Wrangler dry-run validation;
-2. a push to `main` affecting those paths deploys the Worker named `xfmr` using the repository's existing Cloudflare credentials;
+2. once a reviewed XFMR change reaches `main`, the push deploys the Worker named `xfmr` using the repository's existing Cloudflare credentials;
 3. the workflow then smoke-tests `https://xfmr.link` and requires an XFMR response.
+
+This means review gates deployment, but no second manual Cloudflare step is required after merge.
 
 `workflow_dispatch` is retained as an explicit maintainer-operated recovery/deployment path.
 
