@@ -24,18 +24,25 @@ The current Worker intentionally has no persistence, participant identity, write
 
 - Worker source: `worker.js`
 - Wrangler config: `wrangler.jsonc`
+- Deployment workflow: `.github/workflows/xfmr.yml`
 - Cloudflare Worker name: `xfmr`
 - Public hostname: `xfmr.link`
 
-The custom-domain binding is currently configured in Cloudflare rather than declared in this repository. That is deliberate for the Lab stage so source control cannot silently repoint DNS or alter `datum.quest`.
+The custom-domain binding is configured in Cloudflare rather than declared in this repository. That is deliberate for the Lab stage so source control cannot silently repoint DNS or alter `datum.quest`.
 
-An authenticated maintainer can update the Worker from the repository root with:
+Deployment is automated as soon as a reviewed XFMR change reaches `main`:
+
+1. pull requests that change `experimental/xfmr/**` or the XFMR workflow run a Wrangler dry-run validation;
+2. a push to `main` affecting those paths deploys the Worker named `xfmr` using the repository's existing Cloudflare credentials;
+3. the workflow then smoke-tests `https://xfmr.link` and requires an XFMR response.
+
+`workflow_dispatch` is retained as an explicit maintainer-operated recovery/deployment path.
+
+An authenticated maintainer can still deploy locally from the repository root when deliberately needed:
 
 ```sh
 npx wrangler deploy --config experimental/xfmr/wrangler.jsonc
 ```
-
-That command targets the live Worker named `xfmr`, so it should only be run intentionally after reviewing the change.
 
 ## Working language
 
