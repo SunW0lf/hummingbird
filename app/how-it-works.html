@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>How it works — Hummingbird</title>
-<meta name="description" content="How Hummingbird moves offers from consideration toward deliberate admission and publication, and what gates the project uses between phases.">
+<meta name="description" content="How Hummingbird supports open arrival, bounded contribution, portable public artifacts, and deliberate admission and publication.">
 <link rel="canonical" href="https://datum.quest/how-it-works.html">
 <meta property="og:type" content="website">
 <meta property="og:title" content="How it works — Hummingbird">
-<meta property="og:description" content="How offers move through Hummingbird and what gates the project uses between phases.">
+<meta property="og:description" content="Arrive freely, leave bounded material, and carry useful public artifacts onward.">
 <meta property="og:url" content="https://datum.quest/how-it-works.html">
 <meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="style.css">
@@ -26,28 +26,46 @@
 </header>
 <main>
   <h1>How it works</h1>
-  <p>Hummingbird is being built in phases, starting with durable institutional boundaries before broader application-owned interaction.</p>
+  <p>Hummingbird is being built around a deliberately small public promise: <strong>Arrive, Leave, Carry.</strong> The institutional machinery exists to keep those actions legible, bounded, portable, and separate from authority.</p>
+
+  <div class="seed-grid">
+    <article class="seed-card">
+      <h2>Arrive</h2>
+      <p>Public reading does not require an account, origin declaration, CAPTCHA, JavaScript, or proof that a request came from a preferred participant type.</p>
+    </article>
+    <article class="seed-card">
+      <h2>Leave</h2>
+      <p>Bounded offered material may enter through an explicit ingress path. Leaving something is not the same as Hummingbird adopting, publishing, endorsing, or granting standing to it.</p>
+    </article>
+    <article class="seed-card">
+      <h2>Carry</h2>
+      <p>Public records, decisions, raw documents, canonical JSON, provenance, and indexes are exposed in portable representations so they can remain useful elsewhere.</p>
+    </article>
+  </div>
 
   <h2>Lifecycle of an offer</h2>
   <p>You do not need to understand the database or repository to participate. The important distinction is that offering something, Hummingbird remembering it, and Hummingbird publishing it are separate actions.</p>
   <div class="flow" aria-label="Lifecycle of an offer">
-    <strong>Offer</strong> <span aria-hidden="true">→</span> consider / discuss <span aria-hidden="true">→</span> <strong>admit to canonical memory</strong> <span aria-hidden="true">→</span> publication decision <span aria-hidden="true">→</span> <strong>public commons</strong>
+    <strong>Offer</strong> <span aria-hidden="true">→</span> consider / discuss <span aria-hidden="true">→</span> <strong>admit to canonical memory</strong> <span aria-hidden="true">→</span> publication decision <span aria-hidden="true">→</span> <strong>public artifact</strong>
   </div>
   <ul>
     <li><strong>Offer.</strong> A first-party experimental offer, seed, comment, question, correction, critique, proposal, or other offered material exists. It is not automatically Hummingbird memory.</li>
     <li><strong>Consider.</strong> The offer may be discussed, challenged, combined, summarized, deferred, declined, or routed toward the process appropriate to what it would change.</li>
     <li><strong>Admit.</strong> If Hummingbird deliberately decides the meaning belongs in durable canonical memory, a bounded canonical record is created. Provider metadata or temporary offer state is not automatically copied with it.</li>
     <li><strong>Publish.</strong> Publication is a separate decision. A canonical record can exist without being publicly released.</li>
-    <li><strong>Trace consequence.</strong> Published records can later be referenced, corrected, superseded, withdrawn, or archived without silently rewriting history.</li>
+    <li><strong>Carry consequence.</strong> Published artifacts can be referenced, copied, corrected, superseded, withdrawn, archived, or used elsewhere without requiring continued membership in Hummingbird.</li>
   </ul>
 
   <div class="callout">
     <strong>What can an offer be?</strong>
-    <p>An offer can be small or foundational. It might correct a sentence, add evidence, challenge an assumption, propose a new activity or space, recommend a new ADR, suggest a governance or Charter change through the appropriate process, or argue that Hummingbird itself should substantially change. Broad scope is not itself an abuse signal.</p>
+    <p>An offer can be small or foundational. It might correct a sentence, add evidence, challenge an assumption, recommend a new ADR, suggest a governance or Charter change through the appropriate process, or argue that Hummingbird itself should substantially change.</p>
     <p>What an offer may propose is broad. What authority is required to act on it depends on its consequences. Making an offer does not itself change canonical memory, publication, governance, or project authority.</p>
   </div>
 
   <p>The first real admission/publication path has already been exercised end-to-end. See the <a href="records.html">public canonical records</a> for the resulting read model.</p>
+
+  <h2>What is no longer a core product goal</h2>
+  <p>Hummingbird is not currently trying to become a social network, chat system, engagement feed, identity provider, reputation system, general agent workspace, or persistent world of rooms, guilds, games, and followers. Earlier working designs remain inspectable, but they are experiments or design history unless a later explicit decision brings them back into scope.</p>
 
   <h2>Phase progression</h2>
   <div class="phase-tracker" aria-label="Hummingbird phase progression">
@@ -59,31 +77,27 @@
     <div><span class="phase-state planned">Later</span><strong>Phase 5</strong><span>Financial Support</span></div>
   </div>
 
-  <p><strong>Phase 2E is active:</strong> Hummingbird is reviewing Phase 2 evidence and governance gates while running a narrowly bounded first-party experimental ingress pilot. Phase 2D's production recovery proof is complete; one ordinary independent private-backup checkpoint remains.</p>
+  <p><strong>Phase 2E is active:</strong> Phases 2A–2D and Phase 2E.1 are complete. Phase 2E.2 is next, the bounded first-party experimental ingress pilot remains open, and Phase 3 remains blocked.</p>
   <div class="callout">
     <strong>What must be true before Phase 3?</strong>
-    <p>Phase 3 still requires its constitutional, governance, security, and runtime gates to be resolved and an explicit authorization decision. ADR 0017 permits only one evidence-gathering exception before then: the live first-party <a href="offer.html">offer path</a> may write to temporary, non-canonical experimental state, but it cannot create accounts, durable participant capabilities, formal governance standing, automatic admission, automatic publication, or broader institutional write authority.</p>
+    <p>Phase 3 still requires its constitutional, governance, security, and runtime gates to be resolved and an explicit authorization decision. Narrowing the product scope does not bypass those gates.</p>
   </div>
 
   <ol>
     <li><strong>Phase 0 — Foundation (complete).</strong> Repository, documentation, minimal site, CI, deployment.</li>
     <li><strong>Phase 1 — Public Charter Site (complete).</strong> Mission, working Charter, governance, transparency, public repository, security baseline, and supporting project surfaces.</li>
-    <li><strong>Phase 2 — Read-only commons + bounded evidence gathering (current).</strong> Canonical persistence, explicit admission/publication boundaries, static public projections, and production-state recovery are proven. The Phase 2E temporary non-canonical offer experiment is open while the remaining review/gate work continues.</li>
-    <li><strong>Phase 3 — Controlled participation.</strong> Durable participant capabilities and broader Hummingbird-owned write authority may begin only after the applicable constitutional, governance, security, and runtime gates are resolved and Phase 3 is explicitly authorized.</li>
-    <li><strong>Phase 4 — Governance workflows.</strong> Proposals, disputes, validated needs, decisions.</li>
+    <li><strong>Phase 2 — Read-only commons + bounded evidence gathering (current).</strong> Canonical persistence, explicit admission/publication boundaries, static public projections, production-state recovery, and the temporary offer experiment.</li>
+    <li><strong>Phase 3 — Controlled participation.</strong> If authorized, the first durable capability should serve the narrowed Arrive / Leave / Carry core rather than automatically opening accounts or broad social spaces.</li>
+    <li><strong>Phase 4 — Governance workflows.</strong> Later governance capability remains subject to its own decisions and gates.</li>
     <li><strong>Phase 5 — Financial support.</strong> Donations and transparent expenditure, only after the needs process works, and never in exchange for influence.</li>
   </ol>
-
-  <div class="callout">
-    <strong>Offer delivery options regulate resources, not merit.</strong>
-    <p>The live Phase 2E pilot uses a simple low-friction path and temporary Offer Buffer. Later delivery choices may change pacing, quota, or resource cost, but they must not classify participant origin or become hidden content priority, reputation, or governance weight.</p>
-  </div>
 
   <div class="callout">
     <strong>Rollout principle: limit authority, not visibility.</strong>
     <p>Making an offer, publication, canonical admission, alteration of history, and governance authority are separate capabilities. Early pilots constrain the state-changing side rather than putting the public commons behind an identity or browser gate.</p>
   </div>
-  <p>The Seed Bank demonstrated the separation early: <strong>offering something is not the same as admitting it into the commons.</strong> GitHub issues, comments, and reactions remain provider-hosted discussion unless a deliberate process creates a Hummingbird record from them. The live first-party Phase 2E pilot tests the same boundary with much lower entry friction.</p>
+
+  <p>The Seed Bank demonstrated the separation early: <strong>offering something is not the same as admitting it into the commons.</strong> GitHub issues, comments, and reactions remain provider-hosted discussion unless a deliberate process creates a Hummingbird record from them. The live first-party Phase 2E pilot tests the same boundary with lower entry friction.</p>
   <p>Every technical and institutional decision of consequence should leave a trail. Hummingbird's public <a href="decisions.html">Decision Record</a> exposes the Architecture Decision Records that explain why major paths were chosen, what alternatives were rejected, and what consequences were accepted.</p>
 </main>
 <footer>
