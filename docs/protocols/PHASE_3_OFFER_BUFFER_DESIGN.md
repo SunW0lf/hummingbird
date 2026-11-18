@@ -1,6 +1,8 @@
 # Phase 3 Working Design — Offer Buffer and Offer Delivery Options
 
-Status: **design only — not deployed; Phase 3 remains gated**
+Status: **design for the Phase 3 successor to the live Phase 2E pilot; reconciled with ADR 0023–0025 on 2026-11-18 ([review](../reviews/PHASE_3_OFFER_BUFFER_RECONCILIATION.md)); Phase 3 still needs an explicit entry decision**
+
+The Phase 2E evidence pilot has been live at `/offer` since 2026-09-12 under [ADR 0017](../decisions/0017-phase2e-experimental-ingress.md) and [ADR 0018](../decisions/0018-phase2e-offer-pilot-runtime-and-data-boundary.md). This design describes what would make that path durable in Phase 3.
 
 This document translates ADR 0016 into a concrete working design for the first Hummingbird-owned offer surface without authorizing implementation during Phase 2.
 
@@ -68,11 +70,13 @@ No participant-origin field is required.
 
 ## Offer delivery options
 
-### 1. Scoped capability — initial controlled pilot
+### 1. Uncredentialed bounded delivery — the default
 
-The initial Phase 3 pilot should follow ADR 0014 and use a narrow revocable capability credential.
+No credential is ever required to make an offer ([ADR 0016, amended 2026-11-18](../decisions/0016-offers-and-the-offer-buffer.md#amendment-2026-11-18)). The uncredentialed bounded path, as in the live pilot, is the default from the first Phase 3 pilot onward. Flooding is handled at the hosting edge without storing network identifiers ([ADR 0025](../decisions/0025-phase2e3-security-ingress-and-runtime-dispositions.md)).
 
-The capability may bound:
+### 2. Optional issued capability — possible later path
+
+A narrow revocable capability credential may be offered as an **optional** path, for example to raise quota for a client that wants it. It is never required and never changes consideration. If offered, it may bound:
 
 - offer kinds;
 - maximum body size;
@@ -84,7 +88,7 @@ The capability may bound:
 
 Possession establishes only the bounded ability to make an offer. It does not establish identity, origin, reputation, publication entitlement, or governance weight.
 
-### 2. Computational effort — possible later delivery path
+### 3. Computational effort — possible later delivery path
 
 A future broader pilot may allow a modest proof-of-effort challenge to regulate request cost without an account or participant-origin declaration.
 
@@ -97,13 +101,7 @@ If adopted:
 - accessibility and energy/cost implications must be reviewed;
 - it should be replaceable rather than constitutionalized.
 
-### 3. Uncredentialed bounded delivery — accessibility path
-
-Broader participation should retain a path that does not require a capability credential or computational work.
-
-The control may use a stricter throughput/resource envelope, but once the offer enters the buffer it must receive the same substantive consideration rules as an equivalent offer delivered another way.
-
-Exact limits are deliberately undecided.
+Whatever paths exist, once an offer enters the buffer it receives the same substantive consideration rules as an equivalent offer delivered another way.
 
 ## Delivery is not priority
 
@@ -141,7 +139,7 @@ The action endpoint must not be published until it genuinely exists and has pass
 
 ## Buffer properties that must be decided before deployment
 
-Before `/offer` becomes live, the project must explicitly settle at least:
+Before the Phase 3 path becomes durable, the project must explicitly settle at least the following. The [reconciliation review](../reviews/PHASE_3_OFFER_BUFFER_RECONCILIATION.md#3-the-decide-before-deployment-checklist) maps each item to where it is already settled; only Markdown rendering and in-place correction remain open, and both are recommended to stay as in the pilot.
 
 - maximum payload and reference counts;
 - accepted text/Markdown subset and rendering safety;
@@ -160,15 +158,12 @@ Before `/offer` becomes live, the project must explicitly settle at least:
 
 ## Relationship to open questions
 
-This design constrains implementation but does not resolve the existing Phase 3 blockers in `docs/governance/OPEN_QUESTIONS.md`.
-
-In particular, the project must still resolve participant rights, exclusion conditions, participant responsibilities, emergency authority, governance-proposal process, application framework/runtime, abuse-state retention, and authentication/authorization.
+All eight Phase 3 blockers it once depended on are resolved: participant rights, exclusion, participation conditions, emergency authority, and proposals by [ADR 0024](../decisions/0024-phase2e2-constitutional-and-governance-dispositions.md); authentication, abuse-state retention, and framework/runtime by [ADR 0025](../decisions/0025-phase2e3-security-ingress-and-runtime-dispositions.md).
 
 ## Non-goals
 
-This design does not create:
+This design does not by itself create (the live `/offer` page belongs to the Phase 2E pilot):
 
-- a live `/offer` page;
 - `/api/offer`;
 - a public mutation endpoint;
 - an Offer Buffer D1 table;

@@ -1,6 +1,6 @@
 # Phase 3 Offer Buffer Reconciliation Review
 
-Status: **draft for steward review.** Nothing here is adopted, and it authorizes nothing. It performs the review that [ROADMAP.md §Phase 2E.3](../../ROADMAP.md) requires before a Phase 3 entry decision: checking [ADR 0016](../decisions/0016-offers-and-the-offer-buffer.md) and the [Phase 3 Offer Buffer working design](../protocols/PHASE_3_OFFER_BUFFER_DESIGN.md) against every resolved Phase 3 decision.
+Status: **§1 and §2 adopted by the steward on 2026-11-18** ([ADR 0016 amendment](../decisions/0016-offers-and-the-offer-buffer.md#amendment-2026-11-18)). The Phase 3 entry recommendation below is advice, not a decision, and nothing here authorizes Phase 3. It performs the review that [ROADMAP.md §Phase 2E.3](../../ROADMAP.md) requires before a Phase 3 entry decision: checking [ADR 0016](../decisions/0016-offers-and-the-offer-buffer.md) and the [Phase 3 Offer Buffer working design](../protocols/PHASE_3_OFFER_BUFFER_DESIGN.md) against every resolved Phase 3 decision.
 
 Prepared: 2026-11-18
 
