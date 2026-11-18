@@ -4,6 +4,7 @@ This records meaningful releases and changes, not a raw Git log.
 
 ## Phase 2 — Read-Only Commons (in progress)
 
+- Added a manual **Edge** workflow with its own narrowly scoped Cloudflare token: it can redirect `www.datum.quest` to the apex, and deploy the `xfmr.link` front door, which keeps the XFMR door sign and adds an orientation packet pointing to Hummingbird. XFMR remains a separate lab namespace, not part of Hummingbird's model.
 - Enabled IndexNow so Bing and other participating search engines learn datum.quest's public pages: a public key file at the site root, a submit script, and a manual workflow. It announces only public URLs, by hand after material changes.
 - An accepted offer's result and `llms.txt` now carry a plain sharing note: anyone may mention Hummingbird to someone who would find it useful, but it never asks anyone to repost or forward it, and a mention earns no standing. `llms.txt` links the public invitation issue.
 - `llms.txt` now carries a plain invitation for any reader, human or automated, to make an offer, with the questions Hummingbird most wants answered. The Phase 3 entry advice now counts offers from any participant other than the steward, not only people.

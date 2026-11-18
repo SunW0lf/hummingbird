@@ -1,0 +1,95 @@
+name: Edge
+
+# Manual only. Each run makes one Cloudflare edge change with the scoped
+# CLOUDFLARE_EDGE_TOKEN (no DNS, Pages, D1 or billing access). See
+# ops/edge/README.md.
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: What to change
+        required: true
+        type: choice
+        options:
+          - www-redirect
+          - xfmr-worker
+
+permissions:
+  contents: read
+
+concurrency:
+  group: edge
+  cancel-in-progress: false
+
+jobs:
+  www-redirect:
+    if: inputs.target == 'www-redirect'
+    name: Redirect www.datum.quest to the apex
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "22"
+
+      - name: Set the redirect rule
+        env:
+          CLOUDFLARE_EDGE_TOKEN: ${{ secrets.CLOUDFLARE_EDGE_TOKEN }}
+        run: node scripts/edge-www-redirect.mjs
+
+      - name: Check the redirect
+        run: |
+          sleep 20
+          headers=$(curl -sS -o /dev/null -D - "https://www.datum.quest/offer?check=1" || true)
+          echo "$headers" | grep -Ei '^HTTP/|^location:' || true
+          if echo "$headers" | grep -Eiq '^location: https://datum.quest/offer\?check=1'; then
+            echo "www.datum.quest redirects to the apex."
+          else
+            echo "::warning::The rule is set, but www.datum.quest isn't redirecting yet. It needs a proxied DNS record for www (see ops/edge/README.md)."
+          fi
+
+  xfmr-worker:
+    if: inputs.target == 'xfmr-worker'
+    name: Deploy the xfmr.link Worker
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Test the Worker offline
+        run: node --test tests/edge-xfmr.test.mjs
+
+      - name: Deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_EDGE_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx wrangler deploy --config ops/edge/xfmr/wrangler.jsonc
+
+      - name: Smoke test xfmr.link
+        run: |
+          sleep 10
+          curl -fsS https://xfmr.link/ | grep -q "Signals only."
+          curl -fsS https://xfmr.link/llms.txt | grep -q "https://datum.quest/llms.txt"
+          curl -fsS https://xfmr.link/.well-known/xfmr | grep -q '"protocol": "xfmr"'
+
+      - name: Announce xfmr.link to IndexNow
+        run: |
+          key=$(sed -n 's/^const INDEXNOW_KEY = "\([0-9a-f]\{32\}\)";$/\1/p' ops/edge/xfmr/worker.mjs)
+          test "$(curl -fsS "https://xfmr.link/${key}.txt" | tr -d '[:space:]')" = "$key"
+          body=$(printf '{"host":"xfmr.link","key":"%s","urlList":["https://xfmr.link/","https://xfmr.link/llms.txt","https://xfmr.link/.well-known/xfmr"]}' "$key")
+          status=$(curl -sS -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json; charset=utf-8' --data "$body" https://api.indexnow.org/indexnow)
+          echo "IndexNow: $status"
+          test "$status" = 200 -o "$status" = 202
