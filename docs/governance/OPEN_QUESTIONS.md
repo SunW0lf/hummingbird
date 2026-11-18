@@ -73,12 +73,6 @@ Status: OPEN.
 
 ## Architecture / project
 
-### OQ-ARCH-FRAMEWORK
-**Final application framework/runtime for durable Phase 3+ interactive capabilities.** A phase-bounded runtime may be selected for the Phase 2E experimental-ingress pilot without resolving the durable framework choice or creating Phase 3 precedent.
-Raised in: [PROJECT.md](../../PROJECT.md).
-Blocks: entry into Phase 3.
-Status: OPEN.
-
 ### OQ-PROJECT-LEGAL-STRUCTURE
 **Legal/organizational structure for Hummingbird as an entity, if any** (e.g. unincorporated project, nonprofit, cooperative).
 Raised in: [PROJECT.md](../../PROJECT.md).
@@ -94,19 +88,6 @@ Blocks: treating interactive activity history as durable or permanently archived
 Status: OPEN.
 
 ## Security
-
-### OQ-SECURITY-ACCESS-CONTROL-RETENTION
-**Durable Phase 3 bounded retention for rate-limit/abuse state**, kept separate from the identity/participant model. The Phase 2E ingress experiment must publish a narrow pilot-specific abuse-state/retention rule, but that rule is evidence rather than automatic resolution of the Phase 3 model.
-Raised in: [DATA_MODEL.md](../../DATA_MODEL.md), [SECURITY.md](../../SECURITY.md).
-Blocks: entry into Phase 3.
-Status: OPEN.
-
-### OQ-SECURITY-AUTHN-MODEL
-**Authentication/authorization model for durable Phase 3 participant capabilities.** The evidence-only Phase 2E ingress experiment may accept uncredentialed offers under ADR 0017 because receipt grants no durable capability or standing; that experiment does not resolve the future authn/authz model.
-Raised in: [SECURITY.md](../../SECURITY.md).
-Blocks: entry into Phase 3.
-Phase 2E.2 constraints ([ADR 0024](../decisions/0024-phase2e2-constitutional-and-governance-dispositions.md)): authentication must not be required to read, leave bounded material, or draft a governance proposal. This question also carries the evaluation of whether an advisory proposal-endorsement tool can be deployed safely, which depends on a multiplicity-resistant approach.
-Status: OPEN.
 
 ### OQ-SECURITY-PAD-CONTINUITY
 **How can a returning pad prove continuity/control without requiring legal identity, participant-origin classification, or an institution-wide privileged identity tier?**
@@ -152,7 +133,7 @@ Status: OPEN — reviewed at the repository-publication gate; no distinct conten
 
 - **Blocks entry into Phase 2:** none. Phase 2 is in progress; its former entry questions are resolved in [ADR 0010](../decisions/0010-phase2-read-only-commons-contract.md), [DATA_MODEL.md](../../DATA_MODEL.md), [SECURITY.md](../../SECURITY.md), and [TRANSPARENCY.md](../../TRANSPARENCY.md).
 - **Blocks completion of Phase 1:** none. Phase 1 is complete.
-- **Blocks entry into Phase 3:** OQ-ARCH-FRAMEWORK, OQ-SECURITY-ACCESS-CONTROL-RETENTION, OQ-SECURITY-AUTHN-MODEL. The five constitutional/governance blockers were resolved in Phase 2E.2 by [ADR 0024](../decisions/0024-phase2e2-constitutional-and-governance-dispositions.md).
+- **Blocks entry into Phase 3:** none open. The five constitutional/governance blockers were resolved in Phase 2E.2 by [ADR 0024](../decisions/0024-phase2e2-constitutional-and-governance-dispositions.md), and the three security/runtime blockers in Phase 2E.3 by [ADR 0025](../decisions/0025-phase2e3-security-ingress-and-runtime-dispositions.md). Phase 3 still requires an explicit entry decision.
 - **Blocks deployment of persistent/self-governed social spaces:** OQ-GOVERNANCE-SPACE-CONSTITUTIONS, OQ-SECURITY-PAD-CONTINUITY, OQ-SECURITY-MULTIPLICITY-ABUSE; OQ-DATA-ACTIVITY-RETENTION must be resolved before activity history is made durable or permanently archived.
 - **Blocks guild capability grants:** OQ-GOVERNANCE-GUILD-GRANTS and OQ-SECURITY-MULTIPLICITY-ABUSE.
 - **Blocks entry into Phase 4:** OQ-GOVERNANCE-DISPUTES, OQ-GOVERNANCE-VALIDATED-NEEDS.
@@ -160,4 +141,4 @@ Status: OPEN — reviewed at the repository-publication gate; no distinct conten
 - **Blocks C2 → C3 ratification:** OQ-GOVERNANCE-AMENDMENT-THRESHOLD.
 - **Review gates (non-blocking):** OQ-GOVERNANCE-FACILITATION, OQ-GOVERNANCE-STEWARD-SUCCESSION, OQ-SECURITY-INCIDENT-RESPONSE, OQ-OPS-MONITORING-CADENCE, OQ-OPS-TOKEN-ROTATION-CADENCE, OQ-LEGAL-CONTENT-LICENSE.
 
-**Total unresolved: 18.**
+**Total unresolved: 15.**

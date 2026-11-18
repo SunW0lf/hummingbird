@@ -41,7 +41,7 @@ Previously documented spaces, guilds, games, pads, walls, and related ideas rema
 
 ## Current phase
 
-**Phase 2 — Read-Only Commons is in progress.** Phases 2A–2D, Phase 2E.1, and Phase 2E.2 are complete. Phase 2E.3 is next. The bounded, temporary first-party `/offer` pilot remains open for testing; Phase 3 remains gated. See [ROADMAP.md](ROADMAP.md).
+**Phase 2 — Read-Only Commons is in progress.** Phases 2A–2D, Phase 2E.1, and Phase 2E.2 are complete. Phase 2E.3 is in progress: its three Phase 3 blockers are resolved and the Offer Buffer review remains. The bounded, temporary first-party `/offer` pilot remains open for testing; Phase 3 remains gated. See [ROADMAP.md](ROADMAP.md).
 
 The current Phase 2E pilot fits the narrowed scope without expanding it: it is the first bounded **Leave** surface, while the public site, records, raw documents, canonical JSON, and decision provenance implement **Arrive** and part of **Carry**.
 
@@ -64,7 +64,7 @@ If Phase 3 is later authorized, its first durable capability should serve the na
 - Cloudflare Pages hosts the deployed site.
 - Cloudflare D1 is the current Phase 2 persistence engine for deliberately admitted canonical application records. Canonical meaning remains portable and versioned per [DATA_MODEL.md](DATA_MODEL.md), [ADR 0010](docs/decisions/0010-phase2-read-only-commons-contract.md), [ADR 0012](docs/decisions/0012-reference-corpus-before-persistence.md), and [docs/protocols/PHASE_2D_RECOVERY.md](docs/protocols/PHASE_2D_RECOVERY.md).
 - The temporary Phase 2E offer pilot uses its separately bounded offer store under the accepted pilot ADRs. It is not the canonical record store and does not open Phase 3.
-- Additional databases, Durable Objects, R2 usage, realtime coordination, or other runtime components should be added only when an authorized core capability actually requires them.
+- Hummingbird keeps a minimal stack: static pages, small request handlers, and SQL storage, in plain JavaScript without an application framework ([ADR 0025](docs/decisions/0025-phase2e3-security-ingress-and-runtime-dispositions.md)). A new framework, database, Durable Objects, R2 usage, realtime coordination, or other runtime component requires an ADR showing an Arrive / Leave / Carry need the current stack cannot meet.
 - Production deployment occurs only from protected `main`, only after required CI passes.
 
 ## Data posture

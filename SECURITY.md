@@ -30,7 +30,9 @@ The realistic attack surface is concentrated in:
 
 ## Authentication / authorization
 
-The first-party `/offer` pilot accepts an uncredentialed offer. A one-time random receipt, stored only as a hash, controls that offer's temporary status and withdrawal; it does not authenticate a participant, establish identity, or grant standing. GitHub separately handles accounts for the interim Seed Bank. The durable Phase 3 authentication/authorization model remains open: [OQ-SECURITY-AUTHN-MODEL](docs/governance/OPEN_QUESTIONS.md#oq-security-authn-model).
+The first-party `/offer` pilot accepts an uncredentialed offer. A one-time random receipt, stored only as a hash, controls that offer's temporary status and withdrawal; it does not authenticate a participant, establish identity, or grant standing. GitHub separately handles accounts for the interim Seed Bank. For durable capabilities, Phase 2E.3 adopted the same shape ([ADR 0025](docs/decisions/0025-phase2e3-security-ingress-and-runtime-dispositions.md)): **capabilities, not accounts.** Participants never authenticate. Each durable participant action returns a scoped, unguessable capability, stored only as a hash, that authorizes follow-ups on that one item and nothing else. Institutional actions use separate steward/operator credentials and record a reason class. No endorsement tool is deployed until multiplicity resistance is settled.
+
+**Abuse-state retention.** Flooding and volume controls run at the hosting edge and never copy network identifiers into Hummingbird stores. Any application-level restriction attaches to a capability, item, or content hash, never a person, records its scope, reason class, start, and end, and is kept no longer than the shorter of the restriction or 30 days, and less than the content it concerns. Reading is never restricted as a sanction.
 
 ## Secrets
 

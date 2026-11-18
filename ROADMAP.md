@@ -123,7 +123,7 @@ Completed evidence:
 
 ### Phase 2E — Phase review and Phase 3 gate
 
-Status: **in progress — Phase 2E.1 and Phase 2E.2 complete; Phase 2E.3 is next; bounded experimental ingress remains open; Phase 3 remains blocked**
+Status: **in progress — Phase 2E.1 and Phase 2E.2 complete; Phase 2E.3 in progress with all Phase 3 blockers resolved; bounded experimental ingress remains open; Phase 3 remains blocked**
 
 The original evidence review, complete open-question inventory, recommended decision order, and Offer Buffer assumption audit were prepared in [docs/reviews/PHASE_2_EVIDENCE_AND_GATE_REVIEW.md](docs/reviews/PHASE_2_EVIDENCE_AND_GATE_REVIEW.md). It remains the historical evidence snapshot that began the review. The corrected current Phase 2E.1 state and final review-gate dispositions are recorded in [docs/reviews/PHASE_2E1_CLOSEOUT.md](docs/reviews/PHASE_2E1_CLOSEOUT.md) and [ADR 0022](docs/decisions/0022-phase2e1-review-gate-dispositions.md). None of those records authorizes Phase 3.
 
@@ -192,11 +192,13 @@ Completed on 2026-11-18. See [ADR 0024](docs/decisions/0024-phase2e2-constitutio
 
 #### Phase 2E.3 — Security, ingress, and runtime decisions
 
-Status: **next**
+Status: **in progress — blockers resolved 2026-11-18; Offer Buffer review remains**
 
-- Resolve the Phase 3 authentication/authorization, abuse-state retention, and application framework/runtime blockers after the relevant rights and governance constraints are known, using Phase 2E pilot evidence where useful.
+The three security/runtime blockers were resolved on 2026-11-18 by [ADR 0025](docs/decisions/0025-phase2e3-security-ingress-and-runtime-dispositions.md) (see the [decision packet](docs/reviews/PHASE_2E3_DECISION_PACKET.md)): participants use scoped capabilities, never accounts; abuse controls run at the edge and any restriction is item-scoped and kept at most 30 days; and the current minimal stack stays, changing only through an ADR showing need. No endorsement tool is deployed. An earned advisory voice for admitted items is recorded as a possible later experiment requiring a Charter amendment.
+
+Remaining work:
+
 - Define the mature Phase 3 incident-response, monitoring/alerting, credential-lifecycle, ingress, overload, receipt, correction/withdrawal, shutdown, and recovery behavior without treating the Phase 2 baselines or pilot-scoped rules as automatic precedent.
-- Apply the Phase 2E.2 constraints: authentication must not be required to read, leave bounded material, or draft a proposal; abuse-state retention must support capability-scoped, time-bounded, reviewable restrictions rather than participant bans; and evaluate whether an advisory proposal-endorsement tool can be deployed safely given multiplicity/Sybil risk.
 - Review [ADR 0016](docs/decisions/0016-offers-and-the-offer-buffer.md) and the [Phase 3 Offer Buffer working design](docs/protocols/PHASE_3_OFFER_BUFFER_DESIGN.md) against all resolved Phase 3 rights, governance, security, and runtime decisions.
 
 #### Explicit Phase 3 authorization

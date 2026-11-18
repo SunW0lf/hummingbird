@@ -4,7 +4,20 @@ This archive preserves stable `OQ-*` identifiers after their questions leave the
 
 IDs are never reused.
 
-## Resolved 2026-11-18
+## Resolved 2026-11-18 (Phase 2E.3)
+
+These three Phase 3 blockers were resolved together in Phase 2E.3 by [ADR 0025](../decisions/0025-phase2e3-security-ingress-and-runtime-dispositions.md) as C0 working-draft decisions.
+
+### OQ-SECURITY-AUTHN-MODEL
+Resolved by [SECURITY.md](../../SECURITY.md) and ADR 0025: participants never authenticate. Durable participant actions return scoped, unguessable, hash-stored capabilities limited to follow-ups on one item; institutional actions use separate steward/operator credentials. The advisory endorsement tool stays undeployed until `OQ-SECURITY-MULTIPLICITY-ABUSE` is answered. An earned advisory voice for admitted items is recorded as a possible later experiment requiring a Charter amendment.
+
+### OQ-SECURITY-ACCESS-CONTROL-RETENTION
+Resolved by [SECURITY.md](../../SECURITY.md) and ADR 0025: flooding controls run at the hosting edge without copying network identifiers into Hummingbird stores. Application-level restrictions attach to a capability, item, or content hash, never a person, and their state is kept no longer than the shorter of the restriction or 30 days, and less than the content it concerns.
+
+### OQ-ARCH-FRAMEWORK
+Resolved by [PROJECT.md](../../PROJECT.md) and ADR 0025: keep the current minimal stack (static pages, small request handlers, SQL storage, plain JavaScript, no application framework). New frameworks or runtime components require an ADR showing an Arrive / Leave / Carry need the current stack cannot meet.
+
+## Resolved 2026-11-18 (Phase 2E.2)
 
 These five Phase 3 blockers were resolved together in Phase 2E.2 by [ADR 0024](../decisions/0024-phase2e2-constitutional-and-governance-dispositions.md) as C0 working-draft decisions.
 
