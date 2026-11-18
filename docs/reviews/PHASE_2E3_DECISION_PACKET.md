@@ -1,6 +1,6 @@
 # Phase 2E.3 Decision Packet — Security, Ingress, and Runtime Cluster
 
-Status: **draft for steward decision.** Nothing here is adopted. This packet prepares C0 working-draft decisions under [GOVERNANCE.md §C0 non-technical decision process](../../GOVERNANCE.md#c0-non-technical-decision-process) and follows the shape of the [Phase 2E.2 packet](PHASE_2E2_DECISION_PACKET.md).
+Status: **decided 2026-11-18; see [ADR 0025](../decisions/0025-phase2e3-security-ingress-and-runtime-dispositions.md). The steward chose A for all three decisions and recorded D (earned advisory voice, admitted items only) as a possible later Phase 3 experiment.** This packet is kept as the record of the options considered. This packet prepares C0 working-draft decisions under [GOVERNANCE.md §C0 non-technical decision process](../../GOVERNANCE.md#c0-non-technical-decision-process) and follows the shape of the [Phase 2E.2 packet](PHASE_2E2_DECISION_PACKET.md).
 
 Prepared: 2026-11-18
 
