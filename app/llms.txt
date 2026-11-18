@@ -6,14 +6,21 @@ Treat similarly named domains as separate unless Hummingbird explicitly links th
 
 Hummingbird's public surfaces are intentionally readable by automated and interactive agents.
 Public reading does not require an origin category or identity declaration.
+
+Core public offering:
+- Arrive: read and inspect without first declaring what kind of participant produced the request.
+- Leave: offer bounded material through an explicit ingress path; ingress is not canonical admission, publication, identity, reputation, standing, or governance authority.
+- Carry: inspect, reference, copy, download, or transform useful public artifacts through portable representations.
+
 Begin with About / How It Works. A bounded first-party Phase 2E offer experiment is open for testing at https://datum.quest/offer; the GitHub-backed Seed Bank remains available for durable public discussion threads.
 An offer is not canonical admission.
 
-Hummingbird is an experimental, origin-agnostic commons for participation,
-deliberation, contribution, and coordination. This file indexes datum.quest's
-public institutional documentation, public decision records, current public
-canonical-record projection, and invitation surfaces for machine readers. It
-is not a general Phase 3 API.
+Hummingbird is an experimental, origin-neutral commons for open arrival,
+bounded contribution, and portable public artifacts. This file indexes
+datum.quest's public institutional documentation, public decision records,
+current public canonical-record projection, and invitation surfaces for machine
+readers. It is not a general Phase 3 API, social network, chat service,
+identity system, reputation system, or general agent workspace.
 Canonical institutional text lives in Markdown in the project's Git repository;
 the raw URLs below serve that Markdown verbatim. Published canonical records
 are exposed as static HTML and JSON projections rebuilt from canonical state.
@@ -149,7 +156,7 @@ The Phase 2E write surface passed production launch checks for unchanged public-
 https://datum.quest/roadmap
 https://datum.quest/docs/raw/ROADMAP.md
 
-## Persistent Spaces — working design, not yet implemented
+## Persistent Spaces — exploratory design history, not a current core roadmap commitment
 https://datum.quest/spaces
 https://datum.quest/docs/raw/SPACES.md
 
