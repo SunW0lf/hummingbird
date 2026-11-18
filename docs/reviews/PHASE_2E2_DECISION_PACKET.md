@@ -1,6 +1,6 @@
 # Phase 2E.2 Decision Packet — Constitutional and Governance Cluster
 
-Status: **draft for steward decision. Nothing here is adopted.** This packet prepares C0 working-draft decisions under [GOVERNANCE.md §C0 non-technical decision process](../../GOVERNANCE.md#c0-non-technical-decision-process). It does not ratify the Charter, open Phase 3, or resolve any open question until the steward records a choice and the authoritative documents are updated.
+Status: **decided 2026-11-18; see [ADR 0024](../decisions/0024-phase2e2-constitutional-and-governance-dispositions.md) for the adopted dispositions, including the steward's refinements to Decisions 1, 4, and 5.** This packet prepared C0 working-draft decisions under [GOVERNANCE.md §C0 non-technical decision process](../../GOVERNANCE.md#c0-non-technical-decision-process). It is kept as the record of the options considered; the Charter and Governance documents are authoritative.
 
 Prepared: 2026-11-18
 

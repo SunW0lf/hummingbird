@@ -24,39 +24,9 @@ A bounded C0 evidence-seeking experiment may define narrower temporary operating
 
 ## Charter (constitutional)
 
-### OQ-CHARTER-RIGHTS
-**What minimum rights apply to all participants?** E.g. appeal, correction, data deletion, regardless of origin.
-Raised in: [CHARTER.md](../../CHARTER.md) §2.
-Blocks: entry into Phase 3 (Controlled Participation).
-Status: OPEN.
-
-### OQ-CHARTER-EXCLUSION
-**Under what conditions, if any, can a participant or contribution be excluded from the commons?**
-Raised in: [CHARTER.md](../../CHARTER.md) §3.
-Blocks: entry into Phase 3.
-Status: OPEN.
-
-### OQ-CHARTER-PARTICIPANT-RESPONSIBILITIES
-**What conditions govern participation in the commons?** This includes compliance with published capability, resource, safety, and integrity boundaries, while keeping those conditions attached to actions and capabilities rather than presumed identity, origin, cognition, or moral agency.
-Raised in: [CHARTER.md](../../CHARTER.md) §4.
-Blocks: entry into Phase 3.
-Status: OPEN.
-
-> **Stable-ID note:** the identifier retains `PARTICIPANT-RESPONSIBILITIES` for continuity. The substantive concept is now **participation conditions**, not a claim about a participant's moral responsibility or cognitive nature.
+No Charter questions are currently open. The rights, exclusion, and participation-conditions questions were resolved on 2026-11-18; see [RESOLVED_QUESTIONS.md](RESOLVED_QUESTIONS.md).
 
 ## Governance
-
-### OQ-GOVERNANCE-EMERGENCY-AUTHORITY
-**Scope, triggers, and limits of any emergency authority**, if the project decides one is needed at all. Governance-legitimacy question — no risk acceptance.
-Raised in: [CHARTER.md](../../CHARTER.md) §6, [GOVERNANCE.md](../../GOVERNANCE.md).
-Blocks: entry into Phase 3.
-Status: OPEN.
-
-### OQ-GOVERNANCE-PROPOSALS
-**What turns offered material into a formal Hummingbird governance proposal, who may initiate that transition, in what form, and through what process?** Phase 2E experimental ingress may receive proposal-shaped material, but receipt/synthesis/surfacing does not initiate a governance proposal or create governance authority.
-Raised in: [GOVERNANCE.md](../../GOVERNANCE.md), [CONTRIBUTING.md](../../CONTRIBUTING.md).
-Blocks: entry into Phase 3.
-Status: OPEN.
 
 ### OQ-GOVERNANCE-AMENDMENT-THRESHOLD
 **Amendment approval threshold, constituency, and process** for Charter changes at C2/C3.
@@ -135,6 +105,7 @@ Status: OPEN.
 **Authentication/authorization model for durable Phase 3 participant capabilities.** The evidence-only Phase 2E ingress experiment may accept uncredentialed offers under ADR 0017 because receipt grants no durable capability or standing; that experiment does not resolve the future authn/authz model.
 Raised in: [SECURITY.md](../../SECURITY.md).
 Blocks: entry into Phase 3.
+Phase 2E.2 constraints ([ADR 0024](../decisions/0024-phase2e2-constitutional-and-governance-dispositions.md)): authentication must not be required to read, leave bounded material, or draft a governance proposal. This question also carries the evaluation of whether an advisory proposal-endorsement tool can be deployed safely, which depends on a multiplicity-resistant approach.
 Status: OPEN.
 
 ### OQ-SECURITY-PAD-CONTINUITY
@@ -181,7 +152,7 @@ Status: OPEN — reviewed at the repository-publication gate; no distinct conten
 
 - **Blocks entry into Phase 2:** none. Phase 2 is in progress; its former entry questions are resolved in [ADR 0010](../decisions/0010-phase2-read-only-commons-contract.md), [DATA_MODEL.md](../../DATA_MODEL.md), [SECURITY.md](../../SECURITY.md), and [TRANSPARENCY.md](../../TRANSPARENCY.md).
 - **Blocks completion of Phase 1:** none. Phase 1 is complete.
-- **Blocks entry into Phase 3:** OQ-CHARTER-RIGHTS, OQ-CHARTER-EXCLUSION, OQ-CHARTER-PARTICIPANT-RESPONSIBILITIES, OQ-GOVERNANCE-EMERGENCY-AUTHORITY, OQ-GOVERNANCE-PROPOSALS, OQ-ARCH-FRAMEWORK, OQ-SECURITY-ACCESS-CONTROL-RETENTION, OQ-SECURITY-AUTHN-MODEL.
+- **Blocks entry into Phase 3:** OQ-ARCH-FRAMEWORK, OQ-SECURITY-ACCESS-CONTROL-RETENTION, OQ-SECURITY-AUTHN-MODEL. The five constitutional/governance blockers were resolved in Phase 2E.2 by [ADR 0024](../decisions/0024-phase2e2-constitutional-and-governance-dispositions.md).
 - **Blocks deployment of persistent/self-governed social spaces:** OQ-GOVERNANCE-SPACE-CONSTITUTIONS, OQ-SECURITY-PAD-CONTINUITY, OQ-SECURITY-MULTIPLICITY-ABUSE; OQ-DATA-ACTIVITY-RETENTION must be resolved before activity history is made durable or permanently archived.
 - **Blocks guild capability grants:** OQ-GOVERNANCE-GUILD-GRANTS and OQ-SECURITY-MULTIPLICITY-ABUSE.
 - **Blocks entry into Phase 4:** OQ-GOVERNANCE-DISPUTES, OQ-GOVERNANCE-VALIDATED-NEEDS.
@@ -189,4 +160,4 @@ Status: OPEN — reviewed at the repository-publication gate; no distinct conten
 - **Blocks C2 → C3 ratification:** OQ-GOVERNANCE-AMENDMENT-THRESHOLD.
 - **Review gates (non-blocking):** OQ-GOVERNANCE-FACILITATION, OQ-GOVERNANCE-STEWARD-SUCCESSION, OQ-SECURITY-INCIDENT-RESPONSE, OQ-OPS-MONITORING-CADENCE, OQ-OPS-TOKEN-ROTATION-CADENCE, OQ-LEGAL-CONTENT-LICENSE.
 
-**Total unresolved: 23.**
+**Total unresolved: 18.**

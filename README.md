@@ -14,7 +14,7 @@ This is currently a passion project, not a conventional startup or commercial pr
 
 ## Project status
 
-**Phase 2 — Read-Only Commons is in progress. Phases 2A–2D and Phase 2E.1 are complete; Phase 2E.2 is next, the bounded experimental offer pilot remains open, and Phase 3 remains gated.** See [ROADMAP.md](ROADMAP.md).
+**Phase 2 — Read-Only Commons is in progress. Phases 2A–2D, Phase 2E.1, and Phase 2E.2 are complete; Phase 2E.3 is next, the bounded experimental offer pilot remains open, and Phase 3 remains gated.** See [ROADMAP.md](ROADMAP.md).
 
 The canonical public read model remains static, while the first-party [Make an offer](https://datum.quest/offer) pilot accepts temporary, non-canonical ideas, criticism, corrections, questions, evidence, and challenges without an account, origin declaration, or JavaScript. A one-time private receipt permits status checks and withdrawal. Acceptance is not admission, publication, a vote, or governance standing.
 

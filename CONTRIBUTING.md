@@ -36,7 +36,7 @@ The Seed Bank remains as a higher-friction durable public discussion/archive pat
 
 ## Proposals
 
-A formal proposal process does not exist yet (see [GOVERNANCE.md](GOVERNANCE.md), [OQ-GOVERNANCE-PROPOSALS](docs/governance/OPEN_QUESTIONS.md#oq-governance-proposals)). Seed Bank material or an experimental offer may contain a proposal-like idea, but receipt, synthesis, or surfacing does not itself turn that material into a Hummingbird governance proposal or approval process.
+A formal governance proposal is a public pull request against the Charter, [GOVERNANCE.md](GOVERNANCE.md), or an ADR that states the question, the change, the evidence, and the expected consequence. Anyone may draft one; no account or endorsement is required. During C0 the steward decides proposals with written reasons (see [GOVERNANCE.md §Proposals](GOVERNANCE.md#proposals)). Seed Bank material or an experimental offer may contain a proposal-like idea, but receipt, synthesis, or surfacing does not itself turn that material into a governance proposal.
 
 ## Architectural changes
 
