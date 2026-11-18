@@ -1,0 +1,9 @@
+{
+  // Worker "xfmr" behind the xfmr.link custom domain. The custom domain is
+  // attached in Cloudflare, not here, so a deploy cannot repoint the hostname.
+  "name": "xfmr",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-09-13",
+  "workers_dev": true,
+  "preview_urls": false
+}
