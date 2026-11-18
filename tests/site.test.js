@@ -305,8 +305,10 @@ for (const marker of [
   "does <strong>not</strong> currently maintain a global participant score",
   "Current Phase 2 admission criteria",
   "No hidden institutional criteria",
-  "what turns offered material into a formal Hummingbird governance proposal",
-  "does not itself initiate a governance proposal or create governance authority",
+  "Offers never become proposals automatically.",
+  "does not initiate a governance proposal or create governance authority",
+  "A formal governance proposal is a public, versioned change request",
+  "advisory, not binding",
   "Evidence-seeking experiments",
 ]) {
   if (!governance.includes(marker)) fail(`governance.html is missing evaluation/proposal marker: ${marker}`);

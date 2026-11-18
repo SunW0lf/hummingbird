@@ -44,6 +44,9 @@ const PUBLIC_DECISIONS = [
   "0020-phase2e-offer-pilot-launch-profile.md",
   "0021-offer-review-visibility.md",
   "0022-phase2e1-review-gate-dispositions.md",
+  "0023-narrow-core-offering-arrive-leave-carry.md",
+  "0024-phase2e2-constitutional-and-governance-dispositions.md",
+  "0025-phase2e3-security-ingress-and-runtime-dispositions.md",
 ];
 
 const ROOT_PUBLIC_ROUTES = new Map([

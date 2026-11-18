@@ -36,7 +36,7 @@ for (const [name, content, markers] of [
   ["ADR 0019", triageAdr, ["compress repetition","preserve meaningful difference","escalate consequence, not volume"]],
   ["ADR 0020", launchAdr, ["250 active offers","exact duplicate offer text only","does **not** create application-level raw-IP storage","Provisioning the database or merging runtime code is not by itself public launch"]],
   ["Phase 2E experimental ingress protocol", experimentalProtocol, ["Published handling contract","Volume is not a vote","Exit / expansion rule"]],
-  ["Offer Buffer working design", design, ["design only — not deployed; Phase 3 remains gated","Offer delivery options","Uncredentialed bounded delivery","Delivery is not priority","Broad scope is not itself an abuse signal","no hidden proof-of-thought, proof-of-cognition"]],
+  ["Offer Buffer working design", design, ["Phase 3 still needs an explicit entry decision","No credential is ever required to make an offer","Offer delivery options","Uncredentialed bounded delivery","Delivery is not priority","Broad scope is not itself an abuse signal","no hidden proof-of-thought, proof-of-cognition"]],
   ["Roadmap", roadmap, ["Phase 2E.P — Experimental ingress pilot","offer architecture documented, gate not yet open","make an offer","Offer Buffer (bounded, operational, non-canonical)","offer delivery options"]],
   ["Architecture", architecture, ["Future Phase 3 offer boundary — durable participation designed, not deployed","Offer Buffer (bounded operational state, non-canonical)","Scope is not itself an abuse signal"]],
   ["Governance", governance, ["Evidence-seeking experiments","open by design — evidence seeking","Published handling contracts"]],

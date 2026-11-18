@@ -30,7 +30,9 @@ The realistic attack surface is concentrated in:
 
 ## Authentication / authorization
 
-The first-party `/offer` pilot accepts an uncredentialed offer. A one-time random receipt, stored only as a hash, controls that offer's temporary status and withdrawal; it does not authenticate a participant, establish identity, or grant standing. GitHub separately handles accounts for the interim Seed Bank. The durable Phase 3 authentication/authorization model remains open: [OQ-SECURITY-AUTHN-MODEL](docs/governance/OPEN_QUESTIONS.md#oq-security-authn-model).
+The first-party `/offer` pilot accepts an uncredentialed offer. A one-time random receipt, stored only as a hash, controls that offer's temporary status and withdrawal; it does not authenticate a participant, establish identity, or grant standing. GitHub separately handles accounts for the interim Seed Bank. For durable capabilities, Phase 2E.3 adopted the same shape ([ADR 0025](docs/decisions/0025-phase2e3-security-ingress-and-runtime-dispositions.md)): **capabilities, not accounts.** Participants never authenticate. Each durable participant action returns a scoped, unguessable capability, stored only as a hash, that authorizes follow-ups on that one item and nothing else. Institutional actions use separate steward/operator credentials and record a reason class. No endorsement tool is deployed until multiplicity resistance is settled.
+
+**Abuse-state retention.** Flooding and volume controls run at the hosting edge and never copy network identifiers into Hummingbird stores. Any application-level restriction attaches to a capability, item, or content hash, never a person, records its scope, reason class, start, and end, and is kept no longer than the shorter of the restriction or 30 days, and less than the content it concerns. Reading is never restricted as a sanction.
 
 ## Secrets
 
@@ -103,7 +105,7 @@ The Phase 2 lifecycle is:
 
 Hummingbird distinguishes ordinary observations from incidents and critical incidents. A critical incident includes loss of trust in canonical integrity, material secret/control-plane compromise, material private-data exposure, or inability to trust or recover production state. A more detailed mature severity model remains Phase 2E.3 work.
 
-**Containment authority derives from authority published before the incident, not from the existence or severity of the incident itself.** An incident does not grant new constitutional, governance, exclusion, canonical-deletion, participant-restriction, or emergency authority. Permanent participant exclusion, suspension of governance rights, secret constitutional change, or other exceptional authority remains governed by the still-open participant-rights/exclusion/emergency questions.
+**Containment authority derives from authority published before the incident, not from the existence or severity of the incident itself.** An incident does not grant new constitutional, governance, exclusion, canonical-deletion, participant-restriction, or emergency authority. Exclusion, participant rights, and emergency authority are now defined in [CHARTER.md](CHARTER.md) §2, §3, and §6 ([ADR 0024](docs/decisions/0024-phase2e2-constitutional-and-governance-dispositions.md)): exclusion attaches to actions and material, never people; emergency authority is pause-only, triggered only when Hummingbird itself is a risk, publicly noticed at once, reduce-only, and lapses after 14 days unless renewed. Nothing in an incident permits permanent participant exclusion, suspension of rights, or secret constitutional change.
 
 The steward remains the current Phase 2 operational point of contact. Single-contact unavailability is an acknowledged residual continuity risk and is handled by the succession/continuity design rather than by inventing unauthorized emergency governance.
 

@@ -89,6 +89,8 @@ Delivery options exist to control resource consumption, pacing, and abuse risk. 
 
 The initial controlled Phase 3 pilot should follow ADR 0014 and favor a narrow, revocable capability credential with explicit quotas, payload bounds, expiry/revocation, schema validation, and replay/duplicate controls.
 
+> **Amended 2026-11-18:** no credential may be required to make an offer. See [Amendment 2026-11-18](#amendment-2026-11-18) below.
+
 Future broader access may offer additional delivery paths, for example a modest computational-effort path or an uncredentialed low-throughput path, but the same options must not be assigned to presumed participant categories.
 
 A delivery option may affect how quickly or how often an offer can cross the resource boundary. Once an offer is accepted into the Offer Buffer, the delivery method must not become a hidden content score, reputation signal, governance weight, or presumption of merit.
@@ -146,3 +148,13 @@ The implementation must not silently resolve those questions merely because this
 - The Offer Buffer gives Hummingbird a clear non-canonical boundary between receiving material and deciding to remember it.
 - The Phase 2E experimental pilot can test that boundary without opening Phase 3 or granting durable participant authority.
 - Phase 3 implementation can be tested against an explicit conceptual contract before broader controlled participation exists.
+
+## Amendment 2026-11-18
+
+Adopted by the steward on 2026-11-18 after the [Phase 3 Offer Buffer reconciliation review](../reviews/PHASE_3_OFFER_BUFFER_RECONCILIATION.md), to align this ADR with [ADR 0024](0024-phase2e2-constitutional-and-governance-dispositions.md) (leaving bounded material must not require authentication) and [ADR 0025](0025-phase2e3-security-ingress-and-runtime-dispositions.md) (participants never authenticate; capabilities are returned after an action and scoped to one item).
+
+- The **uncredentialed bounded delivery path** is the default and permanent offer delivery option, from the first Phase 3 pilot onward, as it already is in the Phase 2E pilot.
+- An issued capability credential may exist only as an **optional** path, for example to raise quota for a client that wants it. It is never required to make an offer and never changes consideration.
+- Bounded computational effort remains a possible later option, unchanged.
+- The Phase 3 blockers listed under §Phase gate above have all been resolved by ADR 0024 and ADR 0025. Phase 3 still requires an explicit entry decision.
+
