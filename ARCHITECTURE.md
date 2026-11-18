@@ -172,9 +172,9 @@ optional publication
 
 Offer delivery options exist to regulate resource consumption and harmful behavior. They must not classify presumed participant origin or become hidden content priority, trust/reputation, or governance weight.
 
-The initial Phase 3 durable-capability pilot is expected to favor a narrow revocable capability credential under ADR 0014. Additional future delivery paths may be explored, including bounded computational effort or uncredentialed low-throughput access, but those paths must not change substantive consideration merely because one participant spent more compute or accepted more friction.
+No credential is ever required to make an offer: the uncredentialed bounded path is the default from the first Phase 3 pilot onward, as it is in the live Phase 2E pilot ([ADR 0016, amended 2026-11-18](docs/decisions/0016-offers-and-the-offer-buffer.md#amendment-2026-11-18)). An optional issued credential or bounded computational effort may be added later, but no path may change substantive consideration because one participant spent more compute or accepted more friction.
 
-The Offer Buffer is deliberately **not canonical**. Exact durable Phase 3 storage, retention, payload bounds, deduplication, replay protection, capability issuance, abuse-state retention, correction/withdrawal, overload behavior, and recovery semantics remain gated Phase 3 design questions.
+The Offer Buffer is deliberately **not canonical**. Most of its properties are already settled by the live pilot ([ADR 0018](docs/decisions/0018-phase2e-offer-pilot-runtime-and-data-boundary.md)) and [ADR 0025](docs/decisions/0025-phase2e3-security-ingress-and-runtime-dispositions.md); the [reconciliation review](docs/reviews/PHASE_3_OFFER_BUFFER_RECONCILIATION.md) lists each one and the few left open.
 
 The working Phase 3 design is recorded in [docs/protocols/PHASE_3_OFFER_BUFFER_DESIGN.md](docs/protocols/PHASE_3_OFFER_BUFFER_DESIGN.md). It does not authorize durable Phase 3 accounts, capability issuance, governance standing, automatic canonical writes, or broader public mutation before the Phase 3 gate opens. The narrower Phase 2E evidence-only exception is governed separately by ADRs 0017–0020.
 
