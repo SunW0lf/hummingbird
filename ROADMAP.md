@@ -123,7 +123,7 @@ Completed evidence:
 
 ### Phase 2E — Phase review and Phase 3 gate
 
-Status: **in progress — Phase 2E.1 complete; Phase 2E.2 is next; bounded experimental ingress remains open; Phase 3 remains blocked**
+Status: **in progress — Phase 2E.1 and Phase 2E.2 complete; Phase 2E.3 is next; bounded experimental ingress remains open; Phase 3 remains blocked**
 
 The original evidence review, complete open-question inventory, recommended decision order, and Offer Buffer assumption audit were prepared in [docs/reviews/PHASE_2_EVIDENCE_AND_GATE_REVIEW.md](docs/reviews/PHASE_2_EVIDENCE_AND_GATE_REVIEW.md). It remains the historical evidence snapshot that began the review. The corrected current Phase 2E.1 state and final review-gate dispositions are recorded in [docs/reviews/PHASE_2E1_CLOSEOUT.md](docs/reviews/PHASE_2E1_CLOSEOUT.md) and [ADR 0022](docs/decisions/0022-phase2e1-review-gate-dispositions.md). None of those records authorizes Phase 3.
 
@@ -178,19 +178,25 @@ Evidence from the pilot may inform unresolved questions. Volume or repetition is
 
 #### Phase 2E.2 — Constitutional and governance decisions
 
-Status: **next**
+Status: **complete**
 
-- Resolve only the participant-rights, exclusion, participation-conditions, emergency-authority, and governance-proposal questions necessary to authorize Phase 3; bounded Phase 2E experiments may gather evidence relevant to those questions without silently resolving them.
-- Reconcile those decisions with steward scope, decision process, and the authority to consider, decline, admit, or publish offers.
-- Revisit long-term steward succession against the authority, rights, and emergency/proposal rules a future stewardship model would actually inherit.
-- Record each substantive decision in its authoritative Charter/Governance source and preserve ADR discipline where architectural consequences follow.
+Completed on 2026-11-18. See [ADR 0024](docs/decisions/0024-phase2e2-constitutional-and-governance-dispositions.md) and the [decision packet](docs/reviews/PHASE_2E2_DECISION_PACKET.md).
+
+- Adopted a minimum participant-rights floor (Arrive, Leave, Know, Review, Carry, No hidden standing), recorded as a floor for now and open to further exploration.
+- Defined exclusion as attaching to actions and material, never people; reading is never withdrawn as a sanction.
+- Defined participation conditions as each capability's published bounds plus three universal conditions, with no conduct code about intent.
+- Adopted pause-only emergency authority, triggered only when Hummingbird itself is a risk, with an immediate public notice, reduce-only scope, and a 14-day lapse unless renewed.
+- Defined formal proposals as public pull requests anyone may draft, decided by the steward with written reasons during C0. Advisory steward tools such as an endorsement threshold are permitted where safe; their reliability is carried into Phase 2E.3.
+- Recorded each decision in its authoritative Charter or Governance source as a C0 working-draft decision, not ratification.
+- Long-term steward succession remains an open, non-blocking review gate. Its next concrete step is a custody plan so credentials, domains, and backup decryption are not recoverable only through one person.
 
 #### Phase 2E.3 — Security, ingress, and runtime decisions
 
-Status: **pending Phase 2E.2 constraints**
+Status: **next**
 
 - Resolve the Phase 3 authentication/authorization, abuse-state retention, and application framework/runtime blockers after the relevant rights and governance constraints are known, using Phase 2E pilot evidence where useful.
 - Define the mature Phase 3 incident-response, monitoring/alerting, credential-lifecycle, ingress, overload, receipt, correction/withdrawal, shutdown, and recovery behavior without treating the Phase 2 baselines or pilot-scoped rules as automatic precedent.
+- Apply the Phase 2E.2 constraints: authentication must not be required to read, leave bounded material, or draft a proposal; abuse-state retention must support capability-scoped, time-bounded, reviewable restrictions rather than participant bans; and evaluate whether an advisory proposal-endorsement tool can be deployed safely given multiplicity/Sybil risk.
 - Review [ADR 0016](docs/decisions/0016-offers-and-the-offer-buffer.md) and the [Phase 3 Offer Buffer working design](docs/protocols/PHASE_3_OFFER_BUFFER_DESIGN.md) against all resolved Phase 3 rights, governance, security, and runtime decisions.
 
 #### Explicit Phase 3 authorization

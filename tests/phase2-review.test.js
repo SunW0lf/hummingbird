@@ -20,7 +20,7 @@ const rows = [...review.matchAll(/^\| `(OQ-[A-Z0-9-]+)` \| (Blocks Phase 3|Phase
 
 // The evidence review is a dated Phase 2E snapshot. Resolved questions remain in that
 // historical table even after they are removed from the live open-question registry.
-if (registryIds.length !== 23) fail(`expected 23 currently open questions in registry, found ${registryIds.length}`);
+if (registryIds.length !== 18) fail(`expected 18 currently open questions in registry, found ${registryIds.length}`);
 if (rows.length !== 25) fail(`expected the dated evidence review to preserve its 25-question snapshot, found ${rows.length}`);
 
 const rowIds = new Set(rows.map((row) => row.id));
@@ -31,6 +31,11 @@ for (const id of registryIds) {
 for (const resolvedId of [
   "OQ-GOVERNANCE-STEWARD-SCOPE",
   "OQ-GOVERNANCE-DECISION-PROCESS",
+  "OQ-CHARTER-RIGHTS",
+  "OQ-CHARTER-EXCLUSION",
+  "OQ-CHARTER-PARTICIPANT-RESPONSIBILITIES",
+  "OQ-GOVERNANCE-EMERGENCY-AUTHORITY",
+  "OQ-GOVERNANCE-PROPOSALS",
 ]) {
   if (registryIds.includes(resolvedId)) fail(`${resolvedId} should have been removed from the live registry after resolution`);
   if (!rowIds.has(resolvedId)) fail(`dated review snapshot should preserve resolved question ${resolvedId}`);
@@ -64,5 +69,5 @@ if (failures > 0) {
 }
 
 console.log("PASS: all currently open questions remain represented in the dated Phase 2 review snapshot");
-console.log("PASS: resolved C0 steward-scope and decision-process questions are absent from the live registry but preserved historically");
+console.log("PASS: resolved C0 and Phase 2E.2 questions are absent from the live registry but preserved historically");
 console.log("PASS: Seed Bank and Phase 2D findings state evidence limits and preserve Phase 3 authorization boundaries");
