@@ -60,6 +60,6 @@ Between 2026-09-12 and 2026-11-18 the pilot received two offers, one of them the
 
 **Do not enter Phase 3 yet.** Nothing is blocked, but entering now would turn an untested contract into a durable commitment. The cost of waiting is low because the pilot already offers the same capability.
 
-Suggested entry condition, for the steward to adopt or change: enter Phase 3 once the pilot has carried real offers from people other than the steward through at least one full review cycle, and that cycle's findings have been checked against ADR 0016, ADR 0018, and ADR 0025.
+Suggested entry condition, for the steward to adopt or change: enter Phase 3 once the pilot has carried real offers from participants other than the steward, human or automated, through at least one full review cycle, and that cycle's findings have been checked against ADR 0016, ADR 0018, and ADR 0025.
 
-Until then, the next useful work is getting real people to the offer form, and making the small ADR 0016 / working-design amendment in §1 and §2 if the steward agrees with it.
+Until then, the next useful work is getting real interaction through the offer form from any participant, human or automated. (The §1 and §2 amendment was adopted on 2026-11-18.)
