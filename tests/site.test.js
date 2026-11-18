@@ -246,6 +246,13 @@ for (const directive of ["Content-Security-Policy", "X-Content-Type-Options", "X
 const robots = fs.readFileSync(path.join(APP_DIR, "robots.txt"), "utf8");
 if (!robots.includes("https://datum.quest/sitemap.xml")) fail("robots.txt does not advertise the sitemap");
 
+// IndexNow: exactly one public key file whose contents equal its name.
+const indexNowKeys = fs.readdirSync(APP_DIR).filter((name) => /^[0-9a-f]{32}\.txt$/.test(name));
+if (indexNowKeys.length !== 1) fail(`expected one IndexNow key file, found ${indexNowKeys.length}`);
+else if (fs.readFileSync(path.join(APP_DIR, indexNowKeys[0]), "utf8").trim() !== indexNowKeys[0].replace(/\.txt$/, "")) {
+  fail("IndexNow key file contents do not match its name");
+} else pass("IndexNow key file is present and self-consistent");
+
 const sitemap = fs.readFileSync(path.join(APP_DIR, "sitemap.xml"), "utf8");
 for (const url of [
   "https://datum.quest/",

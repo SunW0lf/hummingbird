@@ -1,0 +1,40 @@
+name: IndexNow
+
+# Manual only: announce public URLs to IndexNow engines after a material
+# public change. See OPERATIONS.md, "Public discovery and source identity".
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: indexnow
+  cancel-in-progress: false
+
+jobs:
+  submit:
+    name: Submit public URLs
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Check the live key file
+        run: |
+          key=$(ls app | sed -n 's/^\([0-9a-f]\{32\}\)\.txt$/\1/p')
+          test -n "$key"
+          live=$(curl -fsS "https://datum.quest/${key}.txt" | tr -d '[:space:]')
+          test "$live" = "$key"
+
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "22"
+
+      - name: Build sitemap
+        run: npm ci && ./scripts/build
+
+      - name: Submit
+        run: node scripts/indexnow-submit.mjs
