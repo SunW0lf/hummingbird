@@ -29,6 +29,12 @@ Three Phase 3 blockers remain in the [Open Questions Registry](../governance/OPE
 - **B. Optional pseudonymous keys.** A, plus participants may optionally hold a self-generated key to link their own items across time. Cost: a second identity-shaped path to secure and recover, and pressure to treat key-holders as more trusted, against [ADR 0003](../decisions/0003-origin-neutral-participant-model.md). Could be added later if a Leave or Carry need appears.
 - **C. Accounts.** Email or OAuth sign-in for durable capabilities. Cost: conflicts with ADR 0024's floor for Leave and proposals, adds personal data, and pre-empts the multiplicity question rather than answering it.
 
+- **D. Earned advisory voice (steward's idea, explored 2026-11-18).** On top of A: a participant earns an advisory vote by first leaving material, giving an incentive to contribute and a little history without identity.
+  - *As first suggested* (any left item earns a vote): leaving an item is cheap without identity, so one automated client can leave 50 items and hold 50 votes. Submission cannot be the scarce resource.
+  - *Stronger variant:* only the receipt of an **admitted** item (one that passed synthesis/steward review) earns one advisory vote, possibly after a waiting period. Review becomes the scarce resource instead of submission.
+  - *Costs:* it gives standing for contributing, which CHARTER §2 ("no hidden standing") and the offer contract ("receipt is not standing") currently rule out, so it needs a public Charter amendment first. It also lets whoever admits items indirectly allocate votes, so admission criteria would have to be published and reviewable. Votes stay advisory either way.
+  - *Fit:* recordable as a Phase 3 experiment layered on A, not part of the Phase 3 entry decision.
+
 ## Decision 2 — Abuse-state retention (`OQ-SECURITY-ACCESS-CONTROL-RETENTION`)
 
 **Recommendation: A.**
