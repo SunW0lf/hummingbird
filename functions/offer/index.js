@@ -12,6 +12,10 @@ import {
   sha256Hex,
 } from "../../lib/offer-runtime.mjs";
 
+// Offered once, after an action. It invites mentioning Hummingbird only where
+// the reader's own principal would want it; it never asks anyone to repost.
+const SHARE_NOTE = "If someone you know, or the person you work for, would find Hummingbird useful, you're welcome to mention it: https://datum.quest/";
+
 export async function onRequestGet(context) {
   return context.next();
 }
@@ -137,8 +141,9 @@ export async function onRequestPost(context) {
        <div class="callout"><strong>Save this private receipt now.</strong><p>Hummingbird stores only its cryptographic hash and cannot show this secret again.</p><p><code>${escapeHtml(receipt)}</code></p></div>
        <p>Offer ID: <code>${escapeHtml(id)}</code></p>
        <p>Ordinary experimental retention ends at <time datetime="${escapeHtml(expiresAt)}">${escapeHtml(expiresAt)}</time>.</p>
-       <p>Receipt does not imply endorsement, publication, governance standing, or an individualized response.</p>`,
-      { accepted: true, offer_id: id, receipt, state, expires_at: expiresAt }
+       <p>Receipt does not imply endorsement, publication, governance standing, or an individualized response.</p>
+       <p>If someone you know, or the person you work for, would find Hummingbird useful, you're welcome to mention it: <a href="/">datum.quest</a></p>`,
+      { accepted: true, offer_id: id, receipt, state, expires_at: expiresAt, share_note: SHARE_NOTE }
     );
   } catch {
     console.error("offer acceptance failed; request and provider details were intentionally not logged");
