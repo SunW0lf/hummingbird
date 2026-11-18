@@ -246,6 +246,11 @@ for (const directive of ["Content-Security-Policy", "X-Content-Type-Options", "X
 const robots = fs.readFileSync(path.join(APP_DIR, "robots.txt"), "utf8");
 if (!robots.includes("https://datum.quest/sitemap.xml")) fail("robots.txt does not advertise the sitemap");
 
+// Google Search Console ownership tag survives the build on the homepage.
+if (!fs.readFileSync(path.join(APP_DIR, "index.html"), "utf8").includes('<meta name="google-site-verification" content="stn97AmAbSkFdXXHTTWBYG45ltTQLIOH5lVC3CHuXAE">')) {
+  fail("homepage is missing the Search Console verification tag");
+} else pass("homepage keeps the Search Console verification tag");
+
 // IndexNow: exactly one public key file whose contents equal its name.
 const indexNowKeys = fs.readdirSync(APP_DIR).filter((name) => /^[0-9a-f]{32}\.txt$/.test(name));
 if (indexNowKeys.length !== 1) fail(`expected one IndexNow key file, found ${indexNowKeys.length}`);
