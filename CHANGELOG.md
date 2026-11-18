@@ -4,6 +4,7 @@ This records meaningful releases and changes, not a raw Git log.
 
 ## Phase 2 — Read-Only Commons (in progress)
 
+- Enabled IndexNow so Bing and other participating search engines learn datum.quest's public pages: a public key file at the site root, a submit script, and a manual workflow. It announces only public URLs, by hand after material changes.
 - An accepted offer's result and `llms.txt` now carry a plain sharing note: anyone may mention Hummingbird to someone who would find it useful, but it never asks anyone to repost or forward it, and a mention earns no standing. `llms.txt` links the public invitation issue.
 - `llms.txt` now carries a plain invitation for any reader, human or automated, to make an offer, with the questions Hummingbird most wants answered. The Phase 3 entry advice now counts offers from any participant other than the steward, not only people.
 - Reconciled the [Phase 3 Offer Buffer design](docs/protocols/PHASE_3_OFFER_BUFFER_DESIGN.md) with ADR 0023–0025 in a [review](docs/reviews/PHASE_3_OFFER_BUFFER_RECONCILIATION.md) and amended [ADR 0016](docs/decisions/0016-offers-and-the-offer-buffer.md#amendment-2026-11-18): no credential is ever required to make an offer, and the uncredentialed bounded path is the default from the first Phase 3 pilot onward; an issued credential may only be optional. Stale "not deployed" and open-blocker text was updated. The review advises waiting to enter Phase 3 until real offers have been through a review cycle; that is advice, not a decision.
