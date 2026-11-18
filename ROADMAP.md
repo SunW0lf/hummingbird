@@ -249,7 +249,7 @@ Future broader access may offer multiple **offer delivery options**. Those optio
 
 The live Phase 2E first-party ingress experiment is now the primary low-friction entrance. The Seed Bank remains a durable public discussion/archive path rather than the default front door.
 
-No Phase 3 blocker remains open: they were resolved by [ADR 0024](docs/decisions/0024-phase2e2-constitutional-and-governance-dispositions.md) and [ADR 0025](docs/decisions/0025-phase2e3-security-ingress-and-runtime-dispositions.md), and the Offer Buffer design was reconciled with them on 2026-11-18 ([review](docs/reviews/PHASE_3_OFFER_BUFFER_RECONCILIATION.md)). Entry still requires an explicit recorded decision. The review advises waiting until real offers from people other than the steward have been through at least one review cycle; that advice is not yet adopted. A successful Phase 2E experiment, working Phase 2 database, or narrower product scope is not itself permission to enter.
+No Phase 3 blocker remains open: they were resolved by [ADR 0024](docs/decisions/0024-phase2e2-constitutional-and-governance-dispositions.md) and [ADR 0025](docs/decisions/0025-phase2e3-security-ingress-and-runtime-dispositions.md), and the Offer Buffer design was reconciled with them on 2026-11-18 ([review](docs/reviews/PHASE_3_OFFER_BUFFER_RECONCILIATION.md)). Entry still requires an explicit recorded decision. The review advises waiting until real offers from participants other than the steward, human or automated, have been through at least one review cycle; that advice is not yet adopted. A successful Phase 2E experiment, working Phase 2 database, or narrower product scope is not itself permission to enter.
 
 ### Exploratory work outside the core roadmap
 
