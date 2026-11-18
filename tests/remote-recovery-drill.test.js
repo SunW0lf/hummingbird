@@ -37,7 +37,7 @@ for (const marker of [
   `if: "\${{ startsWith(github.event.head_commit.message, 'Phase 2D: run remote recovery drill') }}"`,
   "secrets.CLOUDFLARE_D1_RECOVERY_TOKEN",
   "permissions:\n  contents: read",
-  "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+  "actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9",
   "retention-days: 30",
 ]) {
   if (!workflow.includes(marker)) fail(`remote recovery workflow is missing guard: ${marker}`);
