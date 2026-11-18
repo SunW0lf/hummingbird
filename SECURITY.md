@@ -4,7 +4,7 @@ Security protects the commons without depending on proving participant origin.
 
 ## Current attack surface
 
-Phase 2 is now in progress. The deployed Hummingbird application surface remains read-only while Cloudflare D1 holds deliberately admitted canonical application state behind a separate operational boundary. There are no Hummingbird-owned public submission forms or participant accounts yet.
+Phase 2 is in progress. Public `GET`/`HEAD` reading remains open and largely static. The bounded first-party `/offer` pilot now accepts temporary, non-canonical offers through a Pages Function and a dedicated `OFFER_DB` separate from canonical D1. It accepts ordinary HTML form posts without an account, origin declaration, CAPTCHA, or JavaScript for basic use. Receipt-based status and withdrawal are pilot-scoped; no durable participant account or Phase 3 public write API exists. See [ADR 0017](docs/decisions/0017-phase2e-experimental-ingress.md) and [ADR 0018](docs/decisions/0018-phase2e-offer-pilot-runtime-and-data-boundary.md).
 
 The interim Seed Bank defined by [ADR 0011](docs/decisions/0011-interim-seed-bank.md) introduces a bounded external write surface through public GitHub issue forms and discussion threads. That surface inherits GitHub's account, spam, abuse, and moderation mechanisms; it does not create Hummingbird application credentials or a direct write path into Hummingbird persistence.
 
@@ -12,9 +12,10 @@ The realistic attack surface is concentrated in:
 
 - public GitHub repository and Actions (source and CI compromise)
 - public Seed Bank issue intake (spam, harassment, malicious links, social engineering, accidental disclosure, and attempts to smuggle vulnerability details into public threads)
+- first-party `/offer` intake and receipt-based status/withdrawal (untrusted content, resource exhaustion, receipt exposure, and availability of the temporary review path)
 - Cloudflare account, Pages deployment credential, and separate D1 operational/recovery credentials (deployment or persistence compromise)
 - dependency compromise (npm devDependencies used for CI tooling)
-- production D1 persistence, migrations, backup, recovery, and future mutation boundaries
+- canonical D1 persistence, migrations, backup, and recovery, alongside the separate disposable offer-store boundary
 
 ## Interim Seed Bank safety boundary
 
@@ -29,7 +30,9 @@ The realistic attack surface is concentrated in:
 
 ## Authentication / authorization
 
-Not applicable to Hummingbird-owned public participation yet — no participant accounts exist. GitHub handles authentication for the interim Seed Bank as an external provider. Open question: [OQ-SECURITY-AUTHN-MODEL](docs/governance/OPEN_QUESTIONS.md#oq-security-authn-model) for Phase 3+ when Hummingbird-owned contribution/proposal forms are introduced.
+The first-party `/offer` pilot accepts an uncredentialed offer. A one-time random receipt, stored only as a hash, controls that offer's temporary status and withdrawal; it does not authenticate a participant, establish identity, or grant standing. GitHub separately handles accounts for the interim Seed Bank. For durable capabilities, Phase 2E.3 adopted the same shape ([ADR 0025](docs/decisions/0025-phase2e3-security-ingress-and-runtime-dispositions.md)): **capabilities, not accounts.** Participants never authenticate. Each durable participant action returns a scoped, unguessable capability, stored only as a hash, that authorizes follow-ups on that one item and nothing else. Institutional actions use separate steward/operator credentials and record a reason class. No endorsement tool is deployed until multiplicity resistance is settled.
+
+**Abuse-state retention.** Flooding and volume controls run at the hosting edge and never copy network identifiers into Hummingbird stores. Any application-level restriction attaches to a capability, item, or content hash, never a person, records its scope, reason class, start, and end, and is kept no longer than the shorter of the restriction or 30 days, and less than the content it concerns. Reading is never restricted as a sanction.
 
 ## Secrets
 
@@ -46,14 +49,18 @@ Not applicable to Hummingbird-owned public participation yet — no participant 
 - GitHub Actions workflows request only the permissions they need (see `.github/workflows/`).
 - Repository workflow-token default permissions are configured read-only; the workflow also declares read-only repository-content permission explicitly.
 
-## Planned defenses (Phase 3+ application-owned participation)
+## Phase 2E pilot controls and future defenses
+
+The live pilot bounds offer text and request size, validates the form and optional reference, enforces a 250-active-offer ceiling at insertion, groups exact duplicate text without rejecting a valid offer, and fails closed when persistence cannot confirm acceptance. Accepted content has 30-day ordinary retention, with scheduled cleanup; receipt-bearing responses are `no-store` and `noindex`. The application offer store does not retain raw network identifiers, user-agent history, or a cross-offer identity profile. The public observer releases counts only; restricted short-lived review packets are a separate projection. See [ADR 0018](docs/decisions/0018-phase2e-offer-pilot-runtime-and-data-boundary.md), [ADR 0021](docs/decisions/0021-offer-review-visibility.md), and [OPERATIONS.md](OPERATIONS.md#phase-2e-offer-review).
+
+Additional durable Phase 3 defenses remain design work, subject to the open rights, governance, security, and runtime decisions:
 
 - Rate limiting
 - Spam / automated flooding controls
 - DDoS (partially mitigated by Cloudflare's proxy by default)
 - Sybil behavior detection
 - Replay protection
-- Injection prevention (input validation once forms/APIs exist)
+- Input validation across any later forms/APIs
 - Malicious upload handling (once uploads exist)
 - CAPTCHA avoided as a primary defense; prefer layered, behavior-based defenses over visual challenge-response
 
@@ -83,7 +90,24 @@ Public source, history, forks, repository Actions logs, and public Seed Bank thr
 
 ## Incident response
 
-Open question: [OQ-SECURITY-INCIDENT-RESPONSE](docs/governance/OPEN_QUESTIONS.md#oq-security-incident-response) — formal incident response process. Until defined, the steward is the operational point of contact.
+Phase 2 uses a small operational incident lifecycle while the mature participant-facing Phase 3 process remains open under [OQ-SECURITY-INCIDENT-RESPONSE](docs/governance/OPEN_QUESTIONS.md#oq-security-incident-response). The full Phase 2E.1 disposition is recorded in [ADR 0022](docs/decisions/0022-phase2e1-review-gate-dispositions.md).
+
+An incident is a credible event involving plausible compromise, unauthorized mutation, exposure of secrets or non-public material, loss/corruption of canonical state, material loss of recoverability, sustained attack/resource exhaustion, or material violation of a published security/privacy boundary. Loss of a key or recovery capability may qualify even without an attacker.
+
+The Phase 2 lifecycle is:
+
+1. **Recognize / declare.** The steward may treat a credible material threat as an incident before proof is complete.
+2. **Contain reversibly where practicable.** Existing operational authority may be used to pause a bounded experimental surface, revoke/rotate credentials, stop a workflow or deployment, isolate suspect state, preserve a snapshot, roll back code, fail closed, or use an already-authorized recovery path.
+3. **Preserve minimum necessary evidence.** Keep only the evidence needed to understand and remediate the event when preservation does not prolong harm. Security-sensitive evidence follows the retention rules below rather than becoming permanent by default.
+4. **Recover and verify.** Recovery is not complete merely because a page responds. Re-establish trust in the affected capability: code/provenance, credentials, canonical state, backup/recovery state, and production health as applicable.
+5. **Record and disclose proportionately.** Restricted exploit/security detail may remain private while necessary; a later public institutional record should preserve material consequence, response, recovery status, and durable corrective action while minimizing secrets, participant material, provider identifiers, and correlation-rich telemetry.
+6. **Close and learn.** Record residual risk and corrective action, and verify temporary containment measures were removed or separately authorized rather than becoming permanent policy by inertia.
+
+Hummingbird distinguishes ordinary observations from incidents and critical incidents. A critical incident includes loss of trust in canonical integrity, material secret/control-plane compromise, material private-data exposure, or inability to trust or recover production state. A more detailed mature severity model remains Phase 2E.3 work.
+
+**Containment authority derives from authority published before the incident, not from the existence or severity of the incident itself.** An incident does not grant new constitutional, governance, exclusion, canonical-deletion, participant-restriction, or emergency authority. Exclusion, participant rights, and emergency authority are now defined in [CHARTER.md](CHARTER.md) §2, §3, and §6 ([ADR 0024](docs/decisions/0024-phase2e2-constitutional-and-governance-dispositions.md)): exclusion attaches to actions and material, never people; emergency authority is pause-only, triggered only when Hummingbird itself is a risk, publicly noticed at once, reduce-only, and lapses after 14 days unless renewed. Nothing in an incident permits permanent participant exclusion, suspension of rights, or secret constitutional change.
+
+The steward remains the current Phase 2 operational point of contact. Single-contact unavailability is an acknowledged residual continuity risk and is handled by the succession/continuity design rather than by inventing unauthorized emergency governance.
 
 ## Vulnerability reporting
 

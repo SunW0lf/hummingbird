@@ -17,10 +17,51 @@ Phase 2 is intentionally staged:
 1. **2A — Canonical contract/reference corpus.** No production database required. Schema and fixture contract must pass CI.
 2. **2B — Persistence/import.** Provision D1, apply versioned migrations, ingest storage-independent records deterministically, and prove export equivalence.
 3. **2C — Public read model/admission.** Build rebuildable projections and demonstrate explicit external-source → canonical-admission behavior.
-4. **2D — Publication buffer/backup/recovery.** Implement delayed/coarsened publication where required, export D1 independently, and restore into empty state.
+4. **2D — Publication buffer/backup/recovery — complete.** Independent encrypted retention, restore, semantic equivalence, and publication-buffer behavior have been exercised.
 5. **2E — Phase review.** Review the Seed Bank experiment and Phase 2 operational/governance review gates before considering Phase 3.
 
 See [ROADMAP.md](ROADMAP.md).
+
+## Phase 2E offer review
+
+The public hourly [offer observer](.github/workflows/phase2e-offer-observer.yml)
+prints `HB_PENDING_COUNT` and `HB_OFFERS_PENDING` for unexpired `received`,
+`grouped`, `synthesized`, and `deferred` offers. A successful run is required before treating zero as clear;
+an observer failure means unknown, not zero. Its public log never contains
+offer text or identifiers. A private, short-lived content review companion is
+described in [ADR 0021](docs/decisions/0021-offer-review-visibility.md) and
+[its setup guide](ops/offer-review-companion/README.md). The companion is now
+configured in a separate private repository. A manual run succeeded, read D1,
+and produced the one-day `offer-review` artifact; later runs must still be
+checked individually for success and freshness. The workflow is scheduled
+hourly and never prints offer bodies or receipts in its logs.
+
+An accepted `/offer` write starts as `received`. A conditional D1 insert enforces
+the published capacity; exact duplicate grouping can then mark `received` rows
+as `grouped` and populate temporary cluster membership. Failed grouping leaves
+the accepted offer `received`, still visible to the observer and review exporter.
+Receipt-based withdrawal clears the body and cluster link; scheduled cleanup
+expires remaining temporary content. The public signal and private packet are
+derived from D1 and do not initiate admission or publication. The private
+packet's `observed_at` and `unresolved_count` must be checked against the latest
+successful public run before declaring the inbox clear or taking action.
+
+The review packet can now be processed locally/private-side with
+`scripts/prepare-offer-candidates.mjs`. The tool deterministically turns each
+exact-text review group into a `canonical-candidate-v1` envelope, preserves each
+offer as a source reference, validates the proposed draft record against the
+existing guarded admission contract, and writes only candidate files plus a
+manifest. This step performs no network access and no canonical mutation.
+Repeated identical offers remain multiple source references, not votes or
+priority weight. Semantic grouping/synthesis beyond exact text remains a later
+advisory step and must preserve corrections, disagreement, and singletons.
+
+A candidate envelope is deliberately weaker than admission. It must remain
+`candidate_only`, require explicit admission, and cannot carry receipt secrets,
+provider database identifiers, participant profiles, source IPs, fingerprints,
+or similar request metadata. A reviewed candidate may later be passed through
+the existing steward-only admission path, but candidate generation itself never
+changes D1, publication state, or governance status.
 
 ## Backup
 
@@ -36,9 +77,11 @@ The exporter is read-only against D1. It reconstructs canonical objects and rela
 
 Production backup bundles must remain outside the public repository, outside the public web root, and outside the live D1 service as an independently retrievable copy. `.hummingbird-backups/` is ignored only as a local convenience; an ignored directory on the same machine is not sufficient disaster recovery.
 
-During the current low-write steward-controlled phase, create and independently retain a verified portable backup after each deliberate durable canonical mutation, and before/after maintenance or migration activity that could materially affect canonical state. Add scheduled backup cadence only when mutation frequency makes it useful.
+The ordinary retention path is the **Phase 2D Private Canonical Backup** workflow. It runs daily on a repository-controlled schedule and retains the manually confirmed trigger for deliberate extra checkpoints. Each run exports canonical production state read-only, validates the portable bundle, public-key encrypts it to the configured `age` recipient, removes runner plaintext, and commits only ciphertext plus its transport checksum to the dedicated private `SunW0lf/hummingbird-backups` repository using a destination-scoped credential. The `age` private identity remains steward-held outside GitHub and Cloudflare.
 
-A provider-native D1 export may supplement this bundle but does not replace the storage-independent canonical backup requirement.
+The ordinary independent-retention checkpoint has been completed: a retained ciphertext bundle was retrieved from the private repository, decrypted with the off-platform steward-held identity, and the recovered portable bundle passed `./scripts/restore ... --validate-only`. This closes Phase 2D's independent-backup requirement while keeping decryption capability outside the hosting and source-control providers.
+
+The daily schedule is the baseline recovery-point cadence during the current low-write phase. Use the retained manual trigger before and after maintenance, migration, or deliberate canonical mutation when a tighter recovery point is materially useful. A provider-native D1 export may supplement this bundle but does not replace the storage-independent canonical backup requirement.
 
 The first remote recovery drill used a narrow exception because the workflow first proved that the complete production canonical set exactly matched already-public `publication/canonical` state. Only then was a short-lived public GitHub Actions artifact permitted. That exception does not authorize public artifact storage for future backups containing drafts or other non-public canonical state.
 
@@ -100,6 +143,51 @@ Database rollback is not equivalent to code rollback. Destructive reverse migrat
 
 The healthcheck deliberately does not persist cookies, authenticate, execute JavaScript, impersonate a verified crawler, or collect participant identity/fingerprinting data. Cloudflare zone-level bot, WAF, Browser Integrity Check, crawler, rate-limit, and managed-`robots.txt` settings remain steward-managed operational configuration. Settings that cannot be read back using the intentionally narrow Pages deployment credential must be recorded as steward-verified rather than falsely described as independently verified. See [ADR 0013](docs/decisions/0013-public-read-accessibility.md).
 
+### Phase 2 monitoring model
+
+The Phase 2 review disposition is recorded in [ADR 0022](docs/decisions/0022-phase2e1-review-gate-dispositions.md). Hummingbird does **not** use one institution-wide monitoring interval. Cadence follows the failure mode, consequence, and expected rate of change of the capability being observed.
+
+The durable monitoring pattern is:
+
+- **event-driven verification** after deployment, migration, credential change, recovery, or material provider/configuration change;
+- **scheduled checks** for capabilities that can degrade without a repository change; and
+- **periodic exercises** for capabilities such as recovery that a successful uptime probe cannot prove.
+
+Every consequential capability should eventually publish or inherit a small monitoring contract: what healthy means, how it is observed, how freshness is determined, what `degraded`, `failed`, and `unknown/stale` mean, what data may be collected, who or what receives an actionable failure, and what—if any—pre-authorized automated mitigation exists.
+
+A stale or failed monitor means **unknown**. Silence from a dead monitor must never be treated as evidence of health. A failed probe also does not automatically prove the underlying service failed; retry/confirmation should be proportionate to the consequence before escalation.
+
+Monitoring is failure-oriented, not surveillance-oriented. It must collect only what is necessary to establish health, integrity, or recoverability. The availability of richer telemetry does not justify participant identity, fingerprinting, raw request exhaust, offer content, or unnecessary behavioral history.
+
+Observation is not authority. A monitor may report or classify a condition and may invoke only explicitly pre-authorized bounded fail-safe behavior. It does not acquire canonical mutation, credential, recovery, exclusion, or governance authority because it detected a failure.
+
+Where consequence warrants it, important health claims should eventually be corroborated from outside the same failure domain. Phase 2 may accept single-source monitoring for low-consequence surfaces, but multiple green jobs in the same provider are not treated as independent evidence merely because they are separate jobs.
+
+The current Phase 2 baseline is:
+
+- **on change:** CI/build verification and post-deployment production health checks; rerun relevant checks after material provider/public-read configuration changes;
+- **scheduled public read plane:** a lightweight repository-controlled external plain-HTTP health run, with no mutation and no participant telemetry;
+- **hourly:** public offer pending-state observation and private offer review/candidate preparation;
+- **daily:** encrypted storage-independent canonical backup;
+- **deliberate/periodic:** backup retrieval/decryption/restore validation, recovery exercises, and tighter backup checkpoints around consequential canonical maintenance.
+
+Cadences are Phase 2 operational parameters, not permanent service promises. Reassess them when write volume, durable participant state, financial consequence, operational custodians, providers/failure domains, availability expectations, or observed failure modes change materially. No uptime SLA is implied by the current schedule.
+
+The broader Phase 3 monitoring/alerting, ownership, redundancy, service-level, and automated-remediation design remains open under [OQ-OPS-MONITORING-CADENCE](docs/governance/OPEN_QUESTIONS.md#oq-ops-monitoring-cadence) for Phase 2E.3.
+
+### Public discovery and source identity
+
+`https://datum.quest/` is the only canonical web origin. Built HTML advertises clean self-canonical URLs; the repository-owned `robots.txt` links the generated `sitemap.xml`; `llms.txt` and the existing `/offer` page describe the ordinary public read and bounded offer paths. Keep the GitHub repository README and About/homepage metadata pointed at the live first-party pilot, not an obsolete read-only-only description. Avoid confusing Hummingbird with similarly named organizations or implying affiliation.
+
+After a material public-entry change:
+
+1. Run `./scripts/healthcheck` against production and inspect `/`, `/offer`, `/robots.txt`, `/sitemap.xml`, `/llms.txt`, and a public canonical JSON/Markdown route using ordinary HTTP. Check clean canonical targets, useful initial HTML, status and content type, and no challenge/interstitial. Do not test participation by posting unsolicited offers.
+2. In a **verified** Google Search Console property for `datum.quest`, inspect the live homepage and `/offer`, submit the existing sitemap, and request recrawling of a few materially changed pages. In a verified Bing Webmaster Tools property, inspect the same routes and submit the sitemap. These account-owned indexing and performance views cannot be inferred from a generic search result or a successful curl response; recrawl and inclusion are not guaranteed.
+3. The optional `www.datum.quest` alias returned an origin error in a 2026-09-12 external check. If it is retained, configure it at the provider as a TLS-valid, single-hop permanent redirect to `https://datum.quest` preserving path and query, then verify both `GET` and `HEAD` externally. Do not treat a repository-only Pages redirect as proof that an unbound host works. Until provider confirmation, keep all project links on the apex.
+4. Track indexed canonical pages, relevant query impressions/clicks, substantive citations or referrals where available, successful offer receipts, public observer health, private review freshness, and unresolved backlog using aggregated provider measurements. Do not add participant identity, fingerprinting, raw request telemetry, or offer content to public analytics. A burst of crawler requests is not participation.
+
+Only after the intake/review path remains healthy under observed demand should external distribution or changed-URL notifications such as IndexNow be considered. A deployment ping should announce genuinely added, changed, or deleted **public** URLs, not private offers or every routine build. This is an operational discovery checklist, not an expansion of the Phase 2E pilot or a decision about training/reuse rights.
+
 ### Cloudflare public-read configuration review
 
 The following is a steward dashboard checklist, not repository-controlled configuration. Provider labels may change; preserve the purpose distinction rather than relying on a particular UI name.
@@ -148,8 +236,6 @@ Manual plain-HTTP checks after activation confirmed:
 - CSP, frame-denial, referrer, permissions, and content-type-hardening headers remained present.
 
 These checks are acceptance evidence for the external behavior, not proof of every hidden provider toggle. After any material Cloudflare bot/WAF/challenge-policy change, rerun `./scripts/healthcheck` and at least one no-`User-Agent` request.
-
-Open question: [OQ-OPS-MONITORING-CADENCE](docs/governance/OPEN_QUESTIONS.md#oq-ops-monitoring-cadence) — scheduled monitoring beyond the post-deployment smoke test versus additional manual checks only. During Phase 2, monitoring should remain lean: service availability, deployment health, migration/import success, backup success, and restore-test outcome are higher priority than broad behavioral telemetry.
 
 ## Upgrades
 
@@ -234,14 +320,46 @@ The public-repository security activation is complete. Repository Actions are re
 
 `.github/CODEOWNERS` records the current steward as code owner. `.github/dependabot.yml` monitors npm and GitHub Actions dependencies so pinned action SHAs and package versions can be reviewed through pull requests.
 
+## Credential lifecycle
+
+The Phase 2 review disposition is recorded in [ADR 0022](docs/decisions/0022-phase2e1-review-gate-dispositions.md). Hummingbird uses a risk-based credential lifecycle rather than one universal calendar interval.
+
+For each consequential credential class, record without recording the secret itself: purpose, scope/capabilities, authorized consumer/custody boundary, storage class, expiration behavior, replacement path, immediate-revocation triggers, and how replacement plus predecessor retirement are verified.
+
+Prefer, where practicable:
+
+1. no long-lived secret / workload or federated identity;
+2. narrowly scoped expiring credentials; then
+3. narrowly scoped long-lived credentials only where necessary.
+
+Immediate rotation or revocation is required on suspected compromise or unintended exposure, material custody/automation-context change, material scope change, compromise of the storage boundary, provider/security-mechanism change that invalidates the old assumptions, or loss of confidence about where a credential has existed.
+
+For the current Phase 2 production Pages deployment token, **180 days is the ordinary review / maximum-lifetime baseline**, not a permanent institutional cadence. Shorter lifetime, automated rotation, or eliminating the stored secret is preferred when it can be done without reducing reliability or broadening authority.
+
+A normal planned rotation follows:
+
+```text
+create replacement
+→ install in authorized consumer
+→ verify intended operation
+→ revoke/expire predecessor
+→ verify predecessor no longer works
+→ record rotation event without secret material
+```
+
+When compromise is suspected, revoke first if graceful overlap would prolong risk. Different credential classes—deployment, provider administration, database/recovery, offline backup decryption, and future workload identities—need not share one age limit because their exposure and consequences differ.
+
+Credential custody is operational capability, not governing authority. The broader Phase 3 credential-lifecycle design remains open under [OQ-OPS-TOKEN-ROTATION-CADENCE](docs/governance/OPEN_QUESTIONS.md#oq-ops-token-rotation-cadence) for Phase 2E.3.
+
 ## Routine steward tasks
 
 - Review and merge pull requests only after required CI passes.
 - Review Dependabot pull requests and security alerts; do not auto-merge dependency changes without CI.
 - Keep canonical schema, reference corpus, migrations, and data-model documentation aligned.
-- Create/retain a verified portable canonical backup after deliberate durable canonical mutation during the current low-write phase.
+- Check that scheduled encrypted canonical backups remain successful; use the manual backup trigger before/after maintenance, migration, or deliberate canonical mutation when a tighter recovery point is useful.
+- Check freshness/success of scheduled monitoring rather than treating absence of alerts as proof of health.
 - Review public Seed Bank activity for abuse/safety issues without treating popularity as governance weight.
 - Review Cloudflare public-read settings after material provider-policy changes so benign `GET`/`HEAD` access remains consistent with ADR 0013 without weakening network/DDoS or mutation-path protections.
 - Revisit the broad public-read Skip expression before any non-public, authenticated, expensive, or abuse-sensitive `GET` endpoint is added.
-- Rotate the Cloudflare deployment token periodically. Open question: [OQ-OPS-TOKEN-ROTATION-CADENCE](docs/governance/OPEN_QUESTIONS.md#oq-ops-token-rotation-cadence) — exact cadence.
+- Review/replace the current production deployment token before its Phase 2 maximum-lifetime baseline, and rotate/revoke immediately on the trigger conditions above. Do not apply that interval mechanically to unrelated credential classes.
 - Keep the Open Questions Registry honest — resolve questions in substantive documents rather than letting implementation silently answer them.

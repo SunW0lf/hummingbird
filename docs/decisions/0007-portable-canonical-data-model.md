@@ -5,7 +5,7 @@
 
 ## Context
 
-Phase 2 (Read-Only Commons) will eventually require a real database, and the project intentionally has not chosen one yet (see [OQ-ARCH-FRAMEWORK](../governance/OPEN_QUESTIONS.md#oq-arch-framework) equivalent framework question and the data-model open questions). Without an explicit portability constraint, early schema decisions risk locking Hummingbird's institutional meaning into the quirks of whichever database is picked first.
+Phase 2 (Read-Only Commons) will eventually require a real database, and the project intentionally has not chosen one yet (see [OQ-ARCH-FRAMEWORK](../governance/RESOLVED_QUESTIONS.md#oq-arch-framework) equivalent framework question and the data-model open questions). Without an explicit portability constraint, early schema decisions risk locking Hummingbird's institutional meaning into the quirks of whichever database is picked first.
 
 ## Decision
 

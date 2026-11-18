@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://datum.quest/schemas/canonical-candidate-v1.schema.json",
+  "title": "Hummingbird Canonical Candidate Envelope v1",
+  "description": "A non-canonical, machine-preparable envelope for material that may later be considered for explicit canonical admission. Validity does not grant admission, publication, governance status, or participant standing.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "candidate_version",
+    "candidate_id",
+    "generated_at",
+    "record",
+    "sources",
+    "derivation",
+    "admission"
+  ],
+  "properties": {
+    "candidate_version": { "const": 1 },
+    "candidate_id": { "type": "string", "minLength": 1, "maxLength": 160 },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "record": {
+      "allOf": [
+        { "$ref": "./canonical-object-v1.schema.json" },
+        {
+          "properties": {
+            "type": { "enum": ["contribution", "proposal", "need"] },
+            "state": { "const": "draft" }
+          }
+        }
+      ]
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 250,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source_ref", "kind"],
+        "properties": {
+          "source_ref": { "type": "string", "minLength": 1, "maxLength": 2048 },
+          "kind": {
+            "type": "string",
+            "enum": ["offer", "seed_bank", "canonical", "public_reference", "other"]
+          },
+          "note": { "type": "string", "maxLength": 1000 }
+        }
+      }
+    },
+    "derivation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "source_count", "machine_assisted"],
+      "properties": {
+        "method": {
+          "type": "string",
+          "enum": ["direct", "manual_synthesis", "machine_assisted_synthesis", "deterministic_transform"]
+        },
+        "source_count": { "type": "integer", "minimum": 1, "maximum": 250 },
+        "machine_assisted": { "type": "boolean" },
+        "note": { "type": "string", "maxLength": 2000 }
+      }
+    },
+    "admission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "requires_explicit_admission"],
+      "properties": {
+        "status": { "const": "candidate_only" },
+        "requires_explicit_admission": { "const": true }
+      }
+    }
+  }
+}

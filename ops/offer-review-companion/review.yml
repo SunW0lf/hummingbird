@@ -1,0 +1,62 @@
+# Copy this workflow into .github/workflows/review.yml in a PRIVATE companion
+# repository. Never enable it in the public Hummingbird repository.
+name: Private Offer Review
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/review.yml
+  schedule:
+    - cron: "43 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: private-offer-review
+  cancel-in-progress: false
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out public review and candidate tooling
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          repository: SunW0lf/hummingbird
+          ref: main
+          path: source
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: "22"
+
+      - name: Export active offers without logging contents
+        env:
+          CLOUDFLARE_D1_RECOVERY_TOKEN: ${{ secrets.CLOUDFLARE_D1_RECOVERY_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -euo pipefail
+          mkdir -m 700 review
+          node source/scripts/export-offer-review.mjs review/packet.json
+
+      - name: Prepare validated non-canonical candidates
+        run: |
+          set -euo pipefail
+          node source/scripts/prepare-offer-candidates.mjs \
+            review/packet.json \
+            --output-dir review/candidates
+
+      - name: Retain private review packet and candidates for one day
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: offer-review
+          path: review/
+          retention-days: 1
+          if-no-files-found: error

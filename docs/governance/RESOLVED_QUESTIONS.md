@@ -4,6 +4,38 @@ This archive preserves stable `OQ-*` identifiers after their questions leave the
 
 IDs are never reused.
 
+## Resolved 2026-11-18 (Phase 2E.3)
+
+These three Phase 3 blockers were resolved together in Phase 2E.3 by [ADR 0025](../decisions/0025-phase2e3-security-ingress-and-runtime-dispositions.md) as C0 working-draft decisions.
+
+### OQ-SECURITY-AUTHN-MODEL
+Resolved by [SECURITY.md](../../SECURITY.md) and ADR 0025: participants never authenticate. Durable participant actions return scoped, unguessable, hash-stored capabilities limited to follow-ups on one item; institutional actions use separate steward/operator credentials. The advisory endorsement tool stays undeployed until `OQ-SECURITY-MULTIPLICITY-ABUSE` is answered. An earned advisory voice for admitted items is recorded as a possible later experiment requiring a Charter amendment.
+
+### OQ-SECURITY-ACCESS-CONTROL-RETENTION
+Resolved by [SECURITY.md](../../SECURITY.md) and ADR 0025: flooding controls run at the hosting edge without copying network identifiers into Hummingbird stores. Application-level restrictions attach to a capability, item, or content hash, never a person, and their state is kept no longer than the shorter of the restriction or 30 days, and less than the content it concerns.
+
+### OQ-ARCH-FRAMEWORK
+Resolved by [PROJECT.md](../../PROJECT.md) and ADR 0025: keep the current minimal stack (static pages, small request handlers, SQL storage, plain JavaScript, no application framework). New frameworks or runtime components require an ADR showing an Arrive / Leave / Carry need the current stack cannot meet.
+
+## Resolved 2026-11-18 (Phase 2E.2)
+
+These five Phase 3 blockers were resolved together in Phase 2E.2 by [ADR 0024](../decisions/0024-phase2e2-constitutional-and-governance-dispositions.md) as C0 working-draft decisions.
+
+### OQ-CHARTER-RIGHTS
+Resolved by [CHARTER.md](../../CHARTER.md) §2: a six-part minimum floor (Arrive, Leave, Know, Review, Carry, No hidden standing) applies regardless of origin. It excludes any right to an individualized reply, admission, publication, or particular outcome. It is recorded as a floor for now, open to further exploration.
+
+### OQ-CHARTER-EXCLUSION
+Resolved by [CHARTER.md](../../CHARTER.md) §3: exclusion attaches to actions and material, never people. Material may be declined or removed only for published reason classes. Capability restrictions are scoped, time-bounded, reasoned, and reviewable. Reading is never withdrawn as a sanction.
+
+### OQ-CHARTER-PARTICIPANT-RESPONSIBILITIES
+Resolved by [CHARTER.md](../../CHARTER.md) §4: participation conditions are each capability's published bounds plus three universal conditions (no secrets or private information about others, no evasion of bounds, no unlawful content). There is no conduct code about character, intent, or tone. The identifier keeps `PARTICIPANT-RESPONSIBILITIES` for continuity; the concept is participation conditions.
+
+### OQ-GOVERNANCE-EMERGENCY-AUTHORITY
+Resolved by [CHARTER.md](../../CHARTER.md) §6 and [GOVERNANCE.md](../../GOVERNANCE.md): pause-only authority, triggered only when Hummingbird itself represents a risk. External loss of service is the baseline environment, not an emergency. A pause is immediate, publicly noticed at once, reduce-only, and lapses after 14 days unless renewed by a recorded C0 decision.
+
+### OQ-GOVERNANCE-PROPOSALS
+Resolved by [GOVERNANCE.md](../../GOVERNANCE.md) §Proposals: a proposal is a public pull request against the Charter, Governance, or an ADR. Anyone may draft one, offers never become proposals automatically, and the steward decides during C0 with written reasons. Advisory tools such as an endorsement threshold are permitted where safe; their reliability is carried into `OQ-SECURITY-AUTHN-MODEL`.
+
 ## Resolved 2026-09-11
 
 ### OQ-GOVERNANCE-DECISION-PROCESS

@@ -6,7 +6,19 @@ Detailed governance protocol documents, once written, live in [docs/governance/]
 
 ## Proposals
 
-Open question: [OQ-GOVERNANCE-PROPOSALS](docs/governance/OPEN_QUESTIONS.md#oq-governance-proposals) — what turns offered material into a formal Hummingbird governance proposal, who may initiate that transition, in what form, and through what process? The Phase 2E experimental offer surface authorized by ADR 0017 may receive proposal-shaped material, but receipt, synthesis, or surfacing does not itself initiate a governance proposal or create governance authority.
+Adopted as a C0 working-draft decision on 2026-11-18 ([ADR 0024](docs/decisions/0024-phase2e2-constitutional-and-governance-dispositions.md)).
+
+**Offers never become proposals automatically.** Receiving, grouping, synthesizing, or surfacing offered material, including through the Phase 2E pilot authorized by ADR 0017, does not initiate a governance proposal or create governance authority.
+
+**What a proposal is.** A formal governance proposal is a public, versioned change request in the repository: a pull request against the Charter, this document, or an Architecture Decision Record. It states the question, the change, the evidence, and the expected consequence.
+
+**Who may initiate one.** Anyone may draft a proposal, starting from an offer, a synthesis, or nothing at all. No account, identity, origin declaration, or endorsement is required to open one.
+
+**How it is decided during C0.** The steward decides proposals under the [C0 non-technical decision process](#c0-non-technical-decision-process) and records written reasons, until a later authorized process replaces this one. A decision on a proposal cannot ratify the Charter or bypass a named gate.
+
+**Optional steward tools.** The steward may use advisory tools to help weigh proposals, such as an endorsement threshold for some or all proposals, where such a tool is safe to deploy. A tool of this kind is advisory, not binding: it never decides a proposal by itself and creates no standing for endorsers. A count of endorsements cannot be relied on until a multiplicity- and Sybil-resistant approach is settled under [OQ-SECURITY-MULTIPLICITY-ABUSE](docs/governance/OPEN_QUESTIONS.md#oq-security-multiplicity-abuse). Phase 2E.3 evaluated it ([ADR 0025](docs/decisions/0025-phase2e3-security-ingress-and-runtime-dispositions.md)): no such tool is deployed until multiplicity resistance is settled.
+
+**Offers.** Offered material continues to be handled under the published layers below and [ADR 0019](docs/decisions/0019-phase2e-offer-triage-and-review.md). It may be considered, declined (no individual reply is owed), admitted, or published under the existing published criteria.
 
 ## Charter publication lifecycle
 
@@ -198,6 +210,18 @@ This section resolves the current **scope of steward authority**; it does not re
 
 Open question: [OQ-GOVERNANCE-STEWARD-SUCCESSION](docs/governance/OPEN_QUESTIONS.md#oq-governance-steward-succession) — long-term steward succession and multi-steward model.
 
+### Phase 2 succession review disposition
+
+The Phase 2 review of steward succession is complete under [ADR 0022](docs/decisions/0022-phase2e1-review-gate-dispositions.md), but the long-term succession question remains open for Phase 2E.2.
+
+The current steward may continue serving for as long as that service remains useful to the commons. Continued usefulness, founding history, tenure, expertise, financial support, or operational custody do not independently create permanent authority, a right to preserve the current structure, or an incumbent/founder veto. Successful stewardship reduces unnecessary dependence on the steward; it does not require excluding a steward who continues to contribute under the then-valid published rules.
+
+Future succession design must separate, wherever practicable, **operational custody**, **institutional stewardship**, and **governing authority**. Transfer of credentials, domains, backup/recovery assets, or other control-plane custody is not transfer of sovereignty. Material continuity dependencies should not remain indefinitely recoverable only through one person's availability, but reducing that single-person risk must not silently create governance authority for a custodian.
+
+A future legitimate governance process must be able to divide, narrow, restructure, or replace stewardship without requiring preservation of the founder's present role. Here, "legitimate" means valid under Hummingbird's then-applicable published governance; it does not presume a voting or other mechanism that has not yet been authorized.
+
+Future design should distinguish voluntary retirement, gradual delegation, temporary incapacity, death/unavailability, credential loss, misconduct, governance disagreement, and legitimate institutional forking rather than treating succession as one undifferentiated event.
+
 ## Disputes
 
 Open question: [OQ-GOVERNANCE-DISPUTES](docs/governance/OPEN_QUESTIONS.md#oq-governance-disputes) — dispute resolution process for participants or contributions.
@@ -208,7 +232,7 @@ Open question: [OQ-GOVERNANCE-VALIDATED-NEEDS](docs/governance/OPEN_QUESTIONS.md
 
 ## Emergency authority
 
-See [CHARTER.md](CHARTER.md) §6 — [OQ-GOVERNANCE-EMERGENCY-AUTHORITY](docs/governance/OPEN_QUESTIONS.md#oq-governance-emergency-authority), not yet defined.
+Defined in [CHARTER.md](CHARTER.md) §6 and [ADR 0024](docs/decisions/0024-phase2e2-constitutional-and-governance-dispositions.md): pause-only authority, triggered only when Hummingbird itself represents a risk. The pause is immediate and comes with an immediate public notice. It may reduce capability but never expand authority, alter canonical records, or change rights, and it lapses after 14 days unless continued by a recorded C0 decision. External loss of service is the environment's baseline, not an emergency. This complements the Phase 2 incident lifecycle in [SECURITY.md](SECURITY.md#incident-response), where containment still derives only from previously published authority.
 
 ## Review and revision
 

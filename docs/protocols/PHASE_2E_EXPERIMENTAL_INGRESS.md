@@ -1,14 +1,14 @@
 # Phase 2E Experimental Ingress Protocol
 
-Status: **authorized design; not yet deployed**
+Status: **open for testing**
 
-Authoritative decisions: [ADR 0017](../decisions/0017-phase2e-experimental-ingress.md), [ADR 0018](../decisions/0018-phase2e-offer-pilot-runtime-and-data-boundary.md), and [ADR 0019](../decisions/0019-phase2e-offer-triage-and-review.md)
+Authoritative decisions: [ADR 0017](../decisions/0017-phase2e-experimental-ingress.md), [ADR 0018](../decisions/0018-phase2e-offer-pilot-runtime-and-data-boundary.md), [ADR 0019](../decisions/0019-phase2e-offer-triage-and-review.md), and [ADR 0020](../decisions/0020-phase2e-offer-pilot-launch-profile.md)
 
-This protocol defines the evidence-gathering pilot that may run during Phase 2E without opening Phase 3.
+This protocol defines the evidence-gathering pilot running during Phase 2E without opening Phase 3.
 
 ## Purpose
 
-The pilot exists to test whether Hummingbird can receive useful low-friction participation directly at `datum.quest` while preserving the boundary between temporary ingress and institutional authority.
+The pilot tests whether Hummingbird can receive useful low-friction participation directly at `datum.quest` while preserving the boundary between temporary ingress and institutional authority.
 
 It is intended to generate evidence about:
 
@@ -25,7 +25,7 @@ It is not intended to test voting, participant identity, durable reputation, per
 
 ## Public funnel
 
-Once the pilot is live, the public front door should present three progressively deeper ideas:
+The public front door presents three progressively deeper ideas:
 
 ### 1. The project — exists now
 
@@ -48,23 +48,22 @@ The visitor should be able to understand the direction without reading the full 
 
 ### 3. Open now — test Hummingbird
 
-When the first-party surface is deployed, the primary call to action should be a direct low-friction offer path such as:
+The primary call to action is the direct low-friction offer path at `datum.quest/offer`:
 
 > **Help test Hummingbird**  
 > Offer an idea, correction, question, criticism, or observation. No account or identity declaration required.
 
-Until that endpoint is genuinely live and the handling contract below is fully published, the site must label the pilot as being prepared rather than open for testing.
-
-The Seed Bank may remain available for participants who want a durable public GitHub discussion thread, but it is not the intended primary ingress once the experimental surface exists.
+The Seed Bank remains available for participants who want a durable public GitHub discussion thread, but it is no longer the intended primary ingress.
 
 ## Minimum participant surface
 
 Baseline fields:
 
 - **Offer** — required text;
-- **Reference** — optional URL or short reference.
+- **Reference** — optional URL or short reference;
+- **Featured question ID** — optional bounded identifier.
 
-The basic path must not require:
+The basic path does not require:
 
 - an account;
 - a handle;
@@ -73,11 +72,11 @@ The basic path must not require:
 - CAPTCHA;
 - proof of humanness, cognition, or participant type.
 
-A successful accept must return a clear acknowledgement and the receipt behavior defined by ADR 0018. A receipt does not imply identity, canonical status, governance standing, or a promise of individualized review.
+A successful accept returns a clear acknowledgement and the receipt behavior defined by ADR 0018. A receipt does not imply identity, canonical status, governance standing, or a promise of individualized review.
 
 ## Published handling contract
 
-The live surface must publish the following in ordinary language before the participant sends an offer.
+The live surface publishes the following in ordinary language before the participant sends an offer.
 
 ### Purpose and scope
 
@@ -117,7 +116,7 @@ It may not automatically:
 
 ### Potential outcomes
 
-The participant-facing vocabulary should support at least:
+The participant-facing vocabulary supports at least:
 
 - `received` — accepted into the experimental buffer;
 - `grouped` — linked with materially related offers;
@@ -190,9 +189,9 @@ Low volume is a valid experimental result. Hummingbird does not manufacture acti
 
 Accepted offers are not silently dropped merely because the queue becomes large. They may remain `received`, `grouped`, or `deferred` until processed, withdrawn, surfaced, or expired under the ordinary retention rule.
 
-If the buffer or review pipeline cannot safely absorb more accepted material, Hummingbird should use published backpressure or temporarily pause new acceptance before the queue becomes unsafe or misleading. A request that cannot be durably accepted receives no receipt and is reported as `not accepted`.
+If the buffer or review pipeline cannot safely absorb more accepted material, Hummingbird uses published backpressure or may temporarily pause new acceptance before the queue becomes unsafe or misleading. A request that cannot be durably accepted receives no receipt and is reported as `not accepted`.
 
-The pilot does not promise a fixed review deadline or individualized response. An accepted offer may expire after the ordinary 30-day retention period without further institutional consequence, and that possibility must be visible before acceptance.
+The pilot does not promise a fixed review deadline or individualized response. An accepted offer may expire after the ordinary 30-day retention period without further institutional consequence, and that possibility is visible before acceptance.
 
 ## Escalation and review
 
@@ -200,23 +199,23 @@ Routine experimental handling should remain below the steward whenever possible.
 
 The pilot does not invent a durable appeal/identity system merely to support low-consequence temporary ingress. ADR 0018 supplies the pilot-scoped continuity mechanism: a private receipt controls status and withdrawal for one accepted offer. Corrections use withdraw-and-reoffer rather than permanent edit history.
 
-## Pre-deployment decisions still required / implementation checks
+## Launch implementation and verification
 
-The pilot-scoped semantic choices are now published in ADRs 0017–0019. The write path must still remain closed until the implementation proves those choices rather than merely describing them.
+The pilot-scoped semantic choices are published in ADRs 0017–0020. The launch implementation now includes:
 
-Before opening the pilot, Hummingbird must complete and test at least:
-
-1. the dedicated `OFFER_DB` provider binding and experimental migration;
-2. the basic no-JavaScript GET/POST offer path with the published payload limits;
-3. edge resource/backpressure controls that fail before unnecessary application writes where practical;
+1. a dedicated `OFFER_DB` provider binding and experimental migration, separate from canonical D1;
+2. a basic no-JavaScript GET/POST offer path with the published payload limits;
+3. bounded capacity/backpressure behavior that returns `not accepted` rather than issuing a false receipt;
 4. transactional acceptance and one-time receipt generation;
 5. receipt-based status and withdrawal behavior;
-6. reliable expiry cleanup within the published post-expiry cleanup target;
-7. duplicate grouping and a review-packet path consistent with ADR 0019, including outlier/singleton coverage;
-8. an operational pause/shutdown path that does not damage the public read plane;
-9. production acceptance tests for success, validation failure, storage failure, overload/not-accepted behavior, withdrawal, expiry, and unchanged public-read accessibility.
+6. scheduled expiry cleanup with the published post-expiry cleanup target;
+7. deterministic exact-duplicate grouping, while broader thematic synthesis remains advisory/future pilot work;
+8. an operational pause path that does not damage the public read plane;
+9. production checks for unchanged public-read accessibility, the offer route/binding, validation failure, and the accept → status → withdraw lifecycle.
 
-These are minimum safe-pilot implementation checks, not universal answers to the corresponding Phase 3 questions.
+Launch evidence on 2026-09-11 Pacific Time: the dedicated offer store was provisioned/migrated/bound successfully; the production public-read and offer-route smoke tests passed; and a one-time production test successfully accepted a unique offer, retrieved its status by private receipt, withdrew it, and confirmed the withdrawn state. The test offer was left withdrawn. Credentials, receipt secrets, provider database identifiers, and participant material are not part of this public evidence record.
+
+These are minimum safe-pilot choices, not universal answers to the corresponding Phase 3 questions.
 
 ## Evidence review
 
