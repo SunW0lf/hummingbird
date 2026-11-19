@@ -36,7 +36,7 @@ An accepted offer stores only the minimum application state needed to run and le
 - optional temporary cluster/synthesis references;
 - optional resulting canonical-record reference if a separate admission later occurs;
 - received and expiry timestamps;
-- content hash for bounded duplicate/synthesis work.
+- content hash for bounded duplicate/synthesis work (keyed, never a plain hash of the text, per [ADR 0027](0027-keyed-offer-content-hash.md)).
 
 The application database does **not** include participant name, email, account, handle, origin category, reputation, browser fingerprint, user-agent history, raw IP address, bot score, or cross-offer identity profile.
 

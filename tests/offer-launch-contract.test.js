@@ -33,10 +33,14 @@ for (const marker of [
   "pilot_capacity_reached",
   "write_unconfirmed",
   "content_sha256",
-  "exact:${contentHash}",
+  "offerContentHash(context.env, body)",
   "201",
 ]) {
   if (!accept.includes(marker)) fail(`acceptance function missing behavior: ${marker}`);
+}
+
+if (accept.includes("sha256Hex(body)") || accept.includes("exact:${contentHash}")) {
+  fail("acceptance must not store or expose a plain hash of offer text (ADR 0027)");
 }
 
 if (!status.includes("lookupByReceipt") || !withdraw.includes("state = 'withdrawn'")) {
