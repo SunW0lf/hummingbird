@@ -3,8 +3,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
-import { onRequestPost, onRequestGet, TOOLS, MAX_RPC_BYTES } from "../functions/offer/mcp.js";
-import { MAX_OFFER_CHARS, MAX_QUESTION_ID_CHARS, MAX_REFERENCE_CHARS } from "../lib/offer-runtime.mjs";
+import { onRequestPost, onRequestGet, TOOLS, MAX_RPC_BYTES, HANDLING } from "../functions/offer/mcp.js";
+import { MAX_OFFER_CHARS, MAX_QUESTION_ID_CHARS, MAX_REFERENCE_CHARS, RETENTION_DAYS } from "../lib/offer-runtime.mjs";
 
 const ORIGIN = "https://datum.quest";
 const assets = {
@@ -161,4 +161,14 @@ test("server.json lists this door, at the version the door reports", () => {
   assert.ok(source.includes(`version: "${server.version}"`), "server.json version must match SERVER_INFO");
   assert.ok(server.description.length <= 100);
   assert.equal(server.packages, undefined);
+});
+
+test("make_offer says what happens to an offer, where the agent decides", () => {
+  assert.ok(HANDLING.includes(`Kept for ${RETENTION_DAYS} days`));
+  for (const fact of ["withdrawing clears it", "IP address", "use AI assistants", "not used to train AI models", "Never published", "https://datum.quest/heard"]) {
+    assert.ok(HANDLING.split(fact).length > 1, `handling note is missing: ${fact}`);
+  }
+  assert.ok(TOOLS.find((t) => t.name === "make_offer").description.includes(HANDLING));
+  const source = fs.readFileSync(new URL("../functions/offer/mcp.js", import.meta.url), "utf8");
+  assert.match(source, /BOUNDARY \+ " " \+ HANDLING \+ " An accepted offer/, "server instructions lack the handling note");
 });

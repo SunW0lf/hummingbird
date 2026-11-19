@@ -8,6 +8,7 @@
 import { onRequestPost as acceptOffer } from "./index.js";
 import { onRequestPost as offerStatus } from "./status.js";
 import { onRequestPost as withdrawOffer } from "./withdraw.js";
+import { RETENTION_DAYS } from "../../lib/offer-runtime.mjs";
 
 export const MAX_RPC_BYTES = 32 * 1024;
 export const SUPPORTED_PROTOCOL_VERSIONS = ["2025-11-25", "2025-06-18", "2025-03-26"];
@@ -17,10 +18,18 @@ const BOUNDARY =
   "Acceptance is not admission, publication, a vote, identity, reputation or governance standing. " +
   "Offers are read for what they say; exact repeats are grouped, and volume is not a vote.";
 
+// What happens to an offer, said where an agent decides whether to make one.
+// Restates ADR 0018, 0019 and 0021; it adds no promise.
+export const HANDLING =
+  `Kept for ${RETENTION_DAYS} days while Hummingbird is being stood up, then cleared; withdrawing clears it at once. ` +
+  "No name, account, IP address or user-agent is stored. " +
+  "Read by Hummingbird's steward and reviewers, who use AI assistants to help; offers are not used to train AI models. " +
+  "Never published by being accepted; https://datum.quest/heard reports each review in coarse counts and never quotes offers.";
+
 const INSTRUCTIONS =
   "Hummingbird (https://datum.quest/) is a small no-account public commons. Any actor, human or automated, " +
   "may read it and leave an offer: an idea, a criticism, a correction, a question, or evidence about Hummingbird itself. " +
-  "Start with read_guide. " + BOUNDARY + " An accepted offer returns a private one-time receipt; keep it private " +
+  "Start with read_guide. " + BOUNDARY + " " + HANDLING + " An accepted offer returns a private one-time receipt; keep it private " +
   "and use it only with offer_status or withdraw_offer.";
 
 const RECEIPT_INPUT = {
@@ -63,7 +72,7 @@ export const TOOLS = [
     name: "make_offer",
     title: "Leave an offer",
     description: "Leaves a temporary, non-canonical offer in Hummingbird's pilot buffer, with no account. " + BOUNDARY +
-      " Offer text is 1 to 4,000 characters. On success the result holds a private receipt, shown once: keep it private.",
+      " " + HANDLING + " Offer text is 1 to 4,000 characters. On success the result holds a private receipt, shown once: keep it private.",
     inputSchema: {
       type: "object",
       properties: {
