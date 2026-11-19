@@ -39,7 +39,7 @@ Hummingbird distinguishes technical access purpose from participant origin or au
 
 Search/discovery and user-directed retrieval should generally be permitted where technically feasible. Reputable examples include Googlebot, Bingbot, OAI-SearchBot, ChatGPT-User, Claude-SearchBot, Claude-User, PerplexityBot, and Perplexity-User. A provider label or user-agent string does not establish institutional authority, participant origin, or entitlement; it only informs an operational access policy where useful.
 
-Training-oriented crawling is a separate content-use policy question. This ADR does not grant or deny permission to GPTBot or any other training crawler, and public network readability is not itself a training or reuse license. Hummingbird's broader content/reuse policy remains separately unresolved under [OQ-LEGAL-CONTENT-LICENSE](../governance/OPEN_QUESTIONS.md#oq-legal-content-license). Search/user-directed access must not be silently coupled to that future decision.
+Training-oriented crawling is a separate content-use policy question. This ADR does not grant or deny permission to GPTBot or any other training crawler, and public network readability is not itself a training or reuse license. Hummingbird's broader content/reuse policy remained separately unresolved under [OQ-LEGAL-CONTENT-LICENSE](../governance/RESOLVED_QUESTIONS.md#oq-legal-content-license) (since resolved by [ADR 0028](0028-content-license-cc-by-4.md)). Search/user-directed access must not be silently coupled to that future decision.
 
 ## Edge-security implications
 

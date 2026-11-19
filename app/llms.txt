@@ -223,6 +223,10 @@ https://datum.quest/docs/raw/decisions/0026-mcp-door-for-agents.md
 https://datum.quest/decisions/0027-keyed-offer-content-hash
 https://datum.quest/docs/raw/decisions/0027-keyed-offer-content-hash.md
 
+### ADR 0028 — Hummingbird's own text is licensed CC BY 4.0
+https://datum.quest/decisions/0028-content-license-cc-by-4
+https://datum.quest/docs/raw/decisions/0028-content-license-cc-by-4.md
+
 ## Roadmap
 https://datum.quest/roadmap
 https://datum.quest/docs/raw/ROADMAP.md
@@ -253,7 +257,7 @@ https://datum.quest/docs/raw/CHANGELOG.md
 https://datum.quest/contributing
 https://datum.quest/docs/raw/CONTRIBUTING.md
 
-## License (raw only, MIT for software; see CHARTER/GOVERNANCE for institutional-text terms)
+## License (Hummingbird's own text is CC BY 4.0: any use, credit "Hummingbird (datum.quest)"; software is MIT; contributed material keeps its author's terms)
 https://datum.quest/docs/raw/LICENSE
 
 ## Open Questions (public-safe summary; not the full internal registry)

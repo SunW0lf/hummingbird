@@ -1,7 +1,8 @@
 # Project-owned crawler policy for the public commons.
 # Public reading is open to search/discovery and user-directed automated clients.
-# Technical crawl access is not itself a content-use or model-training license;
-# training/reuse policy is a separate institutional decision.
+# Crawl access is not itself a license. Reuse terms, training included, are set
+# by Hummingbird's content license: its own text is CC BY 4.0 (credit
+# "Hummingbird (datum.quest)"), software is MIT. See /docs/raw/LICENSE.
 User-agent: *
 Allow: /
 

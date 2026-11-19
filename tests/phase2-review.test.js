@@ -20,7 +20,7 @@ const rows = [...review.matchAll(/^\| `(OQ-[A-Z0-9-]+)` \| (Blocks Phase 3|Phase
 
 // The evidence review is a dated Phase 2E snapshot. Resolved questions remain in that
 // historical table even after they are removed from the live open-question registry.
-if (registryIds.length !== 15) fail(`expected 15 currently open questions in registry, found ${registryIds.length}`);
+if (registryIds.length !== 14) fail(`expected 14 currently open questions in registry, found ${registryIds.length}`);
 if (rows.length !== 25) fail(`expected the dated evidence review to preserve its 25-question snapshot, found ${rows.length}`);
 
 const rowIds = new Set(rows.map((row) => row.id));

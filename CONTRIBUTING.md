@@ -15,6 +15,7 @@ The repository is public. Outside participants can inspect, fork, propose change
 
 - Documentation changes follow the same PR process as code.
 - Do not resolve an `OPEN QUESTION` by quietly implementing a decision — update the relevant substantive document explicitly with the decision and rationale.
+- Text you contribute by pull request is offered under the license of the file it changes: CC BY 4.0 for Hummingbird's text, MIT for code ([ADR 0028](docs/decisions/0028-content-license-cc-by-4.md)).
 - Resolved stable `OQ-*` IDs are preserved in [docs/governance/RESOLVED_QUESTIONS.md](docs/governance/RESOLVED_QUESTIONS.md) so historical ADRs and discussion remain intelligible.
 
 ## Make an experimental offer

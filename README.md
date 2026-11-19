@@ -78,4 +78,4 @@ Deployment target is Cloudflare Pages. `main` is protected and requires the `Che
 
 ## License
 
-See [LICENSE](LICENSE).
+Software is MIT. Hummingbird's own text (documents, decisions, site prose, `llms.txt`) is [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/): reuse it for anything, crediting "Hummingbird (datum.quest)". Material contributed by others keeps its author's terms. See [LICENSE](LICENSE) and [ADR 0028](docs/decisions/0028-content-license-cc-by-4.md).
