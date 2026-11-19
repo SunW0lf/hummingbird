@@ -4,6 +4,11 @@ This archive preserves stable `OQ-*` identifiers after their questions leave the
 
 IDs are never reused.
 
+## Resolved 2026-11-19
+
+### OQ-LEGAL-CONTENT-LICENSE
+Resolved by [ADR 0028](../decisions/0028-content-license-cc-by-4.md) and [LICENSE](../../LICENSE): Hummingbird's own text (documents, decisions, site prose, `llms.txt`, and records written in Hummingbird's own words) is licensed CC BY 4.0; software stays MIT. Any use is allowed with attribution, by people or automated systems. Material contributed by others, such as offers and Seed Bank comments, is not relicensed.
+
 ## Resolved 2026-11-18 (Phase 2E.3)
 
 These three Phase 3 blockers were resolved together in Phase 2E.3 by [ADR 0025](../decisions/0025-phase2e3-security-ingress-and-runtime-dispositions.md) as C0 working-draft decisions.

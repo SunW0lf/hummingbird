@@ -20,8 +20,17 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-Note: Hummingbird's Charter, Mission, and Governance documents are project
-governance artifacts, not software, and their reuse/amendment terms are
-addressed separately in GOVERNANCE.md as the project matures. A distinct
-content license (e.g. Creative Commons) is tracked as
-OQ-LEGAL-CONTENT-LICENSE in docs/governance/OPEN_QUESTIONS.md.
+Note: the MIT license above covers software in this repository: code,
+scripts, workflows, tests and configuration.
+
+Hummingbird's own text (the Charter, Mission, Governance, decisions and other
+documents, the prose of datum.quest's pages, llms.txt, and records Hummingbird
+writes in its own words) is licensed under the Creative Commons Attribution 4.0
+International license (CC BY 4.0):
+https://creativecommons.org/licenses/by/4.0/legalcode
+
+To reuse it, credit "Hummingbird (datum.quest)", name and link the license,
+and say if you changed it. Any use is allowed on those terms, by people or by
+automated systems. Material contributed by others, such as offers and Seed Bank
+issues and comments, is not covered and keeps its author's terms. See ADR 0028
+(docs/decisions/0028-content-license-cc-by-4.md).

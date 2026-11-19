@@ -49,6 +49,7 @@ const PUBLIC_DECISIONS = [
   "0025-phase2e3-security-ingress-and-runtime-dispositions.md",
   "0026-mcp-door-for-agents.md",
   "0027-keyed-offer-content-hash.md",
+  "0028-content-license-cc-by-4.md",
 ];
 
 const ROOT_PUBLIC_ROUTES = new Map([

@@ -50,6 +50,7 @@ node --test tests/atproto-did.test.mjs
 node --test tests/offer-errors.test.mjs
 node --test tests/offer-json-body.test.mjs
 node --test tests/llms-guide.test.mjs
+node --test tests/content-license.test.mjs
 
 echo "Running layout/site-identity regression checks..."
 node tests/layout-identity.test.js
