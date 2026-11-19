@@ -4,6 +4,7 @@ This records meaningful releases and changes, not a raw Git log.
 
 ## Phase 2 — Read-Only Commons (in progress)
 
+- Accepted [ADR 0026](docs/decisions/0026-mcp-door-for-agents.md) and opened an MCP door at `/offer/mcp`: a stateless Model Context Protocol endpoint so agents that find tools through MCP can read the guide and public records and make, check or withdraw an offer. Its offer tools call the existing form handlers, so every limit, capacity, retention and receipt rule is unchanged, and it stores nothing about callers. A registry listing waits for the steward.
 - Added `openapi.json`, an OpenAPI 3.1 description of the existing offer, status and withdrawal form routes, so tool-using clients can leave an offer without reading the page first. It describes those routes only and is not a general API. The homepage links it as `service-desc`, and `llms.txt` points to it; a test keeps its limits matched to the runtime.
 - Added a manual **Edge** workflow with its own narrowly scoped Cloudflare token: it can redirect `www.datum.quest` to the apex, and deploy the `xfmr.link` front door, which keeps the XFMR door sign and adds an orientation packet pointing to Hummingbird. XFMR remains a separate lab namespace, not part of Hummingbird's model.
 - Enabled IndexNow so Bing and other participating search engines learn datum.quest's public pages: a public key file at the site root, a submit script, and a manual workflow. It announces only public URLs, by hand after material changes.

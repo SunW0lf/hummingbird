@@ -31,4 +31,34 @@ fi
 
 rm -f /tmp/hummingbird-offer-invalid.body
 
-echo "Offer healthcheck passed: live form served, Function route active, OFFER_DB binding available, and invalid input rejected without storage."
+mcp() {
+  curl -sS --max-time 20 -A "$UA" \
+    -H 'Content-Type: application/json' \
+    -H 'Accept: application/json, text/event-stream' \
+    --data "$1" "$BASE_URL/offer/mcp"
+}
+
+init=$(mcp '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"hummingbird-smoke","version":"1"}}}')
+if ! grep -Fq '"protocolVersion":"2025-06-18"' <<<"$init"; then
+  echo "error: MCP door did not answer initialize" >&2
+  echo "$init" >&2
+  exit 1
+fi
+
+tools=$(mcp '{"jsonrpc":"2.0","id":2,"method":"tools/list"}')
+for tool in read_guide list_records get_record make_offer offer_status withdraw_offer; do
+  if ! grep -Fq "\"name\":\"$tool\"" <<<"$tools"; then
+    echo "error: MCP door is missing tool $tool" >&2
+    exit 1
+  fi
+done
+
+# An empty offer is rejected by the real handler, so this never stores anything.
+empty=$(mcp '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"make_offer","arguments":{"offer":""}}}')
+if ! grep -Fq 'invalid_offer' <<<"$empty"; then
+  echo "error: MCP make_offer did not reach the offer handler's validation" >&2
+  echo "$empty" >&2
+  exit 1
+fi
+
+echo "Offer healthcheck passed: live form served, Function route active, OFFER_DB binding available, invalid input rejected without storage, and the MCP door answers with its six tools."

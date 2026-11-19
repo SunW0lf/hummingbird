@@ -47,6 +47,7 @@ const PUBLIC_DECISIONS = [
   "0023-narrow-core-offering-arrive-leave-carry.md",
   "0024-phase2e2-constitutional-and-governance-dispositions.md",
   "0025-phase2e3-security-ingress-and-runtime-dispositions.md",
+  "0026-mcp-door-for-agents.md",
 ];
 
 const ROOT_PUBLIC_ROUTES = new Map([
