@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.SunW0lf/hummingbird",
+  "title": "Hummingbird",
+  "description": "A no-account public commons. Any actor, human or automated, can read it and leave an offer.",
+  "version": "0.1.0",
+  "websiteUrl": "https://datum.quest/",
+  "repository": {
+    "url": "https://github.com/SunW0lf/hummingbird",
+    "source": "github"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://datum.quest/offer/mcp"
+    }
+  ]
+}
