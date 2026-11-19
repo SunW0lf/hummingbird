@@ -1,0 +1,37 @@
+name: Offer live check
+
+# Run by hand. Makes a few marked test offers on datum.quest through the HTML
+# form, the JSON form and the agent door, checks the stored rows against
+# ADR 0018 (exact text, hashed receipt, 30-day retention, receipt-only status
+# and withdrawal, withdrawal clears content), sweeps the buffer by counts for
+# content kept past cleanup, then deletes every test row it made.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: phase2e-offer-cleanup
+  cancel-in-progress: false
+
+jobs:
+  live-check:
+    name: Offer receipt and retention live check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "22"
+
+      - name: Run the live check
+        env:
+          HEALTHCHECK_URL: https://datum.quest
+          CLOUDFLARE_D1_RECOVERY_TOKEN: ${{ secrets.CLOUDFLARE_D1_RECOVERY_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: node scripts/offer-live-check.mjs
