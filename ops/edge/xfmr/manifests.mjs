@@ -98,3 +98,25 @@ export const MANIFEST_0_1 = deepFreeze({
     "wildcard subdomain routing",
   ],
 });
+
+// 0.2-lab: served from 2026-11-19 (public PR #129, the packet maker) until the
+// meeting carrier.
+export const MANIFEST_0_2 = deepFreeze({
+  ...structuredClone(MANIFEST_0_1),
+  version: "0.2-lab",
+  capabilities: {
+    read: ["/", "/.well-known/xfmr", "/llms.txt", "/robots.txt", "/packet"],
+    write: [],
+  },
+  packets: {
+    endpoint: "/packet",
+    transformers: ["assemble@1", "delta@1"],
+    parts: ["what", "status", "principles", "cast", "reads", "hosts", "nearby", "not_yet"],
+    default_parts: ["what", "status", "nearby", "principles", "not_yet"],
+    max_bytes: 65536,
+    recipe: "the query string: parts=<comma list>&max_bytes=<n>, or since=<manifest digest>",
+    trace: "digests of the recipe, inputs and output, kind and turns ratio; never the visitor",
+    digests: "hb1:<purpose>:sha256:<hex> = SHA-256(\"hummingbird/v1/<purpose>\" || 0x00 || bytes), JSON in canonical form (sorted keys, no whitespace)",
+  },
+  earlier: [{ version: "0.1-lab", digest: "hb1:manifest:sha256:d96dcff5df620b24c1e04d952c4807f23fe64440232ceaa87310d32d715b6bd2" }],
+});

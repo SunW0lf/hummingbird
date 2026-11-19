@@ -4,7 +4,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import worker from "../ops/edge/xfmr/worker.mjs";
 import { canonicalJson, digest } from "../ops/edge/xfmr/digest.mjs";
-import { MANIFEST_0_1 } from "../ops/edge/xfmr/manifests.mjs";
+import { MANIFEST_0_1, MANIFEST_0_2 } from "../ops/edge/xfmr/manifests.mjs";
+import { b64url, checkPulse, expectedQuicknetRound, readDrandPulse, visitorCloseOnce } from "../ops/edge/xfmr/meeting.mjs";
 
 const call = (path, method = "GET") => worker.fetch(new Request(`https://xfmr.link${path}`, { method }));
 
@@ -62,14 +63,18 @@ test("flavored digests match vectors computed independently with node:crypto", a
 
 test("published manifest versions never change", async () => {
   const manifest = await (await call("/.well-known/xfmr")).json();
-  assert.equal(manifest.version, "0.2-lab");
+  assert.equal(manifest.version, "0.3-lab");
   assert.deepEqual(manifest.capabilities.write, []);
   assert.ok(manifest.capabilities.read.includes("/packet"));
   assert.deepEqual(manifest.earlier, [
     { version: "0.1-lab", digest: await digest("manifest", canonicalJson(MANIFEST_0_1)) },
+    { version: "0.2-lab", digest: await digest("manifest", canonicalJson(MANIFEST_0_2)) },
   ]);
   assert.equal(MANIFEST_0_1.version, "0.1-lab");
   assert.ok(Object.isFrozen(MANIFEST_0_1.capabilities.read));
+  // Pinned: 0.2-lab was served from public PR #129 and must keep this digest.
+  assert.equal(await digest("manifest", canonicalJson(MANIFEST_0_2)), "hb1:manifest:sha256:97dd95055ac96cc819e460e331c8d4012c325cd85b7ec8621cfc0b1982d358cd");
+  assert.ok(Object.isFrozen(MANIFEST_0_2.packets));
 });
 
 test("the manifest's ETag is its own digest, and packets report the same one", async () => {
@@ -113,7 +118,7 @@ test("a returning visitor gets only what changed since the manifest it saw", asy
   const { res, body } = await getJson(`/packet?since=${earlier}`);
   assert.equal(res.status, 200);
   assert.equal(body.trace.transformer, "delta@1");
-  assert.deepEqual(body.output.changed.version, { from: "0.1-lab", to: "0.2-lab" });
+  assert.deepEqual(body.output.changed.version, { from: "0.1-lab", to: "0.3-lab" });
   assert.equal(body.output.added["packets.endpoint"], "/packet");
   assert.deepEqual(body.output.removed, []);
 
@@ -123,7 +128,11 @@ test("a returning visitor gets only what changed since the manifest it saw", asy
 
   const unknown = await getJson(`/packet?since=hb1:manifest:sha256:${"0".repeat(64)}`);
   assert.equal(unknown.res.status, 404);
-  assert.deepEqual(unknown.body.known, [earlier, current]);
+  assert.deepEqual(unknown.body.known, [earlier, await digest("manifest", canonicalJson(MANIFEST_0_2)), current]);
+
+  const fromPackets = await getJson(`/packet?since=${await digest("manifest", canonicalJson(MANIFEST_0_2))}`);
+  assert.deepEqual(fromPackets.body.output.changed.version, { from: "0.2-lab", to: "0.3-lab" });
+  assert.equal(fromPackets.body.output.added["meeting.endpoint"], "/meet");
 });
 
 test("bad recipes get a fixed message that never echoes what was sent", async () => {
@@ -170,4 +179,133 @@ test("the orientation packet and manifest both point to the packet maker", async
   const manifest = await (await call("/.well-known/xfmr")).json();
   assert.equal(manifest.packets.endpoint, "/packet");
   assert.deepEqual(manifest.packets.transformers, ["assemble@1", "delta@1"]);
+});
+
+// ---- Meeting (GET /meet) ----
+
+const PULSE_ROUND = 34089794; // read live from api.drand.sh around 2026-11-19T07:20Z
+const NOW = Date.UTC(2026, 10, 19, 7, 20, 0);
+
+async function withFetch(fake, fn) {
+  const saved = globalThis.fetch;
+  const savedNow = Date.now;
+  globalThis.fetch = fake;
+  Date.now = () => NOW;
+  try {
+    return await fn();
+  } finally {
+    globalThis.fetch = saved;
+    Date.now = savedNow;
+  }
+}
+
+const beacon = (round = expectedQuicknetRound(NOW)) => {
+  const seen = [];
+  const fake = async (url, init) => {
+    seen.push({ url, init });
+    return new Response(JSON.stringify({ round, randomness: "9c".repeat(32), signature: "x" }));
+  };
+  return { fake, seen };
+};
+
+async function visitorHalf() {
+  const half = crypto.getRandomValues(new Uint8Array(32));
+  return { half, commit: await digest("meeting-visitor", half) };
+}
+
+test("the quicknet clock matches the live chain", () => {
+  assert.ok(Math.abs(expectedQuicknetRound(NOW) - PULSE_ROUND) < 40);
+});
+
+test("a meeting: the visitor commits, the space answers with its half and a pulse, both can check it", async () => {
+  const { fake, seen } = beacon();
+  const visitor = await visitorHalf();
+  const res = await withFetch(fake, () => call(`/meet?commit=${visitor.commit}`));
+  assert.equal(res.status, 200);
+  assert.equal(res.headers.get("cache-control"), "no-store");
+  const reply = await res.json();
+  assert.deepEqual(Object.keys(reply).sort(), ["pulse", "space_commit", "space_half", "trace", "visitor_commit"]);
+  assert.deepEqual(reply.pulse, { source: "drand-quicknet", round: expectedQuicknetRound(NOW), randomness: "9c".repeat(32) });
+  assert.deepEqual(reply.trace, { carrier: { kind: "meeting", grain: "2x32B", pulse: `drand-quicknet:${expectedQuicknetRound(NOW)}` } });
+  assert.ok(!JSON.stringify(reply).includes(b64url(visitor.half)));
+  assert.equal((await visitorCloseOnce(visitor.half, reply)).length, 32);
+
+  // The beacon read carries nothing about the visitor.
+  assert.equal(seen.length, 1);
+  assert.match(seen[0].url, /^https:\/\/api\.drand\.sh\/52db9ba7[0-9a-f]+\/public\/latest$/);
+  assert.ok(!seen[0].url.includes(visitor.commit));
+});
+
+test("two meetings with the same commitment give two different space halves", async () => {
+  const { fake } = beacon();
+  const visitor = await visitorHalf();
+  const [a, b] = await withFetch(fake, async () => [
+    await (await call(`/meet?commit=${visitor.commit}`)).json(),
+    await (await call(`/meet?commit=${visitor.commit}`)).json(),
+  ]);
+  assert.notEqual(a.space_half, b.space_half);
+  assert.notDeepEqual(await visitorCloseOnce(visitor.half, a), await visitorCloseOnce(visitor.half, b));
+});
+
+test("no beacon, or a stale one, still meets, with pulse null and the trace saying none", async () => {
+  const visitor = await visitorHalf();
+  for (const fake of [async () => { throw new Error("offline"); }, beacon(PULSE_ROUND - 1_000_000).fake]) {
+    const reply = await withFetch(fake, async () => (await call(`/meet?commit=${visitor.commit}`)).json());
+    assert.equal(reply.pulse, null);
+    assert.equal(reply.trace.carrier.pulse, "none");
+    assert.equal((await visitorCloseOnce(visitor.half, reply)).length, 32);
+  }
+  assert.equal(await readDrandPulse(async () => new Response("{}"), { now: NOW }), null);
+  assert.throws(() => checkPulse({ source: "drand-quicknet", round: 1, randomness: "x" }));
+});
+
+test("/meet with no query explains how, and bad requests get fixed messages that echo nothing", async () => {
+  const how = await call("/meet");
+  assert.equal(how.status, 200);
+  const body = await how.json();
+  assert.equal(body.endpoint, "/meet");
+  assert.match(body.keeps, /nothing/);
+
+  const marker = "zz-visitor-text-zz";
+  for (const path of [
+    `/meet?commit=${marker}`,
+    `/meet?${marker}=1`,
+    `/meet?commit=hb1:meeting-space:sha256:${"0".repeat(64)}`,
+    `/meet?commit=hb1:meeting-visitor:sha256:${"0".repeat(64)}&commit=hb1:meeting-visitor:sha256:${"1".repeat(64)}`,
+  ]) {
+    const res = await withFetch(beacon().fake, () => call(path));
+    assert.equal(res.status, 400, path);
+    assert.ok(!(await res.text()).includes(marker));
+  }
+  assert.equal((await call("/meet", "POST")).status, 405);
+});
+
+test("the meeting reply carries nothing about the visitor, and the doors point to it", async () => {
+  const visitor = await visitorHalf();
+  const text = await withFetch(beacon().fake, async () => (await worker.fetch(
+    new Request(`https://xfmr.link/meet?commit=${visitor.commit}`, {
+      headers: { "user-agent": "zz-agent-zz", "cf-connecting-ip": "203.0.113.77", cookie: "zz=cookie" },
+    }),
+  )).text());
+  for (const leak of ["zz-agent-zz", "203.0.113.77", "zz=cookie"]) assert.ok(!text.includes(leak));
+
+  assert.match(await (await call("/llms.txt")).text(), /https:\/\/xfmr\.link\/meet/);
+  const manifest = await (await call("/.well-known/xfmr")).json();
+  assert.ok(manifest.capabilities.read.includes("/meet"));
+  assert.deepEqual(manifest.capabilities.write, []);
+  assert.equal(manifest.meeting.endpoint, "/meet");
+});
+
+test("the carrier recipe in llms.txt rebuilds the same carrier with node:crypto alone", async () => {
+  const { createHash, hkdfSync } = await import("node:crypto");
+  const label = (purpose, bytes) => createHash("sha256").update(Buffer.concat([Buffer.from(`hummingbird/v1/${purpose}`), Buffer.from([0]), bytes])).digest("hex");
+  const half = crypto.getRandomValues(new Uint8Array(32));
+  const commit = `hb1:meeting-visitor:sha256:${label("meeting-visitor", half)}`;
+  const reply = await withFetch(beacon().fake, async () => (await call(`/meet?commit=${commit}`)).json());
+
+  const spaceHalf = Buffer.from(reply.space_half, "base64url");
+  assert.equal(reply.space_commit, `hb1:meeting-space:sha256:${label("meeting-space", spaceHalf)}`);
+  const info = JSON.stringify({ pulse: reply.pulse, space_commit: reply.space_commit, visitor_commit: commit }, ["pulse", "randomness", "round", "source", "space_commit", "visitor_commit"]);
+  const plain = Buffer.from(hkdfSync("sha256", Buffer.concat([half, spaceHalf]), "hummingbird/v1/meeting", info, 32));
+  assert.deepEqual(new Uint8Array(plain), await visitorCloseOnce(half, reply));
 });

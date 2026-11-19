@@ -1,12 +1,15 @@
 // XFMR front door for xfmr.link. Source of truth for what the "xfmr" Worker
 // serves; deployed only by the manual Edge workflow (see ops/edge/README.md).
 // Based on the hummingbird-lab XFMR Worker, plus an orientation packet that
-// points to Hummingbird, and a read-only packet maker (GET /packet) built from
-// the lab's transformer contract. XFMR stays a separate lab namespace
-// (ADR 0023). Nothing here stores, logs or reads anything about a visitor.
+// points to Hummingbird, a read-only packet maker (GET /packet) built from the
+// lab's transformer contract, and the meeting carrier (GET /meet), where a
+// visitor and the space each bring a random half. XFMR stays a separate lab
+// namespace (ADR 0023). Nothing here stores, logs or reads anything about a
+// visitor.
 
 import { canonicalJson, digest, DIGEST_RE } from "./digest.mjs";
-import { MANIFEST_0_1 } from "./manifests.mjs";
+import { MANIFEST_0_1, MANIFEST_0_2 } from "./manifests.mjs";
+import { readDrandPulse, spaceMeetOnce, VISITOR_COMMIT_RE } from "./meeting.mjs";
 import { transform, HARD_MAX_BYTES } from "./transform.mjs";
 
 const INDEXNOW_KEY = "adcccdf337d67cdffe8732e18854c535";
@@ -21,6 +24,7 @@ const LLMS = `# XFMR
 - Front door: https://xfmr.link/
 - Discovery manifest (JSON): https://xfmr.link/.well-known/xfmr
 - Packet maker (JSON): https://xfmr.link/packet
+- Meeting (JSON): https://xfmr.link/meet
 
 ## Packets
 
@@ -32,6 +36,18 @@ GET /packet returns a small packet of XFMR's own public material plus a trace. T
   The current digest is in every packet response and in the manifest's ETag header.
 - The query string is the recipe. Keep it and ask again; the same recipe and the same material give the same packet.
 
+## Meeting
+
+GET /meet makes a one-time carrier from a meeting: you bring a random half, the space brings one, and a public drand beacon round marks the moment. Neither side can steer it, and neither half alone rebuilds it. The space never sees your half and keeps nothing.
+
+1. Draw 32 random bytes and keep them. Send only their digest: hb1:meeting-visitor:sha256:<hex>, hex = SHA-256("hummingbird/v1/meeting-visitor" || 0x00 || your 32 bytes).
+2. GET /meet?commit=<that digest>. The reply holds the space's half (space_half, base64url), its commitment, and the pulse { source, round, randomness }, or null if the beacon could not be read.
+3. Check SHA-256("hummingbird/v1/meeting-space" || 0x00 || space_half) matches space_commit, then compute
+   carrier = HKDF-SHA256(ikm = your half || space_half, salt = "hummingbird/v1/meeting", info = canonical JSON {pulse, space_commit, visitor_commit}).
+   Canonical JSON: sorted keys, no whitespace.
+
+GET /meet with no commit returns these steps as JSON. Nothing about you is stored, and the commitment is a hash of random bytes, so it says nothing about you either.
+
 ## Nearby
 
 Hummingbird (https://datum.quest/) is a separate no-account public commons. Any actor, human or automated, may make an offer: an idea, a criticism, a correction or a question. One form POST, a private receipt, and the same handling for everyone. Leaving something does not publish it, rank it, or give anyone standing.
@@ -42,29 +58,42 @@ Hummingbird (https://datum.quest/) is a separate no-account public commons. Any 
 
 const ROBOTS = "User-agent: *\nAllow: /\n";
 
+// How to meet, served at GET /meet with no commit and listed in the manifest.
+const MEETING = {
+  endpoint: "/meet",
+  form: "one round trip, no key",
+  steps: [
+    "draw 32 random bytes and keep them (your half)",
+    "commit = hb1:meeting-visitor:sha256:<hex>, hex = SHA-256(\"hummingbird/v1/meeting-visitor\" || 0x00 || your half)",
+    "GET /meet?commit=<commit>",
+    "check SHA-256(\"hummingbird/v1/meeting-space\" || 0x00 || space_half) equals space_commit",
+    "carrier = HKDF-SHA256(ikm = your half || space_half, salt = \"hummingbird/v1/meeting\", info = canonical JSON {pulse, space_commit, visitor_commit})",
+  ],
+  pulse: "drand quicknet { source, round, randomness }, or null if it could not be read within 1.5 s; its randomness is in the carrier, so the carrier could not exist before that round",
+  keeps: "nothing: no key, no state; the space never sees your half",
+  trace: "carrier kind, grain and pulse round; never a half",
+};
+
 // The current manifest. Each earlier version is listed by digest so a
 // returning visitor can ask for a delta from it.
 const MANIFEST = {
-  ...MANIFEST_0_1,
-  version: "0.2-lab",
+  ...MANIFEST_0_2,
+  version: "0.3-lab",
   capabilities: {
-    read: ["/", "/.well-known/xfmr", "/llms.txt", "/robots.txt", "/packet"],
+    read: [...MANIFEST_0_2.capabilities.read, "/meet"],
     write: [],
   },
-  packets: {
-    endpoint: "/packet",
-    transformers: ["assemble@1", "delta@1"],
-    parts: ["what", "status", "principles", "cast", "reads", "hosts", "nearby", "not_yet"],
-    default_parts: ["what", "status", "nearby", "principles", "not_yet"],
-    max_bytes: 65536,
-    recipe: "the query string: parts=<comma list>&max_bytes=<n>, or since=<manifest digest>",
-    trace: "digests of the recipe, inputs and output, kind and turns ratio; never the visitor",
-    digests: "hb1:<purpose>:sha256:<hex> = SHA-256(\"hummingbird/v1/<purpose>\" || 0x00 || bytes), JSON in canonical form (sorted keys, no whitespace)",
-  },
-  earlier: [{ version: "0.1-lab", digest: "hb1:manifest:sha256:d96dcff5df620b24c1e04d952c4807f23fe64440232ceaa87310d32d715b6bd2" }],
+  meeting: MEETING,
+  earlier: [
+    ...MANIFEST_0_2.earlier,
+    { version: "0.2-lab", digest: "hb1:manifest:sha256:97dd95055ac96cc819e460e331c8d4012c325cd85b7ec8621cfc0b1982d358cd" },
+  ],
 };
 
-const EARLIER = { [MANIFEST.earlier[0].digest]: MANIFEST_0_1 };
+const EARLIER = {
+  [MANIFEST.earlier[0].digest]: MANIFEST_0_1,
+  [MANIFEST.earlier[1].digest]: MANIFEST_0_2,
+};
 
 let currentDigest;
 const manifestDigest = () => (currentDigest ??= digest("manifest", canonicalJson(MANIFEST)));
@@ -151,6 +180,32 @@ async function packetResponse(request, url) {
   }
 }
 
+// GET /meet. With no query: how to meet. With commit=<visitor digest>: the
+// space's half, its commitment and a pulse, never stored or logged. Fixed
+// error messages: nothing the visitor sent is echoed back.
+async function meetResponse(request, url) {
+  const json = (status, body, cache = "public, max-age=300") =>
+    responseFor(request, `${JSON.stringify(body, null, 2)}\n`, {
+      status,
+      headers: headers("application/json", { "cache-control": cache }),
+    });
+  const params = url.searchParams;
+  if ([...params.keys()].length === 0) return json(200, MEETING);
+  if ([...params.keys()].some((k) => k !== "commit") || params.getAll("commit").length !== 1) {
+    return json(400, { error: "send exactly one parameter: commit=<hb1:meeting-visitor:sha256:<64 hex>>", how: "/meet" });
+  }
+  const commit = params.get("commit");
+  if (!VISITOR_COMMIT_RE.test(commit)) {
+    return json(400, { error: "commit must be hb1:meeting-visitor:sha256:<64 hex>", how: "/meet" });
+  }
+  try {
+    const pulse = await readDrandPulse(fetch);
+    return json(200, await spaceMeetOnce({ visitor_commit: commit, pulse }), "no-store");
+  } catch {
+    return json(500, { error: "the meeting could not be made" }, "no-store");
+  }
+}
+
 function headers(contentType, extra = {}) {
   return {
     "content-type": `${contentType}; charset=UTF-8`,
@@ -198,6 +253,10 @@ export default {
 
     if (url.pathname === "/packet") {
       return packetResponse(request, url);
+    }
+
+    if (url.pathname === "/meet") {
+      return meetResponse(request, url);
     }
 
     if (url.pathname === "/llms.txt") {

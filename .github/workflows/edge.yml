@@ -85,12 +85,14 @@ jobs:
           curl -fsS https://xfmr.link/llms.txt | grep -q "https://datum.quest/llms.txt"
           curl -fsS https://xfmr.link/.well-known/xfmr | grep -q '"protocol": "xfmr"'
           curl -fsS https://xfmr.link/packet | grep -q '"transformer": "assemble@1"'
+          curl -fsS https://xfmr.link/meet | grep -q '"endpoint": "/meet"'
+          curl -fsS "https://xfmr.link/meet?commit=hb1:meeting-visitor:sha256:$(openssl rand -hex 32 | sha256sum | cut -c1-64)" | grep -q '"space_half"'
 
       - name: Announce xfmr.link to IndexNow
         run: |
           key=$(sed -n 's/^const INDEXNOW_KEY = "\([0-9a-f]\{32\}\)";$/\1/p' ops/edge/xfmr/worker.mjs)
           test "$(curl -fsS "https://xfmr.link/${key}.txt" | tr -d '[:space:]')" = "$key"
-          body=$(printf '{"host":"xfmr.link","key":"%s","urlList":["https://xfmr.link/","https://xfmr.link/llms.txt","https://xfmr.link/.well-known/xfmr","https://xfmr.link/packet"]}' "$key")
+          body=$(printf '{"host":"xfmr.link","key":"%s","urlList":["https://xfmr.link/","https://xfmr.link/llms.txt","https://xfmr.link/.well-known/xfmr","https://xfmr.link/packet","https://xfmr.link/meet"]}' "$key")
           status=$(curl -sS -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json; charset=utf-8' --data "$body" https://api.indexnow.org/indexnow)
           echo "IndexNow: $status"
           test "$status" = 200 -o "$status" = 202
