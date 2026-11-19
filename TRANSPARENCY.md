@@ -19,6 +19,8 @@ admitted, or published. See
 
 Phase 2D is complete. Hummingbird exercised the portable production backup/recovery path end-to-end against an isolated disposable replacement database, published the material recovery outcome through the publication buffer, then completed the ordinary independent-retention checkpoint by retrieving an encrypted private backup, decrypting it with the steward-held identity outside GitHub/Cloudflare, and validating the recovered portable bundle. The same encrypted private-backup path now runs daily while retaining a deliberate manual trigger for tighter checkpoints.
 
+After each offer review, [What We Heard](https://datum.quest/heard) publishes what came in, in coarse counts, what changed because of it with links to the public pull requests, and what was heard but left alone, with the reason. It never quotes or identifies an offer ([ADR 0019](docs/decisions/0019-phase2e-offer-triage-and-review.md)).
+
 A new `canonical-candidate-v1` preparation layer can turn bounded review material into machine-validatable candidate draft records without touching canonical D1. Candidate preparation is explicitly non-canonical: it cannot admit, publish, grant governance status, or convert offer repetition into voting weight.
 
 ## Phase 2 model

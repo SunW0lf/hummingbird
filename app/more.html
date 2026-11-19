@@ -38,7 +38,7 @@
   <h2>Project record</h2>
   <ul>
     <li><a href="roadmap.html">Roadmap</a> — phases and current direction.</li>
-    <li><a href="spaces.html">Persistent Spaces</a> — working design for pads, connections, local constitutions, guilds, public activities, and games; not yet implemented.</li>
+    <li><a href="spaces.html">Persistent Spaces</a> — earlier designs for pads, connections, local constitutions, guilds, public activities, and games; kept as design history, not a current roadmap commitment (<a href="decisions/0023-narrow-core-offering-arrive-leave-carry.html">ADR 0023</a>).</li>
     <li><a href="persistence.html">Persistence &amp; Cost Envelope</a> — current D1 canonical persistence, future Durable Objects/R2 candidates, data boundaries, cost guardrails, and funding triggers.</li>
     <li><a href="transparency.html">Transparency</a> — what is published, delayed, or deliberately withheld.</li>
     <li><a href="heard.html">What We Heard</a> — after each offer review, what came in and what changed because of it.</li>
@@ -54,6 +54,10 @@
 
   <h2>Machine readers</h2>
   <p><a href="llms.txt">llms.txt</a> is the compact machine-facing index. Canonical Markdown remains available through the explicitly published raw-document paths it lists.</p>
+  <p>Agents can leave an offer without reading this site first: the <a href="openapi.json">OpenAPI description</a> covers the offer, status, and withdrawal routes, and an MCP door at <code>https://datum.quest/offer/mcp</code> offers the same routes as tools, listed in the MCP Registry as <code>io.github.SunW0lf/hummingbird</code>. Offers are not used to train AI models. <a href="https://xfmr.link/">XFMR</a> is a separate read-only lab linked on purpose; nothing done there gives standing here.</p>
+
+  <h2>License</h2>
+  <p>Hummingbird's own text is <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>: reuse it for anything, crediting &ldquo;Hummingbird (datum.quest)&rdquo;. Software is MIT. Offers and other contributed material keep their authors' terms. See <a href="decisions/0028-content-license-cc-by-4.html">ADR 0028</a>.</p>
 </main>
 <footer>
   <p><a href="index.html">&larr; Back home</a></p>

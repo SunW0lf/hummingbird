@@ -1,6 +1,6 @@
 # ADR 0028 — Hummingbird's own text is licensed CC BY 4.0
 
-Status: proposed; accepted when the steward merges the pull request that adds it
+Status: accepted for the C0 / Phase 2 working institution (merged 2026-11-19)
 
 Date: 2026-11-19
 

@@ -164,6 +164,8 @@ The participant surface is deliberately low-friction:
 - a clear one-time private receipt whose semantics do not imply identity, canonical status, or standing;
 - receipt-based status and withdrawal.
 
+Since launch the same three routes have gained doors for automated participants, with identical limits and handling: a JSON body, an [OpenAPI 3.1 description](https://datum.quest/openapi.json), and an MCP door at `/offer/mcp` ([ADR 0026](docs/decisions/0026-mcp-door-for-agents.md)), listed in the MCP Registry. Stored offer text is grouped by a keyed hash whose key rotates monthly ([ADR 0027](docs/decisions/0027-keyed-offer-content-hash.md)). The steward promised on 2026-11-19 that offers are not used to train AI models. After each review, [What We Heard](https://datum.quest/heard) reports what came in, in coarse counts, and what changed.
+
 Launch verification completed the dedicated offer-store provisioning/migration/binding, preserved the public read plane, verified the offer route/binding without mutation, and completed a one-time production `accept → status → withdraw → withdrawn status` exercise. The test offer remains withdrawn. The pilot uses the published payload, retention, duplicate, backpressure, receipt, withdrawal, cleanup, and pause boundaries; material operating evidence should continue to be summarized without exposing participant material or correlation-rich telemetry.
 
 The public front door now acts as the intended truthful funnel:
@@ -192,14 +194,14 @@ Completed on 2026-11-18. See [ADR 0024](docs/decisions/0024-phase2e2-constitutio
 
 #### Phase 2E.3 — Security, ingress, and runtime decisions
 
-Status: **in progress — blockers resolved 2026-11-18; Offer Buffer review remains**
+Status: **in progress — blockers resolved and Offer Buffer design reconciled 2026-11-18; mature Phase 3 operating rules remain**
 
 The three security/runtime blockers were resolved on 2026-11-18 by [ADR 0025](docs/decisions/0025-phase2e3-security-ingress-and-runtime-dispositions.md) (see the [decision packet](docs/reviews/PHASE_2E3_DECISION_PACKET.md)): participants use scoped capabilities, never accounts; abuse controls run at the edge and any restriction is item-scoped and kept at most 30 days; and the current minimal stack stays, changing only through an ADR showing need. No endorsement tool is deployed. An earned advisory voice for admitted items is recorded as a possible later experiment requiring a Charter amendment.
 
 Remaining work:
 
 - Define the mature Phase 3 incident-response, monitoring/alerting, credential-lifecycle, ingress, overload, receipt, correction/withdrawal, shutdown, and recovery behavior without treating the Phase 2 baselines or pilot-scoped rules as automatic precedent.
-- Review [ADR 0016](docs/decisions/0016-offers-and-the-offer-buffer.md) and the [Phase 3 Offer Buffer working design](docs/protocols/PHASE_3_OFFER_BUFFER_DESIGN.md) against all resolved Phase 3 rights, governance, security, and runtime decisions.
+- ~~Review ADR 0016 and the Phase 3 Offer Buffer working design against the resolved decisions.~~ Done on 2026-11-18: see the [reconciliation review](docs/reviews/PHASE_3_OFFER_BUFFER_RECONCILIATION.md) and the [ADR 0016 amendment](docs/decisions/0016-offers-and-the-offer-buffer.md#amendment-2026-11-18).
 
 #### Explicit Phase 3 authorization
 

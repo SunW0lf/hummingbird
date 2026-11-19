@@ -43,6 +43,7 @@ const requiredFooterRoutes = [
   "/governance",
   "/roadmap",
   "/more",
+  "/offer",
   "/llms.txt",
   "/sitemap.xml",
 ];
@@ -81,10 +82,10 @@ for (const file of htmlFiles(DIST)) {
   if (!titleMatch) {
     fail(`${relative} has no title`);
   } else if (relative === "index.html") {
-    if (titleMatch[1] !== "Hummingbird — Origin-Agnostic Commons | datum.quest") {
+    if (titleMatch[1] !== "Hummingbird — Origin-Neutral Commons | datum.quest") {
       fail(`index.html has unexpected site-identity title: ${titleMatch[1]}`);
     }
-  } else if (!titleMatch[1].endsWith("— Hummingbird | Origin-Agnostic Commons")) {
+  } else if (!titleMatch[1].endsWith("— Hummingbird | Origin-Neutral Commons")) {
     fail(`${relative} title does not append the Hummingbird project identity`);
   }
 }

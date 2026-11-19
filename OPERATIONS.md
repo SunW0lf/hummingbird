@@ -63,6 +63,15 @@ or similar request metadata. A reviewed candidate may later be passed through
 the existing steward-only admission path, but candidate generation itself never
 changes D1, publication state, or governance status.
 
+### Offer workflows added since launch
+
+- **Offer live check** (manual): makes marked test offers through the HTML form, the JSON form and the MCP door, checks the stored rows against ADR 0018 and ADR 0027, and deletes its own test rows. Run it after any change to the offer runtime, and confirm afterwards that no test rows remain.
+- **Offer content key rotation** (1st of each month, 11:41 UTC, and by hand): makes a new `OFFER_CONTENT_KEY`, sets it straight into the Pages secret, redeploys, re-keys stored hashes, then runs the live check. The key never touches GitHub, logs or disk, and the old key is not kept ([ADR 0027](docs/decisions/0027-keyed-offer-content-hash.md)).
+- **After each offer review**, update [What We Heard](app/heard.html) in coarse counts with links to the resulting public pull requests. It never quotes or identifies an offer.
+- **Publish to MCP Registry** (manual, GitHub OIDC, no stored credential): re-publishes `server.json`. Bump its version, and the MCP door's `SERVER_INFO`, before any re-publish.
+- **Edge** (manual): `www-redirect` or `xfmr-worker`, using the separate `CLOUDFLARE_EDGE_TOKEN`. Run `xfmr-worker` after merging any change under `ops/edge/xfmr/`; merging alone does not deploy it.
+- **IndexNow** (manual): after a material public change, as described under Monitoring.
+
 ## Backup
 
 Current durable production state includes the Git repository, deliberately admitted canonical records in Cloudflare D1, and provider-authoritative external records that Hummingbird references rather than clones. The Phase 2 reference corpus under `fixtures/canonical/` is version-controlled contract material, not a backup of production application state.
@@ -348,6 +357,16 @@ create replacement
 ```
 
 When compromise is suspected, revoke first if graceful overlap would prolong risk. Different credential classes—deployment, provider administration, database/recovery, offline backup decryption, and future workload identities—need not share one age limit because their exposure and consequences differ.
+
+Current credential classes, recorded without their values:
+
+- Pages deployment token (`CLOUDFLARE_API_TOKEN`, Pages:Edit), 180-day baseline as above.
+- D1 recovery token (`CLOUDFLARE_D1_RECOVERY_TOKEN`), used by the backup, offer cleanup, observer, live check and key rotation workflows; expires 2027-11-18.
+- Edge token (`CLOUDFLARE_EDGE_TOKEN`: Workers scripts and routes, single redirects, zone read, cache purge on `datum.quest` and `xfmr.link`); expires 2027-11-18.
+- Private backup destination credential, scoped to `SunW0lf/hummingbird-backups`.
+- `OFFER_CONTENT_KEY`, a Cloudflare Pages secret rotated monthly by workflow and never held anywhere else.
+- The steward-held `age` identity for backup decryption, outside GitHub and Cloudflare.
+- MCP Registry publishing uses GitHub OIDC and stores no credential.
 
 Credential custody is operational capability, not governing authority. The broader Phase 3 credential-lifecycle design remains open under [OQ-OPS-TOKEN-ROTATION-CADENCE](docs/governance/OPEN_QUESTIONS.md#oq-ops-token-rotation-cadence) for Phase 2E.3.
 

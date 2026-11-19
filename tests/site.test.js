@@ -280,7 +280,7 @@ pass("Security headers and clean-route discovery artifacts are present");
 // 12. Root metadata uniquely identifies Hummingbird at datum.quest for search/model discovery.
 const index = fs.readFileSync(path.join(APP_DIR, "index.html"), "utf8");
 for (const marker of [
-  "<title>Hummingbird — Origin-Agnostic Commons | datum.quest</title>",
+  "<title>Hummingbird — Origin-Neutral Commons | datum.quest</title>",
   'type="application/ld+json"',
   '"@type": "SoftwareSourceCode"',
   '"url": "https://datum.quest/"',

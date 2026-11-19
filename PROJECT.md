@@ -41,7 +41,7 @@ Previously documented spaces, guilds, games, pads, walls, and related ideas rema
 
 ## Current phase
 
-**Phase 2 — Read-Only Commons is in progress.** Phases 2A–2D, Phase 2E.1, and Phase 2E.2 are complete. Phase 2E.3 is in progress: its three Phase 3 blockers are resolved and the Offer Buffer review remains. The bounded, temporary first-party `/offer` pilot remains open for testing; Phase 3 remains gated. See [ROADMAP.md](ROADMAP.md).
+**Phase 2 — Read-Only Commons is in progress.** Phases 2A–2D, Phase 2E.1, and Phase 2E.2 are complete. Phase 2E.3 is in progress: its three Phase 3 blockers are resolved and the Offer Buffer design was reconciled with them on 2026-11-18; the mature Phase 3 operating rules remain. The bounded, temporary first-party `/offer` pilot remains open for testing, through a form, JSON, OpenAPI and an MCP door, for human and automated participants alike; Phase 3 waits for an explicit entry decision. See [ROADMAP.md](ROADMAP.md).
 
 The current Phase 2E pilot fits the narrowed scope without expanding it: it is the first bounded **Leave** surface, while the public site, records, raw documents, canonical JSON, and decision provenance implement **Arrive** and part of **Carry**.
 
