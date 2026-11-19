@@ -41,7 +41,7 @@ test("keeps the handling boundary in plain words", () => {
 test("states retention, storage and readers where a tool builder reads first", () => {
   const d = spec.info.description;
   assert.ok(d.includes(`kept for ${RETENTION_DAYS} days`), "stated retention differs from the runtime");
-  for (const fact of ["withdrawing clears it", "IP address", "may use an AI assistant", "never published by being accepted", "https://datum.quest/heard"]) {
+  for (const fact of ["withdrawing clears it", "IP address", "use AI assistants", "not used to train AI models", "never published by being accepted", "https://datum.quest/heard"]) {
     assert.ok(d.split(fact).length > 1, `OpenAPI description is missing: ${fact}`);
   }
 });
