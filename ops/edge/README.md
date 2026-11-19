@@ -33,3 +33,5 @@ A redirect rule only runs for a hostname Cloudflare proxies. In the Cloudflare d
 ## XFMR
 
 `xfmr.link` is a separate lab namespace (see the private `hummingbird-lab` repository and ADR 0023). Its custom domain is attached in Cloudflare, not in `wrangler.jsonc`, so a deploy cannot repoint the hostname. The Worker serves the XFMR door sign, the discovery manifest at `/.well-known/xfmr`, an orientation packet at `/llms.txt` pointing to Hummingbird, `robots.txt`, and its own IndexNow key file.
+
+It also serves a read-only packet maker at `/packet`, built from the lab's transformer contract (`digest.mjs`, `transform.mjs`): a visitor picks parts of XFMR's own public material and a byte budget (`?parts=what,nearby&max_bytes=1600`), or sends the manifest digest it last saw (`?since=<digest>`) and gets only what changed. Each answer carries a trace of digests (recipe, inputs, output), never anything about the visitor, and nothing is stored or logged. Every published manifest version is kept, frozen, in `manifests.mjs` so `since` keeps working; when the manifest changes, add the old version there and list its digest under `earlier`.
