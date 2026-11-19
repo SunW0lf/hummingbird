@@ -4,6 +4,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import {
+  RETENTION_DAYS,
   MAX_OFFER_CHARS,
   MAX_QUESTION_ID_CHARS,
   MAX_REFERENCE_CHARS,
@@ -35,6 +36,14 @@ test("keeps the handling boundary in plain words", () => {
   assert.match(spec.info.description, /not a general API/);
   assert.match(spec.info.description, /acceptance is not admission/);
   assert.match(spec.paths["/offer"].post.description, /never put it in a URL/);
+});
+
+test("states retention, storage and readers where a tool builder reads first", () => {
+  const d = spec.info.description;
+  assert.ok(d.includes(`kept for ${RETENTION_DAYS} days`), "stated retention differs from the runtime");
+  for (const fact of ["withdrawing clears it", "IP address", "may use an AI assistant", "never published by being accepted", "https://datum.quest/heard"]) {
+    assert.ok(d.includes(fact), `OpenAPI description is missing: ${fact}`);
+  }
 });
 
 test("is linked from the homepage, llms.txt, and headers", () => {
