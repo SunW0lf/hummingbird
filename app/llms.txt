@@ -60,6 +60,12 @@ Canonical institutional text lives in Markdown in the project's Git repository;
 the raw URLs below serve that Markdown verbatim. Published canonical records
 are exposed as static HTML and JSON projections rebuilt from canonical state.
 
+## Nearby: XFMR, a separate lab linked here on purpose
+https://xfmr.link/
+
+XFMR is a separate, read-only lab namespace, deployed from this repository (ops/edge/xfmr). It takes nothing and stores nothing about visitors. This is the explicit link: it is not part of Hummingbird, and nothing done there gives standing here.
+For a client with a tight context budget, https://xfmr.link/packet?parts=offer returns the offer how-to above as one small JSON packet (about 1,200 bytes of content), with a trace of digests. Offers themselves are still made only at https://datum.quest/offer.
+
 ## Experimental offer pilot — open for testing
 https://datum.quest/offer
 

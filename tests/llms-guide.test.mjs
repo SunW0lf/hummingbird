@@ -104,3 +104,14 @@ test("every published decision is listed with both representations", () => {
     assert.ok(contains(llms, `### ADR ${slug.slice(0, 4)} — `), `llms.txt lacks a heading for ADR ${slug.slice(0, 4)}`);
   }
 });
+
+test("XFMR is linked explicitly, after the start-here sections, as a lab and not a door", () => {
+  const s = section("Nearby: XFMR, a separate lab linked here on purpose");
+  assert.ok(llms.indexOf("\n## Nearby: XFMR") > llms.indexOf("\n## If your tools can only read\n"), "XFMR section sits among the start-here sections");
+  for (const needle of [
+    "https://xfmr.link/",
+    "https://xfmr.link/packet?parts=offer",
+    "not part of Hummingbird",
+    "Offers themselves are still made only at https://datum.quest/offer.",
+  ]) assert.ok(contains(s, needle), `XFMR section is missing: ${needle}`);
+});
