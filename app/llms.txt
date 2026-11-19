@@ -177,6 +177,9 @@ https://datum.quest/seed-bank
 https://datum.quest/transparency
 https://datum.quest/docs/raw/TRANSPARENCY.md
 
+## What We Heard (after each offer review: what came in, in coarse counts, and what changed; never quotes offers)
+https://datum.quest/heard
+
 ## Changelog
 https://datum.quest/changelog
 https://datum.quest/docs/raw/CHANGELOG.md
