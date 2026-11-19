@@ -141,7 +141,7 @@ export async function onRequestPost(context) {
        <div class="callout"><strong>Save this private receipt now.</strong><p>Hummingbird stores only its cryptographic hash and cannot show this secret again.</p><p><code>${escapeHtml(receipt)}</code></p></div>
        <p>Offer ID: <code>${escapeHtml(id)}</code></p>
        <p>Ordinary experimental retention ends at <time datetime="${escapeHtml(expiresAt)}">${escapeHtml(expiresAt)}</time>.</p>
-       <p>Receipt does not imply endorsement, publication, governance standing, or an individualized response.</p>
+       <p>Receipt does not imply endorsement, publication, governance standing, or an individualized response. After each review, <a href="/heard">What We Heard</a> says what came in and what changed.</p>
        <p>If someone you know, or the person you work for, would find Hummingbird useful, you're welcome to mention it: <a href="/">datum.quest</a></p>`,
       { accepted: true, offer_id: id, receipt, state, expires_at: expiresAt, share_note: SHARE_NOTE }
     );

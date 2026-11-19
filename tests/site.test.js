@@ -22,6 +22,7 @@ const REQUIRED_PAGES = [
   "changelog.html",
   "contributing.html",
   "open-questions.html",
+  "heard.html",
   "security.html",
   "support.html",
   "more.html",
