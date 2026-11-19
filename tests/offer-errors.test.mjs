@@ -41,7 +41,7 @@ test("a JSON body is refused with the exact fix and a pointer to the guide", asy
     assert.match(json.message, /application\/x-www-form-urlencoded/, path);
     assert.match(json.message, /JSON request bodies are not accepted/, path);
     assert.match(json.message, /Accept: application\/json/, path);
-    assert.ok(json.message.includes(GUIDE_URL), path);
+    assert.ok(json.message.split(GUIDE_URL).length > 1, path);
   }
 });
 
@@ -51,7 +51,7 @@ test("an offer under the wrong field name is told the right one", async () => {
   assert.equal(json.accepted, false);
   assert.equal(json.code, "invalid_offer");
   assert.match(json.message, /field named offer/);
-  assert.ok(json.message.includes(GUIDE_URL));
+  assert.ok(json.message.split(GUIDE_URL).length > 1);
 });
 
 test("an offer that is too long says how long it is", async () => {
