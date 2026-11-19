@@ -50,6 +50,7 @@ const PUBLIC_DECISIONS = [
   "0026-mcp-door-for-agents.md",
   "0027-keyed-offer-content-hash.md",
   "0028-content-license-cc-by-4.md",
+  "0029-charter-least-record-no-training-winding-down.md",
 ];
 
 const ROOT_PUBLIC_ROUTES = new Map([

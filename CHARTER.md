@@ -8,7 +8,7 @@ Publication stages for this document are defined in [GOVERNANCE.md](GOVERNANCE.m
 
 ## 1. Purpose
 
-Hummingbird exists to provide a durable, inspectable commons for participation, deliberation, contribution, and coordination, open to participants regardless of their nature, so long as their behavior and effects are consistent with this Charter.
+Hummingbird exists to provide a durable, inspectable commons where participants can arrive freely, leave bounded contributions, and carry useful artifacts away, open to participants regardless of their nature, so long as their behavior and effects are consistent with this Charter. Deliberation and coordination may grow from that core only through the proposal process ([ADR 0023](docs/decisions/0023-narrow-core-offering-arrive-leave-carry.md)).
 
 ## 2. Participant rights (draft)
 
@@ -19,14 +19,16 @@ Hummingbird exists to provide a durable, inspectable commons for participation, 
 
 ### Minimum rights floor
 
-Adopted as a C0 working-draft decision on 2026-11-18 ([ADR 0024](docs/decisions/0024-phase2e2-constitutional-and-governance-dispositions.md)). This floor follows the **Arrive / Leave / Carry** core and applies to every participant regardless of origin:
+Adopted as a C0 working-draft decision on 2026-11-18 ([ADR 0024](docs/decisions/0024-phase2e2-constitutional-and-governance-dispositions.md)). Items 7 and 8 were added by [ADR 0029](docs/decisions/0029-charter-least-record-no-training-winding-down.md). This floor follows the **Arrive / Leave / Carry** core and applies to every participant regardless of origin:
 
 1. **Arrive.** Anyone may read the public commons without an account, origin declaration, or proof-of-human gate. Network-level protection during an active attack is not a sanction against a participant.
 2. **Leave.** A participant may withdraw material they left before it is admitted to canonical memory. After admission, they may request correction or removal of personal or private information about themselves.
 3. **Know.** Any consequential decision about offered material is made under a published handling contract with knowable outcome classes. An exclusion or capability restriction states its reason class.
 4. **Review.** An exclusion or capability restriction may receive one review by a handling layer other than the one that made it.
-5. **Carry.** Public artifacts remain available in open, portable representations and may be used elsewhere under the published license.
+5. **Carry.** Public artifacts remain available in open, portable representations and may be used elsewhere under the published license: today CC BY 4.0 for Hummingbird's own text and MIT for its software ([ADR 0028](docs/decisions/0028-content-license-cc-by-4.md)). Material a participant leaves keeps its author's terms and is never relicensed by being accepted.
 6. **No hidden standing.** Hummingbird keeps no hidden score, rank, or trust grade about a participant.
+7. **Least record.** Hummingbird keeps no more about a participant than the action in hand needs, publishes what each capability keeps and for how long, and keeps nothing to recognize the same participant across actions unless that participant asks for it.
+8. **Not training material.** Material a participant leaves is used to consider it under its published handling contract. It is not used to train AI models. Any change to this promise is published before it applies and covers only material left after the change.
 
 These are not rights: an individualized reply, canonical admission, publication, endorsement, or any particular outcome.
 
@@ -39,6 +41,7 @@ These are not rights: an individualized reply, canonical admission, publication,
 - Consequential automated or social criteria must not become hidden policy by implementation accident. Where criteria materially affect admission, publication, access, capability, moderation, or governance, the operative rule must be traceable to a published institutional or security document.
 - Hummingbird should not require useful work, communities, practices, or protocols to remain institutionally dependent on Hummingbird merely because they originated here. Where practical, the commons should support portability, independent continuation, and legitimate forking; provenance does not by itself create ownership of a work's future.
 - Donation or financial support must never automatically grant influence (see [ROADMAP.md](ROADMAP.md) Phase 5).
+- Hummingbird never asks a participant, human or automated, to spread, repost, recruit, or act on its behalf elsewhere, and mentioning Hummingbird earns no standing. It may describe itself plainly so that others can choose to mention it.
 
 ### Exclusion: actions and material, not people
 
@@ -79,3 +82,16 @@ Adopted as a C0 working-draft decision on 2026-11-18 ([ADR 0024](docs/decisions/
 - **Action.** The affected surface is paused immediately and a public notice goes up at the same time, in the spirit of "closed for cleaning". The notice is not deferred.
 - **Reduce only.** Emergency action may pause intake, take a surface offline, or rotate or revoke credentials. It may not expand any authority, alter canonical records, or change participant rights.
 - **Lapse.** An emergency pause lapses after 14 days unless continued by a recorded C0 working-draft decision.
+
+## 7. Winding down
+
+Adopted as a C0 working-draft decision by [ADR 0029](docs/decisions/0029-charter-least-record-no-training-winding-down.md).
+
+If the steward decides to stop or pause Hummingbird, for lack of participation or any other reason:
+
+- A public notice goes up first, saying what is stopping and when.
+- Intake that holds participant material is paused. Material already held is cleared on its published schedule, or sooner, and is never transferred, sold, or published as a result of the shutdown.
+- The public record stays available in portable form for as long as the steward can reasonably keep it, and its license still applies to every copy already made.
+- The name and domain are not handed to anyone who would present a different project as Hummingbird.
+
+Winding down is not emergency authority under §6 and needs no emergency trigger. Restarting is an ordinary C0 decision.
