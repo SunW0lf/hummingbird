@@ -47,6 +47,7 @@ node --test tests/edge-xfmr.test.mjs
 node --test tests/openapi.test.mjs
 node --test tests/mcp.test.mjs
 node --test tests/atproto-did.test.mjs
+node --test tests/offer-errors.test.mjs
 node --test tests/llms-guide.test.mjs
 
 echo "Running layout/site-identity regression checks..."

@@ -4,6 +4,7 @@ import {
   isoNow,
   lookupByReceipt,
   readUrlEncodedForm,
+  receiptMissMessage,
   requireOfferDb,
   resultResponse,
 } from "../../lib/offer-runtime.mjs";
@@ -29,7 +30,7 @@ export async function onRequestPost(context) {
 
   const form = await readUrlEncodedForm(request);
   if (!form.ok) {
-    return resultResponse(request, form.status, "Status unavailable", `<h1>Status unavailable</h1><p>${escapeHtml(form.message)}</p>`, { ok: false, code: form.code });
+    return resultResponse(request, form.status, "Status unavailable", `<h1>Status unavailable</h1><p>${escapeHtml(form.message)}</p>`, { ok: false, code: form.code, message: form.message });
   }
 
   const receipt = String(form.params.get("receipt") || "").trim();
@@ -40,7 +41,7 @@ export async function onRequestPost(context) {
       404,
       "Receipt not found",
       "<h1>Receipt not found</h1><p>No temporary offer is available for that receipt. It may be invalid, withdrawn past cleanup, or expired past cleanup.</p>",
-      { ok: false, code: "receipt_not_found" }
+      { ok: false, code: "receipt_not_found", message: receiptMissMessage(receipt) }
     );
   }
 

@@ -4,6 +4,7 @@ import {
   isoNow,
   lookupByReceipt,
   readUrlEncodedForm,
+  receiptMissMessage,
   requireOfferDb,
   resultResponse,
   sha256Hex,
@@ -31,17 +32,17 @@ export async function onRequestPost(context) {
 
   const form = await readUrlEncodedForm(request);
   if (!form.ok) {
-    return resultResponse(request, form.status, "Withdrawal unavailable", `<h1>Withdrawal unavailable</h1><p>${escapeHtml(form.message)}</p>`, { ok: false, code: form.code });
+    return resultResponse(request, form.status, "Withdrawal unavailable", `<h1>Withdrawal unavailable</h1><p>${escapeHtml(form.message)}</p>`, { ok: false, code: form.code, message: form.message });
   }
 
   const receipt = String(form.params.get("receipt") || "").trim();
   if (!validReceiptSecret(receipt)) {
-    return resultResponse(request, 404, "Receipt not found", "<h1>Receipt not found</h1><p>No temporary offer is available for that receipt.</p>", { ok: false, code: "receipt_not_found" });
+    return resultResponse(request, 404, "Receipt not found", "<h1>Receipt not found</h1><p>No temporary offer is available for that receipt.</p>", { ok: false, code: "receipt_not_found", message: receiptMissMessage(receipt) });
   }
 
   const row = await lookupByReceipt(db, receipt);
   if (!row) {
-    return resultResponse(request, 404, "Receipt not found", "<h1>Receipt not found</h1><p>No temporary offer is available for that receipt.</p>", { ok: false, code: "receipt_not_found" });
+    return resultResponse(request, 404, "Receipt not found", "<h1>Receipt not found</h1><p>No temporary offer is available for that receipt.</p>", { ok: false, code: "receipt_not_found", message: receiptMissMessage(receipt) });
   }
 
   const nowIso = isoNow();
