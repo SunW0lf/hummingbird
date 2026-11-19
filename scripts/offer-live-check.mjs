@@ -3,8 +3,8 @@
 //
 // It makes a few clearly marked test offers through each door a participant can
 // use (a plain HTML form, the JSON form, and the MCP door for agents), then
-// checks the stored rows against ADR 0018: the text is kept exactly, only the
-// receipt's hash is stored, retention is thirty days, the receipt alone can see
+// checks the stored rows against ADR 0018 and ADR 0027: the text is kept
+// exactly, only the receipt's hash is stored, the text's hash is keyed, retention is thirty days, the receipt alone can see
 // and withdraw an offer, and withdrawal clears the content. It also sweeps the
 // whole buffer, by counts only, for content kept past the cleanup window.
 //
@@ -83,7 +83,9 @@ export async function runLiveCheck({ base, fetchImpl, d1, log = console.log, now
     check(`${door}: offer text is kept exactly`, stored.body === text);
     check(`${door}: only the receipt's hash is stored`, stored.receipt_hash === sha256(accepted.receipt));
     check(`${door}: the receipt itself appears nowhere in the row`, !Object.values(stored).some((v) => typeof v === "string" && v.includes(accepted.receipt)));
-    check(`${door}: content hash matches the text`, stored.content_sha256 === sha256(text));
+    check(`${door}: content hash is keyed, never a plain hash of the text`,
+      /^[0-9a-f]{64}$/.test(stored.content_sha256 || "") && stored.content_sha256 !== sha256(text) &&
+      stored.content_sha256 !== sha256(`hummingbird/v1/offer-content\u0000${text}`));
     const span = Date.parse(stored.expires_at) - Date.parse(stored.received_at);
     check(`${door}: retention is exactly 30 days`, span === RETENTION_MS);
     check(`${door}: the offerer was told the same expiry`, accepted.expires_at === stored.expires_at);
@@ -175,6 +177,8 @@ export async function runLiveCheck({ base, fetchImpl, d1, log = console.log, now
         const b = await checkStored(`${door} (second)`, second, text);
         check(`${door}: both copies keep their text and are grouped together`,
           a && b && a.body === text && b.body === text && a.cluster_id && a.cluster_id === b.cluster_id && second.state === "grouped");
+        check(`${door}: the group's id carries no form of the content hash`,
+          a && a.cluster_id && a.content_sha256 && !a.cluster_id.includes(a.content_sha256) && !a.cluster_id.includes(sha256(text)));
         await form("/offer/withdraw", { receipt: first.receipt });
         const survivor = await row(second.offer_id);
         check(`${door}: withdrawing one copy leaves the other intact`, survivor?.body === text);

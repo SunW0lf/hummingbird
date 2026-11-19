@@ -31,10 +31,10 @@ function d1Binding(sqlite) {
   };
 }
 
-function harness({ breakWithdraw = false } = {}) {
+function harness({ breakWithdraw = false, key = "ab".repeat(32) } = {}) {
   const sqlite = new DatabaseSync(":memory:");
   sqlite.exec(schema);
-  const env = { OFFER_DB: d1Binding(sqlite) };
+  const env = { OFFER_DB: d1Binding(sqlite), ...(key ? { OFFER_CONTENT_KEY: key } : {}) };
   const routes = {
     "/offer": accept,
     "/offer/status": status,
@@ -86,4 +86,12 @@ test("the check never prints offer text or receipts", async () => {
   const out = lines.join("\n");
   assert.doesNotMatch(out, /Live check [0-9a-f-]{36}/);
   assert.doesNotMatch(out, /[A-Za-z0-9_-]{43}/);
+});
+
+test("a missing content key is caught: offers are kept but get no hash and no grouping", async () => {
+  const { sqlite, fetchImpl, d1 } = harness({ key: null });
+  const { results } = await runLiveCheck({ base: "https://datum.quest", fetchImpl, d1, log: () => {} });
+  assert.ok(results.some((r) => !r.ok && r.name.includes("content hash is keyed")));
+  assert.ok(results.some((r) => r.ok && r.name === "JSON form: offer text is kept exactly"));
+  assert.equal(sqlite.prepare("SELECT COUNT(*) AS n FROM experimental_offers").get().n, 0);
 });

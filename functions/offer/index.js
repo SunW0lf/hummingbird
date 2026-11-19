@@ -6,6 +6,7 @@ import {
   newOfferId,
   newReceiptSecret,
   normalizeOffer,
+  offerContentHash,
   readUrlEncodedForm,
   requireOfferDb,
   resultResponse,
@@ -63,7 +64,9 @@ export async function onRequestPost(context) {
 
   try {
     const { body, referenceUrl, questionId } = normalized.value;
-    const contentHash = await sha256Hex(body);
+    // Keyed, never plain (ADR 0027). Null when the key is missing: the offer is
+    // still accepted, it just isn't grouped with exact repeats.
+    const contentHash = await offerContentHash(context.env, body);
     const receipt = newReceiptSecret();
     const receiptHash = await sha256Hex(receipt);
     const id = newOfferId();
@@ -94,16 +97,17 @@ export async function onRequestPost(context) {
 
     let state = "received";
     try {
-      const clusterId = `exact:${contentHash}`;
-      const duplicate = await db.prepare(
-        `SELECT id
+      // Cluster ids are random, so no form of the content hash is ever kept
+      // in a cluster id. A repeat joins the earlier offer's cluster.
+      const duplicate = contentHash && await db.prepare(
+        `SELECT id, cluster_id
            FROM experimental_offers
           WHERE content_sha256 = ? AND id != ? AND expires_at > ?
             AND state IN ('received','grouped')
-            AND (cluster_id IS NULL OR cluster_id = ?)
           ORDER BY received_at, id LIMIT 1`
-      ).bind(contentHash, id, nowIso, clusterId).first();
+      ).bind(contentHash, id, nowIso).first();
       if (duplicate) {
+        const clusterId = duplicate.cluster_id || `exact:${newOfferId()}`;
         await db.batch([
           db.prepare(
             `INSERT OR IGNORE INTO offer_clusters (id, working_summary, state, created_at, updated_at, expires_at)

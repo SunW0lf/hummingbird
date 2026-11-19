@@ -1,0 +1,66 @@
+name: Offer content key rotation
+
+# Rotates OFFER_CONTENT_KEY, the secret behind the keyed hash of offer text
+# (ADR 0027). Monthly, so no key lives much longer than the 30-day retention
+# window, and by hand for the first key or after a suspected leak.
+#
+# The new key is made inside the one step below and goes straight into the
+# Cloudflare Pages production secret. It is never printed, stored in GitHub,
+# or written to disk, and the old key is not kept anywhere. The step then
+# redeploys so the key is live, re-keys every stored offer hash with it, and
+# runs the live offer check to prove grouping and the keyed hash work.
+on:
+  schedule:
+    - cron: "41 11 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: phase2e-offer-cleanup
+  cancel-in-progress: false
+
+jobs:
+  rotate:
+    name: Rotate the offer content key
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: ./scripts/build
+
+      - name: Set a new key, redeploy, and re-key stored hashes
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_D1_RECOVERY_TOKEN: ${{ secrets.CLOUDFLARE_D1_RECOVERY_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -euo pipefail
+          KEY="$(node -e 'process.stdout.write(require("node:crypto").randomBytes(32).toString("hex"))')"
+          echo "::add-mask::$KEY"
+          printf '%s' "$KEY" | npx wrangler pages secret put OFFER_CONTENT_KEY --project-name="${CLOUDFLARE_PAGES_PROJECT:-hummingbird}" >/dev/null
+          ./scripts/deploy
+          OFFER_CONTENT_KEY="$KEY" node scripts/rekey-offer-content.mjs
+          unset KEY
+
+      - name: Live offer check
+        env:
+          HEALTHCHECK_URL: https://datum.quest
+          CLOUDFLARE_D1_RECOVERY_TOKEN: ${{ secrets.CLOUDFLARE_D1_RECOVERY_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: node scripts/offer-live-check.mjs

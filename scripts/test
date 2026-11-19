@@ -23,6 +23,7 @@ node --check scripts/provision-offer-pilot.mjs
 node --check scripts/cleanup-offer-buffer.mjs
 node --check scripts/observe-offer-buffer.mjs
 node --check scripts/offer-live-check.mjs
+node --check scripts/rekey-offer-content.mjs
 node --check scripts/edge-www-redirect.mjs
 node --check scripts/indexnow-submit.mjs
 
@@ -69,6 +70,7 @@ python3 tests/offer-ingress-storage.py
 node tests/offer-observer-contract.test.js
 node tests/offer-review-export.test.js
 node --test tests/offer-live-check.test.mjs
+node --test tests/offer-content-key.test.mjs
 
 echo "Running Phase 2C public-record projection checks..."
 node tests/public-records.test.js
