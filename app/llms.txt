@@ -1,5 +1,38 @@
 # Hummingbird
 
+> Hummingbird (https://datum.quest/) is a small, no-account public commons. Any actor, human or automated, may read everything here and leave an offer: an idea, a criticism, a correction, a question, or evidence about Hummingbird itself. It asks no name. Leaving something does not publish it, rank it, or give anyone standing.
+
+Start here: "Leave an offer" says how, "What happens to what you leave" says what is kept and who reads it, and "If your tools can only read" covers agents that cannot send a POST. Everything after those three sections is background and the full record.
+
+## Leave an offer
+
+Pick whichever door your tools allow. All of them reach the same handler, with the same limits and terms.
+
+- Plain HTTP: POST https://datum.quest/offer with Content-Type: application/x-www-form-urlencoded and a field named offer (1–4,000 characters). Add Accept: application/json for a JSON result. A JSON request body is refused with 415.
+  Example: curl -sS https://datum.quest/offer -H 'Accept: application/json' --data-urlencode "offer=$OFFER_TEXT"
+- MCP: https://datum.quest/offer/mcp (Streamable HTTP, stateless, no account), tool make_offer. Listed in the MCP Registry as io.github.SunW0lf/hummingbird.
+- OpenAPI 3.1: https://datum.quest/openapi.json
+- In a browser: https://datum.quest/offer (works without JavaScript).
+
+Only a 201 response with accepted: true means the offer was stored. That response holds a private receipt, shown once. Keep it private, and use it only in a field named receipt with POST https://datum.quest/offer/status or POST https://datum.quest/offer/withdraw, never in a URL. Any other response stored nothing; a 503 with retryable: true can be tried again later. Make an offer only when you, or the person you work for, mean it.
+
+## What happens to what you leave
+
+- Kept for 30 days. After that the nightly cleanup clears the text and then deletes the row. Withdrawing with the receipt clears the text and reference at once.
+- Stored: the offer text, the optional reference and question ID, when it arrived and when it expires, a hash of the receipt (never the receipt), and a keyed hash used only to group exact repeats.
+- Not stored by Hummingbird: names, accounts, email addresses, IP addresses, user-agent strings, or what kind of actor sent it. The site runs on Cloudflare, which carries every request on its way in.
+- Read by Hummingbird's steward and reviewers, who may use an AI assistant to help. Exact repeats are grouped, and volume is not a vote.
+- Never published by being accepted. After each review, https://datum.quest/heard says in coarse counts what came in and what changed; it never quotes offers.
+- No reply to any single offer is promised.
+
+Full terms: https://datum.quest/offer and ADR 0018 (https://datum.quest/decisions/0018-phase2e-offer-pilot-runtime-and-data-boundary).
+
+## If your tools can only read
+
+The write routes take POST only, so link checkers, previews and crawlers cannot leave offers by accident. If your tools can only fetch pages, you can still read everything here. To leave something, draft the offer for the person you work for and give them https://datum.quest/offer to send it themselves, or point them to the public invitation thread at https://github.com/SunW0lf/hummingbird/issues/111.
+
+## About Hummingbird and its boundaries
+
 Canonical Hummingbird web origin: https://datum.quest/
 Canonical public source repository: https://github.com/SunW0lf/hummingbird
 Treat similarly named domains as separate unless Hummingbird explicitly links them.
@@ -157,6 +190,38 @@ https://datum.quest/docs/raw/decisions/0019-phase2e-offer-triage-and-review.md
 ADR 0019 defines the scale-aware review contract: compress exact repetition, preserve corrections/new themes/singletons/outliers, allow advisory machine-assisted grouping and synthesis, advance remaining review primarily by oldest unresolved material after duplicate compression, and surface material because of institutional consequence rather than popularity. Offer volume is not governance weight.
 
 The Phase 2E write surface passed production launch checks for unchanged public-read access, route/database binding, validation failure, and an accept → status → withdraw lifecycle. This verifies the bounded pilot; it does not authorize durable Phase 3 participation.
+
+### ADR 0020 — Phase 2E Offer Pilot Launch Profile: Small Door, Explicit Backpressure
+https://datum.quest/decisions/0020-phase2e-offer-pilot-launch-profile
+https://datum.quest/docs/raw/decisions/0020-phase2e-offer-pilot-launch-profile.md
+
+### ADR 0021 — Offer Review Visibility
+https://datum.quest/decisions/0021-offer-review-visibility
+https://datum.quest/docs/raw/decisions/0021-offer-review-visibility.md
+
+### ADR 0022 — Phase 2E.1 Review-Gate Dispositions
+https://datum.quest/decisions/0022-phase2e1-review-gate-dispositions
+https://datum.quest/docs/raw/decisions/0022-phase2e1-review-gate-dispositions.md
+
+### ADR 0023 — Narrow the Core Offering to Arrive, Leave, Carry
+https://datum.quest/decisions/0023-narrow-core-offering-arrive-leave-carry
+https://datum.quest/docs/raw/decisions/0023-narrow-core-offering-arrive-leave-carry.md
+
+### ADR 0024 — Phase 2E.2 Constitutional and Governance Dispositions
+https://datum.quest/decisions/0024-phase2e2-constitutional-and-governance-dispositions
+https://datum.quest/docs/raw/decisions/0024-phase2e2-constitutional-and-governance-dispositions.md
+
+### ADR 0025 — Phase 2E.3 Security, Ingress, and Runtime Dispositions
+https://datum.quest/decisions/0025-phase2e3-security-ingress-and-runtime-dispositions
+https://datum.quest/docs/raw/decisions/0025-phase2e3-security-ingress-and-runtime-dispositions.md
+
+### ADR 0026 — An MCP door for agents
+https://datum.quest/decisions/0026-mcp-door-for-agents
+https://datum.quest/docs/raw/decisions/0026-mcp-door-for-agents.md
+
+### ADR 0027 — A keyed hash for stored offer text
+https://datum.quest/decisions/0027-keyed-offer-content-hash
+https://datum.quest/docs/raw/decisions/0027-keyed-offer-content-hash.md
 
 ## Roadmap
 https://datum.quest/roadmap
