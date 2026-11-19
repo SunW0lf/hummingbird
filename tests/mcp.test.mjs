@@ -165,7 +165,7 @@ test("server.json lists this door, at the version the door reports", () => {
 
 test("make_offer says what happens to an offer, where the agent decides", () => {
   assert.ok(HANDLING.includes(`Kept for ${RETENTION_DAYS} days`));
-  for (const fact of ["withdrawing clears it", "IP address", "use AI assistants", "not used to train AI models", "Never published", "https://datum.quest/heard"]) {
+  for (const fact of ["withdrawing clears it", "IP address", "use AI assistants", "not used to train AI models", "stated first", "Never published", "https://datum.quest/heard"]) {
     assert.ok(HANDLING.split(fact).length > 1, `handling note is missing: ${fact}`);
   }
   assert.ok(TOOLS.find((t) => t.name === "make_offer").description.includes(HANDLING));

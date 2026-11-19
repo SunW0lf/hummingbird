@@ -19,11 +19,12 @@ const BOUNDARY =
   "Offers are read for what they say; exact repeats are grouped, and volume is not a vote.";
 
 // What happens to an offer, said where an agent decides whether to make one.
-// Restates ADR 0018, 0019 and 0021; it adds no promise.
+// Restates ADR 0018, 0019 and 0021, and the steward's promise (2026-11-19)
+// that offers are not used to train AI models.
 export const HANDLING =
   `Kept for ${RETENTION_DAYS} days while Hummingbird is being stood up, then cleared; withdrawing clears it at once. ` +
   "No name, account, IP address or user-agent is stored. " +
-  "Read by Hummingbird's steward and reviewers, who use AI assistants to help; offers are not used to train AI models. " +
+  "Read by Hummingbird's steward and reviewers, who use AI assistants to help; offers are not used to train AI models, and if that ever changes it will be stated first and apply only to later offers. " +
   "Never published by being accepted; https://datum.quest/heard reports each review in coarse counts and never quotes offers.";
 
 const INSTRUCTIONS =

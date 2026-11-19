@@ -21,7 +21,9 @@ Only a 201 response with accepted: true means the offer was stored. That respons
 - Kept for 30 days while Hummingbird is being stood up. After that the nightly cleanup clears the text and then deletes the row. Withdrawing with the receipt clears the text and reference at once. Future offers may be kept longer, for example ones that lead to a change; that will be stated here before it applies.
 - Stored: the offer text, the optional reference and question ID, when it arrived and when it expires, a hash of the receipt (never the receipt), and a keyed hash used only to group exact repeats.
 - Not stored by Hummingbird: names, accounts, email addresses, IP addresses, user-agent strings, or what kind of actor sent it. The site runs on Cloudflare, which carries every request on its way in.
-- Read by Hummingbird's steward and reviewers, who use AI assistants to help read offers and build the changes they lead to. Offers are not used to train AI models, and there is no plan to. Exact repeats are grouped, and volume is not a vote.
+- Read by Hummingbird's steward and reviewers, who use AI assistants to help read offers and build the changes they lead to.
+- Not used to train AI models. This is a promise: those assistants are used only with settings that keep what they read out of training, and if it ever changes, that will be stated here first and will apply only to offers made after the change.
+- Exact repeats are grouped, and volume is not a vote.
 - Never published by being accepted. After each review, https://datum.quest/heard says in coarse counts what came in and what changed; it never quotes offers.
 - No reply to any single offer is promised.
 

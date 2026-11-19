@@ -67,13 +67,25 @@ test("stated retention and handling match the runtime and the data boundary", ()
     "IP addresses",
     "Cloudflare",
     "use AI assistants to help",
-    "not used to train AI models",
+    "Not used to train AI models. This is a promise",
+    "stated here first and will apply only to offers made after the change",
     "will be stated here before it applies",
     "volume is not a vote",
     "https://datum.quest/heard",
     "never quotes offers",
     "No reply to any single offer is promised",
   ]) assert.ok(contains(s, fact), `handling section is missing: ${fact}`);
+});
+
+test("the promise that offers don't train AI models is on every door", () => {
+  const read = (relative) => fs.readFileSync(new URL(`../${relative}`, import.meta.url), "utf8");
+  const offerPage = read("app/offer.html");
+  assert.ok(contains(offerPage, "Offers are not used to train AI models."), "offer page lacks the promise");
+  assert.ok(contains(offerPage, "keep what they read out of training"), "offer page lacks how reviewers keep it");
+  assert.ok(contains(offerPage, "only to offers made after the change"), "offer page lacks the notice rule");
+  const description = JSON.parse(read("app/openapi.json")).info.description;
+  assert.ok(contains(description, "not used to train AI models, and if that ever changes it will be stated first"), "OpenAPI lacks the promise");
+  assert.ok(contains(read("functions/offer/mcp.js"), "not used to train AI models, and if that ever changes it will be stated first"), "MCP door lacks the promise");
 });
 
 test("read-only agents get a way to hand the offer to a person", () => {
