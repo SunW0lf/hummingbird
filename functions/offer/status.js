@@ -3,7 +3,7 @@ import {
   escapeHtml,
   isoNow,
   lookupByReceipt,
-  readUrlEncodedForm,
+  readOfferRequest,
   receiptMissMessage,
   requireOfferDb,
   resultResponse,
@@ -28,7 +28,7 @@ export async function onRequestPost(context) {
     );
   }
 
-  const form = await readUrlEncodedForm(request);
+  const form = await readOfferRequest(request);
   if (!form.ok) {
     return resultResponse(request, form.status, "Status unavailable", `<h1>Status unavailable</h1><p>${escapeHtml(form.message)}</p>`, { ok: false, code: form.code, message: form.message });
   }

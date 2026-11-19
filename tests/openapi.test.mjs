@@ -25,11 +25,19 @@ test("describes only the three offer form routes, each backed by a function", ()
   }
 });
 
-test("form limits match the runtime", () => {
-  const props = spec.paths["/offer"].post.requestBody.content["application/x-www-form-urlencoded"].schema.properties;
-  assert.equal(props.offer.maxLength, MAX_OFFER_CHARS);
-  assert.equal(props.reference.maxLength, MAX_REFERENCE_CHARS);
-  assert.equal(props.question_id.maxLength, MAX_QUESTION_ID_CHARS);
+const resolve = (ref) => ref.replace("#/", "").split("/").reduce((node, key) => node[key], spec);
+
+test("form limits match the runtime, for form and JSON bodies alike", () => {
+  const content = spec.paths["/offer"].post.requestBody.content;
+  assert.deepEqual(Object.keys(content).sort(), ["application/json", "application/x-www-form-urlencoded"]);
+  for (const type of Object.keys(content)) {
+    const props = resolve(content[type].schema.$ref).properties;
+    assert.equal(props.offer.maxLength, MAX_OFFER_CHARS, type);
+    assert.equal(props.reference.maxLength, MAX_REFERENCE_CHARS, type);
+    assert.equal(props.question_id.maxLength, MAX_QUESTION_ID_CHARS, type);
+  }
+  const receipt = resolve(spec.paths["/offer/status"].post.requestBody.$ref).content;
+  assert.deepEqual(Object.keys(receipt).sort(), ["application/json", "application/x-www-form-urlencoded"]);
 });
 
 test("keeps the handling boundary in plain words", () => {

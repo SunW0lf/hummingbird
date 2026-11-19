@@ -7,7 +7,7 @@ import {
   newReceiptSecret,
   normalizeOffer,
   offerContentHash,
-  readUrlEncodedForm,
+  readOfferRequest,
   requireOfferDb,
   resultResponse,
   sha256Hex,
@@ -36,7 +36,7 @@ export async function onRequestPost(context) {
     );
   }
 
-  const form = await readUrlEncodedForm(request);
+  const form = await readOfferRequest(request);
   if (!form.ok) {
     return resultResponse(
       request,

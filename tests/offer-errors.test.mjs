@@ -33,14 +33,13 @@ async function call(handler, path, body, type = "application/x-www-form-urlencod
   return { status: res.status, json: await res.json() };
 }
 
-test("a JSON body is refused with the exact fix and a pointer to the guide", async () => {
+test("a body type the routes don't take is refused with the fix and a pointer to the guide", async () => {
   for (const [handler, path] of [[offer, "/offer"], [status, "/offer/status"], [withdraw, "/offer/withdraw"]]) {
-    const { status: code, json } = await call(handler, path, JSON.stringify({ offer: "hi" }), "application/json");
+    const { status: code, json } = await call(handler, path, "offer=hi", "text/plain");
     assert.equal(code, 415, path);
     assert.equal(json.code, "unsupported_media_type", path);
     assert.match(json.message, /application\/x-www-form-urlencoded/, path);
-    assert.match(json.message, /JSON request bodies are not accepted/, path);
-    assert.match(json.message, /Accept: application\/json/, path);
+    assert.match(json.message, /JSON object of strings \(Content-Type: application\/json\)/, path);
     assert.ok(json.message.split(GUIDE_URL).length > 1, path);
   }
 });
