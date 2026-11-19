@@ -4,8 +4,10 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import worker from "../ops/edge/xfmr/worker.mjs";
 import { canonicalJson, digest } from "../ops/edge/xfmr/digest.mjs";
-import { MANIFEST_0_1, MANIFEST_0_2 } from "../ops/edge/xfmr/manifests.mjs";
+import { MANIFEST_0_1, MANIFEST_0_2, MANIFEST_0_3 } from "../ops/edge/xfmr/manifests.mjs";
 import { b64url, checkPulse, expectedQuicknetRound, readDrandPulse, visitorCloseOnce } from "../ops/edge/xfmr/meeting.mjs";
+import { MAX_OFFER_CHARS, RETENTION_DAYS } from "../lib/offer-runtime.mjs";
+import fs from "node:fs";
 
 const call = (path, method = "GET") => worker.fetch(new Request(`https://xfmr.link${path}`, { method }));
 
@@ -63,18 +65,28 @@ test("flavored digests match vectors computed independently with node:crypto", a
 
 test("published manifest versions never change", async () => {
   const manifest = await (await call("/.well-known/xfmr")).json();
-  assert.equal(manifest.version, "0.3-lab");
+  assert.equal(manifest.version, "0.4-lab");
   assert.deepEqual(manifest.capabilities.write, []);
   assert.ok(manifest.capabilities.read.includes("/packet"));
   assert.deepEqual(manifest.earlier, [
     { version: "0.1-lab", digest: await digest("manifest", canonicalJson(MANIFEST_0_1)) },
     { version: "0.2-lab", digest: await digest("manifest", canonicalJson(MANIFEST_0_2)) },
+    { version: "0.3-lab", digest: await digest("manifest", canonicalJson(MANIFEST_0_3)) },
   ]);
   assert.equal(MANIFEST_0_1.version, "0.1-lab");
   assert.ok(Object.isFrozen(MANIFEST_0_1.capabilities.read));
-  // Pinned: 0.2-lab was served from public PR #129 and must keep this digest.
-  assert.equal(await digest("manifest", canonicalJson(MANIFEST_0_2)), "hb1:manifest:sha256:97dd95055ac96cc819e460e331c8d4012c325cd85b7ec8621cfc0b1982d358cd");
-  assert.ok(Object.isFrozen(MANIFEST_0_2.packets));
+  // 0.2-lab was live on xfmr.link with this digest (public PR #129).
+  assert.equal(
+    await digest("manifest", canonicalJson(MANIFEST_0_2)),
+    "hb1:manifest:sha256:97dd95055ac96cc819e460e331c8d4012c325cd85b7ec8621cfc0b1982d358cd",
+  );
+  assert.ok(Object.isFrozen(MANIFEST_0_2.packets.parts));
+  // 0.3-lab as served by public PR #130.
+  assert.equal(
+    await digest("manifest", canonicalJson(MANIFEST_0_3)),
+    "hb1:manifest:sha256:e8d457cda7a2b1ec2d9b1de633b34131e77273fb50d49e1c96cab89b4f811c55",
+  );
+  assert.ok(Object.isFrozen(MANIFEST_0_3.packets.default_parts));
 });
 
 test("the manifest's ETag is its own digest, and packets report the same one", async () => {
@@ -93,7 +105,7 @@ test("the default packet is the orientation packet, the same every time", async 
   assert.deepEqual(one.body, two.body);
   const { recipe, output, trace } = one.body;
   assert.equal(output.packet, "orientation");
-  assert.deepEqual(output.order, ["what", "status", "nearby", "principles", "not_yet"]);
+  assert.deepEqual(output.order, ["what", "offer", "status", "nearby", "principles", "not_yet"]);
   assert.equal(output.parts.nearby.hummingbird.url, "https://datum.quest/");
   assert.equal(trace.transformer, "assemble@1");
   assert.equal(trace.kind, "derived");
@@ -118,7 +130,7 @@ test("a returning visitor gets only what changed since the manifest it saw", asy
   const { res, body } = await getJson(`/packet?since=${earlier}`);
   assert.equal(res.status, 200);
   assert.equal(body.trace.transformer, "delta@1");
-  assert.deepEqual(body.output.changed.version, { from: "0.1-lab", to: "0.3-lab" });
+  assert.deepEqual(body.output.changed.version, { from: "0.1-lab", to: "0.4-lab" });
   assert.equal(body.output.added["packets.endpoint"], "/packet");
   assert.deepEqual(body.output.removed, []);
 
@@ -128,11 +140,18 @@ test("a returning visitor gets only what changed since the manifest it saw", asy
 
   const unknown = await getJson(`/packet?since=hb1:manifest:sha256:${"0".repeat(64)}`);
   assert.equal(unknown.res.status, 404);
-  assert.deepEqual(unknown.body.known, [earlier, await digest("manifest", canonicalJson(MANIFEST_0_2)), current]);
+  const second = await digest("manifest", canonicalJson(MANIFEST_0_2));
+  const third = await digest("manifest", canonicalJson(MANIFEST_0_3));
+  assert.deepEqual(unknown.body.known, [earlier, second, third, current]);
 
-  const fromPackets = await getJson(`/packet?since=${await digest("manifest", canonicalJson(MANIFEST_0_2))}`);
-  assert.deepEqual(fromPackets.body.output.changed.version, { from: "0.2-lab", to: "0.3-lab" });
-  assert.equal(fromPackets.body.output.added["meeting.endpoint"], "/meet");
+  const fromSecond = await getJson(`/packet?since=${second}`);
+  assert.equal(fromSecond.res.status, 200);
+  assert.deepEqual(fromSecond.body.output.changed.version, { from: "0.2-lab", to: "0.4-lab" });
+  assert.ok(fromSecond.body.output.changed["packets.default_parts"].to.includes("offer"));
+
+  const fromThird = await getJson(`/packet?since=${third}`);
+  assert.deepEqual(fromThird.body.output.changed.version, { from: "0.3-lab", to: "0.4-lab" });
+  assert.equal(fromThird.body.output.added["meeting.endpoint"], "/meet");
 });
 
 test("bad recipes get a fixed message that never echoes what was sent", async () => {
@@ -179,6 +198,49 @@ test("the orientation packet and manifest both point to the packet maker", async
   const manifest = await (await call("/.well-known/xfmr")).json();
   assert.equal(manifest.packets.endpoint, "/packet");
   assert.deepEqual(manifest.packets.transformers, ["assemble@1", "delta@1"]);
+});
+
+// ---- The offer kit: Hummingbird's offer how-to, carried as one small packet ----
+
+test("the offer part says how to offer at Hummingbird, in step with its runtime and guide", async () => {
+  const { res, body } = await getJson("/packet?parts=offer");
+  assert.equal(res.status, 200);
+  const offer = body.output.parts.offer;
+  const text = Object.values(offer).join("\n");
+  const guide = fs.readFileSync(new URL("../app/llms.txt", import.meta.url), "utf8");
+  for (const needle of [
+    "POST https://datum.quest/offer",
+    "field named offer",
+    `1–${MAX_OFFER_CHARS.toLocaleString("en-US")} characters`,
+    "Accept: application/json",
+    "https://datum.quest/offer/mcp",
+    "make_offer",
+    "201 with accepted: true",
+    "never in a URL",
+    `Kept for ${RETENTION_DAYS} days`,
+    "not used to train AI models",
+    "give them https://datum.quest/offer to send it",
+    "CC BY 4.0",
+  ]) assert.ok(text.includes(needle), `offer part is missing: ${needle}`);
+  // Every datum.quest address it gives is the guide itself or one the guide also gives.
+  assert.equal(offer.guide, "https://datum.quest/llms.txt");
+  for (const url of text.match(/https:\/\/datum\.quest\/[^\s),]*/g).filter((u) => u !== offer.guide)) {
+    assert.ok(guide.includes(url), `offer part names an address the guide does not: ${url}`);
+  }
+});
+
+test("the offer kit fits a tight budget, and stays in the orientation packet when others are dropped", async () => {
+  const alone = await getJson("/packet?parts=offer&max_bytes=1600");
+  assert.equal(alone.res.status, 200);
+  assert.deepEqual(alone.body.output.omitted, []);
+  const small = await getJson("/packet?max_bytes=1600");
+  assert.equal(small.res.status, 200);
+  assert.deepEqual(small.body.output.order.slice(0, 2), ["what", "offer"]);
+});
+
+test("the door sign and orientation packet point to the offer kit", async () => {
+  assert.match(await (await call("/")).text(), /https:\/\/xfmr\.link\/packet\?parts=offer/);
+  assert.match(await (await call("/llms.txt")).text(), /https:\/\/xfmr\.link\/packet\?parts=offer/);
 });
 
 // ---- Meeting (GET /meet) ----

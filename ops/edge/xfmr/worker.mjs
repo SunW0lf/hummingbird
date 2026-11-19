@@ -8,13 +8,13 @@
 // visitor.
 
 import { canonicalJson, digest, DIGEST_RE } from "./digest.mjs";
-import { MANIFEST_0_1, MANIFEST_0_2 } from "./manifests.mjs";
+import { MANIFEST_0_1, MANIFEST_0_2, MANIFEST_0_3 } from "./manifests.mjs";
 import { readDrandPulse, spaceMeetOnce, VISITOR_COMMIT_RE } from "./meeting.mjs";
 import { transform, HARD_MAX_BYTES } from "./transform.mjs";
 
 const INDEXNOW_KEY = "adcccdf337d67cdffe8732e18854c535";
 
-const DOOR = "XFMR\n\na transduction commons\n\nSignals only.\n\nNearby: Hummingbird, a no-account public commons that takes offers from any actor, human or automated.\nhttps://datum.quest/\n";
+const DOOR = "XFMR\n\na transduction commons\n\nSignals only.\n\nNearby: Hummingbird, a no-account public commons that takes offers from any actor, human or automated.\nhttps://datum.quest/\nHow to make an offer there, as one small packet: https://xfmr.link/packet?parts=offer\n";
 
 // Orientation packet: small enough for a client with a tight context budget.
 const LLMS = `# XFMR
@@ -54,6 +54,7 @@ Hummingbird (https://datum.quest/) is a separate no-account public commons. Any 
 
 - Agent guide: https://datum.quest/llms.txt
 - Offer form: https://datum.quest/offer
+- The offer how-to as one small packet: https://xfmr.link/packet?parts=offer
 `;
 
 const ROBOTS = "User-agent: *\nAllow: /\n";
@@ -77,22 +78,38 @@ const MEETING = {
 // The current manifest. Each earlier version is listed by digest so a
 // returning visitor can ask for a delta from it.
 const MANIFEST = {
-  ...MANIFEST_0_2,
-  version: "0.3-lab",
+  ...MANIFEST_0_3,
+  version: "0.4-lab",
   capabilities: {
-    read: [...MANIFEST_0_2.capabilities.read, "/meet"],
+    read: [...MANIFEST_0_3.capabilities.read, "/meet"],
     write: [],
   },
   meeting: MEETING,
   earlier: [
-    ...MANIFEST_0_2.earlier,
-    { version: "0.2-lab", digest: "hb1:manifest:sha256:97dd95055ac96cc819e460e331c8d4012c325cd85b7ec8621cfc0b1982d358cd" },
+    ...MANIFEST_0_3.earlier,
+    { version: "0.3-lab", digest: "hb1:manifest:sha256:e8d457cda7a2b1ec2d9b1de633b34131e77273fb50d49e1c96cab89b4f811c55" },
   ],
 };
 
 const EARLIER = {
   [MANIFEST.earlier[0].digest]: MANIFEST_0_1,
   [MANIFEST.earlier[1].digest]: MANIFEST_0_2,
+  [MANIFEST.earlier[2].digest]: MANIFEST_0_3,
+};
+
+// How to leave an offer at Hummingbird, carried here so an agent with a tight
+// budget can get the whole how-to in one small read. Hummingbird's own text
+// (CC BY 4.0); tests/edge-xfmr.test.mjs keeps it in step with the offer
+// runtime and datum.quest/llms.txt. XFMR itself still takes nothing.
+const OFFER = {
+  from: "Hummingbird (https://datum.quest/), a separate no-account public commons; its own text, CC BY 4.0",
+  what: "Any actor, human or automated, may leave an offer: an idea, a criticism, a correction, a question, or evidence about Hummingbird itself. It asks no name.",
+  how: "POST https://datum.quest/offer with a field named offer (1–4,000 characters), as a URL-encoded form or a JSON object of strings. Add Accept: application/json for a JSON result.",
+  mcp: "https://datum.quest/offer/mcp (Streamable HTTP, no account), tool make_offer",
+  receipt: "Only a 201 with accepted: true stored it. Its private receipt is shown once: use it only in a POST field named receipt at https://datum.quest/offer/status or https://datum.quest/offer/withdraw, never in a URL.",
+  kept: "Kept for 30 days. No names, accounts, email or IP addresses are stored. Read by its steward and reviewers with AI help, and not used to train AI models. Accepting an offer never publishes it; volume is not a vote.",
+  read_only: "If your tools can only fetch pages, draft the offer for the person you work for and give them https://datum.quest/offer to send it.",
+  guide: "https://datum.quest/llms.txt",
 };
 
 let currentDigest;
@@ -101,6 +118,7 @@ const manifestDigest = () => (currentDigest ??= digest("manifest", canonicalJson
 // XFMR's own public material, as named parts a visitor can pick from.
 const PARTS = {
   what: `${MANIFEST.protocol.toUpperCase()}: ${MANIFEST.tagline}. ${MANIFEST.door_sign}`,
+  offer: OFFER,
   status: { status: MANIFEST.status, version: MANIFEST.version, write: MANIFEST.capabilities.write },
   principles: MANIFEST.principles,
   cast: MANIFEST.cast,

@@ -99,10 +99,10 @@ export const MANIFEST_0_1 = deepFreeze({
   ],
 });
 
-// 0.2-lab: served from 2026-11-19 (public PR #129, the packet maker) until the
-// meeting carrier.
+// 0.2-lab: served from 2026-11-19 (public PR #129, the packet maker) until
+// the offer part was added.
 export const MANIFEST_0_2 = deepFreeze({
-  ...structuredClone(MANIFEST_0_1),
+  ...MANIFEST_0_1,
   version: "0.2-lab",
   capabilities: {
     read: ["/", "/.well-known/xfmr", "/llms.txt", "/robots.txt", "/packet"],
@@ -119,4 +119,20 @@ export const MANIFEST_0_2 = deepFreeze({
     digests: "hb1:<purpose>:sha256:<hex> = SHA-256(\"hummingbird/v1/<purpose>\" || 0x00 || bytes), JSON in canonical form (sorted keys, no whitespace)",
   },
   earlier: [{ version: "0.1-lab", digest: "hb1:manifest:sha256:d96dcff5df620b24c1e04d952c4807f23fe64440232ceaa87310d32d715b6bd2" }],
+});
+
+// 0.3-lab: added the offer part to packets (public PR #130), until the
+// meeting at /meet.
+export const MANIFEST_0_3 = deepFreeze({
+  ...structuredClone(MANIFEST_0_2),
+  version: "0.3-lab",
+  packets: {
+    ...structuredClone(MANIFEST_0_2.packets),
+    parts: ["what", "offer", "status", "principles", "cast", "reads", "hosts", "nearby", "not_yet"],
+    default_parts: ["what", "offer", "status", "nearby", "principles", "not_yet"],
+  },
+  earlier: [
+    ...structuredClone(MANIFEST_0_2.earlier),
+    { version: "0.2-lab", digest: "hb1:manifest:sha256:97dd95055ac96cc819e460e331c8d4012c325cd85b7ec8621cfc0b1982d358cd" },
+  ],
 });
