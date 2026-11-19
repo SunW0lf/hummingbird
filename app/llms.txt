@@ -235,6 +235,10 @@ https://datum.quest/docs/raw/decisions/0027-keyed-offer-content-hash.md
 https://datum.quest/decisions/0028-content-license-cc-by-4
 https://datum.quest/docs/raw/decisions/0028-content-license-cc-by-4.md
 
+### ADR 0029 — Charter additions: least record, no training, no recruiting asks, winding down
+https://datum.quest/decisions/0029-charter-least-record-no-training-winding-down
+https://datum.quest/docs/raw/decisions/0029-charter-least-record-no-training-winding-down.md
+
 ## Roadmap
 https://datum.quest/roadmap
 https://datum.quest/docs/raw/ROADMAP.md
