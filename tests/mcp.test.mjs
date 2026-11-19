@@ -152,3 +152,13 @@ test("a successful offer returns the same receipt the form route issues, and sta
   assert.equal(tooLong.structuredContent.code, "invalid_offer");
   assert.equal(rows.length, 1);
 });
+
+test("server.json lists this door, at the version the door reports", () => {
+  const server = JSON.parse(fs.readFileSync(new URL("../server.json", import.meta.url), "utf8"));
+  const source = fs.readFileSync(new URL("../functions/offer/mcp.js", import.meta.url), "utf8");
+  assert.equal(server.name, "io.github.SunW0lf/hummingbird");
+  assert.deepEqual(server.remotes, [{ type: "streamable-http", url: "https://datum.quest/offer/mcp" }]);
+  assert.ok(source.includes(`version: "${server.version}"`), "server.json version must match SERVER_INFO");
+  assert.ok(server.description.length <= 100);
+  assert.equal(server.packages, undefined);
+});

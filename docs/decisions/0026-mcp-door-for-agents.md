@@ -26,7 +26,7 @@ It exposes only what already exists, with the same bounds:
 
 It adds no new authority, data, capability or route semantics. A receipt is never put in a URL or logged.
 
-Hummingbird would then be listed in the official MCP Registry under the `io.github.sunw0lf/hummingbird` namespace, published from a manual GitHub Actions workflow using GitHub's OIDC login, so no new credential is stored. Listing is a separate step that waits for the steward's yes.
+Hummingbird would then be listed in the official MCP Registry under the `io.github.SunW0lf/hummingbird` namespace, published from a manual GitHub Actions workflow using GitHub's OIDC login, so no new credential is stored. Listing is a separate step that waits for the steward's yes. The steward said yes on 2026-11-18; `server.json` and `.github/workflows/publish-mcp.yml` carry it.
 
 ## Why the current stack cannot meet the need
 
