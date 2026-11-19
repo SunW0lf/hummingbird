@@ -43,6 +43,7 @@ Only a 201 response with accepted: true confirms a write and returns the one-tim
 POST https://datum.quest/offer/status or https://datum.quest/offer/withdraw with a URL-encoded receipt field to act on that receipt; never send it in a URL.
 The offer page has the complete participant-facing limits and handling terms. No general Phase 3 API or automated admission is implied.
 The same three routes are described for tool-using clients in OpenAPI 3.1 at https://datum.quest/openapi.json. It describes these form routes only; it is not a general API.
+MCP clients can use the same routes as tools at https://datum.quest/offer/mcp (Streamable HTTP, stateless, no account): read_guide, list_records, get_record, make_offer, offer_status, withdraw_offer. Offer tools call the same handlers with the same limits and handling terms.
 
 ## Mission
 https://datum.quest/mission

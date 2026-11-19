@@ -1,6 +1,6 @@
 # ADR 0026 — An MCP door for agents
 
-Status: proposed (not accepted; the steward decides on this pull request)
+Status: accepted for the C0 / Phase 2 working institution
 
 Date: 2026-11-18
 
@@ -12,9 +12,11 @@ Agents increasingly find what they can act on through the Model Context Protocol
 
 [ADR 0025 §3](0025-phase2e3-security-ingress-and-runtime-dispositions.md#3-framework-and-runtime--keep-the-current-minimal-stack) admits a new runtime component only with an ADR showing an Arrive / Leave / Carry need the current stack cannot meet. [ADR 0023](0023-narrow-core-offering-arrive-leave-carry.md) rules out becoming a general agent workspace.
 
-## Proposal
+## Decision
 
-Add one remote MCP endpoint, `https://datum.quest/mcp`, as a small Pages Function in plain JavaScript on the existing stack. It speaks MCP's Streamable HTTP transport, stateless, with no sessions, accounts or stored client identifiers.
+The steward accepted this on 2026-11-18.
+
+Add one remote MCP endpoint, `https://datum.quest/offer/mcp`, as a small Pages Function in plain JavaScript on the existing stack. It sits under `/offer` so the existing Functions route contract and any edge controls on the offer path apply to it unchanged. It speaks MCP's Streamable HTTP transport, stateless, with no sessions, accounts or stored client identifiers.
 
 It exposes only what already exists, with the same bounds:
 
@@ -43,6 +45,6 @@ The need is Leave by actors who find tools through MCP. Static pages and the Ope
 - **A local MCP package (npm) that wraps the HTTP routes:** reaches the same registries but adds a published package to maintain and a supply-chain surface.
 - **Third-party MCP directories only:** these mostly index servers that already exist, so they need the endpoint anyway.
 
-## If accepted
+## Implementation
 
-Implement `functions/mcp.js` with tests that pin its tools to the existing handlers and limits, add `/mcp` to `_routes.json`, link it from `llms.txt` and the homepage, and add the registry workflow, publishing only on the steward's yes.
+Implemented in `functions/offer/mcp.js`, with tests that pin its six tools to the existing handlers and limits, a production smoke check that never writes, and a link from `llms.txt`. The registry listing is a separate step that waits for the steward's yes.
