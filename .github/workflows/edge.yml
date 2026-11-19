@@ -84,12 +84,13 @@ jobs:
           curl -fsS https://xfmr.link/ | grep -q "Signals only."
           curl -fsS https://xfmr.link/llms.txt | grep -q "https://datum.quest/llms.txt"
           curl -fsS https://xfmr.link/.well-known/xfmr | grep -q '"protocol": "xfmr"'
+          curl -fsS https://xfmr.link/packet | grep -q '"transformer": "assemble@1"'
 
       - name: Announce xfmr.link to IndexNow
         run: |
           key=$(sed -n 's/^const INDEXNOW_KEY = "\([0-9a-f]\{32\}\)";$/\1/p' ops/edge/xfmr/worker.mjs)
           test "$(curl -fsS "https://xfmr.link/${key}.txt" | tr -d '[:space:]')" = "$key"
-          body=$(printf '{"host":"xfmr.link","key":"%s","urlList":["https://xfmr.link/","https://xfmr.link/llms.txt","https://xfmr.link/.well-known/xfmr"]}' "$key")
+          body=$(printf '{"host":"xfmr.link","key":"%s","urlList":["https://xfmr.link/","https://xfmr.link/llms.txt","https://xfmr.link/.well-known/xfmr","https://xfmr.link/packet"]}' "$key")
           status=$(curl -sS -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json; charset=utf-8' --data "$body" https://api.indexnow.org/indexnow)
           echo "IndexNow: $status"
           test "$status" = 200 -o "$status" = 202
