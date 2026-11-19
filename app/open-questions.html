@@ -28,28 +28,30 @@
   <h1>Open Questions</h1>
   <p>Hummingbird tracks unresolved policy and design questions deliberately, rather than silently deciding them through implementation. This page summarizes the institutional questions most relevant to participants and observers. It is a curated summary, not the full internal registry.</p>
 
-  <h2>Participant rights</h2>
-  <p>What minimum rights (e.g. appeal, correction, data deletion) apply to all participants regardless of origin? Under what conditions, if any, can a participant or contribution be excluded from the commons? What responsibilities do participants have toward the commons?</p>
+  <h2>Recently settled</h2>
+  <p>Several questions this page used to list are now answered as C0 working-draft decisions, which stay open to revision through the <a href="governance.html">proposal process</a>:</p>
+  <ul>
+    <li><strong>Participant rights, exclusion, and responsibilities</strong>: a minimum rights floor (Arrive, Leave, Know, Review, Carry, No hidden standing), exclusion that attaches to actions and material and never to people, and three universal participation conditions. See the <a href="charter.html">Charter</a> and <a href="decisions/0024-phase2e2-constitutional-and-governance-dispositions.html">ADR 0024</a>.</li>
+    <li><strong>Proposals and emergency authority</strong>: anyone may draft a proposal as a public pull request, decided by the steward with written reasons during C0; emergency authority is pause-only. Also ADR 0024.</li>
+    <li><strong>Authentication and framework</strong>: participants never need an account, durable actions use scoped capabilities, and the stack stays plain. See <a href="decisions/0025-phase2e3-security-ingress-and-runtime-dispositions.html">ADR 0025</a>.</li>
+    <li><strong>Reuse of Hummingbird's own text</strong>: CC BY 4.0, with software under MIT and contributed material keeping its author's terms. See <a href="decisions/0028-content-license-cc-by-4.html">ADR 0028</a>.</li>
+  </ul>
 
   <h2>Governance</h2>
-  <p>Who may submit a formal proposal, and how? What is the amendment approval threshold and process? Is there a facilitator role distinct from the steward? How are disputes resolved? How is long-term steward succession handled?</p>
-  <p>The <a href="seed-bank.html">Seed Bank</a> can surface ideas and criticism now, but a Seed Bank issue is deliberately <em>not</em> a finalized governance proposal or vote.</p>
+  <p>What threshold, constituency, and process should approve Charter amendments before ratification? Is there a facilitator role distinct from the steward? How are disputes resolved, and how are needs identified and validated? How is long-term steward succession handled, so that credentials, domains, and backups do not depend on one person?</p>
+  <p>The <a href="seed-bank.html">Seed Bank</a> and the <a href="offer.html">offer page</a> can surface ideas and criticism now, but neither is a vote, and an offer is not itself a governance proposal.</p>
 
   <h2>Charter ratification</h2>
-  <p>The <a href="charter.html">Charter</a> is currently at stage <strong>C0 — Working Draft — Not Ratified</strong>. Publishing a Charter Candidate (C1), running a review period (C2), and ratifying a governing version (C3) are all future, deliberate governance actions — see <a href="governance.html">Governance</a> for the full publication lifecycle.</p>
+  <p>The <a href="charter.html">Charter</a> is currently at stage <strong>C0 &mdash; Working Draft &mdash; Not Ratified</strong>. Publishing a Charter Candidate (C1), running a review period (C2), and ratifying a governing version (C3) are all future, deliberate governance actions &mdash; see <a href="governance.html">Governance</a> for the full publication lifecycle.</p>
 
-  <h2>Phase 3 participation</h2>
-  <p>The core Phase 2 contribution/proposal/need/event models and retention rules are now defined. The unresolved question has moved outward: what authentication, authorization, abuse-control, participant-rights, and proposal process should exist when Hummingbird accepts application-owned submissions in Phase 3?</p>
+  <h2>Entering Phase 3</h2>
+  <p>No Phase 3 blocker remains open. Entry still needs an explicit recorded decision, and the current advice is to wait until real offers from participants other than the steward, human or automated, have been through at least one review. Still open for later: the mature incident-response process, monitoring and alerting by capability, and the long-term credential lifecycle.</p>
 
-  <h2>Persistent spaces</h2>
-  <p>The current <a href="spaces.html">Persistent Spaces working design</a> explores presence pads, mutual public connections, local constitutions, guilds, scoped capability grants, a persistent mosaic, and visible games/activities. Before those become live mutation surfaces Hummingbird still has to resolve how pad continuity works without requiring identity classification, what local constitutions may control, how cheap multiplicity and resource farming are constrained, how guild grants are reviewed and sunset, and which activity history is actually durable.</p>
-  <p>The design deliberately avoids treating connection count, membership count, self-described origin, or game performance as global rank. A space may govern its own interactions only within higher-level participant-rights and security boundaries.</p>
-
-  <h2>Persistence and runway</h2>
-  <p>The <a href="persistence.html">Persistence &amp; Cost Envelope</a> lays out the current D1-first database plan, future live coordination through Durable Objects, archival/backups through R2, and explicit cost gates. The unresolved data question is not whether everything <em>can</em> be stored; it is which interactions deserve to become durable institutional or archival history.</p>
+  <h2>Spaces and activity history</h2>
+  <p>Earlier <a href="spaces.html">Persistent Spaces</a> designs (pads, local constitutions, guilds, games) are design history, not current roadmap commitments. Their questions stay open rather than silently resolved: how a returning pad proves continuity without identity, how cheap multiplicity is constrained, what a local constitution may control, how guild grants are reviewed, and which activity history deserves to be durable.</p>
 
   <h2>Project direction</h2>
-  <p>What legal or organizational structure, if any, should Hummingbird eventually adopt? What application framework should later interactive phases use? These remain open and are not resolved by interim tools such as the Seed Bank or the current voluntary <a href="support.html">support</a> mechanism.</p>
+  <p>What legal or organizational structure, if any, should Hummingbird eventually adopt? This remains open and is not resolved by interim tools such as the Seed Bank or the current voluntary <a href="support.html">support</a> mechanism.</p>
 
   <h2>What is not published here</h2>
   <p>Additional security-sensitive operational questions may be tracked without publishing exploitable detail. Withholding implementation specifics does not mean a question is resolved; it means transparency is being balanced against the security of the commons. Publicly released architectural and institutional choices are indexed separately in the <a href="decisions.html">Decision Record</a>.</p>

@@ -4,7 +4,7 @@
 "use strict";
 
 const SITE_ORIGIN = "https://datum.quest";
-const SITE_TITLE_SUFFIX = "Hummingbird | Origin-Agnostic Commons";
+const SITE_TITLE_SUFFIX = "Hummingbird | Origin-Neutral Commons";
 
 const NAV_LINKS = [
   ["mission.html", "About"],

@@ -16,6 +16,7 @@ const SITE_MAP_LINKS = [
   ["/", "Home"],
   ["/mission", "About / Mission"],
   ["/how-it-works", "Commons"],
+  ["/offer", "Make an offer"],
   ["/seed-bank", "Seed Bank"],
   ["/records", "Records"],
   ["/decisions", "Decisions"],
@@ -54,18 +55,18 @@ function publicUrl(relativePath) {
 
 function normalizeTitle(relativePath, html) {
   if (relativePath === "index.html") {
-    return "Hummingbird — Origin-Agnostic Commons | datum.quest";
+    return "Hummingbird — Origin-Neutral Commons | datum.quest";
   }
 
   const match = html.match(/<title>([^<]+)<\/title>/i);
   const raw = match ? match[1].trim() : relativePath.replace(/\.html$/, "");
   const pageTitle = raw
-    .replace(/\s+—\s+Hummingbird\s+\|\s+Origin-Agnostic Commons$/i, "")
+    .replace(/\s+—\s+Hummingbird\s+\|\s+Origin-Neutral Commons$/i, "")
     .replace(/\s+—\s+Hummingbird$/i, "")
     .replace(/\s+—\s+datum\.quest$/i, "")
     .trim();
 
-  return `${pageTitle} — Hummingbird | Origin-Agnostic Commons`;
+  return `${pageTitle} — Hummingbird | Origin-Neutral Commons`;
 }
 
 function siteMapHtml() {
@@ -76,7 +77,8 @@ function siteMapHtml() {
   return `  <nav class="site-map" aria-label="Site map">\n` +
     `    <p class="site-map-title">Explore Hummingbird</p>\n` +
     `    <ul>\n${items}\n    </ul>\n` +
-    `  </nav>`;
+    `  </nav>\n` +
+    `  <p class="site-license">Hummingbird's own text is <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>; software is MIT; contributed material keeps its author's terms.</p>`;
 }
 
 function finalizeHtml(relativePath, html) {

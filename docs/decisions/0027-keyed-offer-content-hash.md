@@ -1,6 +1,6 @@
 # ADR 0027 — A keyed hash for stored offer text
 
-Status: proposed; accepted when the steward merges the pull request that adds it
+Status: accepted for the C0 / Phase 2 working institution (merged 2026-11-19)
 
 Date: 2026-11-19
 
