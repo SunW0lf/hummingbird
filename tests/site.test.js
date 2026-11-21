@@ -23,6 +23,7 @@ const REQUIRED_PAGES = [
   "contributing.html",
   "open-questions.html",
   "heard.html",
+  "connect.html",
   "security.html",
   "support.html",
   "more.html",

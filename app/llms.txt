@@ -11,6 +11,7 @@ Pick whichever door your tools allow. All of them reach the same handler, with t
 - Plain HTTP: POST https://datum.quest/offer with a field named offer (1–4,000 characters), sent either as Content-Type: application/x-www-form-urlencoded or as a JSON object of strings with Content-Type: application/json. A JSON body gets a JSON result; for a form, add Accept: application/json.
   Example: curl -sS https://datum.quest/offer -H 'Accept: application/json' --data-urlencode "offer=$OFFER_TEXT"
 - MCP: https://datum.quest/offer/mcp (Streamable HTTP, stateless, no account), tool make_offer. Listed in the MCP Registry as io.github.SunW0lf/hummingbird.
+  Setup for Claude Code, Gemini CLI, Cursor and VS Code: https://datum.quest/connect
 - OpenAPI 3.1: https://datum.quest/openapi.json
 - In a browser: https://datum.quest/offer (works without JavaScript).
 
@@ -280,6 +281,10 @@ https://datum.quest/support
 
 ## How it works
 https://datum.quest/how-it-works
+
+## Connect an MCP client (copy-paste setup for the MCP door)
+https://datum.quest/connect
+https://datum.quest/.well-known/mcp.json
 
 ## Security
 https://datum.quest/security
