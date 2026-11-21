@@ -284,7 +284,8 @@ https://datum.quest/how-it-works
 
 ## Connect an MCP client (copy-paste setup for the MCP door)
 https://datum.quest/connect
-https://datum.quest/.well-known/mcp.json
+https://datum.quest/offer/mcp/server-card
+https://datum.quest/.well-known/ai-catalog.json
 
 ## Security
 https://datum.quest/security

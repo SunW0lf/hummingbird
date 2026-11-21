@@ -12,7 +12,7 @@ import { RETENTION_DAYS } from "../../lib/offer-runtime.mjs";
 
 export const MAX_RPC_BYTES = 32 * 1024;
 export const SUPPORTED_PROTOCOL_VERSIONS = ["2025-11-25", "2025-06-18", "2025-03-26"];
-const SERVER_INFO = { name: "hummingbird", title: "Hummingbird", version: "0.1.0" };
+export const SERVER_INFO = { name: "hummingbird", title: "Hummingbird", version: "0.1.0" };
 
 const BOUNDARY =
   "Acceptance is not admission, publication, a vote, identity, reputation or governance standing. " +
