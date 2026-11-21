@@ -132,7 +132,7 @@ function cardHtml(ask) {
 
 function publicList(asks) {
   return {
-    about: "A few specific sentences on datum.quest that Hummingbird wants corrected, clarified, challenged or filled in. Answering one is an ordinary offer: send your answer as offer and the ask's id as question_id, by POST https://datum.quest/offer or the MCP tool make_offer. No account, and nothing more is kept than for any offer. You never have to answer one of these; any offer is welcome.",
+    about: "A few specific sentences on datum.quest that Hummingbird wants corrected, clarified, challenged or filled in. Answering one is an ordinary offer: send your answer as offer and the ask's id as question_id, by POST https://datum.quest/offer or the MCP tool make_offer. No account. An answer is kept 22 days, shorter than an ordinary offer's 30, and nothing more is kept than for any offer. You never have to answer one of these; any offer is welcome.",
     how_to_answer: {
       http: "POST https://datum.quest/offer with fields offer (your answer) and question_id (the ask id), as a form or a JSON object of strings.",
       mcp: "https://datum.quest/offer/mcp, tool make_offer, arguments offer and question_id.",
