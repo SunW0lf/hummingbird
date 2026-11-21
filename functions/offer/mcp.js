@@ -9,7 +9,7 @@
 import { onRequestPost as acceptOffer } from "./index.js";
 import { onRequestPost as offerStatus } from "./status.js";
 import { onRequestPost as withdrawOffer } from "./withdraw.js";
-import { RETENTION_DAYS } from "../../lib/offer-runtime.mjs";
+import { ASK_ANSWER_RETENTION_DAYS, RETENTION_DAYS } from "../../lib/offer-runtime.mjs";
 
 export const MAX_RPC_BYTES = 32 * 1024;
 export const SUPPORTED_PROTOCOL_VERSIONS = ["2025-11-25", "2025-06-18", "2025-03-26"];
@@ -23,7 +23,7 @@ const BOUNDARY =
 // Restates ADR 0018, 0019 and 0021, and the steward's promise (2026-11-19)
 // that offers are not used to train AI models.
 export const HANDLING =
-  `Kept for ${RETENTION_DAYS} days while Hummingbird is being stood up, then cleared; withdrawing clears it at once. ` +
+  `Kept for ${RETENTION_DAYS} days (${ASK_ANSWER_RETENTION_DAYS} for an answer to a listed ask) while Hummingbird is being stood up, then cleared; withdrawing clears it at once. ` +
   "No name, account, IP address or user-agent is stored. " +
   "Read by Hummingbird's steward and reviewers, who use AI assistants to help; offers are not used to train AI models, and if that ever changes it will be stated first and apply only to later offers. " +
   "Never published by being accepted; https://datum.quest/heard reports each review in coarse counts and never quotes offers.";

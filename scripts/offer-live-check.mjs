@@ -4,7 +4,7 @@
 // It makes a few clearly marked test offers through each door a participant can
 // use (a plain HTML form, the JSON form, and the MCP door for agents), then
 // checks the stored rows against ADR 0018 and ADR 0027: the text is kept
-// exactly, only the receipt's hash is stored, the text's hash is keyed, retention is thirty days, the receipt alone can see
+// exactly, only the receipt's hash is stored, the text's hash is keyed, retention is thirty days (twenty-two for an answer to an ask), the receipt alone can see
 // and withdraw an offer, and withdrawal clears the content. It also sweeps the
 // whole buffer, by counts only, for content kept past the cleanup window.
 //
@@ -17,6 +17,7 @@ import { pathToFileURL } from "node:url";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const RETENTION_MS = 30 * DAY_MS;
+const ASK_ANSWER_RETENTION_MS = 22 * DAY_MS; // ADR 0030 amendment: answers to a scoped ask
 const CLEANUP_GRACE_MS = 7 * DAY_MS;
 const TEST_QUESTION_ID = "live-check";
 
@@ -199,10 +200,16 @@ export async function runLiveCheck({ base, fetchImpl, d1, log = console.log, now
       const [stale] = await d1("SELECT COUNT(*) AS n FROM experimental_offers WHERE expires_at <= ?", [cutoff]);
       check("Buffer: no tombstone kept past the cleanup window", Number(stale?.n) === 0);
       const [span] = await d1(
-        "SELECT COUNT(*) AS n FROM experimental_offers WHERE (julianday(expires_at) - julianday(received_at)) * 86400000 NOT BETWEEN ? AND ?",
-        [RETENTION_MS - 1000, RETENTION_MS + 1000]
+        // 30 days, or 22 for an answer to a scoped ask. Withdrawal clears
+        // question_id, so a withdrawn row may show either span.
+        `SELECT COUNT(*) AS n FROM experimental_offers
+          WHERE NOT ((julianday(expires_at) - julianday(received_at)) * 86400000 BETWEEN ? AND ?
+                     AND (question_id IS NULL OR question_id NOT LIKE 'ask-%'))
+            AND NOT ((julianday(expires_at) - julianday(received_at)) * 86400000 BETWEEN ? AND ?
+                     AND (question_id IS NULL OR question_id LIKE 'ask-%'))`,
+        [RETENTION_MS - 1000, RETENTION_MS + 1000, ASK_ANSWER_RETENTION_MS - 1000, ASK_ANSWER_RETENTION_MS + 1000]
       );
-      check("Buffer: every stored offer has 30-day retention", Number(span?.n) === 0);
+      check("Buffer: every stored offer has 30-day retention, or 22 for an answer to an ask", Number(span?.n) === 0);
       const [withdrawnContent] = await d1(
         "SELECT COUNT(*) AS n FROM experimental_offers WHERE state = 'withdrawn' AND (body IS NOT NULL OR reference_url IS NOT NULL OR content_sha256 IS NOT NULL)",
         []

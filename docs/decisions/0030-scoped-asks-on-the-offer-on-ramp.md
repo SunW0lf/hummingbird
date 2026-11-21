@@ -31,3 +31,11 @@ The steward's dated check (2026-12-18) asks whether offers arrive after the on-r
 ## Not changed
 
 The offer runtime, its schema, limits, retention, receipt and handling terms, the OpenAPI paths, and the Phase 3 gate. The MCP door (ADR 0026) gains one read-only tool, `list_asks`, and nothing else.
+
+## Amendment 2026-11-21
+
+Adopted by the steward on 2026-11-20 (Pacific time). An answer to a scoped ask is kept **22 days** instead of the ordinary 30. The steward split the difference between the 14 days the hummingbird-lab sentence-correction sketch proposed and the offer buffer's 30, so answers to a specific ask leave sooner.
+
+- An answer is any offer whose `question_id` has the ask-id form (`ask-` followed by lowercase letters, digits and hyphens), whether that ask is listed now or retired. No lookup decides it, so making an offer still needs no pass.
+- Its expiry is set when it is accepted and told to the offerer in the receipt response, as for any offer. The nightly cleanup already works from each row's expiry, so nothing else in storage changes.
+- This replaces "no new retention rule" in decision 3 for answers only. Ordinary offers, including those with any other `question_id`, are still kept 30 days. The offer page, `llms.txt`, `asks.json`, the MCP handling text and the OpenAPI description say so.

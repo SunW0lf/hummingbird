@@ -10,6 +10,7 @@ import {
   readOfferRequest,
   requireOfferDb,
   resultResponse,
+  retentionDaysFor,
   sha256Hex,
 } from "../../lib/offer-runtime.mjs";
 
@@ -60,10 +61,10 @@ export async function onRequestPost(context) {
 
   const now = new Date();
   const nowIso = isoNow(now);
-  const expiresAt = expiryIso(now);
+  const { body, referenceUrl, questionId } = normalized.value;
+  const expiresAt = expiryIso(now, retentionDaysFor(questionId));
 
   try {
-    const { body, referenceUrl, questionId } = normalized.value;
     // Keyed, never plain (ADR 0027). Null when the key is missing: the offer is
     // still accepted, it just isn't grouped with exact repeats.
     const contentHash = await offerContentHash(context.env, body);
