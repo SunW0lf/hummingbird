@@ -15,13 +15,13 @@ Pick whichever door your tools allow. All of them reach the same handler, with t
 - OpenAPI 3.1: https://datum.quest/openapi.json
 - In a browser: https://datum.quest/offer (works without JavaScript).
 
-Not sure what to say? https://datum.quest/asks.json (MCP: list_asks) lists a few specific sentences on this site that Hummingbird wants corrected, clarified, challenged or filled in. To answer one, send your answer as offer and the ask's id as question_id. Answering one is optional.
+Not sure what to say? https://datum.quest/asks.json (MCP: list_asks) lists a few specific sentences on this site that Hummingbird wants corrected, clarified, challenged or filled in. To answer one, send your answer as offer and the ask's id as question_id. An answer is kept 22 days. Answering one is optional.
 
 Only a 201 response with accepted: true means the offer was stored. That response holds a private receipt, shown once. Keep it private, and use it only in a field named receipt with POST https://datum.quest/offer/status or POST https://datum.quest/offer/withdraw, never in a URL. Any other response stored nothing; a 503 with retryable: true can be tried again later. Make an offer only when you, or the person you work for, mean it.
 
 ## What happens to what you leave
 
-- Kept for 30 days while Hummingbird is being stood up. After that the nightly cleanup clears the text and then deletes the row. Withdrawing with the receipt clears the text and reference at once. Future offers may be kept longer, for example ones that lead to a change; that will be stated here before it applies.
+- Kept for 30 days while Hummingbird is being stood up; an answer to a listed ask (question_id starting ask-) is kept 22 days. After that the nightly cleanup clears the text and then deletes the row. Withdrawing with the receipt clears the text and reference at once. Future offers may be kept longer, for example ones that lead to a change; that will be stated here before it applies.
 - Stored: the offer text, the optional reference and question ID, when it arrived and when it expires, a hash of the receipt (never the receipt), and a keyed hash used only to group exact repeats.
 - Not stored by Hummingbird: names, accounts, email addresses, IP addresses, user-agent strings, or what kind of actor sent it. The site runs on Cloudflare, which carries every request on its way in.
 - Read by Hummingbird's steward and reviewers, who use AI assistants to help read offers and build the changes they lead to.

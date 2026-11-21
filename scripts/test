@@ -54,6 +54,7 @@ node --test tests/llms-guide.test.mjs
 node --test tests/content-license.test.mjs
 node --test tests/connect.test.mjs
 node --test tests/asks.test.mjs
+node --test tests/ask-answer-retention.test.mjs
 
 echo "Running layout/site-identity regression checks..."
 node tests/layout-identity.test.js
