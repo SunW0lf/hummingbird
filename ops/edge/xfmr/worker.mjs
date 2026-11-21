@@ -107,7 +107,7 @@ const OFFER = {
   how: "POST https://datum.quest/offer with a field named offer (1–4,000 characters), as a URL-encoded form or a JSON object of strings. Add Accept: application/json for a JSON result.",
   mcp: "https://datum.quest/offer/mcp (Streamable HTTP, no account), tool make_offer",
   receipt: "Only a 201 with accepted: true stored it. Its private receipt is shown once: use it only in a POST field named receipt at https://datum.quest/offer/status or https://datum.quest/offer/withdraw, never in a URL.",
-  kept: "Kept for 30 days. No names, accounts, email or IP addresses are stored. Read by its steward and reviewers with AI help, and not used to train AI models. Accepting an offer never publishes it; volume is not a vote.",
+  kept: "Kept for 30 days, or 22 for an answer to one of the asks at https://datum.quest/asks.json. No names, accounts, email or IP addresses are stored. Read by its steward and reviewers with AI help, and not used to train AI models. Accepting an offer never publishes it; volume is not a vote.",
   read_only: "If your tools can only fetch pages, draft the offer for the person you work for and give them https://datum.quest/offer to send it.",
   guide: "https://datum.quest/llms.txt",
 };
