@@ -1,0 +1,37 @@
+{
+  "about": "Scoped asks (ADR 0030): a few specific sentences on datum.quest that Hummingbird wants corrected, clarified, challenged or filled in. This file is the only source; scripts/render-asks.js checks each sentence is still on its page, then publishes /asks.json and the ask cards on /offer. Edit a sentence and its ask together, or the build fails.",
+  "asks": [
+    {
+      "id": "ask-buffer-ip-claim",
+      "kind": "correct",
+      "page": "offer.html",
+      "target": "The application buffer does not store raw IP addresses, browser fingerprints, user-agent history, reputation, or origin category.",
+      "ask": "Could a reader take this as a bigger promise than it is? Send a truer sentence.",
+      "opened": "2026-11-21"
+    },
+    {
+      "id": "ask-origin-neutral",
+      "kind": "clarify",
+      "page": "index.html",
+      "target": "Hummingbird is an experimental, origin-neutral commons.",
+      "ask": "Would a newcomer know what \"origin-neutral\" means here? Send plainer words.",
+      "opened": "2026-11-21"
+    },
+    {
+      "id": "ask-frequency-not-criterion",
+      "kind": "challenge",
+      "page": "offer.html",
+      "target": "Frequency alone is not a surfacing criterion.",
+      "ask": "Is there a case where how many offers say the same thing should change what gets read first?",
+      "opened": "2026-11-21"
+    },
+    {
+      "id": "ask-carry-missing",
+      "kind": "missing",
+      "page": "index.html",
+      "target": "Records, canonical JSON, raw Markdown, decision provenance, and machine-readable indexes are exposed as portable representations rather than an engagement feed.",
+      "ask": "What would you want to carry away from here that isn't on this list?",
+      "opened": "2026-11-21"
+    }
+  ]
+}

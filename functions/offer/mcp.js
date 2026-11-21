@@ -1,6 +1,7 @@
 // MCP door (ADR 0026). A stateless Model Context Protocol endpoint over
 // Streamable HTTP that exposes only what Hummingbird already offers: the guide,
-// the public canonical records, and the offer / status / withdraw routes. Offer
+// the public canonical records, the scoped asks (ADR 0030), and the offer /
+// status / withdraw routes. Offer
 // tools call the same handlers as the form routes, so every limit, capacity,
 // retention and receipt rule is the one those routes already enforce. Nothing
 // here stores or logs anything about the caller.
@@ -30,7 +31,8 @@ export const HANDLING =
 const INSTRUCTIONS =
   "Hummingbird (https://datum.quest/) is a small no-account public commons. Any actor, human or automated, " +
   "may read it and leave an offer: an idea, a criticism, a correction, a question, or evidence about Hummingbird itself. " +
-  "Start with read_guide. " + BOUNDARY + " " + HANDLING + " An accepted offer returns a private one-time receipt; keep it private " +
+  "Start with read_guide. list_asks gives a few specific sentences Hummingbird wants corrected, clarified, challenged or filled in; " +
+  "answering one is an ordinary offer, with the ask's id as question_id. " + BOUNDARY + " " + HANDLING + " An accepted offer returns a private one-time receipt; keep it private " +
   "and use it only with offer_status or withdraw_offer.";
 
 const RECEIPT_INPUT = {
@@ -47,6 +49,13 @@ export const TOOLS = [
     name: "read_guide",
     title: "Read the Hummingbird guide",
     description: "Returns Hummingbird's machine-readable guide (llms.txt): what it is, its boundaries, the questions it most wants answered, and where everything public lives.",
+    inputSchema: { type: "object", properties: {}, additionalProperties: false },
+    annotations: { readOnlyHint: true, openWorldHint: false },
+  },
+  {
+    name: "list_asks",
+    title: "List specific asks",
+    description: "Lists the few sentences on datum.quest that Hummingbird currently wants corrected, clarified, challenged or filled in, each with its exact text, a SHA-256 of that text, and its page. To answer one, call make_offer with your answer as offer and the ask's id as question_id. Answering is optional; any offer is welcome.",
     inputSchema: { type: "object", properties: {}, additionalProperties: false },
     annotations: { readOnlyHint: true, openWorldHint: false },
   },
@@ -79,7 +88,7 @@ export const TOOLS = [
       properties: {
         offer: { type: "string", minLength: 1, maxLength: 4000, description: "Your idea, criticism, correction, question, or evidence about Hummingbird." },
         reference: { type: "string", maxLength: 2048, description: "Optional http or https URL that supports the offer." },
-        question_id: { type: "string", maxLength: 120, pattern: "^[A-Za-z0-9._:-]+$", description: "Optional featured-question ID from the guide or offer page." },
+        question_id: { type: "string", maxLength: 120, pattern: "^[A-Za-z0-9._:-]+$", description: "Optional: the id of the ask you are answering, from list_asks." },
       },
       required: ["offer"],
       additionalProperties: false,
@@ -154,6 +163,10 @@ async function callTool(name, args, request, env) {
     case "read_guide": {
       const res = await readAsset(env, request, "/llms.txt");
       return res ? toolText(await res.text()) : toolFailure("The guide is unavailable right now.");
+    }
+    case "list_asks": {
+      const res = await readAsset(env, request, "/asks.json");
+      return res ? toolResult(await res.json(), false) : toolFailure("The list of asks is unavailable right now.");
     }
     case "list_records": {
       const res = await readAsset(env, request, "/records/index.json");

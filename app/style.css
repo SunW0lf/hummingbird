@@ -356,3 +356,22 @@ button#copy-address-btn:focus {
     margin-bottom: 0.5rem;
   }
 }
+
+/* Scoped asks (ADR 0030): the sentence in place, and its card on /offer. */
+.ask-target {
+  text-decoration: underline dotted var(--muted);
+  text-underline-offset: 0.2em;
+}
+
+.ask-link {
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.ask-card blockquote {
+  margin: 0.5rem 0;
+  padding-left: 0.75rem;
+  border-left: 3px solid var(--border);
+}
+
+.ask-card textarea { width: 100%; }
