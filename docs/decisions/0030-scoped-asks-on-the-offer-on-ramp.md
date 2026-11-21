@@ -1,6 +1,6 @@
 # ADR 0030 — Scoped asks on the offer on-ramp
 
-Status: proposed for the C0 / Phase 2 working institution
+Status: accepted for the C0 / Phase 2 working institution (merged 2026-11-21)
 
 Date: 2026-11-21
 
