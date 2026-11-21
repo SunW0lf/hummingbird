@@ -107,7 +107,7 @@
         "properties": {
           "offer": { "type": "string", "minLength": 1, "maxLength": 4000, "description": "The offer text, 1 to 4,000 characters after trimming." },
           "reference": { "type": "string", "format": "uri", "maxLength": 2048, "description": "Optional http or https URL." },
-          "question_id": { "type": "string", "maxLength": 120, "pattern": "^[A-Za-z0-9._:-]+$", "description": "Optional featured-question ID from the offer page." }
+          "question_id": { "type": "string", "maxLength": 120, "pattern": "^[A-Za-z0-9._:-]+$", "description": "Optional: the id of the specific ask you are answering, from https://datum.quest/asks.json." }
         }
       },
       "ReceiptFields": {

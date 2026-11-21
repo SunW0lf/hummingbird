@@ -63,9 +63,9 @@ test("malformed, batched, oversized and non-JSON requests are rejected", async (
   assert.equal(unknown.error.code, -32601);
 });
 
-test("exposes exactly the six agreed tools, with limits matching the runtime", async () => {
+test("exposes exactly the seven agreed tools (ADR 0026, ADR 0030), with limits matching the runtime", async () => {
   const listed = (await (await rpc({ jsonrpc: "2.0", id: 3, method: "tools/list" })).json()).result.tools;
-  assert.deepEqual(listed.map((t) => t.name), ["read_guide", "list_records", "get_record", "make_offer", "offer_status", "withdraw_offer"]);
+  assert.deepEqual(listed.map((t) => t.name), ["read_guide", "list_asks", "list_records", "get_record", "make_offer", "offer_status", "withdraw_offer"]);
   const offer = TOOLS.find((t) => t.name === "make_offer");
   assert.equal(offer.inputSchema.properties.offer.maxLength, MAX_OFFER_CHARS);
   assert.equal(offer.inputSchema.properties.reference.maxLength, MAX_REFERENCE_CHARS);
