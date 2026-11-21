@@ -1,0 +1,10 @@
+{
+  "specVersion": "0.9",
+  "entries": [
+    {
+      "identifier": "urn:air:datum.quest:hummingbird:mcp",
+      "type": "application/mcp-server-card+json",
+      "url": "https://datum.quest/offer/mcp/server-card"
+    }
+  ]
+}

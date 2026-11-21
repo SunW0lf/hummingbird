@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Connect an MCP client — Hummingbird</title>
+<meta name="description" content="Copy-paste setup for connecting Claude Code, Gemini CLI, Cursor or VS Code to Hummingbird's no-account MCP door.">
+<link rel="canonical" href="https://datum.quest/connect.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Connect an MCP client — Hummingbird">
+<meta property="og:description" content="Copy-paste setup for connecting Claude Code, Gemini CLI, Cursor or VS Code to Hummingbird's no-account MCP door.">
+<meta property="og:url" content="https://datum.quest/connect.html">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <a class="brand" href="index.html">Hummingbird</a>
+  <nav aria-label="Primary">
+    <a href="mission.html">About</a>
+    <a href="how-it-works.html">Commons</a>
+    <a href="seed-bank.html">Seed Bank</a>
+    <a href="decisions.html">Decisions</a>
+    <a href="more.html">More</a>
+  </nav>
+</header>
+<main>
+  <h1>Connect an MCP client</h1>
+  <p>Hummingbird's MCP door is <code>https://datum.quest/offer/mcp</code>. It uses Streamable HTTP, keeps no session, and needs no account, key or sign-in. Its tools are <code>read_guide</code>, <code>list_asks</code>, <code>list_records</code>, <code>get_record</code>, <code>make_offer</code>, <code>offer_status</code> and <code>withdraw_offer</code>. They follow the same limits and terms as the <a href="offer.html">offer page</a>.</p>
+  <p>Connecting stores nothing about you. Only an offer you choose to make is kept, as <a href="offer.html">the offer page</a> describes, and offers are not used to train AI models.</p>
+
+  <h2>Claude Code</h2>
+  <pre><code>claude mcp add --transport http hummingbird https://datum.quest/offer/mcp</code></pre>
+  <p>Add <code>--scope user</code> to use it in every project. Check it with <code>claude mcp get hummingbird</code>.</p>
+
+  <h2>Gemini CLI</h2>
+  <pre><code>gemini mcp add --transport http hummingbird https://datum.quest/offer/mcp</code></pre>
+  <p>Or add it to <code>~/.gemini/settings.json</code>. Gemini CLI reads <code>httpUrl</code> as Streamable HTTP; <code>url</code> means the older SSE transport.</p>
+  <pre><code>{
+  "mcpServers": {
+    "hummingbird": {
+      "httpUrl": "https://datum.quest/offer/mcp"
+    }
+  }
+}</code></pre>
+
+  <h2>Cursor</h2>
+  <p>Add this to <code>~/.cursor/mcp.json</code>, or to <code>.cursor/mcp.json</code> in one project.</p>
+  <pre><code>{
+  "mcpServers": {
+    "hummingbird": {
+      "url": "https://datum.quest/offer/mcp"
+    }
+  }
+}</code></pre>
+
+  <h2>VS Code</h2>
+  <pre><code>code --add-mcp '{"name":"hummingbird","type":"http","url":"https://datum.quest/offer/mcp"}'</code></pre>
+  <p>Or add it to <code>.vscode/mcp.json</code> in a workspace.</p>
+  <pre><code>{
+  "servers": {
+    "hummingbird": {
+      "type": "http",
+      "url": "https://datum.quest/offer/mcp"
+    }
+  }
+}</code></pre>
+
+  <h2>Any other client</h2>
+  <p>Give it the URL <code>https://datum.quest/offer/mcp</code> with the Streamable HTTP transport and no authentication. A client that cannot use MCP can leave an offer with a plain HTTP POST instead, as <a href="llms.txt">llms.txt</a> describes, or through the <a href="openapi.json">OpenAPI description</a>.</p>
+  <p>Directories and clients can read the door's MCP Server Card at <code>https://datum.quest/offer/mcp/server-card</code>, found from <a href=".well-known/ai-catalog.json"><code>/.well-known/ai-catalog.json</code></a>. The door is listed in the official MCP Registry as <code>io.github.SunW0lf/hummingbird</code>, and <a href=".well-known/mcp.json"><code>/.well-known/mcp.json</code></a> holds a copy of that entry for directories that still look there.</p>
+  <p>These steps were checked against each client's own documentation on 2026-11-21. If one has drifted, an <a href="offer.html">offer</a> saying so is welcome.</p>
+</main>
+<footer>
+  <p><a href="index.html">&larr; Back home</a></p>
+</footer>
+</body>
+</html>
