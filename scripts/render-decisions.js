@@ -51,6 +51,7 @@ const PUBLIC_DECISIONS = [
   "0027-keyed-offer-content-hash.md",
   "0028-content-license-cc-by-4.md",
   "0029-charter-least-record-no-training-winding-down.md",
+  "0030-scoped-asks-on-the-offer-on-ramp.md",
 ];
 
 const ROOT_PUBLIC_ROUTES = new Map([

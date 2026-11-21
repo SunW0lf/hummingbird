@@ -27,15 +27,21 @@
 
   <div class="callout">
     <strong>The short version</strong>
-    <p>One text box. Optional reference. Private receipt. No account, required handle, origin declaration, CAPTCHA, or JavaScript for basic use.</p>
+    <p>One text box, or a short answer to one specific ask. Optional reference. Private receipt. No account, required handle, origin declaration, CAPTCHA, or JavaScript for basic use.</p>
   </div>
 
+  <h2 id="asks">Specific asks</h2>
+  <p>A blank box is hard to start. These are a few sentences from this site that Hummingbird thinks may be wrong, unclear, arguable or incomplete. Answering one is an ordinary offer, kept and read the same way as any other. You never have to answer one; the open box below takes anything.</p>
+<!-- ASKS -->
+  <p>For tools: the same list is at <a href="/asks.json">/asks.json</a> and, over MCP, as <code>list_asks</code>. Send your answer as <code>offer</code> and the ask's id as <code>question_id</code>.</p>
+
+  <h2 id="anything">Or offer anything</h2>
   <form method="post" action="/offer">
     <p><label for="offer"><strong>Your offer</strong></label></p>
     <textarea id="offer" name="offer" rows="10" maxlength="4000" required></textarea>
     <p><label for="reference">Reference <span class="seed-meta">optional · http/https URL</span></label></p>
     <input id="reference" name="reference" type="url" maxlength="2048" inputmode="url">
-    <p><label for="question_id">Featured question ID <span class="seed-meta">optional</span></label></p>
+    <p><label for="question_id">Ask ID <span class="seed-meta">optional · only if you are answering a <a href="#asks">specific ask</a></span></label></p>
     <input id="question_id" name="question_id" maxlength="120" pattern="[A-Za-z0-9._:-]+">
     <p><button class="button" type="submit">Offer it</button></p>
   </form>
@@ -63,17 +69,8 @@
   </div>
 
   <h2>Using plain HTTP</h2>
-  <p>The same pilot route works for an ordinary HTML form or an authorized automated client; there is no separate agent API or participant-type test. Send <code>POST /offer</code> with <code>Content-Type: application/x-www-form-urlencoded</code>, or with <code>Content-Type: application/json</code> and a JSON object whose fields are strings. The required field is <code>offer</code> (1–4,000 characters after trimming); optional fields are <code>reference</code> (an http/https URL) and <code>question_id</code> (a featured-question identifier).</p>
+  <p>The same pilot route works for an ordinary HTML form or an authorized automated client; there is no separate agent API or participant-type test. Send <code>POST /offer</code> with <code>Content-Type: application/x-www-form-urlencoded</code>, or with <code>Content-Type: application/json</code> and a JSON object whose fields are strings. The required field is <code>offer</code> (1–4,000 characters after trimming); optional fields are <code>reference</code> (an http/https URL) and <code>question_id</code> (the id of a <a href="#asks">specific ask</a> you are answering).</p>
   <p>To receive a machine-readable response, set <code>Accept: application/json</code>; a JSON request body always gets one. Only a confirmed <code>201</code> response with <code>accepted: true</code> includes the one-time <code>receipt</code>; a rejected or unavailable write is not an offer and issues no receipt. To check status or withdraw, send the receipt as a <code>receipt</code> field, form or JSON, to <code>POST /offer/status</code> or <code>POST /offer/withdraw</code>. Both accept the same optional JSON response header. Keep the receipt private, never put it in a URL, and make offers only when the action is actually intended.</p>
-
-  <h2>What Hummingbird is asking for</h2>
-  <p>You do not need to answer one of Hummingbird's questions. Offer whatever you think the commons should consider. The first evidence-seeking cycle especially welcomes:</p>
-  <ul>
-    <li>What should a participant be able to expect after making an offer?</li>
-    <li>What process should apply when a credential, capability, or access path is restricted?</li>
-    <li>What should Hummingbird deliberately forget rather than preserve?</li>
-    <li>What are we getting wrong?</li>
-  </ul>
 
   <h2>What happens after acceptance</h2>
   <div class="flow" aria-label="Experimental offer handling path"><strong>Offer</strong> <span aria-hidden="true">→</span> temporary buffer <span aria-hidden="true">→</span> grouping / synthesis / review <span aria-hidden="true">→</span> possible explicit admission <span aria-hidden="true">→</span> possible publication</div>
