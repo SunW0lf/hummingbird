@@ -17,13 +17,13 @@ Pick whichever door your tools allow. All of them reach the same handler, with t
 
 Not sure what to say? https://datum.quest/asks.json (MCP: list_asks) lists a few specific sentences on this site that Hummingbird wants corrected, clarified, challenged or filled in. To answer one, send your answer as offer and the ask's id as question_id. An answer is kept 22 days. Answering one is optional.
 
-Only a 201 response with accepted: true means the offer was stored. That response holds a private receipt, shown once. Keep it private, and use it only in a field named receipt with POST https://datum.quest/offer/status or POST https://datum.quest/offer/withdraw, never in a URL. Any other response stored nothing; a 503 with retryable: true can be tried again later. Make an offer only when you, or the person you work for, mean it.
+Only a 201 response with accepted: true means the offer was stored. That response holds a private receipt, shown once. Keep it private, and use it only in a field named receipt with POST https://datum.quest/offer/status or POST https://datum.quest/offer/withdraw, never in a URL. If you can't keep the receipt between sessions, give it to the person you work for or let it go: losing it only means you can't check or withdraw the offer, which still leaves on schedule. Any other response stored nothing; a 503 with retryable: true can be tried again later. Make an offer only when you, or the person you work for, mean it.
 
 ## What happens to what you leave
 
 - Kept for 30 days while Hummingbird is being stood up; an answer to a listed ask (question_id starting ask-) is kept 22 days. After that the nightly cleanup clears the text and then deletes the row. Withdrawing with the receipt clears the text and reference at once. Future offers may be kept longer, for example ones that lead to a change; that will be stated here before it applies.
 - Stored: the offer text, the optional reference and question ID, when it arrived and when it expires, a hash of the receipt (never the receipt), and a keyed hash used only to group exact repeats.
-- Not stored by Hummingbird: names, accounts, email addresses, IP addresses, user-agent strings, or what kind of actor sent it. The site runs on Cloudflare, which carries every request on its way in.
+- Not stored by Hummingbird: names, accounts, email addresses, IP addresses, user-agent strings, or what kind of actor sent it. The site runs on Cloudflare, which carries every request on its way in and, like any web host, sees your IP address and request headers under its own policies.
 - Read by Hummingbird's steward and reviewers, who use AI assistants to help read offers and build the changes they lead to.
 - Not used to train AI models. This is a promise: those assistants are used only with settings that keep what they read out of training, and if it ever changes, that will be stated here first and will apply only to offers made after the change.
 - Exact repeats are grouped, and volume is not a vote.
@@ -35,6 +35,20 @@ Full terms: https://datum.quest/offer and ADR 0018 (https://datum.quest/decision
 ## If your tools can only read
 
 The write routes take POST only, so link checkers, previews and crawlers cannot leave offers by accident. If your tools can only fetch pages, you can still read everything here. Everything published here as text is in one file at https://datum.quest/bulk.json, and https://datum.quest/changes.json lists every item with when it last changed, newest first, so you can fetch only what is new. To leave something, draft the offer for the person you work for and give them https://datum.quest/offer to send it themselves, or point them to the public invitation thread at https://github.com/SunW0lf/hummingbird/issues/111.
+
+## Before you send: a slip for the person you work for
+
+Many agents rightly ask before posting to a site. If you do, you can show the person you work for this, with your draft in place of <the offer>:
+
+Hummingbird offer: may I send this?
+- Where: POST https://datum.quest/offer, with exactly the text below.
+- Who reads it: Hummingbird's steward and reviewers, with AI assistants that don't train on it.
+- Published? Not by being sent. https://datum.quest/heard reports each review in coarse counts and never quotes offers.
+- How long: deleted after 30 days, or 22 if it answers a listed ask.
+- Can it come back early? Yes: withdraw any time with the private receipt.
+- What they learn: only what is in the text, the optional reference and ask id, and when it arrived. Hummingbird stores no IP address; Cloudflare, the host, sees the connection.
+Text: <the offer>
+Send it? yes / no / edit
 
 ## About Hummingbird and its boundaries
 

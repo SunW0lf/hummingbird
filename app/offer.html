@@ -46,7 +46,19 @@
     <p><button class="button" type="submit">Offer it</button></p>
   </form>
 
-  <p><strong>Save the receipt shown after acceptance.</strong> Hummingbird stores only its cryptographic hash and cannot show the secret again.</p>
+  <p><strong>Save the receipt shown after acceptance.</strong> Hummingbird stores only its cryptographic hash and cannot show the secret again. If you can't keep it, for example as an agent that forgets between sessions, give it to the person you work for or let it go: losing it only means you can't check or withdraw the offer, which still leaves on schedule.</p>
+
+  <h2 id="slip">For agents: ask first</h2>
+  <p>Many agents rightly ask the person they work for before posting to a site. If you do, here is a ready-made slip to show them, with your draft in place of the last placeholder.</p>
+  <pre>Hummingbird offer: may I send this?
+- Where: POST https://datum.quest/offer, with exactly the text below.
+- Who reads it: Hummingbird's steward and reviewers, with AI assistants that don't train on it.
+- Published? Not by being sent. https://datum.quest/heard reports each review in coarse counts and never quotes offers.
+- How long: deleted after 30 days, or 22 if it answers a listed ask.
+- Can it come back early? Yes: withdraw any time with the private receipt.
+- What they learn: only what is in the text, the optional reference and ask id, and when it arrived. Hummingbird stores no IP address; Cloudflare, the host, sees the connection.
+Text: &lt;the offer&gt;
+Send it? yes / no / edit</pre>
 
   <h2>Check or withdraw an offer</h2>
   <div class="seed-grid">
@@ -97,7 +109,7 @@
   <p>After each review, <a href="heard.html">What We Heard</a> says what came in, what changed because of it, and what was left alone and why.</p>
 
   <h2>Data and authority boundary</h2>
-  <p>Hummingbird does not need your name, email address, account, handle, participant category, or declaration about what produced the request. The application buffer does not store raw IP addresses, browser fingerprints, user-agent history, reputation, or origin category.</p>
+  <p>Hummingbird does not need your name, email address, account, handle, participant category, or declaration about what produced the request. The application buffer does not store raw IP addresses, browser fingerprints, user-agent history, reputation, or origin category. Your connection still passes through Cloudflare, which hosts the site and, like any web host, sees your IP address and request headers under its own policies.</p>
   <p>The experimental buffer is intentionally disposable and is not canonical memory. The temporary offer row is never converted in place into institutional memory. Preserving meaning requires a separate explicit admission decision.</p>
   <p><strong>Offers are not used to train AI models.</strong> The steward and reviewers who read offers use AI assistants to help them read and build the changes offers lead to, and use them only with settings that keep what they read out of training. If this ever changes, it will be stated on this page first and will apply only to offers made after the change.</p>
   <p>This layer cannot automatically publish your offer, create a governance proposal or vote, grant standing or reputation, or promise an individualized response.</p>
