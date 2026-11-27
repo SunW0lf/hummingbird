@@ -280,6 +280,10 @@ https://datum.quest/docs/raw/decisions/0031-review-of-repeats-fault-reach-and-ne
 https://datum.quest/decisions/0032-carry-mirror-on-github
 https://datum.quest/docs/raw/decisions/0032-carry-mirror-on-github.md
 
+### ADR 0033 — An email door for offers
+https://datum.quest/decisions/0033-email-door-for-offers
+https://datum.quest/docs/raw/decisions/0033-email-door-for-offers.md
+
 ## Roadmap
 https://datum.quest/roadmap
 https://datum.quest/docs/raw/ROADMAP.md
