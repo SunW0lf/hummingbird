@@ -12,6 +12,6 @@
   "devDependencies": {
     "marked": "^18.2.0",
     "qrcode": "^1.5.4",
-    "wrangler": "^4.162.0"
+    "wrangler": "^4.168.0"
   }
 }
