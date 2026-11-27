@@ -1,6 +1,6 @@
 # ADR 0031 — Review of repeats: fault reach and near-identical bursts
 
-Status: Proposed (awaiting the steward; not in force until accepted)
+Status: accepted for the C0 / Phase 2 working institution (accepted by the steward 2026-11-26 Pacific time)
 
 Date: 2026-11-27
 
