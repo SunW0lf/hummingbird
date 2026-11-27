@@ -52,6 +52,7 @@ const PUBLIC_DECISIONS = [
   "0028-content-license-cc-by-4.md",
   "0029-charter-least-record-no-training-winding-down.md",
   "0030-scoped-asks-on-the-offer-on-ramp.md",
+  "0031-review-of-repeats-fault-reach-and-near-identical-bursts.md",
 ];
 
 const ROOT_PUBLIC_ROUTES = new Map([

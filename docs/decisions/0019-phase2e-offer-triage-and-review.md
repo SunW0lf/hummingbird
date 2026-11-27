@@ -1,6 +1,8 @@
 # ADR 0019 — Phase 2E Offer Triage and Review
 
 Status: Accepted
+
+Amended by: [ADR 0031](0031-review-of-repeats-fault-reach-and-near-identical-bursts.md) (fault reach and near-identical bursts)
 Date: 2026-09-12
 
 ## Context
