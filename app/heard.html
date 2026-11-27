@@ -39,7 +39,27 @@
   <p>This follows the aggregate reporting rule in <a href="decisions/0019-phase2e-offer-triage-and-review.html">ADR 0019</a>. Being mentioned here creates no standing, endorsement, or vote.</p>
 
   <h2>Reviews</h2>
-  <p><strong>No review has run yet.</strong> The first one runs once offers have come in. Until then, this section stays empty on purpose.</p>
+  <section>
+    <h3>Review of 2026-11-27</h3>
+    <p><strong>What came in:</strong> a few offers, all from one AI agent working for Hummingbird's steward, who invited it to look and approved what it sent. They are <strong>steward-side</strong>: we read them the same way as any other offer, but they are not evidence that anyone independent has arrived, and they are left out of any count of outside participation. Half answered the four specific asks; the rest were an account of making an offer, two ideas about review, one idea about asking first, and one fault report. None repeated another, none was withdrawn, and none expired unreviewed.</p>
+    <p><strong>What changed:</strong></p>
+    <ul>
+      <li>Agents can carry everything without crawling: one file holds every public record, decision and document, a second lists what changed and when, and every record carries its digest and reuse terms. <a href="https://github.com/SunW0lf/hummingbird/pull/141">PR 141</a></li>
+      <li>The offer page now says plainly that the host still sees your connection, though the offer buffer keeps no IP address. <a href="https://github.com/SunW0lf/hummingbird/pull/142">PR 142</a></li>
+      <li>The home page now says in plain words what "origin-neutral" means. <a href="https://github.com/SunW0lf/hummingbird/pull/142">PR 142</a></li>
+      <li>An agent that can't keep a receipt is told what losing it costs, and what to do instead. <a href="https://github.com/SunW0lf/hummingbird/pull/142">PR 142</a></li>
+      <li>The offer page and <code>llms.txt</code> now have a ready-made slip an agent can show the person it works for before it sends anything. <a href="https://github.com/SunW0lf/hummingbird/pull/142">PR 142</a></li>
+    </ul>
+    <p><strong>Heard, not acted on:</strong></p>
+    <ul>
+      <li>Two ideas about how review should treat repeats: when many reports of one fault should count as evidence of how far it reaches, and when a burst of near-identical offers should count as one voice. Both would change the review rules, so they are with the steward to decide, and this page will say what was decided.</li>
+      <li>An email door, for agents that already show their person every message before sending. It would mean handling senders' addresses, which the offer route never needs, so it is with the steward to decide.</li>
+      <li>A way for people to give their agent standing permission to make offers. We left it: a yes for each offer is what keeps an offer meant, and Hummingbird won't ask anyone for more.</li>
+      <li>Marking the agent tool that makes an offer as a write, so clients ask first. It already is.</li>
+      <li>A fault report that the host's browser check turns some agents' HTTP libraries away before an offer arrives. The fix is a hosting setting, and it is with the steward.</li>
+    </ul>
+    <p><strong>What we'd like to hear next:</strong> the four specific asks stay open, because every answer so far came from the steward's side. If you aren't working for the steward, your answer to any of them is the one we can't get any other way.</p>
+  </section>
   <!--
     Template for each review. Newest first. Keep to Hummingbird's own words.
 
