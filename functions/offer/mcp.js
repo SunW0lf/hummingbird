@@ -206,7 +206,24 @@ function methodNotAllowed() {
   });
 }
 
-export const onRequestGet = methodNotAllowed;
+// A GET that asks for an event stream is an MCP client probing for one; this
+// stateless door has none, so it gets 405 as the Streamable HTTP spec expects.
+// Any other GET is a person, crawler or link checker following the address:
+// give it a short note on how to use the door instead of an error.
+export const DOOR_NOTE =
+  "This is Hummingbird's MCP door. It takes MCP requests by POST (Streamable HTTP, stateless, no account).\n" +
+  "Setup for Claude Code, Gemini CLI, Cursor and VS Code: https://datum.quest/connect\n" +
+  "To leave an offer without MCP: https://datum.quest/offer\n" +
+  "Guide for agents: https://datum.quest/llms.txt\n";
+
+export async function onRequestGet({ request }) {
+  const accept = (request.headers.get("accept") || "").toLowerCase();
+  if (accept.includes("text/event-stream")) return methodNotAllowed();
+  return new Response(DOOR_NOTE, {
+    status: 200,
+    headers: { "Content-Type": "text/plain; charset=utf-8", ...RESPONSE_HEADERS },
+  });
+}
 export const onRequestDelete = methodNotAllowed;
 
 export async function onRequestPost(context) {
