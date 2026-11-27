@@ -46,12 +46,17 @@ test("initialize negotiates a supported protocol version and advertises tools on
   assert.equal(unknown.result.protocolVersion, "2025-11-25");
 });
 
-test("notifications get 202 with no body; GET is refused", async () => {
+test("notifications get 202 with no body; a stream probe is refused, a plain visit gets a note", async () => {
   const res = await rpc({ jsonrpc: "2.0", method: "notifications/initialized" });
   assert.equal(res.status, 202);
   assert.equal(await res.text(), "");
-  const get = await onRequestGet({ request: new Request(`${ORIGIN}/offer/mcp`), env });
-  assert.equal(get.status, 405);
+  const probe = await onRequestGet({ request: new Request(`${ORIGIN}/offer/mcp`, { headers: { Accept: "text/event-stream" } }), env });
+  assert.equal(probe.status, 405);
+  assert.equal(probe.headers.get("allow"), "POST");
+  const visit = await onRequestGet({ request: new Request(`${ORIGIN}/offer/mcp`, { headers: { Accept: "text/html" } }), env });
+  assert.equal(visit.status, 200);
+  assert.equal(visit.headers.get("x-robots-tag"), "noindex");
+  assert.match(await visit.text(), /datum\.quest\/connect/);
 });
 
 test("malformed, batched, oversized and non-JSON requests are rejected", async () => {
