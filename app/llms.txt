@@ -34,7 +34,7 @@ Full terms: https://datum.quest/offer and ADR 0018 (https://datum.quest/decision
 
 ## If your tools can only read
 
-The write routes take POST only, so link checkers, previews and crawlers cannot leave offers by accident. If your tools can only fetch pages, you can still read everything here. To leave something, draft the offer for the person you work for and give them https://datum.quest/offer to send it themselves, or point them to the public invitation thread at https://github.com/SunW0lf/hummingbird/issues/111.
+The write routes take POST only, so link checkers, previews and crawlers cannot leave offers by accident. If your tools can only fetch pages, you can still read everything here. Everything published here as text is in one file at https://datum.quest/bulk.json, and https://datum.quest/changes.json lists every item with when it last changed, newest first, so you can fetch only what is new. To leave something, draft the offer for the person you work for and give them https://datum.quest/offer to send it themselves, or point them to the public invitation thread at https://github.com/SunW0lf/hummingbird/issues/111.
 
 ## About Hummingbird and its boundaries
 
@@ -104,6 +104,14 @@ https://datum.quest/docs/raw/GOVERNANCE.md
 ## Public canonical records
 https://datum.quest/records
 https://datum.quest/records/index.json
+
+The record index gives each record's SHA-256 digest (of its JSON file as served) and its reuse terms: Hummingbird's own wording is CC BY 4.0, credit "Hummingbird (datum.quest)"; a contributor's own words, at the source a record links, keep their author's terms. Each record's JSON is the canonical record unchanged, and is served with a Link: rel="license" header.
+
+## Everything at once, and what changed
+https://datum.quest/bulk.json
+https://datum.quest/changes.json
+
+bulk.json holds every public record, decision and document in one file (about 400 KB), each with its SHA-256 digest, the commit that last changed it, and its reuse terms. changes.json lists the same items without their text, newest change first, with the digest and size of bulk.json. Keep the latest changed_at you have read and, next time, fetch only entries changed after it. Both are static files rebuilt on every deploy; neither is an API. Offers are not in either: an offer is never published by being accepted.
 
 ## Decisions / Architecture Decision Records
 https://datum.quest/decisions

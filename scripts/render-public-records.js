@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 "use strict";
 
+const crypto = require("crypto");
 const fs = require("fs");
 const path = require("path");
 const { renderPage, escapeHtml } = require("./lib/page-shell");
+const { REUSE, LICENSE_URL, CREDIT, TERMS_URL, itemReuse } = require("./lib/reuse-terms");
 
 const ROOT = path.join(__dirname, "..");
 const DIST = process.env.HUMMINGBIRD_DIST_DIR
@@ -106,6 +108,13 @@ function renderOptionalJson(record, field) {
   return `<details><summary>${escapeHtml(field)}</summary><pre>${escapeHtml(JSON.stringify(record[field], null, 2))}</pre></details>`;
 }
 
+function sha256(text) {
+  return crypto.createHash("sha256").update(text, "utf8").digest("hex");
+}
+
+// Everything in this projection derives from canonical record content alone,
+// so a recovered database rebuilds it byte for byte. Change dates come from
+// Git and live in /changes.json instead (scripts/render-carry.js).
 function main() {
   if (!fs.existsSync(DIST)) throw new Error("dist/ does not exist; create the output directory before rendering");
   const records = loadRecords();
@@ -116,6 +125,8 @@ function main() {
   for (const record of records) {
     const slug = routeId(record.id);
     const title = displayTitle(record);
+    const json = JSON.stringify(record, null, 2) + "\n";
+    const digest = sha256(json);
     const body = [
       `<p class="badge">Canonical ${escapeHtml(record.type)}</p>`,
       `<h1>${escapeHtml(title)}</h1>`,
@@ -126,6 +137,9 @@ function main() {
       renderOptionalJson(record, "attribution"),
       renderOptionalJson(record, "provenance"),
       renderOptionalJson(record, "publication"),
+      `<h2>Reuse</h2>`,
+      `<p>Hummingbird's own wording in this record is licensed <a rel="license" href="${LICENSE_URL}">CC BY 4.0</a>: credit "${escapeHtml(CREDIT)}", name the license, link to it, and say if you changed the text. A contributor's own words, at the source the record links, keep their author's terms. See <a href="${TERMS_URL}">ADR 0028</a>.</p>`,
+      `<p class="doc-meta">SHA-256 of <a href="${slug}.json">${escapeHtml(slug)}.json</a>: <code>${digest}</code></p>`,
     ].filter(Boolean).join("\n");
 
     fs.writeFileSync(path.join(OUT, `${slug}.html`), renderPage({
@@ -134,8 +148,9 @@ function main() {
       bodyHtml: body,
       prefix: "../",
       canonicalPath: `records/${slug}.html`,
+      extraHead: `<link rel="license" href="${LICENSE_URL}">\n<link rel="alternate" type="application/json" href="${slug}.json">`,
     }));
-    fs.writeFileSync(path.join(OUT, `${slug}.json`), JSON.stringify(record, null, 2) + "\n");
+    fs.writeFileSync(path.join(OUT, `${slug}.json`), json);
     index.push({
       id: record.id,
       type: record.type,
@@ -143,6 +158,8 @@ function main() {
       created_at: record.created_at,
       html: `https://datum.quest/records/${slug}.html`,
       json: `https://datum.quest/records/${slug}.json`,
+      sha256: digest,
+      ...itemReuse(),
     });
     console.log(`record: records/${slug}.html`);
   }
@@ -150,6 +167,10 @@ function main() {
   fs.writeFileSync(path.join(OUT, "index.json"), JSON.stringify({
     schema_version: 1,
     generated_from: "derived publication projection",
+    digest_note: "sha256 is the SHA-256 of the record's JSON file exactly as served. It verifies byte identity; it is not a signature or governance authorization.",
+    reuse: REUSE,
+    bulk: "https://datum.quest/bulk.json",
+    changes: "https://datum.quest/changes.json",
     records: index,
   }, null, 2) + "\n");
 
@@ -167,7 +188,8 @@ function main() {
   const indexBody = `<p class="badge">Phase 2C — Public read model</p>\n` +
     `<h1>Public canonical records</h1>\n` +
     `<p>This is Hummingbird's rebuildable public projection of deliberately published canonical records. It is static at request time: reading this page does not query the canonical database.</p>\n` +
-    `<p><a href="records/index.json">Machine-readable record index</a> · <a href="seed-bank.html">Seed Bank</a></p>\n` +
+    `<p><a href="records/index.json">Machine-readable record index</a> (with a SHA-256 digest and reuse terms for each record) · <a href="bulk.json">Everything in one download</a> · <a href="changes.json">What changed, newest first</a> · <a href="seed-bank.html">Seed Bank</a></p>\n` +
+    `<p>Hummingbird's own wording in these records is licensed <a rel="license" href="${LICENSE_URL}">CC BY 4.0</a> with credit to "${escapeHtml(CREDIT)}"; a contributor's own words, at the source a record links, keep their author's terms (<a href="${TERMS_URL}">ADR 0028</a>).</p>\n` +
     `<div class="seed-grid">${cards}</div>\n` +
     `<p class="doc-meta">${records.length} public canonical record(s). An offer is not admission; admission is not governance approval.</p>`;
 

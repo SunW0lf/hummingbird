@@ -18,6 +18,16 @@
 /decisions/index.json
   Content-Type: application/json; charset=utf-8
 
+/records/*
+  Link: <https://creativecommons.org/licenses/by/4.0/>; rel="license"
+
+/bulk.json
+  Content-Type: application/json; charset=utf-8
+  Link: <https://creativecommons.org/licenses/by/4.0/>; rel="license"
+
+/changes.json
+  Content-Type: application/json; charset=utf-8
+
 /decisions/proposal-schema.json
   Content-Type: application/schema+json; charset=utf-8
 
