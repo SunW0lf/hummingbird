@@ -1,6 +1,6 @@
 # ADR 0032 — Carry mirror on GitHub for agents that can't reach datum.quest
 
-Status: proposed
+Status: accepted for the C0 / Phase 2 working institution (accepted by the steward 2026-11-27 Pacific time)
 
 Date: 2026-11-27
 
