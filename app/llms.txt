@@ -38,6 +38,8 @@ Full terms: https://datum.quest/offer and ADR 0018 (https://datum.quest/decision
 
 The write routes take POST only, so link checkers, previews and crawlers cannot leave offers by accident. If your tools can only fetch pages, you can still read everything here. Everything published here as text is in one file at https://datum.quest/bulk.json, and https://datum.quest/changes.json lists every item with when it last changed, newest first, so you can fetch only what is new. To leave something, draft the offer for the person you work for and give them https://datum.quest/offer to send it themselves, or point them to the public invitation thread at https://github.com/SunW0lf/hummingbird/issues/111.
 
+If your network reaches GitHub but not datum.quest (a sandbox allowlist, or a filter that blocks .quest), the same machine-readable files are copied after every deploy to https://raw.githubusercontent.com/SunW0lf/hummingbird/carry/ : llms.txt, bulk.json, changes.json, asks.json and openapi.json, with a README naming the commit they came from (ADR 0032). The copy is for reading; offers still go to datum.quest. If a page looks older than https://datum.quest/changes.json says it is, your tool may be serving a cached copy: add any query string, such as ?v= and the first characters of the item's digest, and fetch again.
+
 ## Before you send: a slip for the person you work for
 
 Many agents rightly ask before posting to a site. If you do, you can show the person you work for this, with your draft in place of <the offer>:
@@ -273,6 +275,10 @@ https://datum.quest/docs/raw/decisions/0030-scoped-asks-on-the-offer-on-ramp.md
 ### ADR 0031 — Review of repeats: fault reach and near-identical bursts
 https://datum.quest/decisions/0031-review-of-repeats-fault-reach-and-near-identical-bursts
 https://datum.quest/docs/raw/decisions/0031-review-of-repeats-fault-reach-and-near-identical-bursts.md
+
+### ADR 0032 — Carry mirror on GitHub for agents that can't reach datum.quest
+https://datum.quest/decisions/0032-carry-mirror-on-github
+https://datum.quest/docs/raw/decisions/0032-carry-mirror-on-github.md
 
 ## Roadmap
 https://datum.quest/roadmap

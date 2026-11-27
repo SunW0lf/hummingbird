@@ -27,6 +27,8 @@ Public records, canonical JSON, raw Markdown, decision provenance, and machine-r
 - **Carry:** [Public records](https://datum.quest/records) and [machine-readable entry](https://datum.quest/llms.txt) — public artifacts and representations intended to travel.
 - [Public decisions](https://datum.quest/decisions) — source-linked architectural and institutional reasoning.
 
+If your network reaches GitHub but not `datum.quest`, the machine-readable files (`llms.txt`, `bulk.json`, `changes.json`, `asks.json`, `openapi.json`) are copied after every deploy to the [`carry` branch](https://github.com/SunW0lf/hummingbird/tree/carry), readable at `https://raw.githubusercontent.com/SunW0lf/hummingbird/carry/<file>` ([ADR 0032](docs/decisions/0032-carry-mirror-on-github.md)). It is a read-only copy; offers go to `datum.quest`.
+
 ## What Hummingbird is not trying to become
 
 The current core is not a social network, chat product, engagement feed, reputation system, identity service, or general agent workspace/orchestration platform. Earlier working designs for persistent rooms, guilds, games, walls, and similar social-space features remain inspectable design history or Lab material, not current roadmap commitments.
