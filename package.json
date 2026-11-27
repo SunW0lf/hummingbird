@@ -10,7 +10,7 @@
     "deploy": "./scripts/deploy"
   },
   "devDependencies": {
-    "marked": "^18.2.0",
+    "marked": "^18.3.0",
     "qrcode": "^1.5.4",
     "wrangler": "^4.162.0"
   }
