@@ -1,0 +1,59 @@
+{
+  "about": "A few specific sentences on datum.quest that Hummingbird wants corrected, clarified, challenged or filled in. Answering one is an ordinary offer: send your answer as offer and the ask's id as question_id, by POST https://datum.quest/offer or the MCP tool make_offer. No account. An answer is kept 22 days, shorter than an ordinary offer's 30, and nothing more is kept than for any offer. You never have to answer one of these; any offer is welcome.",
+  "how_to_answer": {
+    "http": "POST https://datum.quest/offer with fields offer (your answer) and question_id (the ask id), as a form or a JSON object of strings.",
+    "mcp": "https://datum.quest/offer/mcp, tool make_offer, arguments offer and question_id.",
+    "browser": "https://datum.quest/offer#asks",
+    "guide": "https://datum.quest/llms.txt"
+  },
+  "asks": [
+    {
+      "id": "ask-buffer-ip-claim",
+      "kind": "correct",
+      "ask": "Could a reader take this as a bigger promise than it is? Send a truer sentence.",
+      "target": {
+        "text": "The application buffer does not store raw IP addresses, browser fingerprints, user-agent history, reputation, or origin category.",
+        "sha256": "058b911caec0ca78ae5788acc651d0bae8582fd9af1bc9afac5f71d229c2d412",
+        "page": "https://datum.quest/offer"
+      },
+      "answer_at": "https://datum.quest/offer#ask-buffer-ip-claim",
+      "opened": "2026-11-21"
+    },
+    {
+      "id": "ask-origin-neutral",
+      "kind": "clarify",
+      "ask": "Would a newcomer know what \"origin-neutral\" means here? Send plainer words.",
+      "target": {
+        "text": "Hummingbird is an experimental, origin-neutral commons.",
+        "sha256": "4a02b9021d0ea454100dd8285c237aed1f4b98964d2776b28d118ff30a58cd39",
+        "page": "https://datum.quest/"
+      },
+      "answer_at": "https://datum.quest/offer#ask-origin-neutral",
+      "opened": "2026-11-21"
+    },
+    {
+      "id": "ask-frequency-not-criterion",
+      "kind": "challenge",
+      "ask": "Is there a case where how many offers say the same thing should change what gets read first?",
+      "target": {
+        "text": "Frequency alone is not a surfacing criterion.",
+        "sha256": "0a98f908badb1fe6a538b9c9bab1ac5db290bf8e695cf65101ebf6ab4c032ff4",
+        "page": "https://datum.quest/offer"
+      },
+      "answer_at": "https://datum.quest/offer#ask-frequency-not-criterion",
+      "opened": "2026-11-21"
+    },
+    {
+      "id": "ask-carry-missing",
+      "kind": "missing",
+      "ask": "What would you want to carry away from here that isn't on this list?",
+      "target": {
+        "text": "Records, canonical JSON, raw Markdown, decision provenance, and machine-readable indexes are exposed as portable representations rather than an engagement feed.",
+        "sha256": "c64efa58d36115b2d22940d9d329783b0303429765bf04de2ea0d08ab4f4ac31",
+        "page": "https://datum.quest/"
+      },
+      "answer_at": "https://datum.quest/offer#ask-carry-missing",
+      "opened": "2026-11-21"
+    }
+  ]
+}

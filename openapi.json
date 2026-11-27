@@ -1,0 +1,177 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Hummingbird offer pilot",
+    "version": "2e-pilot",
+    "summary": "Leave a bounded offer at datum.quest without an account, and check or withdraw it with a private receipt.",
+    "description": "This describes the same plain routes every participant uses, human or automated, sent as an HTML form or as a JSON object of strings. It is not a general API. An accepted offer is temporary and non-canonical: acceptance is not admission, publication, a vote, identity, reputation, or governance standing. Offers are read for what they say; exact repeats are grouped, and volume is not a vote. An offer is kept for 30 days while Hummingbird is being stood up (22 days for an answer to a listed ask, whose id is sent as question_id), then cleared; withdrawing clears it at once. No name, account, IP address or user-agent is stored. Offers are read by Hummingbird's steward and reviewers, who use AI assistants to help; they are not used to train AI models, and if that ever changes it will be stated first and apply only to later offers. They are never published by being accepted; https://datum.quest/heard reports each review in coarse counts and never quotes offers. Full handling terms: https://datum.quest/offer. Machine-readable overview: https://datum.quest/llms.txt. To read everything Hummingbird publishes instead, fetch https://datum.quest/bulk.json (one file) or https://datum.quest/changes.json (what changed, newest first); both are static files, not routes described here. Send a User-Agent that names your client (for example my-agent/1.0): Cloudflare, the host, turns some HTTP libraries' default User-Agent away with a 403 (error 1010) before the request reaches Hummingbird.",
+    "license": { "name": "See repository", "url": "https://github.com/SunW0lf/hummingbird" }
+  },
+  "servers": [{ "url": "https://datum.quest" }],
+  "externalDocs": { "description": "Offer page with limits and handling terms", "url": "https://datum.quest/offer" },
+  "paths": {
+    "/offer": {
+      "post": {
+        "operationId": "makeOffer",
+        "summary": "Leave an offer: an idea, criticism, correction, question, or evidence about Hummingbird",
+        "description": "Send the fields as a form or as JSON. A JSON body, or Accept: application/json, gets a JSON result. Only a 201 response with accepted: true confirms a write. The receipt is shown once and stored only as a hash; keep it private and never put it in a URL.",
+        "parameters": [{ "$ref": "#/components/parameters/AcceptJson" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": { "schema": { "$ref": "#/components/schemas/OfferFields" } },
+            "application/json": { "schema": { "$ref": "#/components/schemas/OfferFields" } }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Accepted into the temporary buffer.",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Accepted" } } }
+          },
+          "400": { "$ref": "#/components/responses/NotAccepted" },
+          "413": { "$ref": "#/components/responses/NotAccepted" },
+          "415": { "$ref": "#/components/responses/NotAccepted" },
+          "503": { "$ref": "#/components/responses/NotAccepted" }
+        }
+      }
+    },
+    "/offer/status": {
+      "post": {
+        "operationId": "checkOfferStatus",
+        "summary": "Check an offer's state with its private receipt",
+        "parameters": [{ "$ref": "#/components/parameters/AcceptJson" }],
+        "requestBody": { "$ref": "#/components/requestBodies/Receipt" },
+        "responses": {
+          "200": {
+            "description": "Current state.",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Status" } } }
+          },
+          "400": { "$ref": "#/components/responses/ReceiptFailure" },
+          "404": { "$ref": "#/components/responses/ReceiptFailure" },
+          "503": { "$ref": "#/components/responses/ReceiptFailure" }
+        }
+      }
+    },
+    "/offer/withdraw": {
+      "post": {
+        "operationId": "withdrawOffer",
+        "summary": "Withdraw an offer with its private receipt",
+        "parameters": [{ "$ref": "#/components/parameters/AcceptJson" }],
+        "requestBody": { "$ref": "#/components/requestBodies/Receipt" },
+        "responses": {
+          "200": {
+            "description": "Withdrawn, or already withdrawn.",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Withdrawn" } } }
+          },
+          "400": { "$ref": "#/components/responses/ReceiptFailure" },
+          "404": { "$ref": "#/components/responses/ReceiptFailure" },
+          "409": { "$ref": "#/components/responses/ReceiptFailure" },
+          "503": { "$ref": "#/components/responses/ReceiptFailure" }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "AcceptJson": {
+        "name": "Accept",
+        "in": "header",
+        "required": false,
+        "schema": { "type": "string", "enum": ["application/json"] },
+        "description": "Ask for a JSON result. A JSON request body gets one anyway; a form without this header gets an HTML page."
+      }
+    },
+    "requestBodies": {
+      "Receipt": {
+        "required": true,
+        "content": {
+          "application/x-www-form-urlencoded": { "schema": { "$ref": "#/components/schemas/ReceiptFields" } },
+          "application/json": { "schema": { "$ref": "#/components/schemas/ReceiptFields" } }
+        }
+      }
+    },
+    "responses": {
+      "NotAccepted": {
+        "description": "Not accepted. Nothing was stored and no receipt was issued.",
+        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/NotAccepted" } } }
+      },
+      "ReceiptFailure": {
+        "description": "The receipt action did not complete.",
+        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ReceiptFailure" } } }
+      }
+    },
+    "schemas": {
+      "OfferFields": {
+        "type": "object",
+        "required": ["offer"],
+        "properties": {
+          "offer": { "type": "string", "minLength": 1, "maxLength": 4000, "description": "The offer text, 1 to 4,000 characters after trimming." },
+          "reference": { "type": "string", "format": "uri", "maxLength": 2048, "description": "Optional http or https URL." },
+          "question_id": { "type": "string", "maxLength": 120, "pattern": "^[A-Za-z0-9._:-]+$", "description": "Optional: the id of the specific ask you are answering, from https://datum.quest/asks.json." }
+        }
+      },
+      "ReceiptFields": {
+        "type": "object",
+        "required": ["receipt"],
+        "properties": { "receipt": { "type": "string", "description": "The private one-time receipt from an accepted offer." } }
+      },
+      "Accepted": {
+        "type": "object",
+        "required": ["accepted", "offer_id", "receipt", "state", "expires_at"],
+        "properties": {
+          "accepted": { "const": true },
+          "offer_id": { "type": "string" },
+          "receipt": { "type": "string", "description": "Shown once. Keep it private." },
+          "state": { "type": "string" },
+          "expires_at": { "type": "string", "format": "date-time" },
+          "share_note": { "type": "string" }
+        }
+      },
+      "NotAccepted": {
+        "type": "object",
+        "required": ["accepted", "code"],
+        "properties": {
+          "accepted": { "const": false },
+          "code": { "type": "string", "enum": ["invalid_offer", "invalid_reference", "invalid_question_id", "invalid_json", "request_too_large", "unsupported_media_type", "pilot_capacity_reached", "buffer_unavailable", "write_unconfirmed"] },
+          "message": { "type": "string" },
+          "retryable": { "type": "boolean" },
+          "active_capacity": { "type": "integer" }
+        }
+      },
+      "Status": {
+        "type": "object",
+        "required": ["ok", "offer_id", "state", "expires_at"],
+        "properties": {
+          "ok": { "const": true },
+          "offer_id": { "type": "string" },
+          "state": { "type": "string" },
+          "expires_at": { "type": "string", "format": "date-time" },
+          "question_id": { "type": ["string", "null"] },
+          "resulting_record_id": { "type": ["string", "null"] }
+        }
+      },
+      "Withdrawn": {
+        "type": "object",
+        "required": ["ok", "offer_id", "state"],
+        "properties": {
+          "ok": { "const": true },
+          "offer_id": { "type": "string" },
+          "state": { "const": "withdrawn" },
+          "expires_at": { "type": "string", "format": "date-time" }
+        }
+      },
+      "ReceiptFailure": {
+        "type": "object",
+        "required": ["ok", "code"],
+        "properties": {
+          "ok": { "const": false },
+          "code": { "type": "string", "enum": ["receipt_not_found", "offer_expired", "buffer_unavailable", "withdrawal_unconfirmed", "invalid_json", "request_too_large", "unsupported_media_type"] },
+          "message": { "type": "string" },
+          "retryable": { "type": "boolean" },
+          "offer_id": { "type": "string" },
+          "state": { "type": "string" }
+        }
+      }
+    }
+  }
+}
