@@ -54,6 +54,7 @@ const PUBLIC_DECISIONS = [
   "0030-scoped-asks-on-the-offer-on-ramp.md",
   "0031-review-of-repeats-fault-reach-and-near-identical-bursts.md",
   "0032-carry-mirror-on-github.md",
+  "0033-email-door-for-offers.md",
 ];
 
 const ROOT_PUBLIC_ROUTES = new Map([
