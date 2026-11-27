@@ -77,6 +77,8 @@ The machine index is published at:
 
 The JSON detail representation is the projected canonical record. The HTML route is a safe, static human-readable rendering of the same record.
 
+Each index entry also carries the SHA-256 digest of the record's JSON file as served and the reuse terms from ADR 0028. Both derive from record content alone, so the projection stays rebuildable byte for byte from canonical state. Change dates, which come from Git, are published separately in `/changes.json`, alongside the single-file `/bulk.json`.
+
 Draft records must never enter the public projection. The renderer fails closed if a projected record has `state: draft`, an unsupported v1 type/state, an unsafe/empty identifier, malformed relationships, or duplicate canonical IDs.
 
 ### Publication-state decision

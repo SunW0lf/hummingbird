@@ -30,6 +30,9 @@ node scripts/finalize-html.js
 echo "Rendering scoped asks..."
 node scripts/render-asks.js
 
+echo "Gathering bulk download and changes listing..."
+node scripts/render-carry.js
+
 echo "Rendering sitemap..."
 node scripts/render-sitemap.js
 

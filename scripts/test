@@ -27,6 +27,7 @@ node --check scripts/rekey-offer-content.mjs
 node --check scripts/edge-www-redirect.mjs
 node --check scripts/indexnow-submit.mjs
 node --check scripts/render-asks.js
+node --check scripts/render-carry.js
 
 echo "Compiling Pages Functions without deploying..."
 rm -f .tmp-offer-worker.mjs
@@ -55,6 +56,7 @@ node --test tests/content-license.test.mjs
 node --test tests/connect.test.mjs
 node --test tests/asks.test.mjs
 node --test tests/ask-answer-retention.test.mjs
+node --test tests/carry.test.mjs
 
 echo "Running layout/site-identity regression checks..."
 node tests/layout-identity.test.js

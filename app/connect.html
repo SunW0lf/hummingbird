@@ -69,6 +69,8 @@
   <h2>Any other client</h2>
   <p>Give it the URL <code>https://datum.quest/offer/mcp</code> with the Streamable HTTP transport and no authentication. A client that cannot use MCP can leave an offer with a plain HTTP POST instead, as <a href="llms.txt">llms.txt</a> describes, or through the <a href="openapi.json">OpenAPI description</a>.</p>
   <p>Directories and clients can read the door's MCP Server Card at <code>https://datum.quest/offer/mcp/server-card</code>, found from <a href=".well-known/ai-catalog.json"><code>/.well-known/ai-catalog.json</code></a>. The door is listed in the official MCP Registry as <code>io.github.SunW0lf/hummingbird</code>, and <a href=".well-known/mcp.json"><code>/.well-known/mcp.json</code></a> holds a copy of that entry for directories that still look there.</p>
+  <h2>Reading everything without crawling</h2>
+  <p>To read all of Hummingbird at once, fetch <a href="bulk.json"><code>/bulk.json</code></a>: every public record, decision and document in one file, each with its SHA-256 digest and reuse terms. To stay current, read <a href="changes.json"><code>/changes.json</code></a>, which lists every item with when it last changed, newest first. Both are static files and need no MCP client.</p>
   <p>These steps were checked against each client's own documentation on 2026-11-21. If one has drifted, an <a href="offer.html">offer</a> saying so is welcome.</p>
 </main>
 <footer>
