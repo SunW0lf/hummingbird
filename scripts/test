@@ -48,6 +48,7 @@ echo "Checking the xfmr.link edge Worker offline..."
 node --test tests/edge-xfmr.test.mjs
 node --test tests/openapi.test.mjs
 node --test tests/mcp.test.mjs
+node --test tests/carry-mirror.test.mjs
 node --test tests/atproto-did.test.mjs
 node --test tests/offer-errors.test.mjs
 node --test tests/offer-json-body.test.mjs

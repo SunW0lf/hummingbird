@@ -81,3 +81,44 @@ jobs:
         env:
           HEALTHCHECK_URL: https://datum.quest
         run: node scripts/offer-production-smoke.mjs
+
+  mirror:
+    # ADR 0032: copy the machine-readable files to the `carry` branch so agents
+    # whose network reaches GitHub but not datum.quest can still read them.
+    name: Refresh the carry mirror
+    needs: deploy
+    if: "${{ needs.deploy.result == 'success' }}"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: ./scripts/build
+
+      - name: Prepare mirror
+        run: node scripts/prepare-mirror.mjs dist "$RUNNER_TEMP/carry" "$GITHUB_SHA"
+
+      - name: Replace the carry branch with one fresh commit
+        run: |
+          git switch --orphan carry-mirror
+          git rm -rfq --cached . >/dev/null 2>&1 || true
+          git clean -fdxq
+          cp -R "$RUNNER_TEMP/carry/." .
+          git add -A
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -q -m "Carry mirror of ${GITHUB_SHA}"
+          git push --force origin HEAD:refs/heads/carry
